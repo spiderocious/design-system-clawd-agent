@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Palette</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* Page-only layout. No reusable .specimen-tile classes to avoid catalogue feel. */
+  .palette {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .palette > .name {
+    padding: 22px 24px 22px 0;
+    border-bottom: 1px solid var(--hair);
+    border-right: 1px solid var(--hair);
+  }
+  .palette > .body {
+    padding: 22px 0 22px 24px;
+    border-bottom: 1px solid var(--hair);
+    min-width: 0;
+  }
+  .palette > .name h3 {
+    margin: 0 0 4px;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: var(--track-h);
+  }
+  .palette > .name p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    max-width: 18ch;
+  }
+
+  /* Ramp: a stretched horizontal band, hairline below, hex labels in mono */
+  .ramp { display: grid; grid-template-columns: repeat(10, 1fr); }
+  .ramp .step {
+    height: 56px;
+    display: flex; align-items: flex-end;
+    padding: 6px 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-3);
+    border-right: 1px solid rgba(255,255,255,0.5);
+  }
+  .ramp .step:last-child { border-right: 0; }
+  .ramp .step.dk { color: rgba(255,255,255,0.7); }
+  .ramp-meta {
+    display: grid; grid-template-columns: repeat(10, 1fr);
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-4);
+  }
+  .ramp-meta span { padding: 0 2px; }
+
+  /* The ink-on-paper showpiece — proves the warm-cool tension */
+  .frontispiece {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--ink);
+    margin-bottom: 48px;
+    background: var(--paper);
+  }
+  .frontispiece .lh, .frontispiece .rh {
+    padding: 36px 32px 32px;
+  }
+  .frontispiece .lh {
+    border-right: 1px solid var(--ink);
+  }
+  .frontispiece .rh {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .frontispiece h2 {
+    margin: 0 0 18px;
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1.0;
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+  }
+  .frontispiece .rh h2 { color: var(--paper); }
+  .frontispiece p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 36ch;
+  }
+  .frontispiece .rh p { color: rgba(244,239,230,0.78); }
+  .swatch-row {
+    display: flex; align-items: center; gap: 0; margin-top: 22px;
+    border-top: 1px solid currentColor;
+    padding-top: 14px;
+  }
+  .swatch-row .sw {
+    flex: 1; height: 14px; border: 0;
+  }
+  .swatch-row .lab {
+    font-family: var(--mono); font-size: 10px; opacity: 0.55;
+    width: 64px; text-align: right;
+  }
+
+  /* Critical-paired example showing how state colour is paired with text */
+  .pair {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .pair > div {
+    border: 1px solid var(--hair);
+    padding: 14px 16px;
+    border-radius: var(--r-card);
+  }
+  .pair .quote {
+    font-family: var(--serif); font-style: italic;
+    font-size: 14px; color: var(--ink); line-height: 1.45;
+  }
+  .pair .pair-h {
+    display: flex; gap: 8px; align-items: center;
+    margin-bottom: 8px;
+  }
+  .crit-pane { background: var(--crit-bg); border-color: var(--crit-edge); }
+  .crit-pane .pair-h { color: var(--crit); }
+  .ok-pane   { background: var(--ok-bg);   border-color: var(--ok-edge); }
+  .ok-pane .pair-h   { color: var(--green-800); }
+
+  /* Module-tint demotion — quiet uses only */
+  .modules { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--hair); }
+  .modules > div {
+    padding: 14px 16px 14px 0;
+    border-right: 1px solid var(--hair);
+  }
+  .modules > div:last-child { border-right: 0; padding-right: 0; }
+  .modules .swatch {
+    width: 36px; height: 36px; border-radius: 4px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .modules .nm {
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .modules .use {
+    font-size: 11px; color: var(--ink-3); line-height: 1.45;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">I · 01</span>
+    <h1 class="ttl">Palette</h1>
+    <span class="meta">surgical-paper · v 0.2</span>
+  </header>
+
+  <!-- Frontispiece: ink-on-paper, paper-on-ink. The whole point. -->
+  <div class="frontispiece">
+    <div class="lh">
+      <h2>Ink on warm paper.</h2>
+      <p>The canvas is a faintly warm bone — closer to old chart paper than to a cool grey screen. Type sits on it as ink: a warm near-black with a hint of the same paper undertone, so the page reads as one material rather than two.</p>
+      <div class="swatch-row">
+        <div class="sw" style="background:#F4EFE6"></div>
+        <div class="sw" style="background:#ECE5D6"></div>
+        <div class="sw" style="background:#FBF7EF"></div>
+        <div class="sw" style="background:#D9D0BB"></div>
+        <span class="lab">paper · sheet</span>
+      </div>
+    </div>
+    <div class="rh">
+      <h2>And the same, after dark.</h2>
+      <p>Inverted, the paper becomes ink. Screens at the night-shift station should not glow — they should recede. The accent green stays the same hue; the paper just gets out of the way so vitals can shout.</p>
+      <div class="swatch-row" style="color:var(--paper)">
+        <div class="sw" style="background:#181613"></div>
+        <div class="sw" style="background:#3C3833"></div>
+        <div class="sw" style="background:#6E665B"></div>
+        <div class="sw" style="background:#A39A8A"></div>
+        <span class="lab" style="color:rgba(244,239,230,0.55)">ink · grades</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paper grades & ink grades, side-by-side rows -->
+  <div class="palette">
+    <div class="name">
+      <h3>Paper</h3>
+      <p>Four grades. Canvas stays warm; surfaces stack by lightening or recessing.</p>
+    </div>
+    <div class="body">
+      <div class="ramp" style="grid-template-columns:repeat(4,1fr)">
+        <div class="step" style="background:#FBF7EF;color:#6E665B">sheet</div>
+        <div class="step" style="background:#F4EFE6;color:#6E665B">canvas</div>
+        <div class="step" style="background:#ECE5D6;color:#6E665B">recessed</div>
+        <div class="step" style="background:#D9D0BB;color:#3C3833">edge</div>
+      </div>
+      <div class="ramp-meta" style="grid-template-columns:repeat(4,1fr)">
+        <span>#FBF7EF</span><span>#F4EFE6</span><span>#ECE5D6</span><span>#D9D0BB</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="name">
+      <h3>Ink</h3>
+      <p>Five grades. Warm-leaning so it sits with paper instead of fighting it.</p>
+    </div>
+    <div class="body">
+      <div class="ramp" style="grid-template-columns:repeat(5,1fr)">
+        <div class="step dk" style="background:#181613">ink</div>
+        <div class="step dk" style="background:#3C3833">body</div>
+        <div class="step dk" style="background:#6E665B">secondary</div>
+        <div class="step" style="background:#A39A8A">tertiary</div>
+        <div class="step" style="background:#D9D0BB">hairline</div>
+      </div>
+      <div class="ramp-meta" style="grid-template-columns:repeat(5,1fr)">
+        <span>#181613</span><span>#3C3833</span><span>#6E665B</span><span>#A39A8A</span><span>#D9D0BB</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="name">
+      <h3>Apothecary green</h3>
+      <p>The single accent. Used for primary action, signed state, and "within range." Nothing else.</p>
+    </div>
+    <div class="body">
+      <div class="ramp">
+        <div class="step" style="background:#F0FDF4">50</div>
+        <div class="step" style="background:#DCFCE7">100</div>
+        <div class="step" style="background:#BBF7D0">200</div>
+        <div class="step" style="background:#86EFAC">300</div>
+        <div class="step dk" style="background:#4ADE80">400</div>
+        <div class="step dk" style="background:#22C55E">500</div>
+        <div class="step dk" style="background:#16A34A">600</div>
+        <div class="step dk" style="background:#15803D">700</div>
+        <div class="step dk" style="background:#166534">800</div>
+        <div class="step dk" style="background:#14532D">900</div>
+      </div>
+      <div class="ramp-meta">
+        <span>#F0FDF4</span><span>#DCFCE7</span><span>#BBF7D0</span><span>#86EFAC</span><span>#4ADE80</span><span>#22C55E</span><span>#16A34A</span><span>#15803D</span><span>#166534</span><span>#14532D</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="name">
+      <h3>Clinical state</h3>
+      <p>Critical-red is reserved for life-threatening only. Amber covers all other warnings. Violet is abnormal-low.</p>
+    </div>
+    <div class="body">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div>
+          <div style="height:36px;background:#B42318;border-radius:2px"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--ink-3)"><span>Critical</span><span>#B42318</span></div>
+          <div style="height:8px;background:#FEF3F2;border:1px solid #F2B5AF;border-radius:2px;margin-top:4px"></div>
+        </div>
+        <div>
+          <div style="height:36px;background:#B25E09;border-radius:2px"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--ink-3)"><span>Warn</span><span>#B25E09</span></div>
+          <div style="height:8px;background:#FDF6E3;border:1px solid #E8D9A1;border-radius:2px;margin-top:4px"></div>
+        </div>
+        <div>
+          <div style="height:36px;background:#5B21B6;border-radius:2px"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--ink-3)"><span>Low</span><span>#5B21B6</span></div>
+          <div style="height:8px;background:#F7F2FE;border:1px solid #D8C7F0;border-radius:2px;margin-top:4px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Worked example: the rule shown by being broken nowhere -->
+  <div class="break"><span class="lbl">Rule, applied</span></div>
+
+  <div class="pair">
+    <div class="ok-pane">
+      <div class="pair-h">
+        <span class="overline" style="color:inherit">Within range</span>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:11px;opacity:0.7">06:38</span>
+      </div>
+      <div class="quote">"Sodium 138 mEq/L. Potassium 4.1 mEq/L. Glucose 92 mg/dL fasting."</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:10px">colour paired with text. Never used alone.</div>
+    </div>
+    <div class="crit-pane">
+      <div class="pair-h">
+        <span class="overline" style="color:inherit">Critical</span>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:11px;opacity:0.7">14:42</span>
+      </div>
+      <div class="quote">"Troponin I 2.10 ng/mL. Three-fold above prior. Cardiology paged."</div>
+      <div style="font-family:var(--mono);font-size:10px;color:inherit;opacity:0.7;margin-top:10px">red is reserved. Read the words; the colour confirms.</div>
+    </div>
+  </div>
+
+  <!-- Module tints: explicitly demoted -->
+  <div class="break"><span class="lbl">Module tints — demoted</span></div>
+  <p style="font-size:13px;color:var(--ink-2);max-width:62ch;margin:0 0 14px">
+    Five verticals each carry a quiet desaturated tint. These are <em>only</em>
+    used for: nav active state and the empty-state line drawing. They never
+    appear as card borders, section headers, gradients, or charts.
+  </p>
+  <div class="modules">
+    <div>
+      <div class="swatch" style="background:#3F5B8A"></div>
+      <div class="nm">Patients</div>
+      <div class="use">Paper-blue.<br>Nav tint only.</div>
+    </div>
+    <div>
+      <div class="swatch" style="background:#6E5A8A"></div>
+      <div class="nm">Staff</div>
+      <div class="use">Bruised violet.<br>Nav tint only.</div>
+    </div>
+    <div>
+      <div class="swatch" style="background:#3F7A6E"></div>
+      <div class="nm">Consults</div>
+      <div class="use">Slate-teal.<br>Nav tint only.</div>
+    </div>
+    <div>
+      <div class="swatch" style="background:#4F6C3A"></div>
+      <div class="nm">Records</div>
+      <div class="use">Olive.<br>Nav tint only.</div>
+    </div>
+    <div>
+      <div class="swatch" style="background:#8A6435"></div>
+      <div class="nm">Equipment</div>
+      <div class="use">Bronze.<br>Nav tint only.</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

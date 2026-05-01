@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Inputs — vitals & dosage</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* INPUTS — the chart-paper field.
+     Default field is a *line, not a box*. Underline + label above.
+     The label is uppercase mono, like a chart caption.
+     Numerics inside fields stay mono with tabular figures.
+
+     Specialized fields (BP, dosage, ICD-10) are designed first; the
+     generic text field is shown briefly at the end as the trivial case. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1100px; }
+
+  .lab {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+
+  /* Underline field — the default */
+  .field {
+    display: flex; flex-direction: column; gap: 4px;
+    margin-bottom: 0;
+  }
+  .field input, .field select, .field textarea {
+    background: transparent;
+    border: 0; border-bottom: 1px solid var(--ink-3);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 4px 0 6px;
+    outline: none;
+    letter-spacing: 0;
+    width: 100%;
+  }
+  .field.mono input, .field.mono select { font-family: var(--mono); font-feature-settings: "tnum" 1; }
+  .field input::placeholder { color: var(--ink-4); }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-bottom-color: var(--ink);
+  }
+  .field .help {
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+  }
+
+  .field.error input { border-bottom-color: var(--crit); }
+  .field.error .help { color: var(--crit); }
+  .field.ok input { border-bottom-color: var(--green-700); }
+  .field.ok .help { color: var(--green-800); }
+
+  /* Block (boxed) field — used only when alignment with siblings is required */
+  .block {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .block .input {
+    border: 1px solid var(--sheet-edge); background: var(--sheet);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: var(--sans);
+    font-size: 13px; color: var(--ink);
+  }
+  .block .input.mono { font-family: var(--mono); font-feature-settings: "tnum" 1; }
+  .block .input:focus { outline: none; border-color: var(--ink); background: #fff; }
+
+  /* Section scaffolding */
+  .section { padding: 32px 0 40px; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px;
+  }
+  .section-h h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 500; letter-spacing: var(--track-h);
+  }
+  .section-h .sub {
+    flex: 1;
+    font-size: 13px; color: var(--ink-3); line-height: 1.5;
+  }
+
+  .holder {
+    display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start;
+  }
+  .holder .legend h4 { margin: 0 0 6px; font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .holder .legend p { margin: 0; font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+  /* ============================================================
+     A. THE VITALS GROUP — designed as one composed input.
+     A horizontal strip, six readings. Each reading is a line-field
+     beneath a big mono numeric. Tab moves between numeric inputs.
+     ============================================================ */
+  .vitals-block {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    display: grid; grid-template-columns: repeat(6, 1fr);
+  }
+  .vitals-block .v {
+    padding: 16px 20px;
+    border-right: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .vitals-block .v:last-child { border-right: 0; }
+  .vitals-block .v .lbl {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--ink-3);
+  }
+  .vitals-block .v .num-input {
+    display: flex; align-items: baseline; gap: 4px;
+  }
+  .vitals-block .v input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--ink-3);
+    font-family: var(--mono);
+    font-feature-settings: "tnum" 1;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    outline: none;
+    padding: 2px 0;
+    text-align: left;
+    width: 70px;
+  }
+  .vitals-block .v input.bp-sys { width: 56px; text-align: right; }
+  .vitals-block .v input.bp-dia { width: 56px; }
+  .vitals-block .v .slash { font-family: var(--mono); font-size: 24px; color: var(--ink-3); }
+  .vitals-block .v input:focus { border-bottom-color: var(--ink); }
+  .vitals-block .v .u {
+    font-family: var(--sans);
+    font-size: 11px; color: var(--ink-3);
+    font-weight: 500; letter-spacing: 0.02em;
+  }
+  .vitals-block .v .help {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0;
+  }
+  .vitals-block .v.bp { grid-column: span 2; }
+
+  /* Unit toggle (°F / °C). Two letters, the inactive one is faded. */
+  .toggle {
+    display: inline-flex; gap: 0; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+  }
+  .toggle button {
+    background: none; border: 0; cursor: pointer;
+    padding: 2px 4px; color: var(--ink-3);
+    font-family: inherit; font-size: inherit;
+  }
+  .toggle button.on { color: var(--ink); font-weight: 600; }
+  .toggle .div { color: var(--ink-4); padding: 0 2px; }
+
+  /* ============================================================
+     B. DOSAGE — number + unit + route. A single composed line.
+     Number input is mono and large; unit and route are
+     dropdown-style underlines that share the same baseline.
+     ============================================================ */
+  .dose {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ink);
+  }
+  .dose input.amount {
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--ink);
+    font-family: var(--mono);
+    font-feature-settings: "tnum" 1;
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    outline: none;
+    width: 110px;
+    text-align: right;
+    padding: 2px 4px 4px;
+  }
+  .dose select {
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--ink);
+    padding: 4px 4px;
+    outline: none;
+    cursor: pointer;
+  }
+  .dose .word {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-3);
+  }
+  .dose-meta {
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .dose-meta .max { color: var(--warn); }
+  .dose-warn {
+    margin-top: 12px;
+    background: var(--crit-bg);
+    border: 1px solid var(--crit-edge);
+    border-left: 3px solid var(--crit);
+    padding: 10px 14px;
+    color: var(--crit);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.45;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .dose-warn::before {
+    content: "ALLERGY"; font-family: var(--mono); font-style: normal;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+    background: var(--crit); color: #fff;
+    padding: 3px 7px; border-radius: 1px;
+  }
+
+  /* ============================================================
+     C. ICD-10 / CPT — a search field that opens a list.
+     The result rows are: code (mono) + name (serif) + meta (sans)
+     ============================================================ */
+  .search-line {
+    border: 1px solid var(--ink);
+    background: var(--sheet);
+  }
+  .search-line .row-input {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .search-line .row-input .pre {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .search-line .row-input input {
+    background: transparent; border: 0; outline: none;
+    font-family: var(--sans); font-size: 16px; color: var(--ink);
+    flex: 1; padding: 0;
+    letter-spacing: 0;
+  }
+  .search-line .row-input .hint {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .search-line .results {}
+  .search-line .res {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+    padding: 12px 18px;
+    border-bottom: 1px dashed var(--hair-soft);
+    cursor: pointer;
+  }
+  .search-line .res:last-child { border-bottom: 0; }
+  .search-line .res:hover { background: var(--paper-deep); }
+  .search-line .res.on   { background: var(--paper); border-left: 2px solid var(--ink); padding-left: 16px; }
+  .search-line .res .code {
+    font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 500;
+    letter-spacing: 0;
+  }
+  .search-line .res .nm {
+    font-family: var(--serif); font-size: 16px; color: var(--ink); font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+  .search-line .res .meta {
+    font-size: 12px; color: var(--ink-3); margin-top: 2px;
+  }
+  .search-line .res .badge {
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 1px;
+    color: var(--green-800); background: var(--green-50);
+    border: 1px solid var(--green-200);
+  }
+  .search-line .res .badge.warn { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-edge); }
+
+  /* ============================================================
+     D. STRUCTURED — input groups with paired fields
+     ============================================================ */
+  .row-pair {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px;
+  }
+
+  /* Footnote-style helper between two fields */
+  .compute {
+    font-family: var(--serif); font-style: italic;
+    color: var(--ink-3); font-size: 13px;
+    margin-top: 2px;
+  }
+  .compute strong { color: var(--ink); font-style: normal; font-family: var(--mono); font-size: 12px; }
+
+  /* Generic & states — last, small */
+  .quick {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">II · 02</span>
+    <h1 class="ttl">Inputs · vitals &amp; dosage</h1>
+    <span class="meta">designed for the fields used 200 times a shift</span>
+  </header>
+
+  <p style="font-size:14px;line-height:1.6;color:var(--ink-2);max-width:62ch;margin:0 0 16px">
+    The default input is a line, not a box — chart paper. The label sits above
+    in mono caps; the value below in sans, or in mono if the value is a number
+    on the record. Specialized fields are designed first; the trivial text
+    field is the simplest case of them.
+  </p>
+
+  <!-- A. VITALS BLOCK -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Vitals — six readings, one block.</h2>
+      <div class="sub">Tab moves between fields. The block is the input; the values are large mono so a clinician scanning across the row reads them at a glance.</div>
+    </div>
+
+    <div class="vitals-block">
+      <div class="v">
+        <div class="lbl">Heart rate</div>
+        <div class="num-input"><input value="76" inputmode="numeric"><span class="u">bpm</span></div>
+        <div class="help">range 60–100</div>
+      </div>
+      <div class="v bp">
+        <div class="lbl">Blood pressure</div>
+        <div class="num-input">
+          <input class="bp-sys" value="128" inputmode="numeric">
+          <span class="slash">/</span>
+          <input class="bp-dia" value="82" inputmode="numeric">
+          <span class="u">mmHg</span>
+        </div>
+        <div class="help">last reading 124/80 at 09:00</div>
+      </div>
+      <div class="v">
+        <div class="lbl">Resp rate</div>
+        <div class="num-input"><input value="16" inputmode="numeric"><span class="u">/min</span></div>
+        <div class="help">range 12–20</div>
+      </div>
+      <div class="v">
+        <div class="lbl">SpO₂</div>
+        <div class="num-input"><input value="98" inputmode="numeric"><span class="u">%</span></div>
+        <div class="help">on room air</div>
+      </div>
+      <div class="v">
+        <div class="lbl">Temperature</div>
+        <div class="num-input"><input value="98.6" inputmode="decimal"><span class="u">
+          <span class="toggle"><button class="on">°F</button><span class="div">/</span><button>°C</button></span>
+        </span></div>
+        <div class="help">37.0 °C · oral</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px">
+      <div>
+        <div class="lab">Weight</div>
+        <div style="display:flex;align-items:baseline;gap:14px">
+          <input class="f f-mono" style="font-size:24px;text-align:right;width:120px;border-bottom:1.5px solid var(--ink)" value="178">
+          <span class="toggle" style="font-size:13px"><button class="on">lb</button><span class="div">/</span><button>kg</button></span>
+        </div>
+        <div class="compute">= <strong>80.7</strong> kg · BMI <strong>26.3</strong></div>
+      </div>
+
+      <div>
+        <div class="lab">Height</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input class="f f-mono" style="font-size:24px;text-align:right;width:60px;border-bottom:1.5px solid var(--ink)" value="5">
+          <span class="serif" style="font-style:italic;font-size:18px;color:var(--ink-3)">ft</span>
+          <input class="f f-mono" style="font-size:24px;text-align:right;width:60px;border-bottom:1.5px solid var(--ink)" value="9">
+          <span class="serif" style="font-style:italic;font-size:18px;color:var(--ink-3)">in</span>
+          <span class="toggle" style="font-size:13px;margin-left:10px"><button class="on">ft/in</button><span class="div">/</span><button>cm</button></span>
+        </div>
+        <div class="compute">= <strong>175.3</strong> cm</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. DOSAGE -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Dosage — number, unit, route.</h2>
+      <div class="sub">A single composed line. The number reads big because misreading 50 vs 500 is the hazard.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The line</h4>
+        <p>Amount in mono. Unit and route as inline selects. The italic serif word — "by mouth, every" — keeps it human, like a sentence.</p>
+      </div>
+
+      <div>
+        <div class="lab">Order — Amoxicillin 500 mg PO TID</div>
+        <div class="dose">
+          <input class="amount" value="500">
+          <select><option>mg</option><option>mcg</option><option>g</option><option>mL</option></select>
+          <span class="word">by</span>
+          <select><option>mouth</option><option>IV</option><option>IM</option><option>SC</option><option>PR</option></select>
+          <span class="word">every</span>
+          <select><option>8 hours</option><option>6 hours</option><option>12 hours</option><option>24 hours</option></select>
+          <span class="word">×</span>
+          <select><option>7 days</option><option>10 days</option><option>14 days</option></select>
+        </div>
+        <div class="dose-meta">
+          <span>renal-adjusted dose: <span style="color:var(--ink)">500 mg</span></span>
+          <span class="max">max 2,000 mg / day</span>
+          <span>est. cost / day · $1.40</span>
+        </div>
+
+        <div class="dose-warn">
+          The patient is allergic to penicillin (anaphylaxis). Amoxicillin is the same class. Override requires reason and is logged.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. ICD-10 -->
+  <section class="section">
+    <div class="section-h">
+      <h2>ICD-10 — search the chart-book.</h2>
+      <div class="sub">Code first in mono, name in serif, meta in sans. The selected row is marked with a left rule, not a fill.</div>
+    </div>
+
+    <div class="search-line">
+      <div class="row-input">
+        <span class="pre">ICD-10</span>
+        <input value="hypertension" autofocus>
+        <span class="hint">↑ ↓ to step · ↵ to add</span>
+      </div>
+      <div class="results">
+        <div class="res on">
+          <span class="code">I10</span>
+          <div>
+            <div class="nm">Essential (primary) hypertension</div>
+            <div class="meta">most-used in your dept · billable</div>
+          </div>
+          <span class="badge">Most used</span>
+        </div>
+        <div class="res">
+          <span class="code">I11.9</span>
+          <div>
+            <div class="nm">Hypertensive heart disease without heart failure</div>
+            <div class="meta">billable · requires linked HF code if present</div>
+          </div>
+          <span class="badge">Billable</span>
+        </div>
+        <div class="res">
+          <span class="code">I12.9</span>
+          <div>
+            <div class="nm">Hypertensive CKD with stage 1–4 CKD</div>
+            <div class="meta">requires CKD stage code</div>
+          </div>
+          <span class="badge warn">Pair w/ CKD</span>
+        </div>
+        <div class="res">
+          <span class="code">I13.10</span>
+          <div>
+            <div class="nm">Hypertensive heart and CKD without heart failure</div>
+          </div>
+        </div>
+        <div class="res">
+          <span class="code">O10.012</span>
+          <div>
+            <div class="nm">Pre-existing essential hypertension complicating pregnancy</div>
+            <div class="meta">obstetric encounters only</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. DRUG SEARCH -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Drug search — generic, brand, strength.</h2>
+      <div class="sub">Same idiom as the chart-book. Brands are quieter than generics; non-formulary drugs are flagged.</div>
+    </div>
+
+    <div class="search-line" style="max-width:680px">
+      <div class="row-input">
+        <span class="pre">Rx</span>
+        <input value="lisin" autofocus>
+        <span class="hint">↵ to add</span>
+      </div>
+      <div class="res on" style="grid-template-columns:1fr auto;padding:14px 18px;border-bottom:1px dashed var(--hair-soft)">
+        <div>
+          <div class="nm" style="font-size:17px"><em>Lisinopril</em> &nbsp;<span style="color:var(--ink-3);font-style:normal;font-family:var(--sans);font-size:13px">10 mg tablet</span></div>
+          <div class="meta">ACE inhibitor · generic for Prinivil, Zestril · NDC 0093-1115</div>
+        </div>
+        <span class="badge">Formulary</span>
+      </div>
+      <div class="res" style="grid-template-columns:1fr auto;padding:14px 18px;border-bottom:1px dashed var(--hair-soft)">
+        <div>
+          <div class="nm" style="font-size:17px"><em>Lisinopril</em> &nbsp;<span style="color:var(--ink-3);font-style:normal;font-family:var(--sans);font-size:13px">20 mg tablet</span></div>
+          <div class="meta">ACE inhibitor · NDC 0093-1116</div>
+        </div>
+        <span class="badge">Formulary</span>
+      </div>
+      <div class="res" style="grid-template-columns:1fr auto;padding:14px 18px">
+        <div>
+          <div class="nm" style="font-size:17px"><em>Lisinopril/HCTZ</em> &nbsp;<span style="color:var(--ink-3);font-style:normal;font-family:var(--sans);font-size:13px">20/12.5 mg tablet</span></div>
+          <div class="meta">combination · brand Prinzide, Zestoretic</div>
+        </div>
+        <span class="badge warn">Non-formulary</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. STRUCTURED -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Structured — paired fields.</h2>
+      <div class="sub">Demographics, contact, and the rest of the registration form. Same line-field, same labels, used in pairs.</div>
+    </div>
+
+    <div class="row-pair">
+      <div class="field">
+        <div class="lab">Family name</div>
+        <input value="Adebayo">
+      </div>
+      <div class="field">
+        <div class="lab">Given name</div>
+        <input value="Olumide">
+      </div>
+      <div class="field mono">
+        <div class="lab">Date of birth</div>
+        <input value="1962-03-14">
+        <div class="compute">= <strong>64</strong> years</div>
+      </div>
+      <div class="field">
+        <div class="lab">Sex assigned at birth</div>
+        <select>
+          <option>Male</option><option>Female</option><option>Intersex</option><option>Prefer not to say</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="lab">Mobile</div>
+        <input class="f-mono" value="+1 (312) 555-0148" style="font-family:var(--mono)">
+      </div>
+      <div class="field">
+        <div class="lab">Email</div>
+        <input value="m.adebayo@example.com">
+      </div>
+      <div class="field" style="grid-column:span 2">
+        <div class="lab">Address</div>
+        <input value="142 W Lakeside Dr · Chicago, IL 60615">
+      </div>
+      <div class="field" style="grid-column:span 2">
+        <div class="lab">Emergency contact</div>
+        <input value="Funmi Adebayo · spouse · +1 (312) 555-0193">
+      </div>
+    </div>
+  </section>
+
+  <!-- F. STATES, BRIEFLY -->
+  <section class="section">
+    <div class="section-h">
+      <h2>States, briefly.</h2>
+      <div class="sub">Default · focus · disabled · read-only · error · ok. Drawn small because the design is the rest of this page.</div>
+    </div>
+
+    <div class="quick">
+      <div class="field">
+        <div class="lab">Default</div>
+        <input placeholder="Search MRN, name, DOB">
+        <div class="help">searchable from anywhere with /</div>
+      </div>
+      <div class="field">
+        <div class="lab">Focus</div>
+        <input value="Adebayo, O" style="border-bottom:1.5px solid var(--ink)">
+      </div>
+      <div class="field">
+        <div class="lab">Disabled</div>
+        <input value="signed by R. Patel · cannot edit" disabled style="color:var(--ink-3);border-bottom-style:dashed">
+      </div>
+      <div class="field">
+        <div class="lab">Read-only</div>
+        <input value="ICD-10 I10" readonly style="border-bottom-style:dashed;color:var(--ink-2)">
+        <div class="help">signed records are read-only by default</div>
+      </div>
+      <div class="field error">
+        <div class="lab">Error</div>
+        <input value="abc">
+        <div class="help">pulse must be numeric, between 30 and 220</div>
+      </div>
+      <div class="field ok">
+        <div class="lab">Verified</div>
+        <input value="m.adebayo@example.com">
+        <div class="help">verified · primary contact</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

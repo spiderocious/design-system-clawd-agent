@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Specialized inputs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* SPECIALIZED — drop zones, signatures, body diagram, SOAP, PIN, DICOM thumb */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1100px; }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+  .lab { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 10px; }
+
+  /* Drop zone — dotted edge, inscription typed in serif italic */
+  .dz {
+    border: 1.5px dashed var(--ink-3);
+    background: var(--sheet);
+    padding: 36px 28px;
+    text-align: center;
+  }
+  .dz .glyph { font-family: var(--serif); font-size: 36px; color: var(--ink); line-height: 1; }
+  .dz .ttl { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink); margin-top: 10px; letter-spacing: -0.005em; }
+  .dz .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; letter-spacing: 0; }
+  .dz.hover { border-color: var(--ink); background: var(--paper-deep); }
+  .dz.ok { border-color: var(--green-700); background: var(--green-50); }
+  .dz.ok .ttl { color: var(--green-800); }
+  .dz.err { border-color: var(--crit); background: var(--crit-bg); }
+  .dz.err .ttl { color: var(--crit); }
+
+  /* File row: paper-clip glyph (drawn), name, size, status */
+  .files { display: flex; flex-direction: column; }
+  .file {
+    display: grid; grid-template-columns: 18px 1fr auto auto;
+    align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px dashed var(--hair-soft);
+  }
+  .file:last-child { border-bottom: 0; }
+  .file .clip { color: var(--ink-3); font-family: var(--serif); font-size: 18px; line-height: 1; }
+  .file .nm { font-size: 14px; color: var(--ink); }
+  .file .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .file .pb { width: 120px; height: 4px; background: var(--paper-deep); }
+  .file .pb > span { display: block; height: 100%; background: var(--ink); }
+  .file.ok .nm { color: var(--green-800); }
+  .file.err .nm { color: var(--crit); }
+
+  /* DICOM thumb stack — small grayscale rectangles */
+  .dicom-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .dicom {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #2A2520, #6E665B 60%, #A39A8A);
+    border: 1px solid var(--ink);
+    position: relative;
+    color: var(--paper);
+  }
+  .dicom .badge {
+    position: absolute; top: 6px; left: 6px;
+    background: rgba(0,0,0,0.55); color: var(--paper);
+    font-family: var(--mono); font-size: 9px; padding: 2px 6px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .dicom .modality {
+    position: absolute; top: 6px; right: 6px;
+    color: var(--paper); font-family: var(--mono); font-size: 9px;
+    background: rgba(0,0,0,0.55); padding: 2px 6px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .dicom .when {
+    position: absolute; bottom: 6px; left: 6px;
+    font-family: var(--mono); font-size: 10px;
+    color: rgba(244,239,230,0.85);
+    letter-spacing: 0;
+  }
+  .dicom .ww {
+    position: absolute; bottom: 6px; right: 6px;
+    font-family: var(--mono); font-size: 9px;
+    color: rgba(244,239,230,0.65);
+    letter-spacing: 0;
+  }
+
+  /* PAIRED CARDS — insurance & ID upload */
+  .pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .card-pair {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .card-pair .h {
+    padding: 12px 16px; border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .card-pair .h .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .card-pair .h .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .card-pair .body {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--ink);
+  }
+  .card-pair .face {
+    aspect-ratio: 1.6; padding: 12px;
+    background: var(--sheet);
+    display: flex; flex-direction: column; gap: 4px;
+    position: relative;
+  }
+  .card-pair .face.empty { background: var(--paper); border: 1px dashed var(--ink-3); }
+  .card-pair .face.empty { display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-family: var(--serif); font-style: italic; font-size: 14px; }
+  .card-pair .face .lbl { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .card-pair .face .who { font-family: var(--serif); font-size: 16px; font-weight: 500; }
+  .card-pair .face .num { font-family: var(--mono); font-size: 11px; color: var(--ink-2); letter-spacing: 0; }
+  .card-pair .face.bcbs { background: linear-gradient(135deg,#1F2D4A,#395282); color: var(--paper); }
+  .card-pair .face.bcbs .lbl { color: rgba(244,239,230,0.55); }
+  .card-pair .face.bcbs .who, .card-pair .face.bcbs .num { color: var(--paper); }
+  .card-pair .face.bcbs::after {
+    content: "BCBS";
+    position: absolute; top: 8px; right: 8px;
+    font-family: var(--serif); font-size: 16px; font-weight: 700;
+    color: var(--paper); letter-spacing: -0.01em;
+  }
+
+  /* PIN — six little boxes */
+  .pin { display: flex; gap: 8px; }
+  .pin input {
+    width: 44px; height: 56px;
+    text-align: center;
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 24px; font-weight: 500;
+    background: var(--sheet); border: 1.5px solid var(--ink-3);
+    border-radius: 4px;
+    outline: none; color: var(--ink);
+    letter-spacing: 0;
+  }
+  .pin input:focus { border-color: var(--ink); }
+  .pin input.has { border-color: var(--ink); }
+  .pin input.next { border-color: var(--ink); border-bottom-width: 3px; }
+
+  /* RATING — 5 stars, drawn, the inactive ones outlined */
+  .stars { display: inline-flex; gap: 6px; align-items: center; }
+  .stars svg { width: 22px; height: 22px; }
+
+  /* SIGNATURE PADS — paper-tape with a pen-stroke */
+  .sig {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .sig .h { display: flex; align-items: baseline; justify-content: space-between; }
+  .sig .name { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink); }
+  .sig .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .sig .pad {
+    height: 80px;
+    background: repeating-linear-gradient(0deg, transparent 0 19px, var(--hair) 19px 20px);
+    border-bottom: 1.5px solid var(--ink);
+    position: relative; padding: 0 8px;
+  }
+  .sig .pad svg { width: 100%; height: 100%; }
+  .sig .pad .x {
+    position: absolute; bottom: 6px; left: 14px;
+    font-family: var(--serif); font-size: 18px; color: var(--ink-2);
+  }
+  .sig.witness { background: var(--paper-deep); }
+
+  /* BODY DIAGRAM — front + back, two SVGs, marked regions */
+  .body-row { display: flex; gap: 20px; align-items: flex-start; }
+  .body-svg {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 12px;
+  }
+  .body-svg .h {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .body-legend ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .body-legend li { display: flex; gap: 8px; align-items: baseline; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink); }
+  .body-legend li .dot { width: 8px; height: 8px; flex-shrink: 0; transform: translateY(-1px); }
+
+  /* SOAP composition */
+  .soap-card {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .soap-row {
+    display: grid; grid-template-columns: 64px 1fr;
+    gap: 0; align-items: stretch;
+    border-bottom: 1px solid var(--hair);
+  }
+  .soap-row:last-child { border-bottom: 0; }
+  .soap-row .tag {
+    display: flex; align-items: center; justify-content: center;
+    border-right: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    font-family: var(--serif); font-size: 28px; font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  .soap-row .body {
+    padding: 14px 18px;
+  }
+  .soap-row .body .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .soap-row .body .text {
+    font-family: var(--serif); font-size: 15px; color: var(--ink);
+    line-height: 1.55; letter-spacing: -0.005em;
+  }
+
+  /* MARKDOWN editor — rules-only border, the bar is hairlines, content area is paper */
+  .md-editor {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .md-toolbar {
+    display: flex; gap: 4px; padding: 8px 10px;
+    border-bottom: 1px solid var(--ink);
+    align-items: center;
+    color: var(--ink-3);
+    font-family: var(--mono); font-size: 11px;
+  }
+  .md-toolbar button {
+    background: transparent; border: 0; padding: 4px 6px; cursor: pointer;
+    font-family: inherit; color: inherit;
+  }
+  .md-toolbar button.on { color: var(--ink); border-bottom: 1.5px solid var(--ink); }
+  .md-toolbar .div { width: 1px; height: 14px; background: var(--hair); margin: 0 4px; }
+  .md-toolbar .right { margin-left: auto; }
+  .md-area {
+    padding: 16px 18px;
+    font-family: var(--serif); font-size: 15px; line-height: 1.6;
+    color: var(--ink); min-height: 120px;
+    letter-spacing: -0.005em;
+  }
+  .md-area code { font-family: var(--mono); background: var(--paper-deep); padding: 1px 5px; border-radius: 2px; font-size: 13px; letter-spacing: 0; }
+  .md-area em { font-style: italic; }
+  .md-area strong { font-weight: 600; }
+  .md-foot {
+    display: flex; justify-content: space-between;
+    padding: 8px 14px; border-top: 1px solid var(--ink);
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">II · 05</span>
+    <h1 class="ttl">Specialized inputs</h1>
+    <span class="meta">drop zones, signatures, body diagram, SOAP, PIN, DICOM thumb</span>
+  </header>
+
+  <!-- A. DROP ZONE -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Drop zone — and the file row.</h2>
+      <div class="sub">A dashed edge with a serif inscription. Once files are dropped, the rows below carry them like stamped paperclips.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="dz">
+        <div class="glyph">↑</div>
+        <div class="ttl">Drop a file or click to upload.</div>
+        <div class="meta">PDF · JPEG · PNG · DICOM · max 50 MB</div>
+      </div>
+      <div class="dz hover">
+        <div class="glyph">↑</div>
+        <div class="ttl">Release to upload three files.</div>
+        <div class="meta">labs.pdf · echo.dcm · consent.pdf</div>
+      </div>
+      <div class="dz ok">
+        <div class="glyph">✓</div>
+        <div class="ttl">Three files uploaded.</div>
+        <div class="meta" style="color:var(--green-800)">labs.pdf · echo.dcm · consent.pdf</div>
+      </div>
+      <div class="dz err">
+        <div class="glyph">×</div>
+        <div class="ttl">Upload failed.</div>
+        <div class="meta" style="color:var(--crit)">scan.pdf exceeds 50 MB · split or compress and retry</div>
+      </div>
+    </div>
+
+    <div class="files" style="margin-top:24px">
+      <div class="file">
+        <span class="clip">⏃</span>
+        <span class="nm">echo_2026-04-30.pdf</span>
+        <span class="pb"><span style="width:62%"></span></span>
+        <span class="meta">62% · 2.3 MB</span>
+      </div>
+      <div class="file ok">
+        <span class="clip">⏃</span>
+        <span class="nm">Lab_BMP_2026-04-30.pdf</span>
+        <span class="meta">uploaded</span>
+        <span class="meta">218 KB · 14:22</span>
+      </div>
+      <div class="file err">
+        <span class="clip">⏃</span>
+        <span class="nm">consent.pdf</span>
+        <span class="meta">network error</span>
+        <span class="meta">retry</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. DICOM THUMBS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>DICOM — the radiology thumb.</h2>
+      <div class="sub">Greyscale stripes, mono badge, modality and timestamp typeset like a film header. Click to open the viewer.</div>
+    </div>
+
+    <div class="dicom-row">
+      <div class="dicom">
+        <span class="badge">DICOM</span><span class="modality">CR</span>
+        <span class="when">04/30 · 14:22</span><span class="ww">CHEST PA</span>
+      </div>
+      <div class="dicom" style="background:linear-gradient(180deg,#181613,#3C3833 50%,#6E665B)">
+        <span class="badge">DICOM</span><span class="modality">MRI</span>
+        <span class="when">04/28 · 09:14</span><span class="ww">BRAIN T1</span>
+      </div>
+      <div class="dicom" style="background:radial-gradient(ellipse at center,#A39A8A,#3C3833 70%,#181613)">
+        <span class="badge">DICOM</span><span class="modality">CT</span>
+        <span class="when">04/29 · 11:42</span><span class="ww">ABD/PEL</span>
+      </div>
+      <div class="dicom" style="background:linear-gradient(45deg,#3C3833,#6E665B,#A39A8A)">
+        <span class="badge">DICOM</span><span class="modality">US</span>
+        <span class="when">04/30 · 16:30</span><span class="ww">ECHO</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. INSURANCE / ID -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Insurance &amp; ID — paired front &amp; back.</h2>
+      <div class="sub">Two slots side-by-side. The front carries colour because it is a real card; the back is mostly text and nothing else.</div>
+    </div>
+
+    <div class="pair">
+      <div class="card-pair">
+        <div class="h">
+          <span class="nm">Insurance — BlueCross BlueShield</span>
+          <span class="meta">verified</span>
+        </div>
+        <div class="body">
+          <div class="face bcbs">
+            <span class="lbl">Front · Member</span>
+            <div class="who">ADEBAYO O</div>
+            <div class="num">XYL923847562</div>
+            <div class="num" style="margin-top:auto">Group · 1184-CORP</div>
+          </div>
+          <div class="face">
+            <span class="lbl">Back</span>
+            <div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-2);line-height:1.4">Customer service<br>1-800-555-0148</div>
+            <div class="num" style="margin-top:auto">RxBIN 003858 · PCN A4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-pair">
+        <div class="h">
+          <span class="nm">ID — Driver's license</span>
+          <span class="meta">on file</span>
+        </div>
+        <div class="body">
+          <div class="face">
+            <div style="display:flex;gap:10px">
+              <div style="width:50px;height:60px;background:var(--paper-deep);border:1px dashed var(--ink-3);display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:10px;font-family:var(--mono)">photo</div>
+              <div>
+                <div class="who">ADEBAYO, OLUMIDE</div>
+                <div class="num" style="margin-top:4px">DL · D9183-XXXX</div>
+                <div class="num">DOB 03/14/1962</div>
+                <div class="num">EXP 03/14/2030</div>
+              </div>
+            </div>
+          </div>
+          <div class="face empty">+ Add back of license</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. PIN / OTP -->
+  <section class="section">
+    <div class="section-h">
+      <h2>PIN — badge re-authentication.</h2>
+      <div class="sub">Six small boxes; the next-to-fill is underlined like a fountain-pen field. The workstation auto-locks for HIPAA.</div>
+    </div>
+
+    <div style="background:var(--sheet);border:1px solid var(--ink);padding:22px;max-width:480px">
+      <div class="lab" style="margin-bottom:14px">Re-enter your badge PIN to continue</div>
+      <div class="pin">
+        <input value="3" class="has" readonly>
+        <input value="9" class="has" readonly>
+        <input value="1" class="has" readonly>
+        <input value="" class="next" autofocus>
+        <input value="" readonly>
+        <input value="" readonly>
+      </div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-3);margin-top:14px;line-height:1.45">
+        Workstation auto-locks after five minutes of inactivity. This is a HIPAA requirement, not a setting.
+      </div>
+    </div>
+  </section>
+
+  <!-- E. RATING -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Rating — patient satisfaction.</h2>
+      <div class="sub">Five stars drawn in ink. Half-stars are not allowed; if a patient is between two, ask which one.</div>
+    </div>
+
+    <div style="background:var(--sheet);border:1px solid var(--ink);padding:18px 22px;max-width:520px;display:flex;align-items:center;gap:18px">
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="var(--ink)" stroke-width="0.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+        <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="var(--ink)" stroke-width="0.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+        <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="var(--ink)" stroke-width="0.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+        <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="var(--ink)" stroke-width="0.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="1.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+      </div>
+      <div>
+        <div class="serif" style="font-size:22px;font-weight:500;letter-spacing:-0.012em">4.0</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">Press Ganey · n = 128, last 30 d</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- F. SIGNATURES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Signatures — patient &amp; witness.</h2>
+      <div class="sub">A paper-tape with ruled lines. The signature is drawn over the rules, not in a box. Witness signature uses a quieter paper.</div>
+    </div>
+
+    <div class="pair">
+      <div class="sig">
+        <div class="h">
+          <span class="name">Patient signature</span>
+          <span class="meta">Adebayo, O. · 14:08</span>
+        </div>
+        <div class="pad">
+          <svg viewBox="0 0 240 60" preserveAspectRatio="none">
+            <path d="M 8 36 C 18 22, 30 50, 42 32 S 70 18, 86 38 S 122 16, 142 28 S 184 20, 210 34" stroke="var(--ink)" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="x">×</span>
+        </div>
+      </div>
+
+      <div class="sig witness">
+        <div class="h">
+          <span class="name">Witness signature</span>
+          <span class="meta">A. Williams RN · 14:09</span>
+        </div>
+        <div class="pad">
+          <svg viewBox="0 0 240 60" preserveAspectRatio="none">
+            <path d="M 6 30 Q 30 12, 56 28 T 110 30 T 168 24 T 220 32" stroke="var(--ink-2)" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="x">×</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- G. BODY DIAGRAM -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Body diagram — front &amp; back.</h2>
+      <div class="sub">Tap a region to mark a finding. Each region is drawn with a hairline stroke and labelled inline; the marked regions appear in the legend with a serif italic name.</div>
+    </div>
+
+    <div class="body-row">
+      <div class="body-svg">
+        <div class="h">Anterior</div>
+        <svg viewBox="0 0 100 220" width="160" height="320" fill="none" stroke="var(--ink-2)" stroke-width="1">
+          <circle cx="50" cy="22" r="13" fill="var(--paper-deep)"/>
+          <path d="M 44 33 L 44 42 L 56 42 L 56 33 Z" fill="var(--paper-deep)"/>
+          <path d="M 30 42 Q 30 80 36 130 L 64 130 Q 70 80 70 42 Z" fill="var(--paper-deep)"/>
+          <path d="M 30 44 Q 18 70 14 110 L 22 112 Q 26 76 36 50 Z" fill="var(--paper-deep)"/>
+          <path d="M 70 44 Q 82 70 86 110 L 78 112 Q 74 76 64 50 Z" fill="var(--paper-deep)"/>
+          <path d="M 36 130 L 32 210 L 48 210 L 48 132 Z" fill="var(--paper-deep)"/>
+          <path d="M 64 130 L 68 210 L 52 210 L 52 132 Z" fill="var(--paper-deep)"/>
+          <!-- marked: chest -->
+          <ellipse cx="50" cy="80" rx="14" ry="10" fill="var(--crit-bg)" stroke="var(--crit)" stroke-width="1.5"/>
+          <text x="50" y="83" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="var(--crit)" font-weight="600">PAIN</text>
+          <!-- pickable dots -->
+          <circle cx="38" cy="60" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="62" cy="60" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="50" cy="110" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="40" cy="160" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="60" cy="160" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+        </svg>
+      </div>
+
+      <div class="body-svg">
+        <div class="h">Posterior</div>
+        <svg viewBox="0 0 100 220" width="160" height="320" fill="none" stroke="var(--ink-2)" stroke-width="1">
+          <circle cx="50" cy="22" r="13" fill="var(--paper-deep)"/>
+          <path d="M 44 33 L 44 42 L 56 42 L 56 33 Z" fill="var(--paper-deep)"/>
+          <path d="M 30 42 Q 30 80 36 130 L 64 130 Q 70 80 70 42 Z" fill="var(--paper-deep)"/>
+          <path d="M 30 44 Q 18 70 14 110 L 22 112 Q 26 76 36 50 Z" fill="var(--paper-deep)"/>
+          <path d="M 70 44 Q 82 70 86 110 L 78 112 Q 74 76 64 50 Z" fill="var(--paper-deep)"/>
+          <ellipse cx="50" cy="100" rx="12" ry="10" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.5"/>
+          <text x="50" y="103" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="var(--warn)" font-weight="600">STIFF</text>
+          <path d="M 36 130 L 32 210 L 48 210 L 48 132 Z" fill="var(--paper-deep)"/>
+          <path d="M 64 130 L 68 210 L 52 210 L 52 132 Z" fill="var(--paper-deep)"/>
+          <circle cx="50" cy="60" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="38" cy="80" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+          <circle cx="62" cy="80" r="3" fill="var(--paper)" stroke="var(--ink-3)"/>
+        </svg>
+      </div>
+
+      <div class="body-legend" style="padding-top:30px">
+        <div class="lab" style="margin-bottom:12px">Marked regions</div>
+        <ul>
+          <li><span class="dot" style="background:var(--crit)"></span> Anterior chest — pain 7/10</li>
+          <li><span class="dot" style="background:var(--warn)"></span> Lumbar spine — stiffness</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- H. SOAP -->
+  <section class="section">
+    <div class="section-h">
+      <h2>SOAP — note as a structured input.</h2>
+      <div class="sub">Four labelled blocks, each with the letter as a serif tablet. Type into the body; the letters are the structure.</div>
+    </div>
+
+    <div class="soap-card">
+      <div class="soap-row">
+        <div class="tag">S</div>
+        <div class="body">
+          <div class="lbl">Subjective</div>
+          <div class="text"><em>"Crushing chest pressure × 30 min, sweating, nausea. Last meal at four in the morning."</em> Pain seven of ten.</div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <div class="tag">O</div>
+        <div class="body">
+          <div class="lbl">Objective</div>
+          <div class="text">VS: BP 142/88 · HR 96 · RR 18 · SpO₂ 98% RA · T 98.6 °F. Cards: RRR, no m/r/g. Lungs CTA b/l. ECG: NSR, no acute ST changes. Initial troponin 0.04, repeat 14:42 = <strong>2.10 ng/mL critical</strong>.</div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <div class="tag">A</div>
+        <div class="body">
+          <div class="lbl">Assessment</div>
+          <div class="text">NSTEMI <code style="font-family:var(--mono);font-size:13px;background:var(--paper-deep);padding:1px 5px;border-radius:2px">I21.4</code>. HEART score 6 (high risk).</div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <div class="tag">P</div>
+        <div class="body">
+          <div class="lbl">Plan</div>
+          <div class="text">Transfer to CCU 207A. ASA 325 mg PO × 1, given. Heparin gtt per protocol. Cardiology consult. Cath lab notified. NPO.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- I. MARKDOWN EDITOR -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Markdown editor — clinical narration.</h2>
+      <div class="sub">The body is set in serif, large, like a doctor's letter. The toolbar is mono, hairline. Mention with @, code-tag with backticks, that's it.</div>
+    </div>
+
+    <div class="md-editor">
+      <div class="md-toolbar">
+        <button class="on"><strong>B</strong></button>
+        <button><em>I</em></button>
+        <button>U</button>
+        <div class="div"></div>
+        <button>•</button>
+        <button>1.</button>
+        <div class="div"></div>
+        <button>{ }</button>
+        <button>" "</button>
+        <div class="div"></div>
+        <button>@</button>
+        <span class="right">⌘B · ⌘I · ⌘K</span>
+      </div>
+      <div class="md-area">
+        <strong>HPI:</strong> 64 M with hx HTN, hyperlipidemia presents with substernal chest pressure × 2 h, radiating L arm. Denies SOB, diaphoresis. <em>Pain 7/10.</em>
+        <br><br>
+        <strong>PMH:</strong>
+        <br>— Essential hypertension <code>I10</code>
+        <br>— Hyperlipidemia <code>E78.5</code>
+        <br>— Type 2 diabetes <code>E11.9</code>
+      </div>
+      <div class="md-foot">
+        <span>Mention @ to tag staff or patient</span>
+        <span>auto-saved 14:08 · 242 chars</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

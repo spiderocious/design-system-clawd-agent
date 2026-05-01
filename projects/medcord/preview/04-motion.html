@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Motion</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* Motion: paper turns. Entries fade up by a few pixels.
+     No bounce, no spring. The system is calm because the night-shift
+     workstation cannot afford to be playful. */
+
+  .principle { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.4; max-width: 30ch; margin: 0 0 28px; color: var(--ink); letter-spacing: -0.012em; }
+  .principle small { font-family: var(--mono); font-style: normal; font-size: 11px; color: var(--ink-3); display: block; margin-top: 8px; letter-spacing: 0; }
+
+  .timing { display: grid; grid-template-columns: 140px 1fr 200px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .timing:first-of-type { border-top: 1px solid var(--hair); }
+  .timing .nm { font-family: var(--mono); font-size: 12px; color: var(--ink); letter-spacing: 0; }
+  .timing .nm .ms { color: var(--ink-3); }
+  .timing .desc { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+  .timing .track { background: var(--paper-deep); height: 6px; border-radius: 3px; position: relative; overflow: hidden; }
+  .timing .puck {
+    position: absolute; top: -1px; left: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ink);
+    animation: glide 2400ms infinite;
+  }
+  .timing .puck.fast    { animation-duration: 1200ms; }
+  .timing .puck.normal  { animation-duration: 1800ms; }
+  .timing .puck.slow    { animation-duration: 2800ms; }
+  .timing .puck.ease-out  { animation-timing-function: cubic-bezier(0.18, 0.8, 0.34, 1); }
+  .timing .puck.ease-in   { animation-timing-function: cubic-bezier(0.6, 0, 0.85, 0.2); }
+  .timing .puck.ease-io   { animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1); }
+  .timing .puck.linear    { animation-timing-function: linear; }
+  @keyframes glide {
+    0%   { left: 0; }
+    45%  { left: calc(100% - 8px); }
+    55%  { left: calc(100% - 8px); }
+    100% { left: 0; }
+  }
+
+  /* Live demo: a sheet sliding into view */
+  .demo {
+    position: relative;
+    height: 220px;
+    background: var(--paper-deep);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    overflow: hidden;
+  }
+  .demo .sheet-fly {
+    position: absolute;
+    inset: 32px 32px auto 32px;
+    height: 132px;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge);
+    border-radius: var(--r-card);
+    padding: 14px 16px;
+    animation: rise 4s cubic-bezier(0.18, 0.8, 0.34, 1) infinite;
+  }
+  .demo .sheet-fly h4 { margin: 0 0 6px; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.015em; }
+  .demo .sheet-fly p  { margin: 0; font-size: 12px; color: var(--ink-3); }
+  .demo .label { position: absolute; bottom: 12px; left: 16px; }
+  @keyframes rise {
+    0%, 35%   { transform: translateY(8px); opacity: 0; }
+    50%, 85%  { transform: translateY(0);   opacity: 1; }
+    100%      { transform: translateY(-4px); opacity: 0; }
+  }
+
+  /* Reduced motion notice */
+  .rm {
+    margin-top: 28px;
+    padding: 14px 18px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r-card);
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+    max-width: 60ch;
+  }
+  .rm code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">I · 04</span>
+    <h1 class="ttl">Motion</h1>
+    <span class="meta">paper turns, ink rises · no bounce, no decoration</span>
+  </header>
+
+  <p class="principle">
+    "Motion in Medcord describes the page being turned, not a button being amused."
+    <small>— design principle, vol. 1</small>
+  </p>
+
+  <!-- Live demo of the only sanctioned entry -->
+  <div class="demo">
+    <div class="overline label">Sheet entry · 200 ms · ease-out · ↑ 8 px</div>
+    <div class="sheet-fly">
+      <div class="overline" style="margin-bottom:6px">Progress note · 14:08</div>
+      <h4>Adebayo, Olumide — repeat troponin negative.</h4>
+      <p>Discharge planning resumed. Spouse en route. Cardiology cleared.</p>
+    </div>
+  </div>
+
+  <!-- Easing curves — strict, named -->
+  <div class="break"><span class="lbl">Curves — three, no more</span></div>
+
+  <div class="timing">
+    <div class="nm">paper-out <span class="ms">— ease-out</span></div>
+    <div class="track"><span class="puck normal ease-out"></span></div>
+    <div class="desc">entrances · default</div>
+  </div>
+  <div class="timing">
+    <div class="nm">paper-in <span class="ms">— ease-in</span></div>
+    <div class="track"><span class="puck normal ease-in"></span></div>
+    <div class="desc">exits · dismissals</div>
+  </div>
+  <div class="timing">
+    <div class="nm">paper-turn <span class="ms">— ease-in-out</span></div>
+    <div class="track"><span class="puck normal ease-io"></span></div>
+    <div class="desc">in-place transitions</div>
+  </div>
+  <div class="timing">
+    <div class="nm">linear</div>
+    <div class="track"><span class="puck normal linear"></span></div>
+    <div class="desc">progress, only · drips, infusions</div>
+  </div>
+
+  <!-- Durations -->
+  <div class="break"><span class="lbl">Durations</span></div>
+
+  <div class="timing">
+    <div class="nm">instant <span class="ms">— 0 ms</span></div>
+    <div class="track"></div>
+    <div class="desc">no animation</div>
+  </div>
+  <div class="timing">
+    <div class="nm">fast <span class="ms">— 100 ms</span></div>
+    <div class="track"><span class="puck fast ease-io"></span></div>
+    <div class="desc">hover, focus, micro-feedback</div>
+  </div>
+  <div class="timing">
+    <div class="nm">default <span class="ms">— 200 ms</span></div>
+    <div class="track"><span class="puck normal ease-out"></span></div>
+    <div class="desc">drawers, popovers, sheet entry</div>
+  </div>
+  <div class="timing">
+    <div class="nm">deliberate <span class="ms">— 350 ms</span></div>
+    <div class="track"><span class="puck slow ease-io"></span></div>
+    <div class="desc">large modal entry · use sparingly</div>
+  </div>
+
+  <div class="rm">
+    <strong>Reduced motion is honoured.</strong>
+    When <code>prefers-reduced-motion: reduce</code> is set, all transitions
+    collapse to <code>0 ms</code>. Status changes still fire — the entry just
+    appears, no rise, no fade.
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient banner</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* THE PATIENT BANNER — the single most important object in Medcord.
+     It is the page-header of every chart, every order, every consultation.
+     If a clinician misreads this, someone gets the wrong drug.
+
+     Stance:
+       — full-bleed sheet, black ink rule on top and bottom (a chart-stamp)
+       — name in serif, large; everything else quiets
+       — allergies are a band, not a pill — they cannot be missed
+       — code status is etched into the rule, not a friendly capsule
+       — vitals appear inline, mono, large, with a single pill-bar showing trend
+  */
+
+  .canvas {
+    background: var(--paper);
+    padding: 0 0 64px;
+  }
+
+  /* ============================================================
+     PRIMARY — admitted, not-critical, with allergies
+     ============================================================ */
+  .banner {
+    background: var(--sheet);
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+  .banner-inner {
+    display: grid;
+    grid-template-columns: 64px 1fr 280px;
+    gap: 24px;
+    padding: 22px 28px 18px;
+  }
+  .banner .photo {
+    width: 64px; height: 64px;
+    border-radius: 4px;
+    background: #ECE3D6;
+    border: 1px solid var(--sheet-edge);
+    display: flex; align-items: center; justify-content: center;
+    color: #5C4B30;
+    font-family: var(--sans); font-weight: 600; font-size: 22px;
+    letter-spacing: 0.02em;
+  }
+  .banner .who h1 {
+    margin: 0 0 4px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.0;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+  }
+  .banner .who h1 .nick {
+    color: var(--ink-3); font-style: italic; font-weight: 400;
+  }
+  .banner .who .demo {
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    margin-top: 6px;
+    display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap;
+  }
+  .banner .who .demo .sep { color: var(--ink-4); }
+  .banner .who .ids {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    margin-top: 8px;
+    display: flex; gap: 14px;
+    letter-spacing: 0;
+  }
+  .banner .who .ids strong { color: var(--ink); font-weight: 500; }
+
+  .banner .right {
+    display: flex; flex-direction: column; gap: 10px;
+    align-items: flex-end;
+    border-left: 1px solid var(--hair);
+    padding-left: 24px;
+  }
+  .banner .right .row {
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .banner .right .row .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.14em;
+  }
+  .banner .right .row .v {
+    font-family: var(--sans); font-size: 13px; color: var(--ink); font-weight: 500;
+  }
+  .banner .right .row .v.mono { font-family: var(--mono); letter-spacing: 0; font-weight: 500; }
+
+  /* The CODE-STATUS stamp — etched into the rule, ALL CAPS, mono. */
+  .code-stamp {
+    position: absolute;
+    top: -1px; left: 28px;
+    transform: translateY(-50%);
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    border-radius: 1px;
+  }
+  .code-stamp.dnr     { background: var(--ink); color: var(--paper); }
+  .code-stamp.cmo     { background: var(--ink); color: #FCE5A6; }
+
+  /* The ALLERGY BAND — a thick rule across the bottom of the sheet,
+     in arterial red, italic serif text, never dismissible.
+     Layered above the bottom rule of the banner. */
+  .allergy-band {
+    background: var(--crit);
+    color: #fff;
+    padding: 9px 28px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: 0.005em;
+    border-bottom: 2px solid var(--ink);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .allergy-band::before {
+    content: "ALLERGY";
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    background: rgba(0,0,0,0.32);
+    padding: 3px 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .allergy-band .src {
+    font-family: var(--mono); font-style: normal;
+    font-size: 11px; color: rgba(255,255,255,0.78); letter-spacing: 0;
+    margin-left: auto;
+  }
+
+  /* Action shelf — sits below the banner, separate sheet, single hairline. */
+  .actions {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 28px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--hair);
+  }
+  .actions .gap { flex: 1; }
+  .actions .nav { font-family: var(--mono); font-size: 11px; color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+  .actions .nav a { color: var(--ink-3); text-decoration: none; cursor: pointer; }
+  .actions .nav .on { color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+
+  .b {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 30px; padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    cursor: pointer;
+  }
+  .b svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .b-quiet { color: var(--ink-2); }
+  .b-quiet:hover { background: rgba(24,22,19,0.05); color: var(--ink); }
+  .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .b-secondary:hover { background: var(--ink); color: var(--paper); }
+  .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .b-primary:hover { background: var(--green-800); border-color: var(--green-800); }
+  .b-danger { color: var(--crit); }
+  .b-danger:hover { background: var(--crit-bg); }
+
+  /* Vitals sub-rail under the actions — large mono, six readings, one trend each */
+  .vitals {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    background: var(--sheet);
+  }
+  .vitals .v {
+    padding: 14px 24px;
+    border-right: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .vitals .v:last-child { border-right: 0; }
+  .vitals .v .lbl {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--ink-3);
+  }
+  .vitals .v .num {
+    font-family: var(--mono); font-weight: 500;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-size: 26px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .vitals .v .num .u { font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-left: 4px; font-weight: 500; letter-spacing: 0.02em; }
+  .vitals .v.flagged .num { color: var(--warn); }
+  .vitals .v.crit .num    { color: var(--crit); }
+  .vitals .v .meta {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    margin-top: 4px; letter-spacing: 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .vitals .v .spark { width: 100%; height: 14px; }
+
+  /* ============================================================
+     SECOND SHOWING — a critical patient, no allergies, in CCU
+     The same banner, two states wider apart:
+     - the code-stamp goes inverse for DNR
+     - the allergy band is replaced with a NO KNOWN ALLERGIES line
+     - one vital is critical, one trends downward
+     ============================================================ */
+  .banner.ccu .vitals .v.crit .num { color: var(--crit); }
+  .banner.ccu .nokn {
+    background: var(--paper-deep);
+    color: var(--ink-2);
+    padding: 8px 28px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .banner.ccu .nokn::before {
+    content: "—";
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-3);
+    letter-spacing: 0;
+  }
+
+  /* ============================================================
+     THIRD SHOWING — pediatric outpatient
+     Smaller, with a parent contact line; growth-chart percentile shown
+     instead of LOS.
+     ============================================================ */
+
+  /* Section spacing */
+  .section { padding: 0 0 64px; }
+  .section + .section { padding-top: 0; }
+  .section-cap { padding: 28px 28px 14px; display: flex; align-items: baseline; gap: 16px; max-width: 1100px; margin: 0 auto; }
+  .section-cap .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .section-cap h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-cap .meta { font-family: var(--sans); font-size: 13px; color: var(--ink-3); }
+
+  /* Stamp at very top */
+  .top-stamp {
+    padding: 36px 28px 18px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 16px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .top-stamp .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .top-stamp h1 { margin: 0; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); flex: 1; }
+  .top-stamp .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* Constrained banner inner-width while keeping full-bleed band */
+  .banner-wrap, .actions, .vitals { max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .allergy-band, .nokn { max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+  /* Ribbons at the right edge (precaution flags) — printed as a stack of small marks */
+  .flags {
+    position: absolute;
+    top: 14px; right: 28px;
+    display: flex; gap: 6px;
+  }
+  .flags .f {
+    font-family: var(--mono);
+    font-size: 9px; font-weight: 600;
+    padding: 2px 6px; border-radius: 2px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1px solid currentColor;
+  }
+  .flags .f.fall    { color: var(--warn); }
+  .flags .f.npo     { color: var(--ink); background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .flags .f.iso     { color: var(--low); }
+  .flags .f.aspir   { color: var(--crit); }
+</style>
+</head>
+<body class="canvas">
+
+  <div class="top-stamp">
+    <span class="num">IV · 01</span>
+    <h1>Patient banner</h1>
+    <span class="meta">three states · admitted, critical, pediatric outpatient</span>
+  </div>
+
+  <!-- ============================== -->
+  <!-- A. ADMITTED · WITH ALLERGY     -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-cap">
+      <span class="num">a</span>
+      <h2>Admitted, allergic to penicillin.</h2>
+      <span class="meta">the chart-header most clinicians see</span>
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner">
+        <span class="code-stamp">Full code</span>
+        <div class="flags">
+          <span class="f fall">Fall</span>
+          <span class="f npo">NPO</span>
+        </div>
+
+        <div class="banner-inner">
+          <div class="photo">OA</div>
+
+          <div class="who">
+            <h1>Adebayo, Olumide <span class="nick">"Olu"</span></h1>
+            <div class="demo">
+              <span><strong style="color:var(--ink);font-weight:600">64</strong> years</span>
+              <span class="sep">·</span>
+              <span>Male</span>
+              <span class="sep">·</span>
+              <span>DOB <span style="font-family:var(--mono);letter-spacing:0">14 Mar 1962</span></span>
+              <span class="sep">·</span>
+              <span>English · Yoruba</span>
+            </div>
+            <div class="ids">
+              <span>MRN <strong>10458291</strong></span>
+              <span>ENC <strong>2026-04-29-1184</strong></span>
+              <span>Day <strong>3</strong> of admission</span>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="row"><span class="lbl">Attending</span><span class="v">Patel, R MD</span></div>
+            <div class="row"><span class="lbl">Service</span><span class="v">Cardiology · step-down</span></div>
+            <div class="row"><span class="lbl">Bed</span><span class="v mono">3-N · 312A</span></div>
+            <div class="row"><span class="lbl">Insurance</span><span class="v">BCBS · verified</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="allergy-band">
+        Penicillin causes anaphylaxis. Sulfa drugs cause rash.
+        <span class="src">documented Apr 2018 · R. Patel MD</span>
+      </div>
+
+      <div class="actions">
+        <nav class="nav">
+          <a class="on">Summary</a>
+          <a>Vitals</a>
+          <a>Meds</a>
+          <a>Labs</a>
+          <a>Imaging</a>
+          <a>Notes</a>
+          <a>Orders</a>
+          <a>Problems</a>
+        </nav>
+        <span class="gap"></span>
+        <button class="b b-quiet"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Note</button>
+        <button class="b b-quiet"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Order</button>
+        <button class="b b-quiet"><svg viewBox="0 0 24 24"><path d="M3 9h18l-2 12H5z"/><path d="M16 9V5a4 4 0 0 0-8 0v4"/></svg> Transfer</button>
+        <button class="b b-danger">Discharge…</button>
+      </div>
+
+      <div class="vitals">
+        <div class="v">
+          <div class="lbl">Heart rate</div>
+          <div class="num">76<span class="u">bpm</span></div>
+          <div class="meta">
+            <svg class="spark" viewBox="0 0 80 14" preserveAspectRatio="none"><polyline points="0,8 12,7 24,9 36,7 48,8 60,7 72,8 80,7" stroke="#3C3833" stroke-width="1" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="v">
+          <div class="lbl">Blood pressure</div>
+          <div class="num">128/82<span class="u">mmHg</span></div>
+          <div class="meta">
+            <svg class="spark" viewBox="0 0 80 14" preserveAspectRatio="none"><polyline points="0,6 12,7 24,5 36,7 48,6 60,7 72,5 80,6" stroke="#3C3833" stroke-width="1" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="v">
+          <div class="lbl">Resp rate</div>
+          <div class="num">16<span class="u">/min</span></div>
+          <div class="meta">
+            <svg class="spark" viewBox="0 0 80 14" preserveAspectRatio="none"><polyline points="0,8 14,8 28,7 42,8 56,8 70,7 80,8" stroke="#3C3833" stroke-width="1" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="v">
+          <div class="lbl">SpO₂</div>
+          <div class="num">98<span class="u">%</span></div>
+          <div class="meta">room air</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Temperature</div>
+          <div class="num">98.6<span class="u">°F</span></div>
+          <div class="meta">37.0 °C · oral · 14:08</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Pain</div>
+          <div class="num">2<span class="u">/10</span></div>
+          <div class="meta">↓ from 4 at 09:00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- B. CRITICAL · CCU · DNR        -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-cap">
+      <span class="num">b</span>
+      <h2>Critical · CCU · DNR.</h2>
+      <span class="meta">no known allergies; one vital is shouting</span>
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner ccu">
+        <span class="code-stamp dnr">DNR · DNI</span>
+        <div class="flags">
+          <span class="f iso">Droplet</span>
+          <span class="f aspir">Aspiration</span>
+        </div>
+
+        <div class="banner-inner">
+          <div class="photo" style="background:#F2DCD8;color:#7F1D1D;border-color:#E5BAB3">SH</div>
+
+          <div class="who">
+            <h1>Hadi, Samira</h1>
+            <div class="demo">
+              <span><strong style="color:var(--ink);font-weight:600">38</strong> years</span>
+              <span class="sep">·</span>
+              <span>Female</span>
+              <span class="sep">·</span>
+              <span>DOB <span style="font-family:var(--mono);letter-spacing:0">14 Feb 1988</span></span>
+              <span class="sep">·</span>
+              <span>Arabic · English</span>
+            </div>
+            <div class="ids">
+              <span>MRN <strong>10778123</strong></span>
+              <span>ENC <strong>2026-05-01-2408</strong></span>
+              <span style="color:var(--crit);font-weight:500">Trop ↑↑ · 2.10 ng/mL · 14:42</span>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="row"><span class="lbl">Attending</span><span class="v">Patel, R MD</span></div>
+            <div class="row"><span class="lbl">Service</span><span class="v">Cardiology · CCU</span></div>
+            <div class="row"><span class="lbl">Bed</span><span class="v mono">CCU · 207A</span></div>
+            <div class="row"><span class="lbl">Cath team</span><span class="v">paged 14:43</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nokn">
+        No known allergies
+        <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.16em">last reviewed Apr 2026</span>
+      </div>
+
+      <div class="actions">
+        <nav class="nav">
+          <a>Summary</a>
+          <a class="on">Vitals</a>
+          <a>Meds</a>
+          <a>Labs</a>
+          <a>Imaging</a>
+          <a>Notes</a>
+          <a>Orders</a>
+        </nav>
+        <span class="gap"></span>
+        <button class="b b-quiet"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Note</button>
+        <button class="b b-secondary">Page cardiology</button>
+        <button class="b b-primary">Open chart →</button>
+      </div>
+
+      <div class="vitals">
+        <div class="v flagged">
+          <div class="lbl">Heart rate</div>
+          <div class="num">112<span class="u">bpm</span></div>
+          <div class="meta">↑ from 98 at 13:00
+            <svg class="spark" viewBox="0 0 80 14" preserveAspectRatio="none"><polyline points="0,9 14,8 28,7 42,5 56,4 70,4 80,3" stroke="#B25E09" stroke-width="1.2" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="v flagged">
+          <div class="lbl">Blood pressure</div>
+          <div class="num">158/96<span class="u">mmHg</span></div>
+          <div class="meta">
+            <svg class="spark" viewBox="0 0 80 14" preserveAspectRatio="none"><polyline points="0,7 14,6 28,5 42,4 56,3 70,3 80,2" stroke="#B25E09" stroke-width="1.2" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="v">
+          <div class="lbl">Resp rate</div>
+          <div class="num">22<span class="u">/min</span></div>
+          <div class="meta">within range, just</div>
+        </div>
+        <div class="v crit">
+          <div class="lbl">SpO₂</div>
+          <div class="num">91<span class="u">%</span></div>
+          <div class="meta" style="color:var(--crit)">↓ on 2 L NC · alarm armed</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Temperature</div>
+          <div class="num">98.7<span class="u">°F</span></div>
+          <div class="meta">14:42</div>
+        </div>
+        <div class="v flagged">
+          <div class="lbl">Pain</div>
+          <div class="num">7<span class="u">/10</span></div>
+          <div class="meta">substernal · radiating L arm</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- C. PEDIATRIC OUTPATIENT        -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-cap">
+      <span class="num">c</span>
+      <h2>Pediatric outpatient — well visit.</h2>
+      <span class="meta">growth percentile replaces day-of-admission; parent line above the rule</span>
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner">
+        <span class="code-stamp">Full code</span>
+
+        <div class="banner-inner">
+          <div class="photo" style="background:#E1E8DD;color:#2F4226;border-color:#C4D2BC">EM</div>
+
+          <div class="who">
+            <h1>Mensah, Esi</h1>
+            <div class="demo">
+              <span><strong style="color:var(--ink);font-weight:600">14</strong> months</span>
+              <span class="sep">·</span>
+              <span>Female</span>
+              <span class="sep">·</span>
+              <span>DOB <span style="font-family:var(--mono);letter-spacing:0">2 Mar 2025</span></span>
+              <span class="sep">·</span>
+              <span style="color:var(--ink-3)">w/ parent: Abena Mensah · mobile</span>
+            </div>
+            <div class="ids">
+              <span>MRN <strong>10982314</strong></span>
+              <span>VISIT <strong>2026-05-01-OP-0814</strong></span>
+              <span>Wt <strong>22 lb</strong> · 75th %ile</span>
+              <span>Ht <strong>30 in</strong> · 60th %ile</span>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="row"><span class="lbl">Provider</span><span class="v">Khan, M MD · Peds</span></div>
+            <div class="row"><span class="lbl">Visit type</span><span class="v">15-month well visit</span></div>
+            <div class="row"><span class="lbl">Room</span><span class="v mono">Clinic · 4</span></div>
+            <div class="row"><span class="lbl">Insurance</span><span class="v">BCBS · ped rider</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nokn">
+        Latex sensitivity · mild · use non-latex gloves
+        <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.16em">advisory only · no anaphylaxis</span>
+      </div>
+
+      <div class="actions">
+        <nav class="nav">
+          <a class="on">Summary</a>
+          <a>Vitals</a>
+          <a>Immunizations</a>
+          <a>Growth</a>
+          <a>Notes</a>
+        </nav>
+        <span class="gap"></span>
+        <button class="b b-quiet"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Note</button>
+        <button class="b b-secondary">Print AVS</button>
+        <button class="b b-primary">Sign visit</button>
+      </div>
+
+      <div class="vitals">
+        <div class="v">
+          <div class="lbl">Heart rate</div>
+          <div class="num">118<span class="u">bpm</span></div>
+          <div class="meta">normal for age</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Resp rate</div>
+          <div class="num">28<span class="u">/min</span></div>
+          <div class="meta">normal for age</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Temperature</div>
+          <div class="num">98.4<span class="u">°F</span></div>
+          <div class="meta">tympanic</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Weight</div>
+          <div class="num">22<span class="u">lb</span></div>
+          <div class="meta">75th percentile · ↑ from 60th at 12 mo</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Height</div>
+          <div class="num">30<span class="u">in</span></div>
+          <div class="meta">60th percentile</div>
+        </div>
+        <div class="v">
+          <div class="lbl">Head circ.</div>
+          <div class="num">18.0<span class="u">in</span></div>
+          <div class="meta">50th percentile</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Navigation · shell · ⌘K · drawers</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* NAVIGATION — the global app shell.
+     Stance: an envelope and a binder. The top bar is a printed letterhead.
+     The left rail is the spine of the binder, with mono-numbered tabs.
+     The command palette is a search slip you pull out of the file. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1280px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* SHELL */
+  .shell {
+    border: 1px solid var(--ink);
+    background: var(--sheet);
+    display: grid; grid-template-rows: auto 1fr;
+    overflow: hidden;
+  }
+  .topbar {
+    display: grid;
+    grid-template-columns: 220px 1fr 360px auto auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 18px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink);
+    height: 52px;
+  }
+  .tenant { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .tenant .mark {
+    width: 32px; height: 32px;
+    background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 16px; font-weight: 700;
+    border-radius: 4px; letter-spacing: -0.04em;
+  }
+  .tenant .nm { font-family: var(--serif); font-size: 14px; font-weight: 500; letter-spacing: -0.005em; line-height: 1; }
+  .tenant .sub { font-family: var(--mono); font-size: 9px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid var(--sheet-edge); background: var(--paper);
+    padding: 0 12px; height: 32px; border-radius: 6px;
+  }
+  .search-bar svg { width: 14px; height: 14px; stroke: var(--ink-3); fill: none; stroke-width: 1.6; }
+  .search-bar input { background: transparent; border: 0; outline: none; flex: 1; font-size: 13px; color: var(--ink); }
+  .search-bar input::placeholder { color: var(--ink-3); }
+  .search-bar .kbd { font-family: var(--mono); font-size: 10px; color: var(--ink-3); border: 1px solid var(--sheet-edge); padding: 1px 5px; border-radius: 2px; letter-spacing: 0; }
+
+  .role-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--ink); background: var(--paper);
+    font-family: var(--mono); font-size: 10px; color: var(--ink);
+    letter-spacing: 0.16em; text-transform: uppercase; border-radius: 9999px;
+  }
+  .iconbtn {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 4px;
+    cursor: pointer; color: var(--ink-2);
+    position: relative;
+  }
+  .iconbtn:hover { background: var(--paper-deep); color: var(--ink); }
+  .iconbtn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+  .iconbtn .nb {
+    position: absolute; top: 0px; right: 0px;
+    min-width: 14px; height: 14px;
+    background: var(--crit); color: #fff;
+    border: 1.5px solid var(--paper);
+    border-radius: 9999px;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 3px; letter-spacing: 0;
+  }
+
+  .profile {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; padding: 0 6px;
+  }
+  .profile .av {
+    width: 28px; height: 28px; border-radius: 4px;
+    background: #DEE6D6; color: #2F4226; border: 1px solid #C4D2BC;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 11px;
+  }
+  .profile .nm { font-family: var(--sans); font-size: 12px; font-weight: 500; line-height: 1; }
+  .profile .role { font-family: var(--mono); font-size: 9px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0.16em; text-transform: uppercase; }
+
+  /* SHELL BODY */
+  .shell-body {
+    display: grid; grid-template-columns: 220px 1fr;
+    min-height: 500px;
+  }
+
+  /* SIDEBAR — vertical tabs */
+  .sidebar {
+    background: var(--paper);
+    border-right: 1px solid var(--ink);
+    padding: 18px 0;
+  }
+  .nav-section {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 18px 18px 4px;
+  }
+  .nav-section:first-child { padding-top: 0; }
+
+  .nav-item {
+    display: grid; grid-template-columns: 22px 1fr auto;
+    align-items: baseline; gap: 8px;
+    padding: 7px 18px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+  .nav-item .ord { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0; }
+  .nav-item .ct  { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0; }
+  .nav-item:hover { background: var(--paper-deep); color: var(--ink); }
+  .nav-item.on {
+    background: var(--paper-deep); color: var(--ink); font-weight: 500;
+    border-left-color: var(--ink);
+  }
+  .nav-item.on .ord, .nav-item.on .ct { color: var(--ink); }
+  .nav-item.alert .ct { color: var(--crit); font-weight: 600; }
+
+  /* CONTENT placeholder */
+  .content {
+    padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .content .crumb {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em;
+  }
+  .content .crumb .cur { color: var(--ink); }
+  .content h2.title { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+
+  /* MODULE LAUNCHER — five tiles */
+  .modules {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 16px;
+    box-shadow: 0 16px 36px rgba(24,22,19,0.18);
+  }
+  .modtile {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    padding: 14px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px;
+    border-radius: 4px;
+    aspect-ratio: 1.05;
+  }
+  .modtile:hover { border-color: var(--ink); background: var(--sheet); }
+  .modtile .icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--ink); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--sheet);
+  }
+  .modtile.on .icon { background: var(--ink); color: var(--paper); }
+  .modtile .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .modtile .ct { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: auto; letter-spacing: 0; }
+  .modtile.on .ct { color: var(--ink); }
+
+  /* COMMAND PALETTE */
+  .palette {
+    background: var(--sheet); border: 1px solid var(--ink);
+    box-shadow: 0 24px 48px rgba(24,22,19,0.24);
+    width: 560px;
+    border-radius: 4px;
+  }
+  .palette .find {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .palette .find .pre {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .palette .find input {
+    flex: 1; border: 0; background: transparent; outline: none;
+    font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .palette .find .esc {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0; border: 1px solid var(--sheet-edge); padding: 1px 6px; border-radius: 2px;
+  }
+
+  .palette .group {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 10px 18px 4px; background: var(--paper-deep);
+  }
+  .palette .row {
+    display: grid; grid-template-columns: 24px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 10px 18px; cursor: pointer;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .palette .row:last-child { border-bottom: 0; }
+  .palette .row .glyph {
+    font-family: var(--serif); font-size: 18px; color: var(--ink-3); font-style: italic;
+    text-align: center;
+  }
+  .palette .row .nm { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.005em; }
+  .palette .row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0; }
+  .palette .row.on { background: var(--paper); border-left: 2px solid var(--ink); padding-left: 16px; }
+  .palette .row .kbd { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; border: 1px solid var(--sheet-edge); padding: 1px 5px; border-radius: 2px; }
+
+  /* DRAWER — right edge */
+  .drawer-stage {
+    position: relative;
+    background: var(--paper-deep);
+    border: 1px solid var(--ink);
+    height: 480px; overflow: hidden;
+  }
+  .drawer-bg {
+    padding: 20px 24px;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .scrim {
+    position: absolute; inset: 0;
+    background: rgba(24,22,19,0.32);
+  }
+  .drawer {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 420px;
+    background: var(--sheet);
+    border-left: 1px solid var(--ink);
+    box-shadow: -16px 0 36px rgba(24,22,19,0.18);
+    display: flex; flex-direction: column;
+  }
+  .drawer-h {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--ink);
+    display: grid; grid-template-columns: 36px 1fr auto auto auto;
+    gap: 10px; align-items: center;
+    background: var(--paper);
+  }
+  .drawer-h .nm { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.1; }
+  .drawer-h .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .drawer-h .av-pat-c {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30; border: 1px solid #D4C4A6;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 13px;
+  }
+  .drawer-h .iconbtn { color: var(--ink-3); }
+  .drawer-body { flex: 1; overflow: auto; padding: 16px 20px; }
+  .drawer-foot {
+    padding: 12px 18px; border-top: 1px solid var(--ink);
+    background: var(--paper);
+    display: flex; gap: 8px; justify-content: flex-end;
+  }
+  .drawer-foot .b {
+    height: 30px; padding: 0 12px; border-radius: 4px;
+    border: 1px solid transparent; background: transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer;
+  }
+  .drawer-foot .b-quiet { color: var(--ink-3); }
+  .drawer-foot .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .drawer-foot .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .drawer-foot .b-danger { color: var(--crit); }
+
+  .drawer-allergy {
+    background: var(--crit); color: #fff;
+    padding: 8px 20px;
+    font-family: var(--serif); font-style: italic; font-size: 12px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .drawer-allergy::before {
+    content: "ALLERGY · "; font-family: var(--mono); font-style: normal;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.22em; margin-right: 4px;
+  }
+
+  .drawer-block { margin-bottom: 18px; }
+  .drawer-block .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 6px; }
+  .drawer-block .vital-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .drawer-block .vital {
+    background: var(--paper-deep); border: 1px solid var(--sheet-edge);
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .drawer-block .vital .lbl { margin-bottom: 4px; }
+  .drawer-block .vital .v { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.015em; }
+
+  .drawer-list { display: flex; flex-direction: column; }
+  .drawer-list .row {
+    display: grid; grid-template-columns: 1fr auto;
+    padding: 8px 0; border-bottom: 1px dashed var(--hair-soft);
+    font-size: 13px;
+  }
+  .drawer-list .row:last-child { border-bottom: 0; }
+  .drawer-list .row .nm { font-family: var(--sans); }
+  .drawer-list .row .code { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 10</span>
+    <h1>Navigation · shell · ⌘K · drawers.</h1>
+    <span class="meta">letterhead, binder spine, search slip</span>
+  </header>
+
+  <!-- A. SHELL -->
+  <section class="section">
+    <div class="section-h">
+      <h2>The shell — top bar &amp; left rail.</h2>
+      <div class="sub">A printed letterhead at the top, a binder spine at the left, the work in the middle.</div>
+    </div>
+
+    <div class="shell">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="tenant">
+          <span class="mark">M</span>
+          <div>
+            <div class="nm">St. Catherine's General</div>
+            <div class="sub">2,418 staff · multi-tenant</div>
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input placeholder="Search patient by name, MRN, DOB, or phone…">
+          <span class="kbd">/</span>
+        </div>
+
+        <div></div>
+
+        <span class="role-pill">Acting · MD</span>
+
+        <div class="iconbtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="nb">7</span></div>
+        <div class="iconbtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+
+        <div class="profile">
+          <span class="av">RP</span>
+          <div>
+            <div class="nm">Patel, R MD</div>
+            <div class="role">Cardiology</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="shell-body">
+        <aside class="sidebar">
+          <div class="nav-section">Today</div>
+          <div class="nav-item on"><span class="ord">01</span><span>Patients</span><span class="ct">42</span></div>
+          <div class="nav-item"><span class="ord">02</span><span>Schedule</span><span class="ct">18</span></div>
+          <div class="nav-item"><span class="ord">03</span><span>Bed board</span><span class="ct">3-N</span></div>
+
+          <div class="nav-section">Workspace</div>
+          <div class="nav-item"><span class="ord">04</span><span>Lab orders</span><span class="ct">5</span></div>
+          <div class="nav-item"><span class="ord">05</span><span>Medications</span><span class="ct"></span></div>
+          <div class="nav-item alert"><span class="ord">06</span><span>Inbox</span><span class="ct">3</span></div>
+
+          <div class="nav-section">Team</div>
+          <div class="nav-item"><span class="ord">07</span><span>Staff directory</span><span class="ct"></span></div>
+          <div class="nav-item"><span class="ord">08</span><span>Shifts</span><span class="ct"></span></div>
+
+          <div class="nav-section">Hospital</div>
+          <div class="nav-item"><span class="ord">09</span><span>Settings</span><span class="ct"></span></div>
+          <div class="nav-item"><span class="ord">10</span><span>Audit log</span><span class="ct"></span></div>
+        </aside>
+
+        <main class="content">
+          <div class="crumb">
+            <span>Patients</span> &nbsp;·&nbsp; <span>3-North</span> &nbsp;·&nbsp; <span class="cur">Worklist</span>
+          </div>
+          <h2 class="title">42 patients · day shift</h2>
+
+          <div style="font-family:var(--serif);font-style:italic;color:var(--ink-3);font-size:14px;line-height:1.55;max-width:48ch">
+            "Three new admits since 10:00. One critical in CCU. Discharge planning meeting at 14:30."
+          </div>
+
+          <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0;margin-top:12px">
+            — placeholder · the worklist would render here —
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. MODULE LAUNCHER -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Module launcher — five tiles.</h2>
+      <div class="sub">Small printed tiles. The active module is filled ink; the rest are paper. Glyphs are minimal — name does the work.</div>
+    </div>
+
+    <div class="modules">
+      <div class="modtile on">
+        <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <div class="nm">Patients</div>
+        <div class="ct">⌥ 1 · 42 in your view</div>
+      </div>
+      <div class="modtile">
+        <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
+        <div class="nm">Staff</div>
+        <div class="ct">⌥ 2 · 14 on shift</div>
+      </div>
+      <div class="modtile">
+        <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="2" width="6" height="11" rx="3"/><line x1="12" y1="19" x2="12" y2="22"/></svg></span>
+        <div class="nm">Consults</div>
+        <div class="ct">⌥ 3 · 3 in queue</div>
+      </div>
+      <div class="modtile">
+        <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+        <div class="nm">Records</div>
+        <div class="ct">⌥ 4 · search the archive</div>
+      </div>
+      <div class="modtile">
+        <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg></span>
+        <div class="nm">Equipment</div>
+        <div class="ct">⌥ 5 · 1 out of service</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. COMMAND PALETTE -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Command palette · ⌘K.</h2>
+      <div class="sub">A search slip pulled out of the file. Patient names in serif, actions in serif italic, recent items quieted.</div>
+    </div>
+
+    <div style="display:flex;justify-content:center;padding:36px 0">
+      <div class="palette">
+        <div class="find">
+          <span class="pre">Find</span>
+          <input value="ade" autofocus>
+          <span class="esc">esc</span>
+        </div>
+
+        <div class="group">Patients</div>
+        <div class="row on">
+          <span class="glyph">→</span>
+          <div>
+            <div class="nm">Adebayo, Olumide</div>
+            <div class="meta">10458291 · 64 M · 3-N · 312A</div>
+          </div>
+          <span class="kbd">↵</span>
+        </div>
+        <div class="row">
+          <span class="glyph">→</span>
+          <div>
+            <div class="nm">Adeyemi, Yetunde</div>
+            <div class="meta">10712083 · 32 F · clinic</div>
+          </div>
+        </div>
+
+        <div class="group">Actions</div>
+        <div class="row">
+          <span class="glyph">+</span>
+          <div>
+            <div class="nm" style="font-style:italic">Register a new patient</div>
+            <div class="meta">opens the wizard drawer</div>
+          </div>
+          <span class="kbd">⌘ N</span>
+        </div>
+        <div class="row">
+          <span class="glyph">✓</span>
+          <div>
+            <div class="nm" style="font-style:italic">Sign all pending notes</div>
+            <div class="meta">3 awaiting signature</div>
+          </div>
+          <span class="kbd">⌘ ⇧ S</span>
+        </div>
+
+        <div class="group">Recent</div>
+        <div class="row">
+          <span class="glyph">·</span>
+          <div>
+            <div class="nm">Hadi, Samira</div>
+            <div class="meta">opened 2 h ago · CCU 207A</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. DRAWER -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Drawer — patient detail at the right edge.</h2>
+      <div class="sub">A right-edge sheet with header, scrolling body, and a sticky footer of actions. The allergy band sits as a strip just below the header.</div>
+    </div>
+
+    <div class="drawer-stage">
+      <div class="drawer-bg">— stage · the worklist would be visible behind —</div>
+      <div class="scrim"></div>
+
+      <aside class="drawer">
+        <div class="drawer-h">
+          <span class="av-pat-c">OA</span>
+          <div>
+            <div class="nm">Adebayo, Olumide</div>
+            <div class="meta">MRN 10458291 · 64 M · 3-N · 312A</div>
+          </div>
+          <span class="iconbtn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></span>
+          <span class="iconbtn"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          <span class="iconbtn"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></span>
+        </div>
+
+        <div class="drawer-allergy">Penicillin causes anaphylaxis. Sulfa drugs cause rash.</div>
+
+        <div class="drawer-body">
+          <div class="drawer-block">
+            <div class="lbl">Vitals · last</div>
+            <div class="vital-row">
+              <div class="vital"><div class="lbl">HR</div><div class="v">76</div></div>
+              <div class="vital"><div class="lbl">BP</div><div class="v">128/82</div></div>
+              <div class="vital"><div class="lbl">SpO₂</div><div class="v">98%</div></div>
+              <div class="vital"><div class="lbl">Temp</div><div class="v">98.6</div></div>
+            </div>
+          </div>
+
+          <div class="drawer-block">
+            <div class="lbl">Active problems</div>
+            <div class="drawer-list">
+              <div class="row"><span class="nm">Essential hypertension</span><span class="code">I10</span></div>
+              <div class="row"><span class="nm">Hyperlipidemia</span><span class="code">E78.5</span></div>
+              <div class="row"><span class="nm">Type 2 diabetes</span><span class="code">E11.9</span></div>
+            </div>
+          </div>
+
+          <div class="drawer-block">
+            <div class="lbl">Anticipated</div>
+            <div style="font-family:var(--serif);font-size:14px;color:var(--ink);line-height:1.55">
+              Discharge home with home-health on May 2, after the next troponin is negative and the cardiology team clears.
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-foot">
+          <button class="b b-quiet">Save draft</button>
+          <button class="b b-secondary">Transfer</button>
+          <button class="b b-danger">Discharge…</button>
+          <button class="b b-primary">Open chart →</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bed board · 3-North</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* THE BED BOARD — one designed scene.
+     The point of view: a charge nurse standing at the station, looking at
+     the floor map. The board is the source of truth — who's where, who's
+     coming, who's going, who needs what.
+
+     Idiom: a printed roster, hand-marked with crayon for active states.
+     - Beds are CELLS in a numbered grid that mirrors the hallway.
+     - Occupied beds carry a small portrait of the patient (initials),
+       the headline acuity (a serif single word), and one chip: what they
+       need next.
+     - Empty/cleaning/offline are NOT colored fills — they are typeset
+       differently (sparse, italic, struck-through) so the board reads as
+       *text first, color second.*
+     - The right rail shows the queue (admits/discharges) and three counts.
+  */
+
+  body { background: var(--paper); }
+  .stage {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 32px 64px;
+  }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink);
+    margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1;
+    font-family: var(--serif); font-size: 24px; font-weight: 500;
+    letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* Top strip: who is on, when the shift turns, next change of plan. */
+  .strip {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin-bottom: 28px;
+    background: var(--sheet);
+  }
+  .strip > .cell {
+    padding: 16px 20px;
+    border-right: 1px solid var(--hair);
+  }
+  .strip > .cell:last-child { border-right: 0; }
+  .strip .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .strip .ttl {
+    font-family: var(--serif); font-size: 22px; font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0; color: var(--ink);
+    line-height: 1.1;
+  }
+  .strip .sub {
+    font-size: 12px; color: var(--ink-3); margin-top: 4px;
+  }
+  .strip .who {
+    display: flex; gap: -6px;
+    margin-top: 8px;
+  }
+  .strip .who .av {
+    width: 26px; height: 26px;
+    border: 2px solid var(--sheet);
+    margin-left: -8px; font-size: 9px;
+  }
+  .strip .who .av:first-child { margin-left: 0; }
+
+  /* THE FLOOR.
+     A 6-column hallway. Beds run left-to-right, room by room.
+     Each "room" is two adjacent cells (bed A, bed B).
+     Subtle vertical hairlines between rooms; no border between A & B. */
+  .floor {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+  }
+
+  .bed {
+    position: relative;
+    padding: 14px 14px 14px 16px;
+    min-height: 132px;
+    border-bottom: 1px solid var(--hair);
+    border-right: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  /* Stronger room separator every two cells */
+  .bed.room-end-row1 { border-right: 1px solid var(--ink); }
+  .bed.row-2 { border-bottom: 0; }
+  .bed.last-col { border-right: 0; }
+
+  /* Bed number — small mono, top-right */
+  .bed .num {
+    position: absolute;
+    top: 10px; right: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Top row: portrait + name */
+  .bed .head-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .bed .av {
+    width: 30px; height: 30px;
+    font-size: 10px;
+    border-radius: 4px;
+    background: var(--paper-deep);
+    color: var(--ink);
+    border: 1px solid var(--sheet-edge);
+  }
+  .bed.crit .av { background: #F2DCD8; color: #7F1D1D; border-color: #E5BAB3; }
+  .bed.adm  .av { background: #ECE3D6; color: #5C4B30; border-color: #D4C4A6; }
+  .bed.dc   .av { background: #DCE6D6; color: #2F4226; border-color: #C4D2BC; }
+
+  .bed .name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.005em;
+    line-height: 1.15;
+  }
+  .bed .demo {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0;
+    margin-top: 1px;
+  }
+
+  /* The acuity — serif, ONE word, the dominant glyph in the cell */
+  .bed .acuity {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    line-height: 1;
+    margin-top: auto;
+  }
+  .bed.crit .acuity   { color: var(--crit); }
+  .bed.warn .acuity   { color: var(--warn); }
+  .bed.dc   .acuity   { color: var(--green-700); }
+
+  /* Single chip on the bottom */
+  .bed .next {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 500;
+    color: var(--ink-2);
+    letter-spacing: 0.005em;
+  }
+  .bed .next .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3); }
+  .bed.crit .next .dot { background: var(--crit); }
+  .bed.warn .next .dot { background: var(--warn); }
+  .bed.dc   .next .dot { background: var(--green-600); }
+
+  /* Empty / cleaning / offline / iso — typeset differently */
+  .bed.empty {
+    background: var(--paper);
+  }
+  .bed.empty .av,
+  .bed.empty .head-row { display: none; }
+  .bed.empty .acuity {
+    font-style: italic;
+    color: var(--ink-3);
+    font-weight: 400;
+  }
+  .bed.empty .next { color: var(--ink-3); }
+
+  .bed.clean .acuity {
+    font-style: italic;
+    color: var(--warn);
+    font-weight: 400;
+  }
+  .bed.clean .next { color: var(--warn); }
+
+  .bed.offline {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--paper) 0 8px,
+      var(--paper-deep) 8px 16px
+    );
+  }
+  .bed.offline .acuity {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--ink-3);
+    color: var(--ink-3);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .bed.offline .next { color: var(--ink-3); font-style: italic; }
+
+  /* Iso-flag, top-left, paper-tape style */
+  .bed .iso {
+    position: absolute;
+    top: 0; left: 0;
+    background: var(--low);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-bottom-right-radius: 4px;
+  }
+  .bed .iso.contact   { background: var(--warn); }
+  .bed .iso.airborne  { background: var(--low); }
+  .bed .iso.neutro    { background: var(--crit); }
+
+  /* The CRITICAL bed gets a left-edge bar of arterial red. */
+  .bed.crit::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--crit);
+  }
+
+  /* Layout: the floor + queue side-by-side */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* QUEUE — incoming and outgoing */
+  .queue {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+  }
+  .queue .group {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .queue .group:last-child { border-bottom: 0; }
+  .queue h3 {
+    margin: 0 0 10px;
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .queue h3 .ct { color: var(--ink); }
+  .queue .item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .queue .item:last-child { border-bottom: 0; }
+  .queue .item .row1 {
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .queue .item .nm { font-size: 13px; font-weight: 600; }
+  .queue .item .age { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .queue .item .when {
+    margin-left: auto;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+  .queue .item .why {
+    font-family: var(--serif); font-style: italic; font-size: 13px;
+    color: var(--ink-2); margin-top: 4px;
+    letter-spacing: -0.005em;
+  }
+  .queue .item .meta {
+    font-size: 11px; color: var(--ink-3); margin-top: 4px;
+  }
+  .queue .group.counts {
+    padding: 0;
+  }
+  .queue .counts-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--hair);
+  }
+  .queue .counts-row > div {
+    padding: 12px 14px;
+    border-right: 1px solid var(--hair);
+  }
+  .queue .counts-row > div:last-child { border-right: 0; }
+  .queue .counts-row .num {
+    font-family: var(--mono); font-size: 24px; font-weight: 500;
+    line-height: 1; letter-spacing: -0.02em;
+    font-feature-settings: "tnum" 1;
+  }
+  .queue .counts-row .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em; margin-top: 6px;
+  }
+  .queue .counts-row .delta { color: var(--ink-3); font-size: 11px; margin-top: 4px; font-family: var(--mono); letter-spacing: 0; }
+  .queue .counts-row .delta.up { color: var(--warn); }
+  .queue .counts-row .delta.down { color: var(--green-700); }
+
+  /* "Crayon" — small underline drawn under a urgent queue item */
+  .queue .item.urgent .nm { text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--crit); text-underline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">IV · 02</span>
+    <h1>Bed board · 3-North · step-down</h1>
+    <span class="meta">Wed, May 1 · 14:42 · A. Williams RN, charge</span>
+  </header>
+
+  <!-- TOP STRIP -->
+  <div class="strip">
+    <div class="cell">
+      <div class="lbl">Charge nurse</div>
+      <h2 class="ttl">A. Williams</h2>
+      <div class="sub">RN BSN · ends shift 19:00 · pager ×3214</div>
+    </div>
+    <div class="cell">
+      <div class="lbl">On the floor now</div>
+      <h2 class="ttl">14 staff</h2>
+      <div class="who">
+        <span class="av av-md-md">RP</span>
+        <span class="av av-rn-rn">AW</span>
+        <span class="av av-rn-rn">JK</span>
+        <span class="av av-md-md">MK</span>
+        <span class="av" style="background:var(--paper-deep);color:var(--ink-2)">+10</span>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="lbl">Census</div>
+      <h2 class="ttl">9 of 12</h2>
+      <div class="sub">75% · 3 beds available · 2 cleaning</div>
+    </div>
+    <div class="cell">
+      <div class="lbl">Next shift change</div>
+      <h2 class="ttl">in 4h 18m</h2>
+      <div class="sub">night cohort: M. Reed RN, J. Park MD</div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- =================== FLOOR =================== -->
+    <div class="floor">
+
+      <!-- Row 1 -->
+      <div class="bed crit">
+        <span class="iso airborne">Droplet</span>
+        <span class="num">312 · A</span>
+        <div class="head-row">
+          <span class="av">OA</span>
+          <div>
+            <div class="name">Adebayo, Olumide</div>
+            <div class="demo">64 M · MRN 10458291</div>
+          </div>
+        </div>
+        <div class="acuity">Trop ↑↑</div>
+        <div class="next"><span class="dot"></span>repeat at 18:00</div>
+      </div>
+
+      <div class="bed adm room-end-row1">
+        <span class="num">312 · B</span>
+        <div class="head-row">
+          <span class="av">CW</span>
+          <div>
+            <div class="name">Chen, Wei-Lin</div>
+            <div class="demo">40 F · MRN 10293874</div>
+          </div>
+        </div>
+        <div class="acuity">Stable</div>
+        <div class="next"><span class="dot"></span>BMP pending — 16:00</div>
+      </div>
+
+      <div class="bed empty">
+        <span class="num">313 · A</span>
+        <div class="acuity">Available.</div>
+        <div class="next">next admit at 15:30</div>
+      </div>
+
+      <div class="bed clean room-end-row1">
+        <span class="num">313 · B</span>
+        <div class="acuity">Cleaning…</div>
+        <div class="next">housekeeping · ~12 min</div>
+      </div>
+
+      <div class="bed adm">
+        <span class="num">314 · A</span>
+        <div class="head-row">
+          <span class="av">DM</span>
+          <div>
+            <div class="name">Diallo, Mariama</div>
+            <div class="demo">54 F · MRN 10883204</div>
+          </div>
+        </div>
+        <div class="acuity">Stable</div>
+        <div class="next"><span class="dot"></span>cardiology consult, 17:00</div>
+      </div>
+
+      <div class="bed dc room-end-row1 last-col">
+        <span class="num">314 · B</span>
+        <div class="head-row">
+          <span class="av">GL</span>
+          <div>
+            <div class="name">García, Lucía</div>
+            <div class="demo">77 F · MRN 10712558</div>
+          </div>
+        </div>
+        <div class="acuity">Going home</div>
+        <div class="next"><span class="dot"></span>ride confirmed, AVS printed</div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="bed offline row-2">
+        <span class="num">315 · A</span>
+        <div class="acuity">Off-line</div>
+        <div class="next">biomed hold · suction not pulling</div>
+      </div>
+
+      <div class="bed offline room-end-row1 row-2">
+        <span class="num">315 · B</span>
+        <div class="acuity">Off-line</div>
+        <div class="next">biomed hold · since Apr 28</div>
+      </div>
+
+      <div class="bed empty row-2">
+        <span class="num">316 · A</span>
+        <div class="acuity">Available.</div>
+        <div class="next">held for direct admit</div>
+      </div>
+
+      <div class="bed adm room-end-row1 row-2">
+        <span class="num">316 · B</span>
+        <div class="head-row">
+          <span class="av">PJ</span>
+          <div>
+            <div class="name">Park, Jiwoo</div>
+            <div class="demo">71 M · MRN 10128403</div>
+          </div>
+        </div>
+        <div class="acuity">Stable</div>
+        <div class="next"><span class="dot"></span>OOB ambulating, t 1100</div>
+      </div>
+
+      <div class="bed adm row-2">
+        <span class="iso contact">Contact</span>
+        <span class="num">317 · A</span>
+        <div class="head-row">
+          <span class="av">RS</span>
+          <div>
+            <div class="name">Reed, Sarah</div>
+            <div class="demo">58 F · MRN 10401872</div>
+          </div>
+        </div>
+        <div class="acuity">Stable</div>
+        <div class="next"><span class="dot"></span>C. diff result · pending</div>
+      </div>
+
+      <div class="bed clean row-2 last-col">
+        <span class="num">317 · B</span>
+        <div class="acuity">Cleaning…</div>
+        <div class="next">deep clean · isolation discharge</div>
+      </div>
+
+    </div>
+
+    <!-- =================== QUEUE =================== -->
+    <aside class="queue">
+
+      <div class="group">
+        <h3>Incoming · admits <span class="ct">3</span></h3>
+
+        <div class="item urgent">
+          <div class="row1">
+            <span class="nm">Hadi, Samira</span>
+            <span class="age">38 F</span>
+            <span class="when">14:55 · ED</span>
+          </div>
+          <div class="why">"chest pressure, troponin rising. cath team paged."</div>
+          <div class="meta">→ likely CCU; held here only if CCU full</div>
+        </div>
+
+        <div class="item">
+          <div class="row1">
+            <span class="nm">Okonkwo, M.</span>
+            <span class="age">52 M</span>
+            <span class="when">15:30 · direct</span>
+          </div>
+          <div class="why">"post-ablation, overnight observation."</div>
+          <div class="meta">→ assigned to 313-A on cleaning</div>
+        </div>
+
+        <div class="item">
+          <div class="row1">
+            <span class="nm">Idowu, F.</span>
+            <span class="age">66 F</span>
+            <span class="when">16:45 · transfer</span>
+          </div>
+          <div class="why">"from 4-South. Cardiology consult requested."</div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>Outgoing · discharges <span class="ct">2</span></h3>
+
+        <div class="item">
+          <div class="row1">
+            <span class="nm">García, L.</span>
+            <span class="age">77 F</span>
+            <span class="when">~15:15 · home</span>
+          </div>
+          <div class="meta">ride confirmed · AVS printed · eRx sent</div>
+        </div>
+
+        <div class="item">
+          <div class="row1">
+            <span class="nm">Park, J.</span>
+            <span class="age">71 M</span>
+            <span class="when">~16:30 · home health</span>
+          </div>
+          <div class="meta">awaiting home health intake form</div>
+        </div>
+      </div>
+
+      <div class="group counts">
+        <div class="counts-row">
+          <div>
+            <div class="num">9</div>
+            <div class="lbl">Census</div>
+            <div class="delta up">+1 since 12:00</div>
+          </div>
+          <div>
+            <div class="num">3</div>
+            <div class="lbl">Open</div>
+            <div class="delta">2 cleaning</div>
+          </div>
+          <div>
+            <div class="num">3.4<span style="font-size:14px;color:var(--ink-3)">d</span></div>
+            <div class="lbl">Avg LOS</div>
+            <div class="delta down">−0.2 wow</div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Skeletons &amp; empty states</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* SKELETONS & EMPTY STATES — the three states of any async surface.
+     Skeleton: paper grain instead of grey shimmer. The shape mirrors the
+     final layout; tone is calm because the page will arrive shortly.
+     Empty: a serif italic sentence that names the absence honestly.
+     Error: arterial red rule on the leading edge, like a chart-mark. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* Skeleton primitives — paper-grain, not grey shimmer */
+  .sk {
+    background: linear-gradient(90deg, var(--paper-deep) 0%, var(--hair) 50%, var(--paper-deep) 100%);
+    background-size: 200% 100%;
+    animation: paperturn 1800ms ease-in-out infinite;
+  }
+  @keyframes paperturn {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .sk-line { height: 12px; border-radius: 2px; }
+  .sk-line.lg { height: 18px; }
+  .sk-line.sm { height: 9px; }
+  .sk-block { height: 80px; border-radius: 4px; }
+  .sk-circ  { width: 32px; height: 32px; border-radius: 50%; }
+
+  /* Triad — the three states for the same surface */
+  .triad {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .triad-cell {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px 20px;
+    min-height: 220px;
+    position: relative;
+  }
+  .triad-cell .stamp {
+    position: absolute; top: -1px; left: 18px; transform: translateY(-50%);
+    background: var(--paper); padding: 0 8px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; border: 1px solid var(--ink);
+  }
+  .triad-cell.err { border-color: var(--crit); }
+  .triad-cell.err::before {
+    content: ""; position: absolute; left: -1px; top: 0; bottom: 0;
+    width: 3px; background: var(--crit);
+  }
+  .triad-cell.err .stamp { color: var(--crit); border-color: var(--crit); }
+
+  /* Empty state — what we put inside */
+  .empty-body {
+    padding-top: 22px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .empty-glyph {
+    font-family: var(--serif); font-style: italic;
+    font-size: 36px; color: var(--ink-3);
+    line-height: 1;
+  }
+  .empty-title {
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    color: var(--ink); letter-spacing: -0.005em;
+    line-height: 1.45; max-width: 36ch;
+  }
+  .empty-desc {
+    font-size: 12px; color: var(--ink-3); line-height: 1.5;
+    max-width: 38ch;
+  }
+  .empty-actions {
+    margin-top: 12px;
+    display: flex; gap: 10px;
+  }
+  .empty-actions a {
+    font-family: var(--sans); font-size: 12px; color: var(--ink);
+    border-bottom: 1px solid var(--ink); padding-bottom: 1px;
+    text-decoration: none; cursor: pointer; letter-spacing: 0.005em;
+  }
+  .empty-actions a:hover { color: var(--green-800); border-bottom-color: var(--green-800); }
+  .empty-actions a.muted { color: var(--ink-3); border-bottom-color: var(--ink-3); }
+
+  /* Error variant tints */
+  .err-title { color: var(--crit); }
+  .err-desc  { color: var(--crit); opacity: 0.8; }
+
+  /* Empty per-module gallery */
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .empty-card {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 24px;
+    min-height: 200px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .empty-card .stamp {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .empty-card .glyph {
+    font-family: var(--serif); font-size: 28px; font-style: italic;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .empty-card .desc {
+    font-size: 12px; color: var(--ink-3); line-height: 1.55;
+  }
+  .empty-card .a {
+    margin-top: auto;
+    font-family: var(--sans); font-size: 12px; color: var(--ink);
+    border-bottom: 1px solid var(--ink); padding-bottom: 1px;
+    align-self: flex-start;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 06</span>
+    <h1>Skeletons &amp; empty states.</h1>
+    <span class="meta">three states for every async surface</span>
+  </header>
+
+  <!-- A. THE TRIAD — same surface, three states -->
+  <section class="section">
+    <div class="section-h">
+      <h2>The patient list — three states.</h2>
+      <div class="sub">The skeleton mirrors the final layout. The empty state names the absence in serif italic. The error carries arterial red on its leading edge.</div>
+    </div>
+
+    <div class="triad">
+      <!-- Skeleton -->
+      <div class="triad-cell">
+        <span class="stamp">Loading</span>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="sk sk-circ"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div class="sk sk-line lg" style="width:62%"></div>
+              <div class="sk sk-line sm" style="width:34%"></div>
+            </div>
+            <div class="sk sk-line" style="width:60px"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="sk sk-circ"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div class="sk sk-line lg" style="width:54%"></div>
+              <div class="sk sk-line sm" style="width:28%"></div>
+            </div>
+            <div class="sk sk-line" style="width:60px"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="sk sk-circ"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div class="sk sk-line lg" style="width:74%"></div>
+              <div class="sk sk-line sm" style="width:42%"></div>
+            </div>
+            <div class="sk sk-line" style="width:60px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty -->
+      <div class="triad-cell">
+        <span class="stamp">Empty</span>
+        <div class="empty-body" style="padding-top:32px">
+          <div class="empty-glyph">—</div>
+          <div class="empty-title">"No patients match this filter."</div>
+          <div class="empty-desc">Adjust filters to widen the view, or add patients to your team's worklist from the floor map.</div>
+          <div class="empty-actions">
+            <a>Clear filters</a>
+            <a class="muted">Open floor map</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="triad-cell err">
+        <span class="stamp">Error</span>
+        <div class="empty-body" style="padding-top:32px">
+          <div class="empty-glyph" style="color:var(--crit)">!</div>
+          <div class="empty-title err-title">"The worklist could not be loaded."</div>
+          <div class="empty-desc err-desc">The EMR connection timed out at 14:42. Cached data may be available offline; live changes will not sync until the connection is restored.</div>
+          <div class="empty-actions">
+            <a style="color:var(--crit);border-bottom-color:var(--crit)">Retry</a>
+            <a class="muted">Open offline</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. SKELETON PARTS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Skeleton parts — text, avatar, card, vitals strip.</h2>
+      <div class="sub">A skeleton always mirrors the layout it replaces. No generic boxes; no greyed-out pills.</div>
+    </div>
+
+    <div class="triad" style="grid-template-columns:1fr 1fr">
+
+      <div class="triad-cell">
+        <span class="stamp">Card</span>
+        <div style="padding-top:22px;display:flex;flex-direction:column;gap:10px">
+          <div class="sk sk-block" style="height:60px;width:100%"></div>
+          <div class="sk sk-line lg" style="width:60%"></div>
+          <div class="sk sk-line sm" style="width:40%"></div>
+          <div style="display:flex;gap:14px;margin-top:10px">
+            <div class="sk sk-line" style="width:60px"></div>
+            <div class="sk sk-line" style="width:80px"></div>
+            <div class="sk sk-line" style="width:50px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="triad-cell">
+        <span class="stamp">Vitals strip</span>
+        <div style="padding-top:22px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:18px">
+            <div class="sk sk-line" style="width:60px"></div>
+            <div class="sk sk-line" style="width:60px"></div>
+            <div class="sk sk-line" style="width:60px"></div>
+            <div class="sk sk-line" style="width:60px"></div>
+          </div>
+          <div class="sk sk-block" style="height:120px;width:100%"></div>
+          <div style="display:flex;justify-content:space-between">
+            <div class="sk sk-line sm" style="width:42px"></div>
+            <div class="sk sk-line sm" style="width:42px"></div>
+            <div class="sk sk-line sm" style="width:42px"></div>
+            <div class="sk sk-line sm" style="width:42px"></div>
+            <div class="sk sk-line sm" style="width:42px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. PER-MODULE EMPTY STATES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Empty, by module.</h2>
+      <div class="sub">Each module phrases its emptiness in its own voice — "no patients today" reads differently than "the chart is blank."</div>
+    </div>
+
+    <div class="gallery">
+      <div class="empty-card">
+        <div class="stamp">Patients</div>
+        <div class="glyph">∅</div>
+        <div class="empty-title">"No patients on this worklist."</div>
+        <div class="desc">Adjust filters or add patients from the floor map.</div>
+        <a class="a">Open floor map →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Schedule</div>
+        <div class="glyph">—</div>
+        <div class="empty-title">"Your schedule for today is clear."</div>
+        <div class="desc">Check tomorrow, or open the master template to add ad-hoc visits.</div>
+        <a class="a">View tomorrow →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Consults</div>
+        <div class="glyph">—</div>
+        <div class="empty-title">"No active consultations."</div>
+        <div class="desc">Patients in your queue will appear here in arrival order.</div>
+        <a class="a">Configure auto-routing →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Chart</div>
+        <div class="glyph">∅</div>
+        <div class="empty-title">"This chart is blank."</div>
+        <div class="desc">No notes, problems, medications, or labs documented yet. Begin with the chief complaint.</div>
+        <a class="a">Start H&amp;P note →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Equipment</div>
+        <div class="glyph">∅</div>
+        <div class="empty-title">"No equipment registered."</div>
+        <div class="desc">Track infusion pumps, monitors, and durable equipment by importing from CSV or scanning each tag.</div>
+        <a class="a">Scan asset →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Staff</div>
+        <div class="glyph">—</div>
+        <div class="empty-title">"No shifts scheduled today."</div>
+        <div class="desc">Pull from a template or build a custom block.</div>
+        <a class="a">Apply weekly template →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Telehealth</div>
+        <div class="glyph">—</div>
+        <div class="empty-title">"No incoming calls."</div>
+        <div class="desc">The next patient will appear when they connect from the waiting room.</div>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Labs</div>
+        <div class="glyph">∅</div>
+        <div class="empty-title">"All ordered labs have resulted."</div>
+        <div class="desc">New results will appear here automatically.</div>
+        <a class="a">View resulted labs →</a>
+      </div>
+
+      <div class="empty-card">
+        <div class="stamp">Meds</div>
+        <div class="glyph">—</div>
+        <div class="empty-title">"No medications due in the next four hours."</div>
+        <div class="desc">Next dose: 20:00 — Metformin 500 mg.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

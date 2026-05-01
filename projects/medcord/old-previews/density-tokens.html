@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Density tokens</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.density-table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; }
+.density-table th { font-size:10px; font-weight:600; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; text-align:left; background:#F8FAFB; border-bottom:1px solid #E2E8F0; }
+.density-table td { border-bottom:1px solid #F1F5F8; vertical-align:middle; }
+.density-table tr:last-child td { border-bottom:none; }
+.density-table .col-mrn { font-family:'JetBrains Mono',monospace; color:#475569; }
+.compact th, .compact td { font-size:12px; padding:4px 8px; height:32px; }
+.default-d th, .default-d td { font-size:13px; padding:8px 12px; height:44px; }
+.comfortable th, .comfortable td { font-size:14px; padding:12px 16px; height:56px; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Density tokens</h1>
+<p class="spec-sub">The same patient list rendered at three densities. Compact is appropriate for nurses' station worklists where every row matters; comfortable is the default for chart review where scanning accuracy beats throughput.</p>
+
+<div class="spec-section-label">Compact <span class="count">row 32px · cell 4×8 · 12px</span></div>
+<table class="density-table compact">
+  <thead><tr><th>Patient</th><th>MRN</th><th>DOB · Age</th><th>Bed</th><th>Attending</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Adebayo, Olumide</td><td class="col-mrn">10458291</td><td>1962-03-14 · 64</td><td>3-North · 312A</td><td>Patel, Reema MD</td><td><span class="pill pill-info">In room</span></td></tr>
+    <tr><td>Chen, Wei-Lin</td><td class="col-mrn">10293874</td><td>1985-11-02 · 40</td><td>3-North · 312B</td><td>Patel, Reema MD</td><td><span class="pill pill-warning">Awaiting labs</span></td></tr>
+    <tr><td>Diallo, Mariama</td><td class="col-mrn">10883204</td><td>1971-07-23 · 54</td><td>3-North · 314A</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-success">Admitted</span></td></tr>
+    <tr><td>García, Lucía</td><td class="col-mrn">10712558</td><td>1948-09-30 · 77</td><td>3-North · 314B</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-neutral">Discharged</span></td></tr>
+  </tbody>
+</table>
+
+<div class="spec-section-label">Default <span class="count">row 44px · cell 8×12 · 14px</span></div>
+<table class="density-table default-d">
+  <thead><tr><th>Patient</th><th>MRN</th><th>DOB · Age</th><th>Bed</th><th>Attending</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Adebayo, Olumide</td><td class="col-mrn">10458291</td><td>1962-03-14 · 64</td><td>3-North · 312A</td><td>Patel, Reema MD</td><td><span class="pill pill-info">In room</span></td></tr>
+    <tr><td>Chen, Wei-Lin</td><td class="col-mrn">10293874</td><td>1985-11-02 · 40</td><td>3-North · 312B</td><td>Patel, Reema MD</td><td><span class="pill pill-warning">Awaiting labs</span></td></tr>
+    <tr><td>Diallo, Mariama</td><td class="col-mrn">10883204</td><td>1971-07-23 · 54</td><td>3-North · 314A</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-success">Admitted</span></td></tr>
+    <tr><td>García, Lucía</td><td class="col-mrn">10712558</td><td>1948-09-30 · 77</td><td>3-North · 314B</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-neutral">Discharged</span></td></tr>
+  </tbody>
+</table>
+
+<div class="spec-section-label">Comfortable <span class="count">row 56px · cell 12×16 · 16px</span></div>
+<table class="density-table comfortable">
+  <thead><tr><th>Patient</th><th>MRN</th><th>DOB · Age</th><th>Bed</th><th>Attending</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Adebayo, Olumide</td><td class="col-mrn">10458291</td><td>1962-03-14 · 64</td><td>3-North · 312A</td><td>Patel, Reema MD</td><td><span class="pill pill-info">In room</span></td></tr>
+    <tr><td>Chen, Wei-Lin</td><td class="col-mrn">10293874</td><td>1985-11-02 · 40</td><td>3-North · 312B</td><td>Patel, Reema MD</td><td><span class="pill pill-warning">Awaiting labs</span></td></tr>
+    <tr><td>Diallo, Mariama</td><td class="col-mrn">10883204</td><td>1971-07-23 · 54</td><td>3-North · 314A</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-success">Admitted</span></td></tr>
+    <tr><td>García, Lucía</td><td class="col-mrn">10712558</td><td>1948-09-30 · 77</td><td>3-North · 314B</td><td>Okafor, Chiamaka MD</td><td><span class="pill pill-neutral">Discharged</span></td></tr>
+  </tbody>
+</table>
+
+<div class="spec-section-label">Density toggle — surface control</div>
+<div style="display:inline-flex;border:1px solid #E2E8F0;border-radius:6px;background:#fff;overflow:hidden;font-size:12px">
+  <button style="border:none;background:#F1F5F8;padding:6px 12px;font-weight:500;color:#0E1117;border-right:1px solid #E2E8F0">Compact</button>
+  <button style="border:none;background:#0A87A3;color:#fff;padding:6px 12px;font-weight:500;border-right:1px solid #0A6F87">Default</button>
+  <button style="border:none;background:#fff;padding:6px 12px;font-weight:500;color:#475569">Comfortable</button>
+</div>
+
+</body>
+</html>

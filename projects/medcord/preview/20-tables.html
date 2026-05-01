@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tables</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* TABLES — the patient worklist.
+     Stance: typeset like a printed roster, not a spreadsheet.
+     Header is a single line of mono-caps text. Rows are hairline-separated.
+     Sort indicator is a small triangle in mono. Selected rows are
+     left-marked with a 2px ink rule, never a blue tinted fill.
+     Critical rows show an arterial-red bleed at the leading edge. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* Toolbar above the table */
+  .filters {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 18px;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-bottom: 0;
+  }
+  .filters .pre {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .filters .chip {
+    height: 22px; padding: 0 8px;
+    border: 1px solid var(--ink-3);
+    border-radius: 9999px; background: transparent;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+    cursor: pointer; letter-spacing: 0.005em;
+  }
+  .filters .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .filters .chip.crit { color: var(--crit); border-color: var(--crit-edge); background: var(--crit-bg); }
+  .filters .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .filters .density {
+    display: inline-flex; align-items: center;
+    border: 1px solid var(--ink-3); border-radius: 9999px;
+    padding: 2px;
+    font-family: var(--mono); font-size: 11px;
+  }
+  .filters .density button {
+    background: transparent; border: 0; cursor: pointer;
+    padding: 2px 8px; color: var(--ink-3); border-radius: 9999px;
+    font-family: inherit; font-size: inherit;
+  }
+  .filters .density button.on { background: var(--ink); color: var(--paper); }
+  .filters .ct {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+
+  /* The selected-bar — replaces the toolbar when rows are selected */
+  .selbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 18px;
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    border-bottom: 0;
+  }
+  .selbar .ct { font-family: var(--mono); font-size: 11px; color: rgba(244,239,230,0.7); letter-spacing: 0; }
+  .selbar .actions { margin-left: auto; display: flex; gap: 16px; align-items: center; }
+  .selbar .actions a {
+    color: var(--paper); font-family: var(--sans); font-size: 12px;
+    text-decoration: none; letter-spacing: 0.005em;
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+    cursor: pointer;
+  }
+  .selbar .actions a:hover { border-bottom-color: var(--paper); }
+  .selbar .actions .danger { color: #FCA5A5; }
+  .selbar .x { color: var(--paper); cursor: pointer; opacity: 0.7; }
+
+  /* The table itself */
+  table.t {
+    width: 100%; border-collapse: collapse;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-top: 0;
+  }
+  table.t th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  table.t th.r { text-align: right; }
+  table.t th .sort { color: var(--ink-4); margin-left: 4px; }
+  table.t th.sorted { color: var(--ink); }
+  table.t th.sorted .sort { color: var(--ink); }
+  table.t td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--hair-soft);
+    font-family: var(--sans); font-size: 13px;
+    vertical-align: middle;
+    color: var(--ink);
+  }
+  table.t td.mono { font-family: var(--mono); font-feature-settings: "tnum" 1; color: var(--ink-2); letter-spacing: 0; font-size: 12px; }
+  table.t td.r { text-align: right; }
+  table.t tr:last-child td { border-bottom: 0; }
+  table.t tbody tr:hover td { background: var(--paper); }
+
+  /* Selection */
+  table.t tr.sel td { background: var(--paper); box-shadow: inset 2px 0 0 var(--ink); }
+  table.t tr.sel.crit td { box-shadow: inset 2px 0 0 var(--ink), inset 4px 0 0 var(--crit); }
+
+  /* Critical bleed */
+  table.t tr.crit td { background: linear-gradient(to right, var(--crit-bg) 0%, transparent 50%); }
+
+  /* Compact density */
+  table.t.compact td { padding: 6px 14px; font-size: 12px; }
+  table.t.comfy td { padding: 16px 14px; font-size: 14px; }
+  table.t.comfy td.mono { font-size: 13px; }
+
+  /* The patient cell — avatar + serif name */
+  td.who { display: flex; align-items: center; gap: 10px; }
+  td.who .nm { font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--ink); }
+  td.who .demo { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 1px; letter-spacing: 0; }
+
+  /* Ack row indent */
+  td .alt { font-family: var(--mono); font-size: 11px; color: var(--crit); letter-spacing: 0; }
+
+  /* Status pill, scoped */
+  .pill-x {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 8px;
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    border-radius: 9999px; border: 1px solid var(--ink-3); color: var(--ink-2);
+  }
+  .pill-x .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+  .pill-x.ok    { color: var(--green-800); border-color: var(--green-200); background: var(--green-50); }
+  .pill-x.warn  { color: var(--warn);  border-color: var(--warn-edge); background: var(--warn-bg); }
+  .pill-x.crit  { color: var(--crit);  border-color: var(--crit-edge); background: var(--crit-bg); }
+
+  /* Sparkline column */
+  .spark { width: 80px; height: 14px; }
+
+  /* Pagination */
+  .foot {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 18px;
+    background: var(--paper-deep);
+    border: 1px solid var(--ink); border-top: 0;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+  .foot .right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .foot a {
+    color: var(--ink-2); cursor: pointer; padding: 2px 8px;
+    text-decoration: none; border: 1px solid transparent; border-radius: 3px;
+    font-family: var(--sans); font-size: 12px; letter-spacing: 0.005em;
+  }
+  .foot a:hover { background: var(--sheet); }
+  .foot a.on { background: var(--ink); color: var(--paper); }
+
+  /* Group header — section break inside the table */
+  table.t tr.group td {
+    background: var(--paper-deep);
+    font-family: var(--mono); font-size: 10px;
+    font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-3);
+    padding: 8px 14px;
+    border-top: 1px solid var(--hair);
+  }
+
+  /* Expand row content */
+  table.t tr.expanded td {
+    background: var(--paper-deep);
+    padding: 0; border-top: 0;
+  }
+  .expand-body {
+    padding: 18px 24px; border-top: 1px solid var(--hair);
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .expand-body .lab { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .expand-body .v { font-family: var(--mono); font-size: 13px; color: var(--ink); }
+  .expand-body .quote { font-family: var(--serif); font-style: italic; color: var(--ink-2); font-size: 14px; line-height: 1.5; }
+
+  /* Density showcase */
+  .density-block { display: flex; flex-direction: column; gap: 18px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">III · 01</span>
+    <h1 class="ttl">Tables</h1>
+    <span class="meta">a printed roster · sorted, selected, expanded</span>
+  </header>
+
+  <p style="font-size:14px;line-height:1.6;color:var(--ink-2);max-width:62ch;margin:0 0 22px">
+    The table is a printed roster. Headers are mono-caps; rows are hairline-separated;
+    sorted columns gain a small triangle. Selected rows are marked with an ink rule on
+    the leading edge — never a blue fill. Critical rows bleed arterial red from the left.
+  </p>
+
+  <!-- A. THE WORKLIST — selected -->
+  <section class="section">
+    <div class="section-h">
+      <h2>The patient worklist.</h2>
+      <div class="sub">Three rows are selected; the bulk-action bar is in. Density is set to <em>regular</em>.</div>
+    </div>
+
+    <div class="selbar">
+      <span class="ct">3 selected</span>
+      <span style="font-family:var(--mono);font-size:11px;color:rgba(244,239,230,0.45);letter-spacing:0">·</span>
+      <div class="actions">
+        <a>Assign attending</a>
+        <a>Add tag</a>
+        <a>Export CSV</a>
+        <a class="danger">Discharge × 3</a>
+      </div>
+      <span class="x">×</span>
+    </div>
+
+    <table class="t">
+      <thead>
+        <tr>
+          <th style="width:32px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1.5px solid var(--paper);background:var(--ink);position:relative;top:1px">
+              <span style="display:block;width:6px;height:1.5px;background:var(--paper)"></span>
+            </span>
+          </th>
+          <th class="sorted">Patient <span class="sort">↑</span></th>
+          <th>MRN</th>
+          <th>DOB · age</th>
+          <th>Bed</th>
+          <th>Attending</th>
+          <th>Last vitals</th>
+          <th>Trend</th>
+          <th>Status</th>
+          <th style="width:32px"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="crit sel">
+          <td><span style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);font-size:10px;line-height:1;border-radius:2px">✓</span></td>
+          <td class="who">
+            <span class="av av-md av-pat" style="background:#F2DCD8;color:#7F1D1D;border-color:#E5BAB3">SH</span>
+            <div>
+              <div class="nm">Hadi, Samira</div>
+              <div class="alt">Trop ↑↑ 2.10 ng/mL · cath team paged</div>
+            </div>
+          </td>
+          <td class="mono">10778123</td>
+          <td>14 Feb 1988 · 38 F</td>
+          <td>CCU · 207A</td>
+          <td>Patel, R MD</td>
+          <td class="mono" style="color:var(--crit)">112 · 158/96 · 91%</td>
+          <td>
+            <svg class="spark" viewBox="0 0 80 14"><polyline points="0,9 14,8 28,7 42,5 56,4 70,4 80,3" stroke="var(--crit)" stroke-width="1.2" fill="none"/></svg>
+          </td>
+          <td><span class="pill-x crit"><span class="dot"></span>STAT</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+        <tr class="sel">
+          <td><span style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);font-size:10px;line-height:1;border-radius:2px">✓</span></td>
+          <td class="who">
+            <span class="av av-md av-pat">OA</span>
+            <div>
+              <div class="nm">Adebayo, Olumide</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:1px">"Olu" · ENC-1184</div>
+            </div>
+          </td>
+          <td class="mono">10458291</td>
+          <td>14 Mar 1962 · 64 M</td>
+          <td>3-N · 312A</td>
+          <td>Patel, R MD</td>
+          <td class="mono">76 · 128/82 · 98%</td>
+          <td><svg class="spark" viewBox="0 0 80 14"><polyline points="0,8 14,7 28,9 42,7 56,8 70,7 80,8" stroke="var(--ink-2)" stroke-width="1.2" fill="none"/></svg></td>
+          <td><span class="pill-x ok"><span class="dot"></span>In room</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+        <tr class="sel">
+          <td><span style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);font-size:10px;line-height:1;border-radius:2px">✓</span></td>
+          <td class="who">
+            <span class="av av-md av-pat" style="background:#E1E8DD;color:#2F4226;border-color:#C4D2BC">CW</span>
+            <div>
+              <div class="nm">Chen, Wei-Lin</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:1px">ENC-1163</div>
+            </div>
+          </td>
+          <td class="mono">10293874</td>
+          <td>02 Nov 1985 · 40 F</td>
+          <td>3-N · 312B</td>
+          <td>Patel, R MD</td>
+          <td class="mono">88 · 122/78 · 99%</td>
+          <td><svg class="spark" viewBox="0 0 80 14"><polyline points="0,9 14,8 28,9 42,7 56,8 70,8 80,7" stroke="var(--ink-2)" stroke-width="1.2" fill="none"/></svg></td>
+          <td><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+        <!-- Group break -->
+        <tr class="group">
+          <td colspan="10">3-North · step-down · 3 more</td>
+        </tr>
+
+        <tr>
+          <td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who">
+            <span class="av av-md av-pat" style="background:#E1E8DD;color:#2F4226;border-color:#C4D2BC">DM</span>
+            <div>
+              <div class="nm">Diallo, Mariama</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:1px">ENC-1165</div>
+            </div>
+          </td>
+          <td class="mono">10883204</td>
+          <td>23 Jul 1971 · 54 F</td>
+          <td>3-N · 314A</td>
+          <td>Okafor, C MD</td>
+          <td class="mono">72 · 118/76 · 98%</td>
+          <td><svg class="spark" viewBox="0 0 80 14"><polyline points="0,8 14,8 28,7 42,8 56,8 70,8 80,7" stroke="var(--ink-2)" stroke-width="1.2" fill="none"/></svg></td>
+          <td><span class="pill-x ok"><span class="dot"></span>Admitted</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+        <!-- Expanded row -->
+        <tr>
+          <td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who">
+            <span style="font-family:var(--mono);color:var(--ink);cursor:pointer;font-size:14px;line-height:1">▾</span>
+            <span class="av av-md av-pat" style="background:#E1E8DD;color:#2F4226;border-color:#C4D2BC">PJ</span>
+            <div>
+              <div class="nm">Park, Jiwoo</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:1px">ENC-1170 · expanded</div>
+            </div>
+          </td>
+          <td class="mono">10128403</td>
+          <td>09 Sep 1954 · 71 M</td>
+          <td>3-N · 316B</td>
+          <td>Okafor, C MD</td>
+          <td class="mono">68 · 124/80 · 97%</td>
+          <td><svg class="spark" viewBox="0 0 80 14"><polyline points="0,8 14,8 28,8 42,9 56,8 70,9 80,8" stroke="var(--ink-2)" stroke-width="1.2" fill="none"/></svg></td>
+          <td><span class="pill-x ok"><span class="dot"></span>Admitted</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+        <tr class="expanded">
+          <td colspan="10">
+            <div class="expand-body">
+              <div>
+                <div class="lab">Active problems</div>
+                <div class="v" style="font-family:var(--sans)">CHF, Afib (rate-controlled), CKD-3</div>
+              </div>
+              <div>
+                <div class="lab">Last note</div>
+                <div class="quote">"Awoke without dyspnea. Walked to the bathroom unaided. Plans to discharge tomorrow with home health."</div>
+                <div class="v" style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:6px;letter-spacing:0">Okafor, C MD · 13:42</div>
+              </div>
+              <div>
+                <div class="lab">Anticipated DC</div>
+                <div class="v">02 May 2026</div>
+                <div class="lab" style="margin-top:14px">Mobility</div>
+                <div class="v" style="font-family:var(--sans)">Ambulating with assist</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who">
+            <span class="av av-md av-pat" style="background:#ECE3D6;color:#5C4B30;border-color:#D4C4A6">GL</span>
+            <div>
+              <div class="nm">García, Lucía</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:1px">ENC-1158</div>
+            </div>
+          </td>
+          <td class="mono">10712558</td>
+          <td>30 Sep 1948 · 77 F</td>
+          <td>3-N · 314B</td>
+          <td>Okafor, C MD</td>
+          <td class="mono">80 · 132/84 · 96%</td>
+          <td><svg class="spark" viewBox="0 0 80 14"><polyline points="0,8 14,9 28,8 42,10 56,9 70,11 80,12" stroke="var(--ink-2)" stroke-width="1.2" fill="none"/></svg></td>
+          <td><span class="pill-x"><span class="dot"></span>Awaiting DC</span></td>
+          <td style="cursor:pointer;color:var(--ink-3);font-size:18px;text-align:center;line-height:1">⋯</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="foot">
+      <span>5 of 42 — page 1 of 9</span>
+      <span class="right">
+        <a>‹</a>
+        <a class="on">1</a>
+        <a>2</a>
+        <a>3</a>
+        <a style="color:var(--ink-3);cursor:default">…</a>
+        <a>9</a>
+        <a>›</a>
+        <span style="margin-left:14px">10 / page</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- B. NORMAL TOOLBAR (no selection) -->
+  <section class="section">
+    <div class="section-h">
+      <h2>The toolbar — when nothing is selected.</h2>
+      <div class="sub">Filters as chips, density toggle on the right, count below.</div>
+    </div>
+
+    <div class="filters">
+      <span class="pre">Filter</span>
+      <button class="chip on">All</button>
+      <button class="chip">Admitted</button>
+      <button class="chip">Awaiting labs</button>
+      <button class="chip">Awaiting DC</button>
+      <button class="chip crit">STAT only</button>
+
+      <div class="right">
+        <span class="ct">42 patients</span>
+        <span class="density">
+          <button>Compact</button>
+          <button class="on">Regular</button>
+          <button>Comfy</button>
+        </span>
+      </div>
+    </div>
+
+    <table class="t">
+      <thead>
+        <tr>
+          <th style="width:32px"></th>
+          <th class="sorted">Patient <span class="sort">↑</span></th>
+          <th>MRN</th>
+          <th>Bed</th>
+          <th>Attending</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who"><span class="av av-md av-pat">OA</span><div class="nm">Adebayo, Olumide</div></td>
+          <td class="mono">10458291</td>
+          <td>3-N · 312A</td>
+          <td>Patel, R MD</td>
+          <td><span class="pill-x ok"><span class="dot"></span>In room</span></td>
+        </tr>
+        <tr><td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who"><span class="av av-md av-pat">CW</span><div class="nm">Chen, Wei-Lin</div></td>
+          <td class="mono">10293874</td>
+          <td>3-N · 312B</td>
+          <td>Patel, R MD</td>
+          <td><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></td>
+        </tr>
+        <tr><td><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent;border-radius:2px"></span></td>
+          <td class="who"><span class="av av-md av-pat">DM</span><div class="nm">Diallo, Mariama</div></td>
+          <td class="mono">10883204</td>
+          <td>3-N · 314A</td>
+          <td>Okafor, C MD</td>
+          <td><span class="pill-x ok"><span class="dot"></span>Admitted</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- C. DENSITY -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Density — same row, three readings.</h2>
+      <div class="sub">Compact for the night-shift worklist; regular for the day chart; comfy for review.</div>
+    </div>
+
+    <div class="density-block">
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Compact · 32 px row</div>
+        <table class="t compact">
+          <thead><tr><th>Patient</th><th>MRN</th><th>Bed</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="who"><span class="av av-sm av-pat">OA</span><span class="nm" style="font-size:13px">Adebayo, Olumide</span></td><td class="mono">10458291</td><td class="mono">312A</td><td><span class="pill-x ok"><span class="dot"></span>In room</span></td></tr>
+            <tr><td class="who"><span class="av av-sm av-pat">CW</span><span class="nm" style="font-size:13px">Chen, Wei-Lin</span></td><td class="mono">10293874</td><td class="mono">312B</td><td><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Regular · 44 px</div>
+        <table class="t">
+          <thead><tr><th>Patient</th><th>MRN</th><th>Bed</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="who"><span class="av av-md av-pat">OA</span><div><div class="nm">Adebayo, Olumide</div><div class="demo" style="font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:1px">ENC-1184</div></div></td><td class="mono">10458291</td><td>3-N · 312A</td><td><span class="pill-x ok"><span class="dot"></span>In room</span></td></tr>
+            <tr><td class="who"><span class="av av-md av-pat">CW</span><div><div class="nm">Chen, Wei-Lin</div><div class="demo" style="font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:1px">ENC-1163</div></div></td><td class="mono">10293874</td><td>3-N · 312B</td><td><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Comfy · 56 px</div>
+        <table class="t comfy">
+          <thead><tr><th>Patient</th><th>MRN</th><th>Bed</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="who"><span class="av av-lg av-pat" style="width:40px;height:40px;font-size:14px;border-radius:6px">OA</span><div><div class="nm" style="font-size:15px">Adebayo, Olumide</div><div class="demo" style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:2px">ENC-1184 · 64 M</div></div></td><td class="mono">10458291</td><td>3-N · 312A</td><td><span class="pill-x ok"><span class="dot"></span>In room</span></td></tr>
+            <tr><td class="who"><span class="av av-lg av-pat" style="width:40px;height:40px;font-size:14px;border-radius:6px">CW</span><div><div class="nm" style="font-size:15px">Chen, Wei-Lin</div><div class="demo" style="font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:2px">ENC-1163 · 40 F</div></div></td><td class="mono">10293874</td><td>3-N · 312B</td><td><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

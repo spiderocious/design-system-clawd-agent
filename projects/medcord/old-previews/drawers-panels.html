@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drawers & panels</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.scaffold {
+  position:relative; background:#F1F5F8;
+  border:1px solid #E2E8F0; border-radius:10px;
+  height:520px; overflow:hidden;
+}
+.scrim { position:absolute; inset:0; background:rgba(14,17,23,0.32); }
+.drawer-r { position:absolute; right:0; top:0; bottom:0; width:420px; background:#fff; border-left:1px solid #E2E8F0; box-shadow:-16px 0 48px rgba(14,17,23,0.16); display:flex; flex-direction:column; }
+.drawer-l { position:absolute; left:0; top:0; bottom:0; width:300px; background:#fff; border-right:1px solid #E2E8F0; box-shadow:16px 0 48px rgba(14,17,23,0.16); display:flex; flex-direction:column; }
+.drawer-b { position:absolute; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #E2E8F0; border-radius:14px 14px 0 0; box-shadow:0 -16px 48px rgba(14,17,23,0.16); padding:12px; }
+.drawer-h { padding:14px 16px; border-bottom:1px solid #F1F5F8; display:flex; align-items:center; gap:10px; }
+.drawer-h .ttl { font-size:14px; font-weight:600; flex:1; }
+.drawer-h button { border:none; background:transparent; cursor:pointer; padding:4px; color:#94A3B8; }
+.drawer-body { flex:1; overflow:auto; padding:14px 16px; }
+.drawer-foot { padding:12px 16px; border-top:1px solid #F1F5F8; display:flex; gap:8px; justify-content:flex-end; background:#F8FAFB; }
+.label-strip { font-size:10px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; }
+.kvgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.kv-block { background:#F8FAFB; border-radius:6px; padding:8px 10px; }
+.kv-block .k { font-size:10px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; }
+.kv-block .v { font-size:13px; font-weight:500; margin-top:2px; }
+.handle { width:36px; height:4px; background:#CBD5E1; border-radius:2px; margin:0 auto 8px; }
+.snap-bar { display:flex; gap:4px; justify-content:center; padding:4px 0; }
+.snap { width:48px; height:3px; background:#E2E8F0; border-radius:2px; }
+.snap.on { background:#0A87A3; }
+.bc-row { padding:10px 16px; background:#F8FAFB; border-bottom:1px solid #F1F5F8; display:flex; gap:8px; align-items:center; font-size:12px; }
+.bc-row .stp { color:#94A3B8; }
+.bc-row .stp.cur { color:#0E1117; font-weight:600; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Drawers &amp; panels</h1>
+<p class="spec-sub">Patient detail drawer (right edge), filter drawer (left), bottom drawer (mobile with snap points), inline expanding row drawer, and the multi-step wizard drawer for new-patient registration.</p>
+
+<div class="spec-section-label">Right-edge patient detail drawer — sticky footer</div>
+<div class="scaffold">
+  <div style="position:absolute;left:14px;top:14px;color:#475569;font-size:12px;font-family:'JetBrains Mono',monospace">/ patients / Adebayo, Olumide</div>
+  <div class="scrim"></div>
+  <div class="drawer-r">
+    <div class="drawer-h">
+      <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div style="flex:1"><div class="ttl">Adebayo, Olumide</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748B">10458291 · 64M · 312A</div></div>
+      <button>‹</button>
+      <button>›</button>
+      <button>×</button>
+    </div>
+    <div class="drawer-body">
+      <div style="background:#DC2626;color:#fff;padding:8px 12px;border-radius:4px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>ALLERGY · Penicillin (anaphylaxis)</div>
+
+      <div style="margin-top:12px">
+        <div class="label-strip" style="margin-bottom:6px">Demographics</div>
+        <div class="kvgrid">
+          <div class="kv-block"><div class="k">DOB · age</div><div class="v">1962-03-14 · 64</div></div>
+          <div class="kv-block"><div class="k">Sex</div><div class="v">M</div></div>
+          <div class="kv-block"><div class="k">Code status</div><div class="v">FULL CODE</div></div>
+          <div class="kv-block"><div class="k">Attending</div><div class="v">Patel, R MD</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="label-strip" style="margin-bottom:6px">Vitals · last</div>
+        <div style="display:flex;gap:6px">
+          <div class="kv-block" style="flex:1;text-align:center"><div class="k">HR</div><div class="v" style="font-family:'JetBrains Mono',monospace">76</div></div>
+          <div class="kv-block" style="flex:1;text-align:center"><div class="k">BP</div><div class="v" style="font-family:'JetBrains Mono',monospace">128/82</div></div>
+          <div class="kv-block" style="flex:1;text-align:center"><div class="k">SpO₂</div><div class="v" style="font-family:'JetBrains Mono',monospace">98%</div></div>
+          <div class="kv-block" style="flex:1;text-align:center"><div class="k">Temp</div><div class="v" style="font-family:'JetBrains Mono',monospace">98.6°F</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="label-strip" style="margin-bottom:6px">Active problems</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:#F8FAFB;border-radius:4px"><span>Essential hypertension</span><span class="mono" style="color:#0A87A3;font-size:11px">I10</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:#F8FAFB;border-radius:4px"><span>Hyperlipidemia</span><span class="mono" style="color:#0A87A3;font-size:11px">E78.5</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-secondary btn-sm">Transfer</button>
+      <button class="btn btn-destructive-ghost btn-sm">Discharge</button>
+      <button class="btn btn-primary btn-sm">Open chart</button>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Left-edge filter drawer</div>
+<div class="scaffold" style="height:380px">
+  <div style="position:absolute;right:14px;top:14px;color:#475569;font-size:12px;font-family:'JetBrains Mono',monospace">/ patients · 42 results</div>
+  <div class="drawer-l">
+    <div class="drawer-h"><span class="ttl">Filters</span><button>×</button></div>
+    <div class="drawer-body">
+      <div class="label-strip">Acuity</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0 14px">
+        <span class="pill" style="background:#7F1D1D;color:#fff;border-color:#7F1D1D">1</span>
+        <span class="pill" style="background:#FEE2E2;color:#991B1B;border-color:#FCA5A5">2</span>
+        <span class="pill" style="background:#FEF3C7;color:#92400E;border-color:#FCD34D">3</span>
+        <span class="pill" style="background:#F0FDF4;color:#15803D;border-color:#86EFAC">4</span>
+        <span class="pill" style="background:#EFF6FF;color:#1E40AF;border-color:#BFDBFE">5</span>
+      </div>
+      <div class="label-strip">Status</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin:6px 0 14px;font-size:13px">
+        <label><input type="checkbox" checked> In room</label>
+        <label><input type="checkbox" checked> Awaiting labs</label>
+        <label><input type="checkbox"> Discharged</label>
+        <label><input type="checkbox"> No-show</label>
+      </div>
+      <div class="label-strip">Ward</div>
+      <select class="input" style="margin:6px 0 14px"><option>3-North</option><option>CCU</option><option>Med 4-South</option></select>
+    </div>
+    <div class="drawer-foot"><button class="btn btn-tertiary btn-sm">Reset</button><button class="btn btn-primary btn-sm">Apply (3)</button></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Bottom drawer — mobile with snap points &amp; handle</div>
+<div class="scaffold" style="height:380px">
+  <div class="scrim"></div>
+  <div class="drawer-b" style="height:280px">
+    <div class="handle"></div>
+    <div class="snap-bar"><span class="snap"></span><span class="snap on"></span><span class="snap"></span></div>
+    <div style="font-size:14px;font-weight:600;margin:8px 0 4px">Order set · Sepsis bundle</div>
+    <div style="font-size:12px;color:#64748B;margin-bottom:10px">Includes labs, fluids, antibiotics, and lactate. Review and confirm.</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+      <label><input type="checkbox" checked> Lactate · STAT</label>
+      <label><input type="checkbox" checked> Blood cultures × 2 sets</label>
+      <label><input type="checkbox" checked> Broad-spectrum antibiotic within 1h</label>
+      <label><input type="checkbox" checked> 30 mL/kg crystalloid bolus</label>
+      <label><input type="checkbox"> Repeat lactate in 6h if &gt; 2.0</label>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:14px"><button class="btn btn-secondary btn-sm" style="flex:1">Cancel</button><button class="btn btn-primary btn-sm" style="flex:1">Place order</button></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Multi-step drawer — new-patient registration</div>
+<div class="scaffold" style="height:520px">
+  <div class="drawer-r" style="width:520px">
+    <div class="drawer-h">
+      <span class="ttl">Register new patient</span>
+      <button>×</button>
+    </div>
+    <div class="bc-row">
+      <span class="stp">1 · Demographics ✓</span><span style="color:#CBD5E1">›</span>
+      <span class="stp">2 · Insurance ✓</span><span style="color:#CBD5E1">›</span>
+      <span class="stp cur">3 · Consents</span><span style="color:#CBD5E1">›</span>
+      <span class="stp">4 · Triage</span>
+    </div>
+    <div class="drawer-body">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">Consent forms</div>
+      <div style="font-size:12px;color:#64748B;margin-bottom:12px">All required consents must be signed before the patient may be roomed.</div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="border:1px solid #E2E8F0;border-radius:6px;padding:10px;display:flex;align-items:center;gap:10px">
+          <span class="cb checked" style="display:inline-flex;width:18px;height:18px;border-radius:4px;background:#0A87A3;border:1.5px solid #0A87A3;align-items:center;justify-content:center;color:#fff;font-size:11px">✓</span>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">General consent for treatment</div><div class="spec-caption">Signed 14:08 · witness AW</div></div>
+          <button class="btn btn-sm btn-tertiary">View</button>
+        </div>
+        <div style="border:1px solid #E2E8F0;border-radius:6px;padding:10px;display:flex;align-items:center;gap:10px">
+          <span class="cb checked" style="display:inline-flex;width:18px;height:18px;border-radius:4px;background:#0A87A3;border:1.5px solid #0A87A3;align-items:center;justify-content:center;color:#fff;font-size:11px">✓</span>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">HIPAA Notice of Privacy Practices</div><div class="spec-caption">Acknowledged 14:09</div></div>
+          <button class="btn btn-sm btn-tertiary">View</button>
+        </div>
+        <div style="border:1px dashed #FB923C;border-radius:6px;padding:10px;display:flex;align-items:center;gap:10px;background:#FFF7ED">
+          <span class="cb" style="display:inline-flex;width:18px;height:18px;border-radius:4px;border:1.5px solid #FB923C;background:#fff"></span>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#7C2D12">Financial responsibility — required</div><div class="spec-caption" style="color:#9A3412">Patient + witness signature</div></div>
+          <button class="btn btn-sm btn-primary">Sign now</button>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-tertiary btn-sm">Save as draft</button>
+      <button class="btn btn-secondary btn-sm">‹ Back</button>
+      <button class="btn btn-primary btn-sm">Continue to triage</button>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Inline expanding row drawer</div>
+<div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden">
+  <div style="display:flex;padding:10px 14px;border-bottom:1px solid #F1F5F8;font-size:13px;align-items:center;gap:10px">
+    <span style="cursor:pointer;font-weight:600">▾</span>
+    <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+    <span style="font-weight:600">Adebayo, Olumide</span>
+    <span class="mono" style="color:#64748B;font-size:11px">10458291</span>
+    <span class="pill pill-info" style="margin-left:auto">In room</span>
+  </div>
+  <div style="background:#F8FAFB;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+    <div class="kv-block"><div class="k">Vitals</div><div class="v" style="font-family:'JetBrains Mono',monospace">76 · 128/82 · 98%</div></div>
+    <div class="kv-block"><div class="k">Last note</div><div class="v">14:08 · R. Patel MD</div></div>
+    <div class="kv-block"><div class="k">Anticipated DC</div><div class="v">2026-05-03</div></div>
+    <div class="kv-block" style="grid-column:span 3"><div class="k">Active problems</div><div class="v" style="font-family:'Inter',sans-serif">Essential hypertension (I10), Hyperlipidemia (E78.5), Type 2 DM (E11.9)</div></div>
+  </div>
+  <div style="display:flex;padding:10px 14px;font-size:13px;align-items:center;gap:10px">
+    <span style="cursor:pointer;color:#94A3B8">▸</span>
+    <span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">CL</span>
+    <span style="font-weight:600">Chen, Wei-Lin</span>
+    <span class="mono" style="color:#64748B;font-size:11px">10293874</span>
+    <span class="pill pill-warning" style="margin-left:auto">Awaiting labs</span>
+  </div>
+</div>
+
+</body>
+</html>

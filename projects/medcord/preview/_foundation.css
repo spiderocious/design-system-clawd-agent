@@ -1,0 +1,391 @@
+/* ============================================================
+   MEDCORD — surgical-paper foundation
+   One stance, applied everywhere.
+
+   Palette: bone-paper canvas, ink-black, apothecary green.
+   Type:    serif display + humanist sans, mono for record numbers.
+   Chrome:  hairlines only, no gratuitous shadow, no decoration.
+
+   Components are designed scenes, not catalog grids.
+   Component cards do not annotate themselves with token names
+   or pill counts. They render and let the work speak.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---------- Paper & ink (warm-cool tension) ---------- */
+  --paper:        #F4EFE6;   /* warm bone — the canvas */
+  --paper-deep:   #ECE5D6;   /* recessed surface */
+  --sheet:        #FBF7EF;   /* a single sheet on the desk */
+  --sheet-edge:   #D9D0BB;   /* the edge of a sheet */
+  --ink:          #181613;   /* near-black, slightly warm */
+  --ink-2:        #3C3833;   /* body */
+  --ink-3:        #6E665B;   /* secondary */
+  --ink-4:        #A39A8A;   /* tertiary */
+  --hair:         #D9D0BB;   /* hairline, identical to sheet-edge */
+  --hair-soft:    #E6DFCF;   /* even quieter divider */
+  --rule:         #181613;   /* heavy rule for emphasis (rare) */
+
+  /* ---------- Apothecary green (primary, single accent) ----------
+     The original brand-brand ramp from colors-brand.html, kept verbatim.
+     This is the ONE accent. It marks: interactive, signed, healthy state. */
+  --green-50:  #F0FDF4;
+  --green-100: #DCFCE7;
+  --green-200: #BBF7D0;
+  --green-300: #86EFAC;
+  --green-400: #4ADE80;
+  --green-500: #22C55E;
+  --green-600: #16A34A;   /* primary action */
+  --green-700: #15803D;   /* primary action hover */
+  --green-800: #166534;
+  --green-900: #14532D;   /* deepest */
+
+  /* ---------- Clinical state (used sparingly, paired with text) ----------
+     Critical-red is reserved for life-threatening. Amber is everything else
+     warning-level. Purple is abnormal-low. Color alone never carries meaning. */
+  --crit:        #B42318;   /* deep arterial red, not Bootstrap red */
+  --crit-bg:     #FEF3F2;
+  --crit-edge:   #F2B5AF;
+
+  --warn:        #B25E09;   /* burnt amber */
+  --warn-bg:     #FDF6E3;
+  --warn-edge:   #E8D9A1;
+
+  --low:         #5B21B6;   /* deep violet for abnormal-low only */
+  --low-bg:      #F7F2FE;
+  --low-edge:    #D8C7F0;
+
+  --ok:          var(--green-700);
+  --ok-bg:       var(--green-50);
+  --ok-edge:     var(--green-200);
+
+  /* ---------- Ribbons (allergy / advisory) ----------
+     These wrap the patient banner. Loud is the point. */
+  --ribbon-allergy:   #B42318;   /* anaphylactic */
+  --ribbon-warn:      #B25E09;
+  --ribbon-watch:     #8C6E1D;
+
+  /* ---------- Type ---------- */
+  --serif:   'Newsreader', 'Lyon Display', Georgia, serif;
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', 'JetBrains Sans Mono', ui-monospace, monospace;
+
+  /* Tracking — actually used */
+  --track-display:  -0.025em;
+  --track-h:        -0.012em;
+  --track-body:      0;
+  --track-label:     0.01em;
+  --track-overline:  0.18em;   /* generous, like a chart-label */
+  --track-mono:      0;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:    2px;
+  --r-soft:     6px;
+  --r-card:     4px;          /* deliberately tight; this is paper */
+  --r-pill:     9999px;
+
+  --gutter:     24px;
+
+  /* Hairlines, not shadows */
+  --line-1: 0 0 0 1px var(--hair);
+  --shade-1: 0 1px 0 rgba(24,22,19,0.04);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "kern", "calt";
+}
+
+/* ----- Type primitives -----
+   Used inline; no .t-h1 / .t-body soup. */
+.serif    { font-family: var(--serif); font-weight: 500; letter-spacing: var(--track-display); }
+.sans     { font-family: var(--sans); }
+.mono     { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1, "ss01"; letter-spacing: var(--track-mono); }
+.tabular  { font-variant-numeric: tabular-nums; }
+.overline {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Page header: a chart-stamp for every preview -----
+   Each specimen carries a single, restrained header that names
+   what's on the page and what part of the system it belongs to.
+   No "10 cards" counts, no spec annotations. */
+.stamp {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 18px; margin-bottom: 36px;
+  border-bottom: 1px solid var(--ink);
+}
+.stamp .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.stamp .ttl {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: var(--track-display);
+  flex: 1;
+  line-height: 1.05;
+}
+.stamp .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ----- Subdued section break ----- */
+.break {
+  margin: 56px 0 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.break::before { content: ""; height: 1px; background: var(--hair); width: 24px; flex-shrink: 0; }
+.break::after  { content: ""; height: 1px; background: var(--hair); flex: 1; }
+.break .lbl {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* ----- Page wrapper: paper with margins ----- */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 64px 96px;
+}
+
+/* ----- Sheet: a single piece of paper inside the canvas -----
+   This is the only "card" idiom we use. Hairline edge, no shadow,
+   sometimes a single hair on the inside corner for tactility. */
+.sheet {
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+}
+.sheet-tight { padding: 14px 18px; }
+.sheet-md    { padding: 20px 24px; }
+.sheet-lg    { padding: 28px 32px; }
+
+/* ----- Hairline rules ----- */
+hr.hair { border: 0; border-top: 1px solid var(--hair); margin: 0; }
+hr.hair-soft { border: 0; border-top: 1px solid var(--hair-soft); margin: 0; }
+
+/* ----- A "stamp" used inside components: a small uppercase mark ----- */
+.mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Generic interactive primitives — used by every page ----- */
+
+/* Buttons:
+   No drop shadow, no gradient. The primary is a filled green rectangle
+   with tight 6px radius. Secondary is an outlined ink rectangle.
+   The "irreversible" button is the only ornamented variant. */
+.b {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
+}
+.b:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.28);
+}
+.b-primary    { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+.b-primary:hover { background: var(--green-800); border-color: var(--green-800); }
+.b-secondary  { background: transparent; border-color: var(--ink); color: var(--ink); }
+.b-secondary:hover { background: var(--ink); color: var(--paper); }
+.b-quiet      { color: var(--ink-2); }
+.b-quiet:hover{ background: rgba(24,22,19,0.05); color: var(--ink); }
+.b-danger     { color: var(--crit); }
+.b-danger:hover{ background: var(--crit-bg); }
+.b-sm { height: 26px; padding: 0 10px; font-size: 12px; }
+.b-lg { height: 40px; padding: 0 18px; font-size: 14px; }
+
+/* Inputs */
+.f {
+  font-family: var(--sans);
+  font-size: 13px;
+  height: 32px;
+  padding: 0 10px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink-3);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: var(--track-body);
+}
+.f::placeholder { color: var(--ink-4); }
+.f:focus { border-bottom-color: var(--ink); }
+.f-mono { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; }
+
+/* Pills:
+   No background fill by default. A pill is a hairline rectangle with
+   tight tracking. State pills color the text and edge — never the fill. */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 20px; padding: 0 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hair);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: var(--track-label);
+  white-space: nowrap;
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+.pill-ok    { color: var(--green-800); border-color: var(--green-300); background: var(--green-50); }
+.pill-warn  { color: var(--warn);  border-color: var(--warn-edge); background: var(--warn-bg); }
+.pill-crit  { color: var(--crit);  border-color: var(--crit-edge); background: var(--crit-bg); }
+.pill-low   { color: var(--low);   border-color: var(--low-edge);  background: var(--low-bg); }
+.pill-ink   { color: var(--paper); border-color: var(--ink);       background: var(--ink); }
+
+/* Chip (looser than a pill, used for tags inside content) */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+  padding: 1px 6px; border-radius: 3px; background: var(--paper-deep);
+}
+
+/* MRN / record number — a chart label */
+.rec {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* The flag glyph used on lab values: H, L, HH, LL, !!! */
+.flag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 0 4px;
+  line-height: 14px;
+  border-radius: 2px;
+  letter-spacing: 0;
+}
+.flag-h  { color: var(--warn); border: 1px solid var(--warn-edge); background: var(--warn-bg); }
+.flag-l  { color: var(--low);  border: 1px solid var(--low-edge);  background: var(--low-bg); }
+.flag-c  { color: #fff; background: var(--crit); border: 1px solid var(--crit); }
+
+/* Avatar — initials only, sober palette tones, no random colors */
+.av {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-deep);
+  color: var(--ink-2);
+  font-family: var(--sans); font-weight: 600; font-size: 11px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  user-select: none;
+  border: 1px solid var(--sheet-edge);
+}
+.av-sm { width: 22px; height: 22px; font-size: 9px; }
+.av-md { width: 32px; height: 32px; font-size: 11px; }
+.av-lg { width: 48px; height: 48px; font-size: 16px; border-radius: 50%; }
+.av-xl { width: 80px; height: 80px; font-size: 22px; }
+/* Tinted role variants — desaturated, all sit on the paper */
+.av-md-md   { background: #E1E8DD; color: #2F4226; border-color: #C4D2BC; }
+.av-rn-rn   { background: #DDE3D4; color: #495939; border-color: #C2CCB4; }
+.av-pat     { background: #ECE3D6; color: #5C4B30; border-color: #D4C4A6; }
+
+/* The "live now" pulse used for shift-on-now indicators only */
+.pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-600);
+  box-shadow: 0 0 0 0 rgba(22,163,74,0.5);
+  animation: pulse 1.6s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.45); }
+  100% { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+}
+
+/* Selection ring — used as the only "focus" idiom on cards */
+.ring-focus { box-shadow: 0 0 0 2px var(--ink); }
+
+/* ----- Common scaffolding ----- */
+.row    { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col    { display: flex; flex-direction: column; gap: 12px; }
+.stack  { display: flex; flex-direction: column; gap: 0; }
+.split  { display: grid; gap: 16px; }
+.split-2 { grid-template-columns: 1fr 1fr; }
+.split-3 { grid-template-columns: repeat(3, 1fr); }
+.split-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ----- Numerics — the vitals readout family -----
+   Big tabular numerals, generous letter-shape, ink-black.
+   This is the only place we "shout" with size. */
+.read {
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+.read-lg { font-size: 40px; }
+.read-md { font-size: 28px; }
+.read-sm { font-size: 20px; }
+.read .u { font-family: var(--sans); font-size: 0.42em; color: var(--ink-3); margin-left: 4px; letter-spacing: 0.02em; font-weight: 500; }
+
+/* ----- Quote (chief-complaint style) -----
+   Pull-quote treatment used inside the patient banner: italic serif,
+   indented, ink-grey. Reads as if dictated. */
+.dictated {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-2);
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+/* ----- Selection: subtle, paper-aware ----- */
+::selection { background: rgba(22,163,74,0.22); color: var(--ink); }
+
+/* ----- Scrollbar (webkit) ----- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--sheet-edge); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }

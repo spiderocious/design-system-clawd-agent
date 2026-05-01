@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Type</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* Type specimens layout — printed-page rhythm */
+  .specimen { padding: 22px 0; border-bottom: 1px solid var(--hair); display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: baseline; }
+  .specimen:last-child { border-bottom: 0; }
+  .specimen .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); line-height: 1.6; }
+  .specimen .meta .lbl { color: var(--ink); font-weight: 500; display: block; margin-bottom: 2px; letter-spacing: 0; }
+  .specimen .sample { color: var(--ink); }
+
+  /* Three families, side-by-side: sample + name + use */
+  .families {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 48px;
+  }
+  .families > div {
+    padding: 28px 24px;
+    border-right: 1px solid var(--hair);
+  }
+  .families > div:last-child { border-right: 0; }
+  .families .glyph {
+    font-size: 88px; line-height: 1; letter-spacing: -0.04em;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .families .name {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .families .role {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+
+  /* Tracking specimen: same glyphs at four tracking values */
+  .tracking {
+    display: grid; grid-template-columns: 100px 1fr;
+    border-top: 1px solid var(--hair);
+  }
+  .tracking > div { padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .tracking > div:nth-child(odd) {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); padding-right: 16px;
+  }
+  .tracking > div:nth-child(even) {
+    font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">I · 02</span>
+    <h1 class="ttl">Type</h1>
+    <span class="meta">three families · one for thinking, one for chrome, one for record</span>
+  </header>
+
+  <!-- Three families -->
+  <div class="families">
+    <div>
+      <div class="glyph serif">Aa</div>
+      <div class="name">Newsreader</div>
+      <div class="role">Serif · for thinking<br>display, dictation, chief complaint</div>
+    </div>
+    <div>
+      <div class="glyph sans">Aa</div>
+      <div class="name">Inter</div>
+      <div class="role">Sans · for chrome<br>labels, body, navigation</div>
+    </div>
+    <div>
+      <div class="glyph mono">Aa</div>
+      <div class="name">JetBrains Mono</div>
+      <div class="role">Mono · for record<br>MRN, lab values, timestamps</div>
+    </div>
+  </div>
+
+  <!-- Display ladder: serif, real headlines, real content -->
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Display</span>
+      Newsreader 500 · 48 / 1.0<br>
+      tracking −0.025em
+    </div>
+    <div class="sample serif" style="font-size:48px;line-height:1.0;letter-spacing:-0.025em">Adebayo, Olumide</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Section</span>
+      Newsreader 500 · 28 / 1.05<br>
+      tracking −0.022em
+    </div>
+    <div class="sample serif" style="font-size:28px;line-height:1.05;letter-spacing:-0.022em">Active problems &amp; current medications</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Subhead</span>
+      Newsreader 500 · 19 / 1.2<br>
+      tracking −0.012em
+    </div>
+    <div class="sample serif" style="font-size:19px;line-height:1.2;letter-spacing:-0.012em">Cardiology consult · 14:08, May 1, 2026</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Dictated</span>
+      Newsreader 400 italic · 16 / 1.45<br>
+      tracking 0
+    </div>
+    <div class="sample serif" style="font-size:16px;line-height:1.45;font-style:italic;font-weight:400">"Crushing chest pressure × 30 min, sweating, nausea. Last meal at four in the morning. Patient is anxious but cooperative."</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Body</span>
+      Inter 400 · 14 / 1.55<br>
+      tracking 0
+    </div>
+    <div class="sample" style="font-size:14px;line-height:1.55;max-width:60ch">Plan to admit overnight to step-down for serial troponins and cardiology evaluation. NPO until cath team has cleared the patient. Spouse has been notified and will arrive within the hour.</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Body — small</span>
+      Inter 400 · 13 / 1.5<br>
+      tracking 0
+    </div>
+    <div class="sample" style="font-size:13px;line-height:1.5;max-width:60ch;color:var(--ink-2)">Adjust filters to widen the view, or add patients to your team's worklist from the floor map.</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Label</span>
+      Inter 600 · 13<br>
+      tracking +0.01em
+    </div>
+    <div class="sample" style="font-size:13px;font-weight:600;letter-spacing:0.01em">Date of birth</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Overline</span>
+      Inter 600 · 11 · uppercase<br>
+      tracking +0.18em
+    </div>
+    <div class="sample overline">Vitals · last 24 hours</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Mark</span>
+      Mono 500 · 10 · uppercase<br>
+      tracking +0.14em
+    </div>
+    <div class="sample mark">MRN · ENC · ICD-10</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Record</span>
+      Mono 500 · 12<br>
+      tabular nums on
+    </div>
+    <div class="sample mono tabular" style="font-size:12px;color:var(--ink-2)">MRN 10458291 · ENC-2026-04-29-1184 · 04/30 14:08</div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Reading — large</span>
+      Mono 500 · 40 / 0.95<br>
+      tracking −0.02em · for vitals
+    </div>
+    <div class="sample read read-lg">128<span style="color:var(--ink-3)">/</span>82<span class="u">mmHg</span></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      <span class="lbl">Reading — medium</span>
+      Mono 500 · 28
+    </div>
+    <div class="sample read read-md">76<span class="u">bpm</span></div>
+  </div>
+
+  <!-- Tracking ladder, working sample -->
+  <div class="break"><span class="lbl">Tracking, applied</span></div>
+
+  <div class="tracking">
+    <div>−0.030em</div>
+    <div style="letter-spacing:-0.030em">Newsreader at display sizes — tighten so words read as objects</div>
+    <div>−0.012em</div>
+    <div style="letter-spacing:-0.012em">Newsreader at heading sizes — slight tighten for cohesion</div>
+    <div>0.000em</div>
+    <div style="letter-spacing:0">Newsreader at body — leave alone, the face is balanced as drawn</div>
+    <div>+0.010em</div>
+    <div style="letter-spacing:0.01em;font-family:var(--sans);font-weight:600;font-size:14px">Inter at label sizes — open up by a hair so labels read flat-footed</div>
+    <div>+0.180em</div>
+    <div style="letter-spacing:0.18em;font-family:var(--sans);font-weight:600;font-size:11px;text-transform:uppercase">Inter overline — generous, like a chart label</div>
+  </div>
+
+  <!-- A composed paragraph, the proof: how all three families coexist -->
+  <div class="break"><span class="lbl">All three, in one paragraph</span></div>
+
+  <div class="sheet sheet-md" style="background:var(--sheet);max-width:680px">
+    <div class="overline" style="margin-bottom:10px">Progress note · 14:08</div>
+    <h3 class="serif" style="margin:0 0 8px;font-size:22px;font-weight:500;letter-spacing:-0.012em">Adebayo, Olumide <span style="color:var(--ink-3);font-weight:400">— f/u for chest pressure</span></h3>
+    <div class="rec mono" style="margin-bottom:14px">MRN 10458291 · ENC-2026-04-29-1184 · 64 M · DOB 1962-03-14</div>
+
+    <p class="dictated" style="margin:0 0 14px">"Pressure is gone now. Walked the unit twice without symptoms. He'd like to know when he can go home."</p>
+
+    <p style="margin:0 0 12px;color:var(--ink-2);line-height:1.55">Vitals stable. Repeat troponin pending. ECG unchanged from prior. Plan to discharge after the 6h trop, with follow-up in cardiology clinic.</p>
+
+    <div style="display:flex;gap:18px;margin-top:14px;padding-top:14px;border-top:1px solid var(--hair)">
+      <div><div class="overline">HR</div><div class="read read-sm">76<span class="u">bpm</span></div></div>
+      <div><div class="overline">BP</div><div class="read read-sm">128/82</div></div>
+      <div><div class="overline">SpO₂</div><div class="read read-sm">98<span class="u">%</span></div></div>
+      <div><div class="overline">Temp</div><div class="read read-sm">98.6<span class="u">°F</span></div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

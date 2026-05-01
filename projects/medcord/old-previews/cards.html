@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cards</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:14px; }
+.kv-row { display:flex; justify-content:space-between; align-items:baseline; padding:4px 0; font-size:12px; }
+.kv-row .k { color:#94A3B8; }
+.kv-row .v { color:#0E1117; font-family:'JetBrains Mono',monospace; }
+.kv-row.dark .v { color:#F1F5F8; }
+.card-int { cursor:pointer; transition:box-shadow 0.15s, border-color 0.15s; }
+.card-int:hover { box-shadow:0 8px 24px rgba(14,17,23,0.10); border-color:#CBD5E1; }
+.card-sel { border-color:#0A87A3; box-shadow:0 0 0 3px rgba(10,135,163,0.15); }
+.card-drag { cursor:grab; position:relative; }
+.card-drag::before { content:""; position:absolute; left:0; top:50%; transform:translateY(-50%); width:3px; height:24px; background:#CBD5E1; border-radius:0 3px 3px 0; }
+.compact-card { padding:10px; font-size:12px; }
+.expand-card { padding:18px; }
+.summary-stat { padding:14px; }
+.summary-stat .num { font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:600; letter-spacing:-0.02em; }
+.compare-card { display:grid; grid-template-columns:1fr 1px 1fr; gap:14px; padding:14px; }
+.divv { background:#E2E8F0; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Cards</h1>
+<p class="spec-sub">The patient summary card is the central object in the system — render it at multiple densities. Other variants: basic, with header, with media (DICOM), interactive, selected, draggable, compact, expanded, summary stat, comparison, staff profile, equipment.</p>
+
+<div class="spec-section-label">Variants</div>
+<div class="card-grid">
+
+  <div class="card">
+    <div style="font-size:13px;color:#475569">Basic card · borders + soft shadow define container; no heavy fills</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">With header</div><button class="btn btn-sm btn-tertiary">Edit</button></div>
+    <div style="font-size:13px;color:#475569">Patient demographics, last verified 04/29 · 14:08 by R. Patel MD.</div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="height:120px;background:linear-gradient(135deg,#0E1117,#475569 70%,#94A3B8);position:relative">
+      <span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.5);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;letter-spacing:0.06em">DICOM · CR</span>
+      <span style="position:absolute;bottom:8px;left:10px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px">Chest PA · 04/30 14:22</span>
+    </div>
+    <div style="padding:12px"><div style="font-size:13px;font-weight:600">With media — imaging study</div><div style="font-size:11px;color:#64748B;margin-top:2px">Read by Dr. Iqbal · finalized</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:8px">With footer actions</div>
+    <div style="font-size:13px;color:#475569;margin-bottom:12px">2 active orders pending sign-off.</div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;border-top:1px solid #F1F5F8;padding-top:10px;margin:0 -14px -14px;padding:10px 14px 0"><button class="btn btn-sm btn-secondary">Discard</button><button class="btn btn-sm btn-primary">Sign all</button></div>
+  </div>
+
+  <div class="card card-int">
+    <div style="font-size:13px;font-weight:600">Interactive · clickable</div>
+    <div style="font-size:11px;color:#64748B;margin-top:2px">Hovers to lift, full-card click target</div>
+  </div>
+
+  <div class="card card-int card-sel">
+    <div style="font-size:13px;font-weight:600;color:#0A6F87">Selected</div>
+    <div style="font-size:11px;color:#0A87A3;margin-top:2px">Inside a multi-select list — checkmark hidden, ring visible</div>
+  </div>
+
+  <div class="card card-drag" style="padding-left:20px">
+    <div style="font-size:13px;font-weight:600">Draggable</div>
+    <div style="font-size:11px;color:#64748B;margin-top:2px">Drag to reorder · keyboard: ⌘↑/↓</div>
+  </div>
+
+  <div class="card compact-card">
+    <div style="font-weight:600;color:#0E1117">Compact</div>
+    <div style="color:#64748B">Used in dense worklists; row-like behavior at 32px height.</div>
+  </div>
+
+  <div class="card expand-card">
+    <div style="font-size:14px;font-weight:600;margin-bottom:6px">Expanded</div>
+    <div style="font-size:13px;color:#475569;line-height:1.55">Larger padding for foreground actions like new-patient registration confirmation. Use sparingly.</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Summary stat tiles</div>
+<div class="card-grid">
+  <div class="card summary-stat">
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">Census · 3-North</div>
+    <div class="num">42<span style="font-size:14px;color:#94A3B8;font-weight:500"> / 48</span></div>
+    <div style="font-size:11px;color:#15803D;margin-top:4px">↑ 2 vs yesterday · 87.5% occupancy</div>
+  </div>
+  <div class="card summary-stat">
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">Avg LOS</div>
+    <div class="num">4.2<span style="font-size:14px;color:#94A3B8;font-weight:500"> days</span></div>
+    <div style="font-size:11px;color:#15803D;margin-top:4px">↓ 0.3 d · target ≤ 4.5</div>
+  </div>
+  <div class="card summary-stat">
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">Readmission 30d</div>
+    <div class="num" style="color:#9A3412">11.4<span style="font-size:14px;color:#94A3B8;font-weight:500"> %</span></div>
+    <div style="font-size:11px;color:#9A3412;margin-top:4px">↑ 0.8 pp · target ≤ 9%</div>
+  </div>
+  <div class="card summary-stat">
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">ED throughput</div>
+    <div class="num">3:42<span style="font-size:14px;color:#94A3B8;font-weight:500"> avg</span></div>
+    <div style="font-size:11px;color:#15803D;margin-top:4px">↓ 8 min vs last week</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Comparison card — vs prev period</div>
+<div class="card compare-card" style="max-width:520px">
+  <div>
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">This week</div>
+    <div class="num" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600">128</div>
+    <div style="font-size:11px;color:#64748B">discharges</div>
+  </div>
+  <div class="divv"></div>
+  <div>
+    <div style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">Prev week</div>
+    <div class="num" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;color:#94A3B8">114</div>
+    <div style="font-size:11px;color:#15803D">↑ 12.3% wow</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Patient summary card — multiple sizes</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+
+  <div class="card" style="padding:12px">
+    <div class="spec-tile-label" style="margin-bottom:6px">Compact (worklist)</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Adebayo, Olumide</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748B">10458291 · 64M · 312A</div>
+      </div>
+      <span class="pill pill-info">In room</span>
+    </div>
+    <div style="background:#DC2626;color:#fff;padding:3px 8px;border-radius:4px;margin-top:8px;font-size:10px;font-weight:600">ALLERGY · Penicillin</div>
+  </div>
+
+  <div class="card" style="padding:14px">
+    <div class="spec-tile-label" style="margin-bottom:6px">Default</div>
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600">Adebayo, Olumide <span style="color:#94A3B8;font-weight:400">"Olu"</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748B">10458291 · M · 64 y · DOB 1962-03-14</div>
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <span class="pill" style="background:#0E1117;color:#fff;border-color:#0E1117">FULL CODE</span>
+          <span class="pill pill-info">3-North · 312A</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#DC2626;color:#fff;padding:6px 10px;border-radius:4px;margin-top:10px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>ALLERGY · Penicillin (anaphylaxis), Sulfa</div>
+  </div>
+
+  <div class="card" style="padding:16px;grid-column:span 1">
+    <div class="spec-tile-label" style="margin-bottom:6px">Expanded — chart open</div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <span class="avatar avatar-lg" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:600">Adebayo, Olumide</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748B">MRN 10458291 · M · 64 y · DOB 1962-03-14</div>
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <span class="pill" style="background:#0E1117;color:#fff;border-color:#0E1117">FULL CODE</span>
+          <span class="pill pill-info">3-North · 312A</span>
+          <span class="pill" style="background:#FFF7ED;color:#9A3412;border-color:#FDBA74">Fall risk</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#DC2626;color:#fff;padding:8px 12px;border-radius:4px;margin-top:12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>ALLERGY · Penicillin (anaphylaxis), Sulfa drugs (rash)</div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #F1F5F8">
+      <div class="kv-row"><span class="k">Attending</span><span class="v" style="font-family:'Inter',sans-serif">Patel, Reema MD</span></div>
+      <div class="kv-row"><span class="k">Encounter</span><span class="v">ENC-2026-04-29-1184</span></div>
+      <div class="kv-row"><span class="k">Admitted</span><span class="v">2026-04-29 · 08:32</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Staff profile card</div>
+<div class="card-grid">
+  <div class="card">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span class="avatar avatar-lg role-ring" style="--ring:#1D4ED8;background:#DBEAFE;color:#1D4ED8;box-shadow:0 0 0 2px #fff,0 0 0 4px #1D4ED8;position:relative">RP</span>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600">Patel, Reema <span style="color:#475569;font-weight:500">MD, FACC</span></div>
+        <div style="font-size:11px;color:#64748B">Cardiology · Attending</div>
+        <span class="pill pill-success" style="margin-top:6px"><span class="dot"></span>On-shift · ends 19:00</span>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #F1F5F8;margin:10px 0">
+    <div class="kv-row"><span class="k">NPI</span><span class="v">1093847562</span></div>
+    <div class="kv-row"><span class="k">License</span><span class="v">IL · 036-018392</span></div>
+    <div class="kv-row"><span class="k">Pager</span><span class="v">×4187</span></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span class="avatar avatar-lg role-ring" style="--ring:#16A34A;background:#DCFCE7;color:#15803D;box-shadow:0 0 0 2px #fff,0 0 0 4px #16A34A">AW</span>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600">Williams, Aiyana <span style="color:#475569;font-weight:500">RN, BSN</span></div>
+        <div style="font-size:11px;color:#64748B">3-North · Charge nurse</div>
+        <span class="pill pill-success" style="margin-top:6px"><span class="dot"></span>On-shift</span>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #F1F5F8;margin:10px 0">
+    <div class="kv-row"><span class="k">Ratio</span><span class="v">1:4 patients</span></div>
+    <div class="kv-row"><span class="k">Hire date</span><span class="v">2018-09-14</span></div>
+    <div class="kv-row"><span class="k">Cert · BLS</span><span class="v" style="color:#15803D">exp 2027-02</span></div>
+    <div class="kv-row"><span class="k">Cert · ACLS</span><span class="v" style="color:#9A3412">exp 2026-08 ⚠</span></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Equipment card</div>
+<div class="card-grid">
+  <div class="card">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="width:48px;height:48px;border-radius:6px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;color:#B45309"><svg class="icon-24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600">Infusion pump · Alaris 8100</div>
+        <div style="font-size:11px;color:#64748B;font-family:'JetBrains Mono',monospace">SN ALR-8100-39482 · BD Medical</div>
+        <span class="pill pill-success" style="margin-top:6px">In use · 312A</span>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #F1F5F8;margin:10px 0">
+    <div class="kv-row"><span class="k">Last calibration</span><span class="v">2026-02-12 · pass</span></div>
+    <div class="kv-row"><span class="k">Next service</span><span class="v" style="color:#9A3412">2026-05-12 · 11d</span></div>
+    <div class="kv-row"><span class="k">Assigned to</span><span class="v" style="font-family:'Inter',sans-serif">3-North · Bed 312A</span></div>
+  </div>
+
+  <div class="card" style="border-left:3px solid #DC2626">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="width:48px;height:48px;border-radius:6px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;color:#991B1B"><svg class="icon-24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600">Defibrillator · Lifepak 20e</div>
+        <div style="font-size:11px;color:#64748B;font-family:'JetBrains Mono',monospace">SN LP20-77451</div>
+        <span class="pill pill-danger" style="margin-top:6px">Out of service</span>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #F1F5F8;margin:10px 0">
+    <div style="font-size:12px;color:#991B1B;background:#FEF2F2;padding:8px 10px;border-radius:4px">Battery fault · ticket #SVC-1042 opened 04/29 · awaiting biomed</div>
+  </div>
+</div>
+
+</body>
+</html>

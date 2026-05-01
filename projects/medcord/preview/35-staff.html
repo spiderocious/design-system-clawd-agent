@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Staff management</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* STAFF MANAGEMENT — one designed scene.
+     The schedule grid is the centrepiece: a printed weekly grid like a
+     hospital wall calendar. Charge nurse + roster on the left; PTO &
+     credential expiries underneath. */
+
+  body { background: var(--paper); }
+  .stage { max-width: 1280px; margin: 0 auto; padding: 28px 32px 96px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* TOP STRIP — charge / on-floor / next change */
+  .strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--ink); margin-bottom: 28px;
+    background: var(--sheet);
+  }
+  .strip > div { padding: 16px 20px; border-right: 1px solid var(--hair); }
+  .strip > div:last-child { border-right: 0; }
+  .strip .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 6px; }
+  .strip .ttl { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.1; }
+  .strip .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 4px; letter-spacing: 0; }
+
+  /* SCHEDULE GRID */
+  .sched {
+    background: var(--sheet); border: 1px solid var(--ink); margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .sched-h {
+    padding: 14px 20px; border-bottom: 1px solid var(--ink); background: var(--paper-deep);
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .sched-h h2 { margin: 0; font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.012em; }
+  .sched-h .meta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .sched-h .nav { display: flex; gap: 6px; }
+  .sched-h .nav button { background: transparent; border: 1px solid var(--ink); padding: 4px 10px; font-family: var(--mono); font-size: 10px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
+
+  .sched-grid {
+    display: grid;
+    grid-template-columns: 200px repeat(7, 1fr);
+    background: var(--ink);
+    gap: 1px;
+  }
+  .sched-grid .col-h {
+    background: var(--paper-deep);
+    padding: 10px 12px;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em;
+    text-align: center;
+  }
+  .sched-grid .col-h.first { text-align: left; padding-left: 20px; }
+  .sched-grid .col-h.today { background: var(--ink); color: var(--paper); }
+
+  .sched-grid .nm-cell {
+    background: var(--sheet);
+    padding: 14px 20px;
+    display: grid; grid-template-columns: 32px 1fr;
+    gap: 10px; align-items: center;
+  }
+  .sched-grid .nm-cell .av {
+    width: 32px; height: 32px;
+    background: #DEE6D6; color: #2F4226;
+    border: 1px solid #C4D2BC; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 11px;
+    position: relative;
+  }
+  .sched-grid .nm-cell .av::after {
+    content: attr(data-role);
+    position: absolute; right: -3px; bottom: -3px;
+    font-family: var(--mono); font-size: 8px; font-weight: 600;
+    background: var(--ink); color: var(--paper);
+    padding: 1px 3px; border-radius: 2px; letter-spacing: 0.06em; line-height: 1;
+  }
+  .sched-grid .nm-cell.rn .av { background: #DDE3D4; color: #495939; border-color: #C2CCB4; }
+  .sched-grid .nm-cell.tech .av { background: #ECE3D6; color: #5C4B30; border-color: #D4C4A6; }
+  .sched-grid .nm-cell .nm { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--ink); }
+  .sched-grid .nm-cell .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 1px; letter-spacing: 0; }
+
+  .sched-grid .day-cell {
+    background: var(--sheet);
+    padding: 8px 6px;
+    min-height: 60px;
+    display: flex; flex-direction: column; gap: 2px; justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .sched-grid .blk {
+    display: inline-block;
+    padding: 3px 8px;
+    font-family: var(--mono); font-size: 10px;
+    border-radius: 2px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .sched-grid .blk.day   { background: var(--paper); border: 1px solid var(--ink); color: var(--ink); }
+  .sched-grid .blk.eve   { background: var(--paper-deep); border: 1px solid var(--ink); color: var(--ink); }
+  .sched-grid .blk.night { background: var(--ink); color: var(--paper); }
+  .sched-grid .blk.oncall{ background: var(--crit-bg); border: 1px solid var(--crit-edge); color: var(--crit); }
+  .sched-grid .blk.pto   { background: var(--paper); border: 1px dashed var(--ink-3); color: var(--ink-3); font-style: italic; font-family: var(--serif); padding: 3px 10px; }
+  .sched-grid .blk.swap  { background: var(--warn-bg); border: 1px solid var(--warn-edge); color: var(--warn); }
+
+  /* SECOND ROW: PTO + credentials + swap */
+  .second { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 24px; align-items: start; }
+
+  .panel { background: var(--sheet); border: 1px solid var(--ink); }
+  .panel-h { padding: 14px 20px; border-bottom: 1px solid var(--ink); background: var(--paper-deep); display: flex; align-items: baseline; gap: 14px; }
+  .panel-h h3 { margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; }
+  .panel-h .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* PTO list */
+  .pto-row {
+    padding: 14px 20px; border-bottom: 1px dashed var(--hair-soft);
+    display: grid; grid-template-columns: 32px 1fr auto; gap: 10px; align-items: center;
+  }
+  .pto-row:last-child { border-bottom: 0; }
+  .pto-row .av {
+    width: 32px; height: 32px; border-radius: 4px;
+    background: #DDE3D4; color: #495939; border: 1px solid #C2CCB4;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 11px;
+  }
+  .pto-row .nm { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .pto-row .what { font-family: var(--serif); font-size: 13px; color: var(--ink-2); margin-top: 2px; font-style: italic; line-height: 1.4; }
+  .pto-row .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0; }
+  .pto-row .stat {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 9999px; border: 1px solid; white-space: nowrap;
+  }
+  .pto-row .stat.pending  { color: var(--warn); border-color: var(--warn-edge); background: var(--warn-bg); }
+  .pto-row .stat.approved { color: var(--green-800); border-color: var(--green-200); background: var(--green-50); }
+
+  /* Credentials */
+  .cred {
+    padding: 14px 20px; border-bottom: 1px dashed var(--hair-soft);
+    display: grid; grid-template-columns: 32px 1fr auto; gap: 10px; align-items: center;
+  }
+  .cred:last-child { border-bottom: 0; }
+  .cred .av { width: 32px; height: 32px; border-radius: 4px; background: var(--paper-deep); color: var(--ink); border: 1px solid var(--sheet-edge); display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-weight: 600; font-size: 11px; }
+  .cred .nm { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .cred .what { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+  .cred.warn .what { color: var(--warn); }
+  .cred.crit .what { color: var(--crit); }
+  .cred .ring {
+    width: 36px; height: 36px;
+  }
+
+  /* Shift swap card */
+  .swap-card { padding: 18px 20px; }
+  .swap-card .top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .swap-card .top .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; }
+  .swap-card .top .when { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .swap-card .why { font-family: var(--serif); font-style: italic; color: var(--ink-2); font-size: 13px; line-height: 1.5; padding: 10px 12px; background: var(--paper-deep); border-left: 2px solid var(--ink); margin-bottom: 14px; }
+  .swap-card .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .swap-card .cand { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--hair-soft); font-size: 12px; }
+  .swap-card .cand:last-child { border-bottom: 0; }
+  .swap-card .cand .av { width: 28px; height: 28px; border-radius: 4px; background: #DDE3D4; color: #495939; border: 1px solid #C2CCB4; display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-weight: 600; font-size: 10px; }
+  .swap-card .cand .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .swap-card .b {
+    font-family: var(--sans); font-size: 11px; height: 26px; padding: 0 10px;
+    border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 3px; cursor: pointer; font-weight: 500;
+  }
+  .swap-card .b.primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .swap-card .b.muted { color: var(--ink-3); border-color: var(--sheet-edge); }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">IV · 06</span>
+    <h1>Staff &amp; schedule.</h1>
+    <span class="meta">3-North · week of May 4</span>
+  </header>
+
+  <!-- TOP STRIP -->
+  <div class="strip">
+    <div>
+      <div class="lbl">Charge today</div>
+      <div class="ttl">A. Williams RN</div>
+      <div class="sub">7:00 → 19:00 · pager ×3214</div>
+    </div>
+    <div>
+      <div class="lbl">On the floor now</div>
+      <div class="ttl">14 staff</div>
+      <div class="sub">3 MD · 8 RN · 2 tech · 1 admin</div>
+    </div>
+    <div>
+      <div class="lbl">Next shift change</div>
+      <div class="ttl">in 4 h 18 m</div>
+      <div class="sub">night cohort: M. Reed RN, J. Park MD</div>
+    </div>
+    <div>
+      <div class="lbl">Open shifts · this week</div>
+      <div class="ttl">2 unfilled</div>
+      <div class="sub" style="color:var(--warn)">Sat May 9 · 19–07 · Sun May 10 · 07–19</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE GRID -->
+  <div class="sched">
+    <div class="sched-h">
+      <h2>Schedule — week view</h2>
+      <span class="meta">May 4 → May 10</span>
+      <div class="nav">
+        <button>‹ Prev</button>
+        <button>Today</button>
+        <button>Next ›</button>
+      </div>
+    </div>
+
+    <div class="sched-grid">
+      <div class="col-h first">Provider</div>
+      <div class="col-h">Mon · 4</div>
+      <div class="col-h">Tue · 5</div>
+      <div class="col-h today">Wed · 6</div>
+      <div class="col-h">Thu · 7</div>
+      <div class="col-h">Fri · 8</div>
+      <div class="col-h">Sat · 9</div>
+      <div class="col-h">Sun · 10</div>
+
+      <div class="nm-cell">
+        <span class="av" data-role="MD">RP</span>
+        <div><div class="nm">Patel, R MD</div><div class="role">Cardiology</div></div>
+      </div>
+      <div class="day-cell"><span class="blk day">07–19 · 3-N</span></div>
+      <div class="day-cell"><span class="blk day">07–19 · 3-N</span></div>
+      <div class="day-cell"><span class="blk oncall">on-call</span></div>
+      <div class="day-cell"><span class="blk day">07–19 · 3-N</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk oncall">on-call</span></div>
+
+      <div class="nm-cell rn">
+        <span class="av" data-role="RN" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">AW</span>
+        <div><div class="nm">Williams, A RN</div><div class="role">3-N · charge</div></div>
+      </div>
+      <div class="day-cell"><span class="blk day">07–19</span></div>
+      <div class="day-cell"><span class="blk day">07–19</span></div>
+      <div class="day-cell"><span class="blk pto">PTO</span></div>
+      <div class="day-cell"><span class="blk pto">PTO</span></div>
+      <div class="day-cell"><span class="blk pto">PTO</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk eve">15–23</span></div>
+
+      <div class="nm-cell">
+        <span class="av" data-role="DO">PA</span>
+        <div><div class="nm">Park, A DO</div><div class="role">Cardiology fellow</div></div>
+      </div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk day">07–19</span></div>
+      <div class="day-cell"><span class="blk day">07–19</span></div>
+
+      <div class="nm-cell rn">
+        <span class="av" data-role="RN" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">JK</span>
+        <div><div class="nm">Kim, J RN</div><div class="role">3-N · bedside</div></div>
+      </div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk eve">15–23</span></div>
+      <div class="day-cell"><span class="blk eve">15–23</span></div>
+      <div class="day-cell"><span class="blk eve">15–23</span></div>
+      <div class="day-cell"><span class="blk eve">15–23</span></div>
+      <div class="day-cell"><span class="blk swap">offered: 07–19</span></div>
+      <div class="day-cell"></div>
+
+      <div class="nm-cell tech">
+        <span class="av" data-role="TC" style="background:#ECE3D6;color:#5C4B30;border-color:#D4C4A6">TJ</span>
+        <div><div class="nm">Johnson, T</div><div class="role">Phlebotomy tech</div></div>
+      </div>
+      <div class="day-cell"><span class="blk day">07–15</span></div>
+      <div class="day-cell"><span class="blk day">07–15</span></div>
+      <div class="day-cell"><span class="blk day">07–15</span></div>
+      <div class="day-cell"><span class="blk day">07–15</span></div>
+      <div class="day-cell"><span class="blk day">07–15</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"></div>
+
+      <div class="nm-cell rn">
+        <span class="av" data-role="RN" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">SR</span>
+        <div><div class="nm">Reed, S RN</div><div class="role">3-N · float</div></div>
+      </div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"><span class="blk night">19–07</span></div>
+      <div class="day-cell"></div>
+      <div class="day-cell"><span class="blk day">07–19</span></div>
+    </div>
+  </div>
+
+  <!-- SECOND ROW: PTO + Credentials + Swap -->
+  <div class="second">
+
+    <div class="panel">
+      <div class="panel-h">
+        <h3>PTO &amp; absence requests</h3>
+        <span class="meta">3 pending</span>
+      </div>
+      <div class="pto-row">
+        <span class="av">AW</span>
+        <div>
+          <div class="nm">Williams, A RN</div>
+          <div class="what">"Daughter's school recital."</div>
+          <div class="when">May 12 → May 18 · 5 working days · vacation</div>
+        </div>
+        <span class="stat pending">Pending</span>
+      </div>
+      <div class="pto-row">
+        <span class="av" style="background:#ECE3D6;color:#5C4B30;border-color:#D4C4A6">TJ</span>
+        <div>
+          <div class="nm">Johnson, T · Tech</div>
+          <div class="what">"Routine appointment."</div>
+          <div class="when">May 14 · half day · personal</div>
+        </div>
+        <span class="stat pending">Pending</span>
+      </div>
+      <div class="pto-row">
+        <span class="av">JK</span>
+        <div>
+          <div class="nm">Kim, J RN</div>
+          <div class="what">"Approved last week."</div>
+          <div class="when">May 22 → May 24 · 3 days · vacation</div>
+        </div>
+        <span class="stat approved">Approved</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">
+        <h3>Credentials &amp; expiries</h3>
+        <span class="meta">next 60 days</span>
+      </div>
+      <div class="cred crit">
+        <span class="av">RP</span>
+        <div>
+          <div class="nm">Patel, R MD</div>
+          <div class="what">DEA registration · expired 31 Mar</div>
+        </div>
+        <svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="var(--paper-deep)" stroke-width="3"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--crit)" stroke-width="3" stroke-dasharray="88 88" transform="rotate(-90 18 18)"/></svg>
+      </div>
+      <div class="cred warn">
+        <span class="av">RP</span>
+        <div>
+          <div class="nm">Patel, R MD</div>
+          <div class="what">ACLS · expires 12 Jun · 42 d</div>
+        </div>
+        <svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="var(--paper-deep)" stroke-width="3"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--warn)" stroke-width="3" stroke-dasharray="76 88" transform="rotate(-90 18 18)"/></svg>
+      </div>
+      <div class="cred warn">
+        <span class="av" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">AW</span>
+        <div>
+          <div class="nm">Williams, A RN</div>
+          <div class="what">ACLS · expires 22 Aug · 113 d</div>
+        </div>
+        <svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="var(--paper-deep)" stroke-width="3"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--warn)" stroke-width="3" stroke-dasharray="48 88" transform="rotate(-90 18 18)"/></svg>
+      </div>
+      <div class="cred">
+        <span class="av" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">JK</span>
+        <div>
+          <div class="nm">Kim, J RN</div>
+          <div class="what">RN license · renewed 14 Apr · valid through 2028</div>
+        </div>
+        <svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="var(--paper-deep)" stroke-width="3"/><circle cx="18" cy="18" r="14" fill="none" stroke="var(--green-700)" stroke-width="3" stroke-dasharray="14 88" transform="rotate(-90 18 18)"/></svg>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">
+        <h3>Shift swap — Sat May 9</h3>
+        <span class="meta">offered by J. Kim</span>
+      </div>
+      <div class="swap-card">
+        <div class="top">
+          <span class="nm">07–19 · 3-North</span>
+          <span class="when">Sat May 9 · 12 h shift</span>
+        </div>
+        <div class="why">"Wedding out of town. Happy to take any of yours next week — let me know."</div>
+
+        <div class="lbl">Eligible candidates · auto-suggested</div>
+
+        <div class="cand">
+          <span class="av">AW</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600">Williams, A RN</div>
+            <div class="meta">on PTO · unavailable</div>
+          </div>
+          <button class="b muted">Unavailable</button>
+        </div>
+
+        <div class="cand">
+          <span class="av">SR</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600">Reed, S RN</div>
+            <div class="meta">no conflict · within hours cap</div>
+          </div>
+          <button class="b primary">Offer</button>
+        </div>
+
+        <div class="cand">
+          <span class="av">MJ</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600">Johnson, M RN</div>
+            <div class="meta">overtime threshold +4 h</div>
+          </div>
+          <button class="b">Offer with OT</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

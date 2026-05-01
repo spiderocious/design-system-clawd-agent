@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio · design-system playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     STUDIO — the playground gallery.
+     A quiet workshop: warm-paper canvas, tight chrome, framed
+     project plates on a long shelf. The gallery itself is a
+     design — restrained, so the projects inside can shout in
+     their own voices.
+     ============================================================ */
+
+  :root {
+    --paper:      #F2EDE2;
+    --paper-deep: #E8E2D2;
+    --sheet:      #FBF7EF;
+    --hair:       #D9D0BB;
+    --hair-soft:  #E6DFCF;
+    --ink:        #1A1714;
+    --ink-2:      #3D3833;
+    --ink-3:      #6E665B;
+    --ink-4:      #A39A8A;
+    --accent:     #1A1714;
+
+    --serif: 'Newsreader', 'Lyon Display', Georgia, serif;
+    --sans:  'Inter', system-ui, -apple-system, sans-serif;
+    --mono:  'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ===== Letterhead ===== */
+  .letterhead {
+    border-bottom: 1px solid var(--ink);
+    padding: 32px 56px 22px;
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: end; gap: 24px;
+  }
+  .mark {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin: 0;
+  }
+  .mark .amp {
+    font-style: italic;
+    color: var(--ink-3);
+    font-weight: 400;
+  }
+  .lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-3);
+    line-height: 1.45;
+    max-width: 56ch;
+    margin-top: 6px;
+    letter-spacing: -0.005em;
+  }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+
+  /* ===== Toolbar ===== */
+  .toolbar {
+    padding: 18px 56px;
+    display: flex; align-items: center; gap: 24px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .filter-group {
+    display: flex; gap: 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0;
+  }
+  .filter-group .lbl {
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-right: 14px; padding-top: 4px;
+  }
+  .filter-group .chip {
+    height: 24px; padding: 0 10px;
+    background: transparent;
+    border: 1px solid var(--ink-3);
+    border-radius: 9999px;
+    font-family: var(--sans);
+    font-size: 11px; color: var(--ink-2);
+    cursor: pointer;
+    margin-right: 6px;
+    letter-spacing: 0.005em;
+  }
+  .filter-group .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .filter-group .chip.on    { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .toolbar .gap { flex: 1; }
+
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--ink-3);
+    padding: 0 0 4px;
+    width: 280px;
+  }
+  .search svg { width: 13px; height: 13px; stroke: var(--ink-3); fill: none; stroke-width: 1.6; }
+  .search input {
+    background: transparent; border: 0; outline: none;
+    font-family: var(--sans); font-size: 13px; color: var(--ink);
+    flex: 1; padding: 0;
+  }
+  .search input::placeholder { color: var(--ink-4); font-style: italic; font-family: var(--serif); }
+
+  .new-btn {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: var(--ink); color: var(--paper);
+    padding: 8px 14px;
+    border: 0; cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .new-btn .plus { font-family: var(--serif); font-style: italic; font-size: 14px; line-height: 1; }
+
+  /* ===== Section break ===== */
+  .section-cap {
+    padding: 40px 56px 18px;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .section-cap .num {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .section-cap h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+  .section-cap .ct {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+
+  /* ===== Shelf (projects grid) ===== */
+  .shelf {
+    padding: 0 56px 96px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 28px 24px;
+  }
+
+  /* Each plate: a framed thumbnail + the bottom plaque */
+  .plate {
+    display: flex; flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .plate-thumb {
+    aspect-ratio: 16 / 10;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    overflow: hidden;
+    position: relative;
+    transition: transform 200ms cubic-bezier(0.18,0.8,0.34,1), box-shadow 200ms ease-out;
+  }
+  .plate:hover .plate-thumb {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(26,23,20,0.10);
+  }
+
+  .plate-thumb iframe {
+    width: 100%; height: 100%;
+    border: 0; display: block;
+    pointer-events: none;
+  }
+
+  /* Stamp on the thumbnail's top-right — corner mark */
+  .plate-thumb::after {
+    content: attr(data-style);
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--ink); color: var(--paper);
+    padding: 3px 8px;
+    font-family: var(--mono);
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* Plaque */
+  .plaque {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 16px;
+    align-items: baseline;
+  }
+  .plaque .nm {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .plaque .acc {
+    width: 22px; height: 12px;
+    border: 1px solid var(--ink);
+    align-self: center;
+    justify-self: end;
+  }
+
+  .plaque .desc {
+    grid-column: 1 / -1;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    max-width: 56ch;
+  }
+
+  .plaque .footrow {
+    grid-column: 1 / -1;
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .plaque .footrow .dot { color: var(--ink-4); margin: 0 -6px; }
+
+  /* ===== "Add a project" empty plate ===== */
+  .plate.add .plate-thumb {
+    border-style: dashed;
+    background: var(--paper-deep);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .plate.add .plate-thumb::after { display: none; }
+  .plate.add .plate-thumb .glyph {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-3);
+    font-size: 28px; font-weight: 400;
+  }
+  .plate.add .plate-thumb .hint {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .plate.add .plate-thumb .kbd {
+    background: var(--ink); color: var(--paper);
+    padding: 2px 6px; border-radius: 2px;
+    font-family: var(--mono); font-size: 10px;
+    margin-left: 4px;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    padding: 24px 56px 32px;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .footer .gap { flex: 1; }
+  .footer a {
+    color: var(--ink-3); text-decoration: none;
+    border-bottom: 1px solid transparent; padding-bottom: 1px;
+  }
+  .footer a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* ===== Empty state (no projects yet) ===== */
+  .empty-state {
+    padding: 80px 56px;
+    text-align: center;
+    color: var(--ink-3);
+  }
+  .empty-state h3 {
+    margin: 0 0 8px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.012em;
+  }
+  .empty-state p {
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 56ch;
+    margin: 0 auto;
+  }
+  .empty-state code {
+    font-family: var(--mono);
+    background: var(--paper-deep);
+    padding: 2px 6px;
+    color: var(--ink);
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .letterhead, .toolbar, .section-cap, .shelf, .footer { padding-left: 28px; padding-right: 28px; }
+    .shelf { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- LETTERHEAD -->
+  <header class="letterhead">
+    <div>
+      <h1 class="mark">Studio</h1>
+      <p class="lede">A playground for design systems. Each project below is a complete system — its own stance, its own voice, its own components — built from a feature list, a brand, a vision.</p>
+    </div>
+    <div class="meta">
+      <strong>Curator</strong><br>
+      Feranmi<br>
+      <span style="color:var(--ink-3)">v 1 · est. 2026</span>
+    </div>
+  </header>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="filter-group" id="filters">
+      <span class="lbl">Filter</span>
+      <button class="chip on" data-filter="all">All</button>
+      <!-- type chips appear dynamically -->
+    </div>
+    <span class="gap"></span>
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" placeholder="search by name, style, type…">
+    </div>
+    <span class="new-btn" id="newBtn" title="Use /design-system-agent to start a new project">
+      <span class="plus">+</span> New project
+    </span>
+  </div>
+
+  <!-- SECTION CAP -->
+  <div class="section-cap">
+    <span class="num">— Projects —</span>
+    <h2>The shelf</h2>
+    <span class="ct" id="ctMeta"></span>
+  </div>
+
+  <!-- SHELF -->
+  <main class="shelf" id="shelf">
+    <!-- populated by JS -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>Studio · design-system playground</span>
+    <span class="gap"></span>
+    <a href="CLAUDE.md" target="_blank">CLAUDE.md</a>
+    <a href="styles/STYLE-CATALOG.md" target="_blank">Style catalog</a>
+    <a href="notes/" target="_blank">Notes</a>
+  </footer>
+
+  <script>
+    // ============================================================
+    // Load projects.json and render the shelf.
+    // The manifest is the source of truth — agents append entries
+    // there, this page reflects them automatically.
+    // ============================================================
+
+    const shelf      = document.getElementById('shelf');
+    const ctMeta     = document.getElementById('ctMeta');
+    const searchEl   = document.getElementById('searchInput');
+    const filtersEl  = document.getElementById('filters');
+    const newBtn     = document.getElementById('newBtn');
+
+    let projects = [];
+    let activeFilter = 'all';
+
+    async function load() {
+      try {
+        const res = await fetch('projects/projects.json');
+        if (!res.ok) throw new Error('manifest fetch failed');
+        const data = await res.json();
+        projects = data.projects || [];
+      } catch (err) {
+        // Inline fallback so the gallery still renders if fetch is blocked
+        // (e.g. opening the file directly in some browsers without a server).
+        projects = window.__PROJECTS__ || [];
+      }
+      buildFilters();
+      render();
+    }
+
+    function buildFilters() {
+      const types = [...new Set(projects.map(p => firstWord(p.type)))];
+      // remove old type chips, keep "All"
+      [...filtersEl.querySelectorAll('.chip')].forEach((c, i) => { if (i > 0) c.remove(); });
+      types.forEach(t => {
+        const b = document.createElement('button');
+        b.className = 'chip';
+        b.dataset.filter = t.toLowerCase();
+        b.textContent = t;
+        filtersEl.appendChild(b);
+      });
+      filtersEl.addEventListener('click', e => {
+        const btn = e.target.closest('.chip');
+        if (!btn) return;
+        activeFilter = btn.dataset.filter;
+        [...filtersEl.querySelectorAll('.chip')].forEach(c => c.classList.toggle('on', c === btn));
+        render();
+      });
+    }
+
+    function firstWord(s) {
+      return (s || '').split(/[ ·]/)[0].trim() || s;
+    }
+
+    function render() {
+      const q = searchEl.value.trim().toLowerCase();
+      const list = projects.filter(p => {
+        if (activeFilter !== 'all' && firstWord(p.type).toLowerCase() !== activeFilter) return false;
+        if (!q) return true;
+        return [p.name, p.style, p.type, p.tagline].some(v => v && v.toLowerCase().includes(q));
+      });
+
+      shelf.innerHTML = '';
+
+      if (!list.length && !projects.length) {
+        renderEmpty();
+        ctMeta.textContent = '0 projects';
+        return;
+      }
+
+      list.forEach(p => shelf.appendChild(plate(p)));
+      shelf.appendChild(addPlate());
+
+      ctMeta.textContent = `${list.length} of ${projects.length}` + (q || activeFilter !== 'all' ? ' shown' : ' on the shelf');
+    }
+
+    function plate(p) {
+      const a = document.createElement('a');
+      a.className = 'plate';
+      a.href = p.entry;
+
+      const thumb = document.createElement('div');
+      thumb.className = 'plate-thumb';
+      thumb.dataset.style = p.style || '';
+
+      if (p.thumb) {
+        const f = document.createElement('iframe');
+        f.src = p.thumb;
+        f.title = `${p.name} thumbnail`;
+        f.loading = 'lazy';
+        thumb.appendChild(f);
+      }
+
+      const plaque = document.createElement('div');
+      plaque.className = 'plaque';
+      plaque.innerHTML = `
+        <div class="nm">${escape(p.name)}</div>
+        <div class="acc" style="background:${p.accent || 'transparent'}"></div>
+        <div class="desc">${escape(p.tagline)}</div>
+        <div class="footrow">
+          <span>${escape(p.type)}</span>
+          <span class="dot">·</span>
+          <span>${escape(p.style)}</span>
+          ${p.surfaceCount ? `<span class="dot">·</span><span>${p.surfaceCount} surfaces</span>` : ''}
+          ${p.createdAt ? `<span class="dot">·</span><span>${p.createdAt}</span>` : ''}
+        </div>
+      `;
+
+      a.appendChild(thumb);
+      a.appendChild(plaque);
+      return a;
+    }
+
+    function addPlate() {
+      const a = document.createElement('div');
+      a.className = 'plate add';
+      a.title = 'Run /design-system-agent to start a new project';
+
+      a.innerHTML = `
+        <div class="plate-thumb">
+          <span class="glyph">+ a new system</span>
+          <div class="hint">run <span class="kbd">/design-system-agent</span></div>
+        </div>
+        <div class="plaque">
+          <div class="nm" style="color:var(--ink-3);font-style:italic">A blank shelf-spot.</div>
+          <div class="desc">Start a project: invoke the agent with a feature list and a brand. The system walks the questions, picks a style, builds the surfaces, and registers itself here.</div>
+        </div>
+      `;
+      return a;
+    }
+
+    function escape(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+    }
+
+    function renderEmpty() {
+      shelf.innerHTML = `
+        <div class="empty-state" style="grid-column:1 / -1">
+          <h3>"The shelf is empty."</h3>
+          <p>No projects yet. Invoke <code>/design-system-agent</code> with a product idea, or
+             give it nothing and it will ask you the right questions.</p>
+        </div>
+      `;
+    }
+
+    searchEl.addEventListener('input', render);
+
+    newBtn.addEventListener('click', () => {
+      // Best-effort hint for users running outside Claude Code.
+      alert('To start a project, run /design-system-agent in this folder via Claude Code.\n\n' +
+            'You can pass a prompt — e.g. /design-system-agent "design a fintech app for traders" —\n' +
+            'or invoke it bare and the agent will ask the discovery questions.');
+    });
+
+    load();
+  </script>
+
+  <!-- Inline fallback manifest if fetch is blocked.
+       Kept in sync with projects/projects.json by hand or by the agent. -->
+  <script>
+    window.__PROJECTS__ = [
+      {
+        "slug": "medcord",
+        "name": "Medcord",
+        "tagline": "A clinical record system for an enterprise hospital management SaaS — patients, staff, EMR, equipment.",
+        "type": "Enterprise · healthcare SaaS",
+        "style": "Surgical paper",
+        "accent": "#16A34A",
+        "entry": "projects/medcord/index.html",
+        "thumb": "projects/medcord/thumb.html",
+        "createdAt": "2026-05-01",
+        "surfaceCount": 30
+      }
+    ];
+  </script>
+
+</body>
+</html>

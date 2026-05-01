@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colors — Brand & Module Accents</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 20px; background: #F8FAFB; font-family: 'Inter', sans-serif; }
+  .label { font-size: 11px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .ramp { display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid #E2E8F0; margin-bottom: 12px; }
+  .sw { flex: 1; height: 44px; display: flex; align-items: flex-end; padding: 4px 5px; }
+  .sw span { font-size: 9px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .section { margin-bottom: 16px; }
+  .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mod-ramp { display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid #E2E8F0; }
+  .mod-sw { flex: 1; height: 36px; }
+  .mod-name { font-size: 11px; font-weight: 600; color: #334155; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .mod-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dark-bg { background: #0E1117; border-radius: 8px; padding: 12px; margin-top: 10px; }
+  .dark-label { color: #64748B; }
+</style>
+</head>
+<body>
+
+<div class="section">
+  <div class="label">Brand Teal — Primary (9 shades 50→900)</div>
+  <div class="ramp">
+    <div class="sw" style="background:#DCFCE7"><span style="color:#0A6F87">50</span></div>
+    <div class="sw" style="background:#F0FDF4"><span style="color:#0A6F87">100</span></div>
+    <div class="sw" style="background:#BBF7D0"><span style="color:#0A6F87">200</span></div>
+    <div class="sw" style="background:#86EFAC"><span style="color:#0A6F87">300</span></div>
+    <div class="sw" style="background:#86EFAC"><span style="color:#fff">400</span></div>
+    <div class="sw" style="background:#4ADE80"><span style="color:#fff">500</span></div>
+    <div class="sw" style="background:#22C55E"><span style="color:#fff">600</span></div>
+    <div class="sw" style="background:#16A34A"><span style="color:#fff">700</span></div>
+    <div class="sw" style="background:#15803D"><span style="color:#fff">800</span></div>
+    <div class="sw" style="background:#14532D"><span style="color:#fff">900</span></div>
+  </div>
+</div>
+
+</body>
+</html>

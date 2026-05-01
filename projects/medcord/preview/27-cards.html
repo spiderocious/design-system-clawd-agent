@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cards</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* CARDS — patient summary, staff profile, equipment.
+     The card is a sheet on the desk: a small piece of paper with a
+     hairline edge. Three signature card types are designed in full;
+     generic variants are not catalogued. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* PATIENT SUMMARY — three sizes side-by-side */
+  .triptych { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
+  .triptych .label-tag {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 10px;
+  }
+
+  .pcard {
+    background: var(--sheet); border: 1px solid var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .pcard.crit::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--crit);
+  }
+
+  /* COMPACT — 1-line sized */
+  .pcard.compact { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .pcard.compact .av-pat {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid #D4C4A6;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 10px;
+    flex-shrink: 0;
+  }
+  .pcard.compact .who { flex: 1; min-width: 0; }
+  .pcard.compact .nm { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pcard.compact .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; margin-top: 1px; }
+
+  /* DEFAULT */
+  .pcard.default { padding: 0; }
+  .pcard.default .top {
+    padding: 14px 16px;
+    display: grid; grid-template-columns: 40px 1fr;
+    gap: 12px; align-items: start;
+  }
+  .pcard.default .av-pat {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid #D4C4A6;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 13px;
+  }
+  .pcard.default h3 {
+    margin: 0; font-family: var(--serif); font-size: 19px; font-weight: 500;
+    letter-spacing: -0.012em; line-height: 1.1;
+  }
+  .pcard.default .demo {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0;
+    margin-top: 4px;
+  }
+  .pcard.default .marks {
+    display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .pcard.default .stamp {
+    display: inline-flex; align-items: center; padding: 2px 7px;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); border-radius: 1px;
+  }
+  .pcard.default .pill {
+    display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+    border: 1px solid var(--ink-3); border-radius: 9999px;
+    font-family: var(--sans); font-size: 11px; color: var(--ink-2);
+  }
+  .pcard.default .allergy {
+    background: var(--crit); color: #fff;
+    padding: 7px 14px;
+    font-family: var(--serif); font-style: italic; font-size: 12px;
+    line-height: 1.45;
+  }
+  .pcard.default .allergy::before {
+    content: "ALLERGY · ";
+    font-family: var(--mono); font-style: normal;
+    font-weight: 600; letter-spacing: 0.22em;
+    font-size: 9px;
+    margin-right: 4px;
+  }
+
+  /* EXPANDED — chart open */
+  .pcard.expanded { }
+  .pcard.expanded .top {
+    padding: 18px 20px;
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 16px;
+  }
+  .pcard.expanded .av-pat {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid #D4C4A6;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 19px;
+  }
+  .pcard.expanded h3 {
+    margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 500;
+    letter-spacing: -0.018em; line-height: 1.05;
+  }
+  .pcard.expanded h3 .nick { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .pcard.expanded .demo {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+    margin-top: 4px;
+  }
+  .pcard.expanded .ids {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 4px; letter-spacing: 0;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .pcard.expanded .ids strong { color: var(--ink); }
+  .pcard.expanded .marks { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .pcard.expanded .stamp { display: inline-flex; align-items: center; padding: 2px 7px; font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; background: var(--ink); color: var(--paper); border-radius: 1px; }
+  .pcard.expanded .pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border: 1px solid var(--ink-3); border-radius: 9999px; font-family: var(--sans); font-size: 11px; color: var(--ink-2); }
+  .pcard.expanded .allergy {
+    background: var(--crit); color: #fff;
+    padding: 9px 20px;
+    font-family: var(--serif); font-style: italic; font-size: 13px;
+    line-height: 1.45; margin-top: 4px;
+  }
+  .pcard.expanded .allergy::before {
+    content: "ALLERGY"; font-family: var(--mono); font-style: normal;
+    font-weight: 600; letter-spacing: 0.22em; font-size: 10px;
+    background: rgba(0,0,0,0.32); padding: 2px 7px; border-radius: 1px;
+    margin-right: 10px;
+  }
+  .pcard.expanded .kvg {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--hair);
+  }
+  .pcard.expanded .kvg .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2px; }
+  .pcard.expanded .kvg .v { font-family: var(--sans); font-size: 13px; color: var(--ink); }
+  .pcard.expanded .kvg .v.mono { font-family: var(--mono); letter-spacing: 0; }
+
+  /* STAFF profile cards */
+  .staff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .scard {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px 20px;
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 16px;
+  }
+  .scard .av-staff {
+    width: 56px; height: 56px;
+    background: #DEE6D6; color: #2F4226;
+    border: 1px solid #C4D2BC;
+    border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 19px;
+    position: relative;
+  }
+  .scard .av-staff::after {
+    content: attr(data-role);
+    position: absolute; right: -3px; bottom: -3px;
+    font-family: var(--mono); font-size: 8px; font-weight: 600;
+    background: var(--ink); color: var(--paper);
+    padding: 1px 4px; border-radius: 2px; letter-spacing: 0.06em; line-height: 1;
+  }
+  .scard .av-staff::before {
+    content: ""; position: absolute; right: -2px; top: -2px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--green-600);
+    border: 2px solid var(--sheet);
+  }
+  .scard.off .av-staff::before { display: none; }
+
+  .scard h3 {
+    margin: 0; font-family: var(--serif); font-size: 19px; font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+  .scard h3 .creds { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .scard .role { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+  .scard .pill {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+    border: 1px solid var(--green-300); background: var(--green-50); color: var(--green-800);
+    border-radius: 9999px; font-size: 11px; font-weight: 500;
+  }
+  .scard .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-600); }
+  .scard.off .pill { background: var(--paper-deep); border-color: var(--sheet-edge); color: var(--ink-3); }
+  .scard.off .pill .dot { background: var(--ink-4); }
+
+  .scard .meta {
+    grid-column: 1 / -1;
+    margin-top: 10px; padding-top: 12px;
+    border-top: 1px solid var(--hair);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+  }
+  .scard .meta .row {
+    display: flex; gap: 10px;
+  }
+  .scard .meta .lbl { color: var(--ink-3); width: 80px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; padding-top: 1px; }
+  .scard .meta .v { color: var(--ink); }
+  .scard .meta .v.warn { color: var(--warn); }
+
+  /* EQUIPMENT cards */
+  .eq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .ecard {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px 20px;
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 16px;
+    position: relative;
+  }
+  .ecard .icon {
+    width: 56px; height: 56px;
+    border: 1px solid var(--ink); border-radius: 4px;
+    background: var(--paper-deep);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+  }
+  .ecard h3 {
+    margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+  .ecard h3 .alt { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .ecard .sn { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+  .ecard .pill {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+    border: 1px solid var(--green-300); background: var(--green-50); color: var(--green-800);
+    border-radius: 9999px; font-size: 11px; font-weight: 500;
+  }
+  .ecard .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .ecard.warn .pill { background: var(--warn-bg); border-color: var(--warn-edge); color: var(--warn); }
+  .ecard.crit .pill { background: var(--crit-bg); border-color: var(--crit-edge); color: var(--crit); }
+  .ecard.crit { border-color: var(--ink); }
+  .ecard.crit::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--crit); }
+
+  .ecard .meta {
+    grid-column: 1 / -1;
+    margin-top: 10px; padding-top: 12px;
+    border-top: 1px solid var(--hair);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+  }
+  .ecard .meta .row { display: flex; gap: 10px; }
+  .ecard .meta .lbl { color: var(--ink-3); width: 90px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; padding-top: 1px; }
+  .ecard .meta .v { color: var(--ink); }
+  .ecard .meta .v.warn { color: var(--warn); }
+  .ecard .meta .v.crit { color: var(--crit); }
+
+  .ecard .alarm {
+    grid-column: 1 / -1;
+    margin-top: 10px;
+    background: var(--crit-bg); border: 1px solid var(--crit-edge);
+    color: var(--crit);
+    padding: 8px 12px;
+    font-family: var(--serif); font-style: italic; font-size: 13px;
+    line-height: 1.45;
+  }
+
+  /* SUMMARY STAT TILES — used inside dashboards */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .stat-tile { background: var(--sheet); border: 1px solid var(--ink); padding: 16px 20px; }
+  .stat-tile .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; }
+  .stat-tile .num {
+    font-family: var(--serif); font-size: 36px; font-weight: 500; line-height: 1;
+    letter-spacing: -0.022em; margin-top: 8px;
+  }
+  .stat-tile .num .u { font-family: var(--sans); font-size: 13px; color: var(--ink-3); margin-left: 4px; }
+  .stat-tile .delta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; letter-spacing: 0; }
+  .stat-tile .delta.up { color: var(--warn); }
+  .stat-tile .delta.down { color: var(--green-700); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 08</span>
+    <h1>Cards.</h1>
+    <span class="meta">patient · staff · equipment · stats</span>
+  </header>
+
+  <!-- A. PATIENT — three sizes -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Patient summary — three readings.</h2>
+      <div class="sub">Compact for the worklist row, default for the team panel, expanded for the chart-open header.</div>
+    </div>
+
+    <div class="triptych">
+      <div>
+        <div class="label-tag">Compact</div>
+        <div class="pcard compact crit">
+          <span class="av-pat" style="background:#F2DCD8;color:#7F1D1D;border-color:#E5BAB3">SH</span>
+          <div class="who">
+            <div class="nm">Hadi, Samira</div>
+            <div class="meta">10778123 · 38 F · CCU 207A</div>
+          </div>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--crit);letter-spacing:0.16em;text-transform:uppercase">STAT</span>
+        </div>
+
+        <div class="pcard compact" style="margin-top:6px">
+          <span class="av-pat">OA</span>
+          <div class="who">
+            <div class="nm">Adebayo, Olumide</div>
+            <div class="meta">10458291 · 64 M · 312A</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="label-tag">Default</div>
+        <div class="pcard default">
+          <div class="top">
+            <span class="av-pat">OA</span>
+            <div>
+              <h3>Adebayo, Olumide</h3>
+              <div class="demo">64 M · DOB 14 Mar 1962 · MRN 10458291</div>
+              <div class="marks">
+                <span class="stamp">Full code</span>
+                <span class="pill"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.85"></span>3-N · 312A</span>
+                <span class="pill" style="color:var(--warn);border-color:var(--warn-edge);background:var(--warn-bg)">Fall risk</span>
+              </div>
+            </div>
+          </div>
+          <div class="allergy">Penicillin causes anaphylaxis. Sulfa drugs cause rash.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="label-tag">Expanded · chart-open</div>
+        <div class="pcard expanded">
+          <div class="top">
+            <span class="av-pat">OA</span>
+            <div>
+              <h3>Adebayo, Olumide <span class="nick">"Olu"</span></h3>
+              <div class="demo">64 years · Male · DOB 14 Mar 1962</div>
+              <div class="ids">
+                <span>MRN <strong>10458291</strong></span>
+                <span>ENC <strong>2026-04-29-1184</strong></span>
+                <span>Day <strong>3</strong></span>
+              </div>
+              <div class="marks">
+                <span class="stamp">Full code</span>
+                <span class="pill" style="background:var(--paper-deep)">Insurance · BCBS · verified</span>
+                <span class="pill">3-N · 312A · Patel R MD</span>
+              </div>
+            </div>
+          </div>
+          <div class="allergy">Penicillin causes anaphylaxis. Sulfa drugs cause rash.</div>
+          <div class="kvg">
+            <div><div class="lbl">HR</div><div class="v mono">76 bpm</div></div>
+            <div><div class="lbl">BP</div><div class="v mono">128 / 82 mmHg</div></div>
+            <div><div class="lbl">SpO₂</div><div class="v mono">98%</div></div>
+            <div><div class="lbl">Temp</div><div class="v mono">98.6 °F</div></div>
+            <div><div class="lbl">Anticipated DC</div><div class="v">02 May 2026</div></div>
+            <div><div class="lbl">Last note</div><div class="v">14:08 · Patel, R MD</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. STAFF -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Staff profile — the badge made big.</h2>
+      <div class="sub">Same square avatar as the worklist; expanded with credentials, NPI, license number, pager. Off-shift quiets the live indicator.</div>
+    </div>
+
+    <div class="staff-grid">
+      <div class="scard">
+        <span class="av-staff" data-role="MD">RP</span>
+        <div>
+          <h3>Patel, Reema MD <span class="creds">— FACC</span></h3>
+          <div class="role">cardiology · attending physician</div>
+          <span class="pill"><span class="dot"></span>On shift · 07:00 → 19:00</span>
+        </div>
+
+        <div class="meta">
+          <div class="row"><span class="lbl">NPI</span><span class="v">1093847562</span></div>
+          <div class="row"><span class="lbl">License</span><span class="v">IL · 036-018392</span></div>
+          <div class="row"><span class="lbl">Pager</span><span class="v">×4187</span></div>
+          <div class="row"><span class="lbl">Mobile</span><span class="v">+1 (312) 555-0148</span></div>
+          <div class="row"><span class="lbl">Hire</span><span class="v">04 Aug 2014</span></div>
+          <div class="row"><span class="lbl">ACLS</span><span class="v warn">expires Jun 2026</span></div>
+        </div>
+      </div>
+
+      <div class="scard off">
+        <span class="av-staff" data-role="RN" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">AW</span>
+        <div>
+          <h3>Williams, Aiyana RN <span class="creds">— BSN</span></h3>
+          <div class="role">3-North · charge nurse</div>
+          <span class="pill"><span class="dot"></span>Off shift · returns 19:00</span>
+        </div>
+
+        <div class="meta">
+          <div class="row"><span class="lbl">License</span><span class="v">IL · 029-738291</span></div>
+          <div class="row"><span class="lbl">Ratio</span><span class="v">1 : 4 patients</span></div>
+          <div class="row"><span class="lbl">Pager</span><span class="v">×3214</span></div>
+          <div class="row"><span class="lbl">BLS</span><span class="v">exp Feb 2027</span></div>
+          <div class="row"><span class="lbl">Hire</span><span class="v">14 Sep 2018</span></div>
+          <div class="row"><span class="lbl">ACLS</span><span class="v warn">expires Aug 2026</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. EQUIPMENT -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Equipment — like a luggage tag.</h2>
+      <div class="sub">A small icon, the model name in serif, the serial in mono. Out-of-service equipment carries a critical bar; warnings stay amber.</div>
+    </div>
+
+    <div class="eq-grid">
+      <div class="ecard">
+        <div class="icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div>
+          <h3>Infusion pump <span class="alt">— Alaris 8100</span></h3>
+          <div class="sn">SN ALR-8100-39482 · BD Medical</div>
+          <span class="pill"><span class="dot"></span>In use · 3-N 312A</span>
+        </div>
+        <div class="meta">
+          <div class="row"><span class="lbl">Last cal.</span><span class="v">12 Feb 2026 · pass</span></div>
+          <div class="row"><span class="lbl">Next service</span><span class="v warn">12 May · 11 d</span></div>
+          <div class="row"><span class="lbl">Useful life</span><span class="v">4 of 7 yr left</span></div>
+          <div class="row"><span class="lbl">UDI</span><span class="v" style="font-size:10px">(01)003882…</span></div>
+        </div>
+      </div>
+
+      <div class="ecard crit">
+        <div class="icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--crit)" stroke-width="1.4" stroke-linecap="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+        </div>
+        <div>
+          <h3>Defibrillator <span class="alt">— Lifepak 20e</span></h3>
+          <div class="sn">SN LP20-77451</div>
+          <span class="pill"><span class="dot"></span>Out of service</span>
+        </div>
+        <div class="meta">
+          <div class="row"><span class="lbl">Reason</span><span class="v crit">Battery fault</span></div>
+          <div class="row"><span class="lbl">Ticket</span><span class="v">SVC-1042</span></div>
+          <div class="row"><span class="lbl">Since</span><span class="v">29 Apr 2026</span></div>
+          <div class="row"><span class="lbl">Expected</span><span class="v">~ 08 May</span></div>
+        </div>
+        <div class="alarm">"Battery does not hold charge after full cycle. Code-cart unit — replace before end of shift."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. SUMMARY STAT TILES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Summary stat — the dashboard tile.</h2>
+      <div class="sub">A single number in serif. Delta below in mono. The colour follows whether the trend favours the target.</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-tile">
+        <div class="lbl">House census</div>
+        <div class="num">312</div>
+        <div class="delta up">↑ 8 since 12:00</div>
+      </div>
+      <div class="stat-tile">
+        <div class="lbl">Avg LOS</div>
+        <div class="num">4.2<span class="u">days</span></div>
+        <div class="delta down">↓ 0.3 d · target ≤ 4.5</div>
+      </div>
+      <div class="stat-tile">
+        <div class="lbl">30-day readmit</div>
+        <div class="num" style="color:var(--warn)">11.4<span class="u">%</span></div>
+        <div class="delta up">↑ 0.8 pp · target ≤ 9</div>
+      </div>
+      <div class="stat-tile">
+        <div class="lbl">ED door-to-doc</div>
+        <div class="num">14<span class="u">min</span></div>
+        <div class="delta down">↓ 3 min vs target</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

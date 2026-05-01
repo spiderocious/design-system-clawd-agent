@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Equipment</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* EQUIPMENT — one designed scene.
+     The biomed log: a printed asset roster with maintenance, calibration,
+     consumables, recall notice, and a single asset detail card to the side.
+     Stance: a property book. */
+
+  body { background: var(--paper); }
+  .stage { max-width: 1280px; margin: 0 auto; padding: 28px 32px 96px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* RECALL BANNER — a critical strip across the top */
+  .recall {
+    background: var(--ink); color: var(--paper);
+    border-bottom: 4px solid var(--crit);
+    padding: 14px 24px;
+    margin-bottom: 28px;
+    display: grid; grid-template-columns: 12px 1fr auto; gap: 14px;
+    align-items: center;
+  }
+  .recall .stamp {
+    background: var(--crit); color: #fff;
+    padding: 3px 10px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .recall .body {
+    font-family: var(--serif); font-style: italic; font-size: 15px;
+    line-height: 1.5; color: rgba(244,239,230,0.92);
+  }
+  .recall .body strong { color: var(--paper); font-style: normal; font-weight: 500; }
+  .recall .b {
+    background: var(--paper); color: var(--ink); border: 0;
+    height: 32px; padding: 0 14px; border-radius: 4px;
+    font-family: var(--sans); font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .recall .meta {
+    grid-column: 1 / -1;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(244,239,230,0.5);
+    padding-top: 8px;
+    border-top: 1px solid rgba(244,239,230,0.15);
+    margin-top: 6px;
+  }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+
+  /* The roster */
+  .roster {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .roster-h {
+    padding: 14px 20px; border-bottom: 1px solid var(--ink);
+    background: var(--paper-deep);
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .roster-h h2 { margin: 0; font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.012em; }
+  .roster-h .meta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+
+  .row {
+    display: grid; grid-template-columns: 40px 2fr 1fr 1fr 1fr 90px;
+    align-items: center; gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .row:last-child { border-bottom: 0; }
+  .row.head-row {
+    background: var(--paper-deep);
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    border-bottom: 1px solid var(--ink);
+    padding: 8px 20px;
+  }
+
+  .row.crit { background: linear-gradient(to right, var(--crit-bg) 0%, transparent 60%); box-shadow: inset 4px 0 0 var(--crit); }
+  .row.warn { background: linear-gradient(to right, var(--warn-bg) 0%, transparent 60%); }
+
+  .row .icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--ink); background: var(--paper-deep);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+  }
+  .row .icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; }
+
+  .row .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .row .nm .alt { color: var(--ink-3); font-style: italic; font-weight: 400; font-size: 14px; }
+  .row .sn { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+
+  .row .next { font-family: var(--mono); font-size: 12px; color: var(--ink); letter-spacing: 0; }
+  .row .next .meta { font-size: 10px; color: var(--ink-3); display: block; margin-top: 2px; letter-spacing: 0.04em; }
+  .row.warn .next .due { color: var(--warn); font-weight: 500; }
+  .row.crit .next .due { color: var(--crit); font-weight: 600; }
+
+  .row .loc { font-family: var(--mono); font-size: 12px; color: var(--ink); letter-spacing: 0; }
+  .row .loc .meta { color: var(--ink-3); font-size: 10px; display: block; margin-top: 2px; letter-spacing: 0.04em; }
+
+  .pill-x {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 22px; padding: 0 10px;
+    border: 1px solid var(--ink-3); background: transparent;
+    border-radius: 9999px;
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    color: var(--ink-2); letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+  .pill-x .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+  .pill-x.ok    { color: var(--green-800); border-color: var(--green-200); background: var(--green-50); }
+  .pill-x.warn  { color: var(--warn);  border-color: var(--warn-edge); background: var(--warn-bg); }
+  .pill-x.crit  { color: var(--crit);  border-color: var(--crit-edge); background: var(--crit-bg); }
+
+  /* SIDE — asset detail */
+  .detail {
+    background: var(--sheet); border: 1px solid var(--ink);
+    overflow: hidden;
+  }
+  .detail-h {
+    padding: 18px 20px; border-bottom: 1px solid var(--ink);
+    background: var(--paper-deep);
+  }
+  .detail-h .nm { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.018em; }
+  .detail-h .nm .alt { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .detail-h .sn { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 4px; }
+
+  .detail .img {
+    height: 140px; background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .detail .img svg { width: 64px; height: 64px; stroke: var(--paper); fill: none; stroke-width: 1.2; stroke-linecap: round; }
+
+  .detail-body { padding: 16px 20px; }
+  .detail-body .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .detail-body .row-d { padding: 10px 0; border-bottom: 1px dashed var(--hair-soft); display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: baseline; }
+  .detail-body .row-d:last-child { border-bottom: 0; }
+  .detail-body .row-d .v { font-family: var(--mono); font-size: 12px; color: var(--ink); letter-spacing: 0; }
+  .detail-body .row-d .v.serif { font-family: var(--serif); font-size: 13px; letter-spacing: 0; }
+
+  /* CONSUMABLES — second roster */
+  .second { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+  .cons-row {
+    display: grid; grid-template-columns: 1fr auto auto auto;
+    gap: 14px; align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .cons-row.head-row { background: var(--paper-deep); border-bottom: 1px solid var(--ink); padding: 8px 20px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; }
+  .cons-row .nm { font-family: var(--sans); font-size: 13px; }
+  .cons-row .nm .meta { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 1px; letter-spacing: 0; }
+  .cons-row .qty { font-family: var(--mono); font-size: 14px; color: var(--ink); letter-spacing: 0; }
+  .cons-row .par { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .cons-row.warn .qty { color: var(--warn); font-weight: 500; }
+  .cons-row.crit .qty { color: var(--crit); font-weight: 600; }
+  .cons-row.crit { background: linear-gradient(to right, var(--crit-bg) 0%, transparent 60%); box-shadow: inset 4px 0 0 var(--crit); }
+
+  /* STERILIZATION cycle card */
+  .ster {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px 22px;
+  }
+  .ster h3 { margin: 0 0 12px; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; display: flex; align-items: baseline; gap: 10px; }
+  .ster h3 .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .ster .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ster .cell { background: var(--paper-deep); border: 1px solid var(--sheet-edge); padding: 10px 12px; }
+  .ster .cell .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .ster .cell .v { font-family: var(--sans); font-size: 13px; color: var(--ink); margin-top: 4px; font-weight: 500; }
+  .ster .cell .v.ok { color: var(--green-800); }
+  .ster .contents { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair); font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+  .ster .release {
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">IV · 05</span>
+    <h1>Equipment · biomed log.</h1>
+    <span class="meta">Wed, May 1 · St. Catherine's General</span>
+  </header>
+
+  <!-- RECALL BANNER -->
+  <div class="recall">
+    <span></span>
+    <div>
+      <span class="stamp">FDA Class I</span>
+      <span class="body" style="margin-left:14px">
+        <strong>Alaris 8100 infusion pump</strong> · firmware ≤ 9.18 may deliver inaccurate flow rates at low volumes. Take affected units offline; apply firmware patch v9.19. Four units in this hospital are affected.
+      </span>
+    </div>
+    <button class="b">Acknowledge · 4 affected</button>
+    <div class="meta">recall Z-2026-1183 · posted 22 Apr · BD support 1-800-555-0148</div>
+  </div>
+
+  <div class="layout">
+
+    <!-- ROSTER -->
+    <div>
+      <div class="roster">
+        <div class="roster-h">
+          <h2>Maintenance roster — May 1</h2>
+          <span class="meta">10 of 38 assets · sorted by next service</span>
+        </div>
+
+        <div class="row head-row">
+          <div></div>
+          <div>Asset</div>
+          <div>Last service</div>
+          <div>Next</div>
+          <div>Location</div>
+          <div></div>
+        </div>
+
+        <div class="row crit">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+          </div>
+          <div>
+            <div class="nm">Defibrillator <span class="alt">— Lifepak 20e</span></div>
+            <div class="sn">SN LP20-77451 · code-cart unit</div>
+          </div>
+          <div class="next"><span>04 Dec 2025</span><span class="meta">pass · last cycle</span></div>
+          <div class="next"><span class="due">04 Apr · 28 d overdue</span><span class="meta">battery fault open</span></div>
+          <div class="loc"><span>3-N · biomed</span><span class="meta">held by P. Reyes</span></div>
+          <div><span class="pill-x crit"><span class="dot"></span>Out of service</span></div>
+        </div>
+
+        <div class="row warn">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <div>
+            <div class="nm">Infusion pump <span class="alt">— Alaris 8100</span></div>
+            <div class="sn">SN ALR-8100-39482 · BD Medical · recall affected</div>
+          </div>
+          <div class="next"><span>12 Feb 2026</span><span class="meta">pass</span></div>
+          <div class="next"><span class="due">12 May · 11 d</span><span class="meta">firmware update due</span></div>
+          <div class="loc"><span>3-N · 312A</span><span class="meta">in use · NS infusion</span></div>
+          <div><span class="pill-x warn"><span class="dot"></span>In use</span></div>
+        </div>
+
+        <div class="row">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><path d="M3 18v-6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </div>
+          <div>
+            <div class="nm">Hospital bed <span class="alt">— Hill-Rom Versacare</span></div>
+            <div class="sn">SN HR-VC-29384</div>
+          </div>
+          <div class="next"><span>08 Apr 2026</span><span class="meta">pass</span></div>
+          <div class="next"><span>08 Oct · 160 d</span><span class="meta">on schedule</span></div>
+          <div class="loc"><span>3-N · 313A</span><span class="meta">cleaning</span></div>
+          <div><span class="pill-x ok"><span class="dot"></span>OK</span></div>
+        </div>
+
+        <div class="row">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <div>
+            <div class="nm">Vital signs monitor <span class="alt">— Welch Allyn 6000</span></div>
+            <div class="sn">SN WA6000-18372</div>
+          </div>
+          <div class="next"><span>14 Mar 2026</span><span class="meta">pass · with note</span></div>
+          <div class="next"><span>14 Sep · 137 d</span><span class="meta">on schedule</span></div>
+          <div class="loc"><span>3-N · 312B</span></div>
+          <div><span class="pill-x ok"><span class="dot"></span>In use</span></div>
+        </div>
+
+        <div class="row">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="11" r="4"/><line x1="9" y1="2" x2="9" y2="7"/><line x1="9" y1="15" x2="9" y2="22"/></svg>
+          </div>
+          <div>
+            <div class="nm">Microscope <span class="alt">— Olympus CX23</span></div>
+            <div class="sn">SN OL-CX23-44829</div>
+          </div>
+          <div class="next"><span>22 Feb 2026</span><span class="meta">pass</span></div>
+          <div class="next"><span>22 Aug · 113 d</span><span class="meta">on schedule</span></div>
+          <div class="loc"><span>Lab</span></div>
+          <div><span class="pill-x ok"><span class="dot"></span>In use</span></div>
+        </div>
+
+        <div class="row">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-30 12 12)"/></svg>
+          </div>
+          <div>
+            <div class="nm">Pyxis station <span class="alt">— ES medication</span></div>
+            <div class="sn">SN PYX-ES-29483 · biomed-managed</div>
+          </div>
+          <div class="next"><span>04 Apr 2026</span><span class="meta">pass</span></div>
+          <div class="next"><span>04 Oct · 156 d</span><span class="meta">on schedule</span></div>
+          <div class="loc"><span>3-N · medication room</span></div>
+          <div><span class="pill-x ok"><span class="dot"></span>In use</span></div>
+        </div>
+
+        <div class="row">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><path d="M9 2h6"/><path d="M10 2v3l-3 7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9l-3-7V2"/></svg>
+          </div>
+          <div>
+            <div class="nm">Ultrasound <span class="alt">— Sonosite Edge II</span></div>
+            <div class="sn">SN SS-E2-19384 · portable bedside</div>
+          </div>
+          <div class="next"><span>10 Apr 2026</span><span class="meta">pass</span></div>
+          <div class="next"><span>10 Oct · 162 d</span><span class="meta">on schedule</span></div>
+          <div class="loc"><span>3-N · cart</span><span class="meta">missing — last seen ED</span></div>
+          <div><span class="pill-x warn"><span class="dot"></span>Missing</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DETAIL -->
+    <aside class="detail">
+      <div class="detail-h">
+        <div class="nm">Defibrillator <span class="alt">— Lifepak 20e</span></div>
+        <div class="sn">SN LP20-77451 · Stryker Medical · acquired 2019</div>
+      </div>
+
+      <div class="img">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+      </div>
+
+      <div class="detail-body">
+        <div class="row-d"><span class="lbl">Status</span><span class="v" style="color:var(--crit);font-weight:500">Out of service · battery fault</span></div>
+        <div class="row-d"><span class="lbl">Ticket</span><span class="v">SVC-1042 · opened 29 Apr</span></div>
+        <div class="row-d"><span class="lbl">Assigned</span><span class="v serif">Reyes, Pat · biomed</span></div>
+        <div class="row-d"><span class="lbl">Last cal.</span><span class="v">04 Dec 2025 · pass</span></div>
+        <div class="row-d"><span class="lbl">Calibrations</span><span class="v">7 cycles · 4 yr</span></div>
+        <div class="row-d"><span class="lbl">Acquired</span><span class="v">14 Sep 2019 · $14,200</span></div>
+        <div class="row-d"><span class="lbl">Useful life</span><span class="v">3 of 7 yr left</span></div>
+        <div class="row-d"><span class="lbl">UDI</span><span class="v" style="font-size:10px">(01)003827193847·(11)190914</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- SECOND ROW: consumables + sterilization -->
+  <div class="second">
+
+    <div class="roster">
+      <div class="roster-h">
+        <h2>Consumables — par check</h2>
+        <span class="meta">end-of-shift · 7 items</span>
+      </div>
+
+      <div class="cons-row head-row">
+        <div>Item</div>
+        <div>On hand</div>
+        <div>Par</div>
+        <div>Expiry</div>
+      </div>
+
+      <div class="cons-row">
+        <div class="nm">10 mL syringe — sterile<span class="meta">BD · NDC 8290-XX</span></div>
+        <div class="qty">412</div>
+        <div class="par">par 300</div>
+        <div><span class="pill-x ok"><span class="dot"></span>2027-04</span></div>
+      </div>
+
+      <div class="cons-row warn">
+        <div class="nm">0.9% NaCl — 1 L bag<span class="meta">Baxter · reorder ↓</span></div>
+        <div class="qty">42</div>
+        <div class="par">par 120</div>
+        <div><span class="pill-x warn"><span class="dot"></span>2026-06 · 36 d</span></div>
+      </div>
+
+      <div class="cons-row crit">
+        <div class="nm">Lidocaine 1% — 50 mL vial<span class="meta">Pfizer · expired</span></div>
+        <div class="qty">8</div>
+        <div class="par">par 20</div>
+        <div><span class="pill-x crit"><span class="dot"></span>EXPIRED 22 Apr</span></div>
+      </div>
+
+      <div class="cons-row">
+        <div class="nm">Sterile gauze 4×4<span class="meta">Cardinal</span></div>
+        <div class="qty">1,840</div>
+        <div class="par">par 2,000</div>
+        <div><span class="pill-x ok"><span class="dot"></span>2028-09</span></div>
+      </div>
+    </div>
+
+    <div class="ster">
+      <h3>Sterilization cycle <span class="meta">CSP-2026-0218</span></h3>
+      <div class="grid">
+        <div class="cell"><div class="lbl">Load</div><div class="v">218 · 04/30</div></div>
+        <div class="cell"><div class="lbl">Cycle</div><div class="v">Steam · 134 °C · 4 min</div></div>
+        <div class="cell"><div class="lbl">Bowie–Dick</div><div class="v ok">Pass</div></div>
+        <div class="cell"><div class="lbl">Biological indicator</div><div class="v ok">Negative · 04/30</div></div>
+      </div>
+      <div class="contents">
+        <strong style="font-style:normal;color:var(--ink)">Contents.</strong> 18 instrument trays · OR-2 set · cardiac cath set.
+      </div>
+      <div class="release">
+        Released by P. Reyes · biomed · 14:42 · workstation BIO-04
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

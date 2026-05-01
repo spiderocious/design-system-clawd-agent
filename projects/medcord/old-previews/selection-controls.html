@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Selection controls</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.cb { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border:1.5px solid #94A3B8; border-radius:4px; background:#fff; flex-shrink:0; }
+.cb.checked { background:#0A87A3; border-color:#0A87A3; }
+.cb.checked::after { content:""; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg) translate(-1px, -1px); }
+.cb.indet { background:#0A87A3; border-color:#0A87A3; }
+.cb.indet::after { content:""; width:8px; height:2px; background:#fff; }
+.cb.disabled { opacity:0.4; }
+.cb.error { border-color:#DC2626; }
+.cb-row { display:flex; align-items:center; gap:8px; padding:6px 0; font-size:13px; color:#0E1117; }
+.rb { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border:1.5px solid #94A3B8; border-radius:9999px; background:#fff; flex-shrink:0; }
+.rb.on { border-color:#0A87A3; }
+.rb.on::after { content:""; width:8px; height:8px; border-radius:9999px; background:#0A87A3; }
+.switch { width:36px; height:20px; background:#CBD5E1; border-radius:9999px; position:relative; cursor:pointer; transition:background 0.15s; }
+.switch::after { content:""; position:absolute; left:2px; top:2px; width:16px; height:16px; background:#fff; border-radius:9999px; box-shadow:0 1px 2px rgba(0,0,0,0.15); transition:left 0.15s; }
+.switch.on { background:#0A87A3; }
+.switch.on::after { left:18px; }
+.switch.lg { width:44px; height:24px; }
+.switch.lg::after { width:20px; height:20px; }
+.switch.lg.on::after { left:22px; }
+.switch.sm { width:28px; height:16px; }
+.switch.sm::after { width:12px; height:12px; }
+.switch.sm.on::after { left:14px; }
+.chip { display:inline-flex; align-items:center; gap:4px; height:26px; padding:0 10px; border-radius:9999px; background:#F1F5F8; color:#475569; font-size:12px; font-weight:500; border:1px solid transparent; cursor:pointer; }
+.chip.on { background:#E0F2F7; color:#0A6F87; border-color:#7DD1E7; }
+.chip.removable::after { content:"×"; margin-left:4px; font-size:14px; color:#94A3B8; }
+.radio-card {
+  border:1.5px solid #E2E8F0; border-radius:8px; padding:12px; cursor:pointer; background:#fff;
+  display:flex; align-items:flex-start; gap:10px; transition:border-color 0.12s, background 0.12s;
+}
+.radio-card.selected { border-color:#0A87A3; background:#F0FBFD; }
+.radio-card .ttl { font-size:13px; font-weight:600; color:#0E1117; margin-bottom:2px; }
+.radio-card .sub { font-size:11px; color:#64748B; }
+.select-trigger { display:inline-flex; align-items:center; justify-content:space-between; min-width:240px; height:36px; padding:0 10px; border:1px solid #CBD5E1; border-radius:6px; background:#fff; font-size:13px; color:#0E1117; cursor:pointer; }
+.select-trigger .chev { color:#94A3B8; }
+.dropdown { background:#fff; border:1px solid #E2E8F0; border-radius:8px; box-shadow:0 8px 24px rgba(14,17,23,0.10); max-width:340px; }
+.dropdown .group-label { font-size:10px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; padding:8px 12px 4px; }
+.dropdown .row { display:flex; align-items:center; gap:10px; padding:8px 12px; cursor:pointer; }
+.dropdown .row:hover { background:#F8FAFB; }
+.dropdown .row.on { background:#F0FBFD; }
+.tag-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 6px 4px 10px; background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; border-radius:6px; font-size:12px; font-weight:500; }
+.tag-chip .x { width:14px; height:14px; border-radius:9999px; background:rgba(0,0,0,0.08); display:flex;align-items:center;justify-content:center; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Selection controls</h1>
+<p class="spec-sub">Checkboxes, radios, switches, chips, selects, comboboxes, multi-value inputs. Combobox is heavily used in EMR for diagnoses, medications, and procedures.</p>
+
+<div class="spec-section-label">Checkbox — all states</div>
+<div class="card">
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px">
+  <div class="cb-row"><span class="cb"></span> Unchecked</div>
+  <div class="cb-row"><span class="cb checked"></span> Checked</div>
+  <div class="cb-row"><span class="cb indet"></span> Indeterminate</div>
+  <div class="cb-row"><span class="cb disabled"></span> Disabled</div>
+  <div class="cb-row"><span class="cb error"></span> <span style="color:#DC2626">Error · required</span></div>
+  <div class="cb-row"><span class="cb checked" style="outline:2px solid #0EA5E9;outline-offset:2px"></span> Focus-visible</div>
+</div>
+</div>
+
+<div class="spec-section-label">Checkbox group — vertical</div>
+<div class="card" style="max-width:420px">
+  <div class="label" style="margin-bottom:10px">Discharge checklist</div>
+  <div class="cb-row"><span class="cb checked"></span> Medications reconciled</div>
+  <div class="cb-row"><span class="cb checked"></span> Follow-up appointment scheduled</div>
+  <div class="cb-row"><span class="cb checked"></span> Discharge education provided</div>
+  <div class="cb-row"><span class="cb"></span> Prescriptions sent to pharmacy</div>
+  <div class="cb-row"><span class="cb"></span> Transportation home confirmed</div>
+  <div class="cb-row"><span class="cb"></span> Home health referral (if needed)</div>
+</div>
+
+<div class="spec-section-label">Radio + radio group</div>
+<div class="card" style="max-width:420px">
+  <div class="label" style="margin-bottom:10px">Patient sex assigned at birth</div>
+  <div class="cb-row"><span class="rb on"></span> Female</div>
+  <div class="cb-row"><span class="rb"></span> Male</div>
+  <div class="cb-row"><span class="rb"></span> Intersex</div>
+  <div class="cb-row"><span class="rb"></span> Prefer not to disclose</div>
+</div>
+
+<div class="spec-section-label">Radio cards — Wong-Baker pain scale</div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+  <div class="radio-card" style="text-align:center;flex-direction:column"><div style="font-size:20px">😀</div><div class="ttl">0</div><div class="sub">No hurt</div></div>
+  <div class="radio-card selected" style="text-align:center;flex-direction:column"><div style="font-size:20px">🙂</div><div class="ttl">2</div><div class="sub">Hurts a little</div></div>
+  <div class="radio-card" style="text-align:center;flex-direction:column"><div style="font-size:20px">😐</div><div class="ttl">4</div><div class="sub">Hurts a little more</div></div>
+  <div class="radio-card" style="text-align:center;flex-direction:column"><div style="font-size:20px">😟</div><div class="ttl">6</div><div class="sub">Hurts even more</div></div>
+  <div class="radio-card" style="text-align:center;flex-direction:column"><div style="font-size:20px">😣</div><div class="ttl">8</div><div class="sub">Hurts a whole lot</div></div>
+  <div class="radio-card" style="text-align:center;flex-direction:column"><div style="font-size:20px">😭</div><div class="ttl">10</div><div class="sub">Hurts worst</div></div>
+</div>
+
+<div class="spec-section-label">Switch — sm · md · lg · disabled</div>
+<div class="card" style="display:flex;gap:24px;align-items:center">
+  <div style="display:flex;align-items:center;gap:6px"><span class="switch sm on"></span><span style="font-size:12px">sm on</span></div>
+  <div style="display:flex;align-items:center;gap:6px"><span class="switch sm"></span><span style="font-size:12px">sm off</span></div>
+  <div style="display:flex;align-items:center;gap:6px"><span class="switch on"></span><span style="font-size:13px">md on</span></div>
+  <div style="display:flex;align-items:center;gap:6px"><span class="switch"></span><span style="font-size:13px">md off</span></div>
+  <div style="display:flex;align-items:center;gap:6px"><span class="switch lg on"></span><span style="font-size:14px">lg on</span></div>
+  <div style="display:flex;align-items:center;gap:6px;opacity:0.4"><span class="switch lg"></span><span style="font-size:14px">lg disabled</span></div>
+</div>
+
+<div class="spec-section-label">Chips — toggle, filter, removable</div>
+<div class="card">
+  <div class="spec-tile-label">Toggle / filter</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+    <span class="chip on">All patients</span>
+    <span class="chip">Admitted</span>
+    <span class="chip on">In ED</span>
+    <span class="chip">Discharged</span>
+    <span class="chip">No-show</span>
+    <span class="chip">STAT only</span>
+  </div>
+  <div class="spec-tile-label">Removable — active filters</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+    <span class="chip removable on">Ward: 3-North</span>
+    <span class="chip removable on">Acuity: ESI 1-2</span>
+    <span class="chip removable on">Attending: Patel R.</span>
+  </div>
+  <div class="spec-tile-label">Allergy chips — multi-value input</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:1px solid #CBD5E1;border-radius:6px;padding:6px 8px;background:#fff">
+    <span class="tag-chip">Penicillin · anaphylaxis <span class="x">×</span></span>
+    <span class="tag-chip">Sulfa drugs · rash <span class="x">×</span></span>
+    <span class="tag-chip" style="background:#FFFBEB;color:#92400E;border-color:#FCD34D">Latex · contact dermatitis <span class="x">×</span></span>
+    <input style="border:none;outline:none;flex:1;min-width:100px;font-size:13px" placeholder="Add allergy…">
+  </div>
+</div>
+
+<div class="spec-section-label">Select / dropdown</div>
+<div class="card">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:flex-start">
+  <div>
+    <label class="label">Searchable provider picker</label>
+    <div class="select-trigger">
+      <span style="display:flex;align-items:center;gap:8px"><span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">RP</span> Patel, Reema MD · Cardiology</span>
+      <span class="chev">▾</span>
+    </div>
+    <div class="dropdown" style="margin-top:6px">
+      <div style="padding:8px 10px;border-bottom:1px solid #F1F5F8"><input class="input" style="height:30px;font-size:13px" value="pa"></div>
+      <div class="group-label">Cardiology</div>
+      <div class="row on"><span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">RP</span><div><div style="font-weight:600;font-size:13px">Patel, Reema</div><div style="font-size:11px;color:#64748B">MD · Attending · NPI 1093847562</div></div></div>
+      <div class="row"><span class="avatar avatar-sm" style="background:#DDD6FE;color:#5B21B6">PA</span><div><div style="font-weight:600;font-size:13px">Park, Aaron</div><div style="font-size:11px;color:#64748B">DO · Fellow</div></div></div>
+      <div class="group-label">Internal medicine</div>
+      <div class="row"><span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">PD</span><div><div style="font-weight:600;font-size:13px">Park, Daniel</div><div style="font-size:11px;color:#64748B">MD · Hospitalist</div></div></div>
+    </div>
+  </div>
+  <div>
+    <label class="label">Multi-select with avatars</label>
+    <div class="select-trigger">
+      <span style="display:flex;align-items:center;gap:6px">
+        <span class="avatar avatar-xs" style="background:#DBEAFE;color:#1D4ED8">RP</span>
+        <span class="avatar avatar-xs" style="background:#DDD6FE;color:#5B21B6">CO</span>
+        <span class="avatar avatar-xs" style="background:#FEF3C7;color:#B45309">JK</span>
+        <span style="font-size:12px;color:#475569">+ 4 selected</span>
+      </span>
+      <span class="chev">▾</span>
+    </div>
+    <div style="margin-top:14px">
+      <label class="label">Department</label>
+      <div class="select-trigger" style="min-width:280px"><span>3-North · Cardiac Step-down</span><span class="chev">▾</span></div>
+      <div style="height:10px"></div>
+      <label class="label">Room · Bed</label>
+      <div style="display:flex;gap:6px"><div class="select-trigger" style="min-width:120px"><span>Room 312</span><span class="chev">▾</span></div><div class="select-trigger" style="min-width:80px"><span>Bed A</span><span class="chev">▾</span></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="spec-section-label">Combobox — async with descriptions</div>
+<div class="card" style="max-width:520px">
+  <label class="label">Add to problem list</label>
+  <div class="select-trigger" style="border-color:#0EA5E9;box-shadow:0 0 0 3px rgba(14,165,233,0.18)"><span style="color:#94A3B8">Type 2 diab</span><span class="chev"><span class="spinner" style="border-color:rgba(10,135,163,0.25);border-top-color:#0A87A3"></span></span></div>
+  <div class="dropdown" style="margin-top:6px">
+    <div class="row on"><span class="mono" style="color:#0A87A3;font-size:11px;min-width:64px">E11.9</span><div><div style="font-weight:600;font-size:13px">Type 2 diabetes mellitus without complications</div><div style="font-size:11px;color:#64748B">ICD-10 · Most-used in your dept</div></div></div>
+    <div class="row"><span class="mono" style="color:#0A87A3;font-size:11px;min-width:64px">E11.65</span><div><div style="font-weight:600;font-size:13px">Type 2 diabetes mellitus with hyperglycemia</div></div></div>
+    <div class="row"><span class="mono" style="color:#0A87A3;font-size:11px;min-width:64px">E11.40</span><div><div style="font-weight:600;font-size:13px">Type 2 diabetes mellitus with diabetic neuropathy, unspecified</div></div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Room · bed picker (visual)</div>
+<div class="card">
+<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+  <div style="aspect-ratio:1;background:#F0FDF4;border:1px solid #86EFAC;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600">312A</div><div style="color:#15803D">Avail</div></div>
+  <div style="aspect-ratio:1;background:#FEF2F2;border:1px solid #FCA5A5;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600">312B</div><div style="color:#991B1B">Occupied</div></div>
+  <div style="aspect-ratio:1;background:#FFFBEB;border:1px solid #FCD34D;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600">313A</div><div style="color:#B45309">Cleaning</div></div>
+  <div style="aspect-ratio:1;background:#FEF2F2;border:1px solid #FCA5A5;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600">313B</div><div style="color:#991B1B">Occupied</div></div>
+  <div style="aspect-ratio:1;background:#F0FDF4;border:1px solid #86EFAC;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600">314A</div><div style="color:#15803D">Avail</div></div>
+  <div style="aspect-ratio:1;background:#F0FDFA;border:2px solid #0D9488;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;box-shadow:0 0 0 3px rgba(13,148,136,0.18)"><div style="font-weight:600;color:#115E59">314B</div><div style="color:#0D9488">Selected</div></div>
+  <div style="aspect-ratio:1;background:#F1F5F8;border:1px dashed #CBD5E1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600;color:#475569">315A</div><div style="color:#64748B">Off-line</div></div>
+  <div style="aspect-ratio:1;background:#F1F5F8;border:1px dashed #CBD5E1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px"><div style="font-weight:600;color:#475569">315B</div><div style="color:#64748B">Off-line</div></div>
+</div>
+</div>
+
+</body>
+</html>

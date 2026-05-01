@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Navigation & shell</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.shell { background:#fff; border:1px solid #E2E8F0; border-radius:10px; overflow:hidden; }
+.shell-top { display:flex; align-items:center; gap:14px; padding:8px 14px; background:#fff; border-bottom:1px solid #E2E8F0; height:52px; }
+.tenant { display:flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #E2E8F0; border-radius:6px; background:#F8FAFB; cursor:pointer; min-width:200px; }
+.tenant svg { width:16px; height:16px; }
+.tenant .nm { font-size:13px; font-weight:600; color:#0E1117; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tenant .sub { font-size:10px; color:#94A3B8; font-family:'JetBrains Mono',monospace; }
+.module-launcher-btn { display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid #E2E8F0; border-radius:6px; background:#fff; cursor:pointer; }
+.glob-search { flex:1; max-width:520px; display:flex; align-items:center; gap:8px; padding:0 12px; height:36px; border:1px solid #E2E8F0; border-radius:6px; background:#F8FAFB; }
+.glob-search input { border:none; background:transparent; outline:none; font-size:13px; flex:1; }
+.glob-search .kbd { background:#fff; border:1px solid #CBD5E1; padding:1px 5px; border-radius:3px; font-size:11px; color:#475569; font-family:'JetBrains Mono',monospace; }
+.shell-icon-btn { display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid transparent; border-radius:6px; background:transparent; cursor:pointer; position:relative; }
+.shell-icon-btn:hover { background:#F1F5F8; }
+.shell-icon-btn .badge { position:absolute; top:6px; right:6px; min-width:14px; height:14px; padding:0 3px; border-radius:9999px; background:#DC2626; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; border:2px solid #fff; }
+.role-pill { display:flex; align-items:center; gap:6px; padding:5px 10px; border:1px solid #DBEAFE; background:#EFF6FF; color:#1D4ED8; border-radius:6px; font-size:12px; font-weight:600; }
+.profile { display:flex; align-items:center; gap:8px; padding:4px 8px 4px 4px; border-radius:6px; cursor:pointer; }
+.profile:hover { background:#F1F5F8; }
+
+.shell-body { display:flex; min-height:480px; }
+.sidebar { width:240px; background:#F8FAFB; border-right:1px solid #E2E8F0; padding:14px 8px; }
+.sidebar.collapsed { width:56px; padding:14px 4px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:6px; font-size:13px; color:#1E293B; cursor:pointer; }
+.nav-item svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.6; flex-shrink:0; }
+.nav-item:hover { background:#fff; }
+.nav-item.active { background:#fff; color:#0A6F87; font-weight:600; box-shadow:inset 3px 0 0 #0A87A3; padding-left:12px; }
+.nav-item.active.patient { color:#1D4ED8; box-shadow:inset 3px 0 0 #1D4ED8; }
+.nav-section { font-size:10px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; padding:14px 10px 6px; }
+.nav-collapse-row { display:flex; align-items:center; justify-content:flex-end; padding:6px 8px 0; }
+.shell-content { flex:1; padding:16px; background:#fff; }
+
+.modlauncher { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:18px; box-shadow:0 16px 48px rgba(14,17,23,0.14); width:560px; }
+.modlauncher .h { font-size:13px; font-weight:600; margin-bottom:12px; }
+.mods { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.mod-tile { aspect-ratio:1.1; border:1px solid #E2E8F0; border-radius:8px; padding:12px; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.12s ease, box-shadow 0.12s ease; }
+.mod-tile:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(14,17,23,0.10); }
+.mod-tile .ic { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.mod-tile .nm { font-size:13px; font-weight:600; }
+.mod-tile .sub { font-size:10px; color:#64748B; font-family:'JetBrains Mono',monospace; }
+
+.tabs-row { display:flex; gap:0; border-bottom:1px solid #E2E8F0; margin-bottom:14px; }
+.tab { padding:10px 14px; font-size:13px; font-weight:500; color:#64748B; cursor:pointer; border-bottom:2px solid transparent; display:inline-flex; align-items:center; gap:6px; }
+.tab.active { color:#0E1117; border-color:#0A87A3; font-weight:600; }
+.tab .badge { background:#F1F5F8; color:#475569; padding:1px 6px; border-radius:9999px; font-size:11px; font-weight:600; }
+.tab.active .badge { background:#E0F2F7; color:#0A6F87; }
+
+.tabs-pill { display:inline-flex; padding:3px; background:#F1F5F8; border-radius:8px; gap:2px; }
+.tabs-pill .pillt { padding:6px 12px; border-radius:6px; font-size:13px; color:#475569; cursor:pointer; }
+.tabs-pill .pillt.active { background:#fff; color:#0E1117; box-shadow:0 1px 2px rgba(14,17,23,0.06); font-weight:600; }
+
+.bc { display:flex; gap:6px; align-items:center; font-size:12px; color:#64748B; }
+.bc a { color:#475569; text-decoration:none; }
+.bc .sep { color:#CBD5E1; }
+.bc .cur { color:#0E1117; font-weight:600; }
+
+.stepper { display:flex; align-items:center; gap:0; }
+.stepper .stp { display:flex; align-items:center; gap:8px; padding:0 12px; font-size:13px; color:#475569; }
+.stepper .stp .num { width:24px; height:24px; border-radius:9999px; background:#F1F5F8; color:#94A3B8; display:flex; align-items:center; justify-content:center; font-weight:700; font-family:'JetBrains Mono',monospace; font-size:11px; }
+.stepper .stp.done .num { background:#0A87A3; color:#fff; }
+.stepper .stp.done { color:#0A6F87; }
+.stepper .stp.cur .num { background:#0A87A3; color:#fff; box-shadow:0 0 0 4px rgba(10,135,163,0.2); }
+.stepper .stp.cur { color:#0E1117; font-weight:600; }
+.stepper .arrow { width:24px; height:1px; background:#E2E8F0; }
+
+.cmd { background:#fff; border:1px solid #E2E8F0; border-radius:10px; box-shadow:0 24px 64px rgba(14,17,23,0.18); width:560px; overflow:hidden; }
+.cmd-input { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid #F1F5F8; }
+.cmd-input input { flex:1; border:none; outline:none; font-size:14px; }
+.cmd-group { padding:8px 0; }
+.cmd-glabel { font-size:10px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; padding:4px 14px; }
+.cmd-row { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; }
+.cmd-row:hover, .cmd-row.on { background:#F8FAFB; }
+.cmd-row .ic { width:28px; height:28px; border-radius:6px; background:#F1F5F8; display:flex; align-items:center; justify-content:center; }
+.cmd-row .desc { flex:1; }
+.cmd-row .nm { font-size:13px; font-weight:500; }
+.cmd-row .sub { font-size:11px; color:#64748B; font-family:'JetBrains Mono',monospace; }
+.cmd-row .kbd { background:#F1F5F8; padding:1px 5px; border-radius:3px; font-size:10px; color:#475569; font-family:'JetBrains Mono',monospace; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Navigation &amp; shell</h1>
+<p class="spec-sub">The global app shell, primary nav (collapsed and expanded), tenant switcher, module launcher, global patient search, role-context indicator, in-product breadcrumbs, tabs, stepper, and the ⌘K command palette.</p>
+
+<div class="spec-section-label">Global app shell — full</div>
+<div class="shell">
+  <div class="shell-top">
+    <div class="tenant">
+      <span style="width:24px;height:24px;background:#0A87A3;border-radius:5px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px">M</span>
+      <div style="flex:1;min-width:0"><div class="nm">St. Catherine's General</div><div class="sub">tenant · 2,418 users</div></div>
+      <svg class="icon" viewBox="0 0 24 24" stroke="#94A3B8" fill="none" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
+    <button class="module-launcher-btn" title="Module launcher">
+      <svg class="icon-20" viewBox="0 0 24 24" fill="#475569"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </button>
+
+    <div class="glob-search">
+      <svg class="icon" viewBox="0 0 24 24" stroke="#94A3B8" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Search patient by name, MRN, DOB or phone…">
+      <span class="kbd">/</span>
+    </div>
+
+    <span class="role-pill"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Acting as · MD</span>
+
+    <button class="shell-icon-btn"><svg class="icon-20" viewBox="0 0 24 24" stroke="#475569" fill="none" stroke-width="1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge">7</span></button>
+    <button class="shell-icon-btn"><svg class="icon-20" viewBox="0 0 24 24" stroke="#475569" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+
+    <div class="profile">
+      <span class="avatar avatar-sm role-ring" style="--ring:#1D4ED8;background:#DBEAFE;color:#1D4ED8;box-shadow:0 0 0 2px #fff,0 0 0 4px #1D4ED8">RP</span>
+      <div><div style="font-size:12px;font-weight:600;line-height:1.2">Patel, R MD</div><div style="font-size:10px;color:#64748B">Cardiology</div></div>
+      <svg class="icon" viewBox="0 0 24 24" stroke="#94A3B8" fill="none" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+
+  <div class="shell-body">
+    <div class="sidebar">
+      <div class="nav-item active patient">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Patients
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M3 18v-6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        Bed board
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M9 2h6"/><path d="M10 2v3l-3 7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9l-3-7V2"/></svg>
+        Lab orders
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-30 12 12)"/></svg>
+        Medications
+      </div>
+
+      <div class="nav-section">My team</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Staff directory
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Shifts <span style="margin-left:auto;background:#FEE2E2;color:#991B1B;padding:1px 6px;border-radius:9999px;font-size:10px;font-weight:700">2</span>
+      </div>
+
+      <div class="nav-section">Tools</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+      <div class="nav-collapse-row">
+        <button class="btn btn-sm btn-tertiary">«</button>
+      </div>
+    </div>
+
+    <div class="shell-content">
+      <div class="bc" style="margin-bottom:10px"><a>Patients</a> <span class="sep">/</span> <a>3-North</a> <span class="sep">/</span> <span class="cur">Adebayo, Olumide</span></div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:10px">Active worklist · 42 patients</div>
+
+      <div class="tabs-row">
+        <span class="tab active">All <span class="badge">42</span></span>
+        <span class="tab">Admitted <span class="badge">38</span></span>
+        <span class="tab">Awaiting DC <span class="badge">3</span></span>
+        <span class="tab">STAT <span class="badge" style="background:#FEE2E2;color:#991B1B">1</span></span>
+        <span class="tab">No-show <span class="badge">0</span></span>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="tabs-pill">
+          <span class="pillt active">List</span>
+          <span class="pillt">Floor map</span>
+          <span class="pillt">Cards</span>
+        </div>
+        <button class="btn btn-sm btn-primary">+ Add patient</button>
+      </div>
+
+      <div style="height:14px"></div>
+
+      <div class="stepper">
+        <div class="stp done"><span class="num">✓</span>Demographics</div>
+        <span class="arrow"></span>
+        <div class="stp done"><span class="num">✓</span>Insurance</div>
+        <span class="arrow"></span>
+        <div class="stp cur"><span class="num">3</span>Consents</div>
+        <span class="arrow"></span>
+        <div class="stp"><span class="num">4</span>Triage</div>
+        <span class="arrow"></span>
+        <div class="stp"><span class="num">5</span>Room assignment</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Module launcher — open</div>
+<div class="modlauncher">
+  <div class="h">Switch module</div>
+  <div class="mods">
+    <div class="mod-tile" style="border-color:#BFDBFE">
+      <div class="ic" style="background:#DBEAFE;color:#1D4ED8"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><div class="nm">Patient</div><div class="sub">⌥1</div></div>
+    </div>
+    <div class="mod-tile" style="border-color:#DDD6FE">
+      <div class="ic" style="background:#EDE9FE;color:#6D28D9"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+      <div><div class="nm">Staff</div><div class="sub">⌥2</div></div>
+    </div>
+    <div class="mod-tile" style="border-color:#99F6E4">
+      <div class="ic" style="background:#CCFBF1;color:#0F766E"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M15 10v2a3 3 0 0 1-6 0v-2"/><rect x="9" y="2" width="6" height="11" rx="3"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+      <div><div class="nm">Consults</div><div class="sub">⌥3</div></div>
+    </div>
+    <div class="mod-tile" style="border-color:#BBF7D0">
+      <div class="ic" style="background:#DCFCE7;color:#15803D"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div><div class="nm">Records</div><div class="sub">⌥4</div></div>
+    </div>
+    <div class="mod-tile" style="border-color:#FCD34D">
+      <div class="ic" style="background:#FEF3C7;color:#B45309"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/><path d="M4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33"/></svg></div>
+      <div><div class="nm">Assets</div><div class="sub">⌥5</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Sidebar — collapsed (icon-only)</div>
+<div class="shell" style="max-width:680px">
+  <div class="shell-body" style="min-height:340px">
+    <div class="sidebar collapsed" style="padding-top:14px">
+      <div class="nav-item active" style="justify-content:center;padding:8px"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="nav-item" style="justify-content:center;padding:8px"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div>
+      <div class="nav-item" style="justify-content:center;padding:8px"><svg viewBox="0 0 24 24"><path d="M3 18v-6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6"/></svg></div>
+      <div class="nav-item" style="justify-content:center;padding:8px"><svg viewBox="0 0 24 24"><path d="M9 2h6"/><path d="M10 2v3l-3 7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9l-3-7V2"/></svg></div>
+    </div>
+    <div class="shell-content"><div class="spec-caption">Hover over a collapsed icon to reveal the label tooltip.</div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Command palette · ⌘K</div>
+<div class="cmd">
+  <div class="cmd-input">
+    <svg class="icon-20" viewBox="0 0 24 24" stroke="#475569" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input value="ade" placeholder="Search patients · staff · orders · settings…">
+    <span class="kbd" style="font-family:'JetBrains Mono',monospace;background:#F1F5F8;padding:1px 5px;border-radius:3px;font-size:11px">esc</span>
+  </div>
+  <div class="cmd-group">
+    <div class="cmd-glabel">Patients</div>
+    <div class="cmd-row on">
+      <span class="ic"><span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8;width:24px;height:24px;font-size:10px">OA</span></span>
+      <div class="desc"><div class="nm">Adebayo, Olumide</div><div class="sub">10458291 · 64M · 3-North · 312A</div></div>
+      <span class="kbd">↵</span>
+    </div>
+    <div class="cmd-row">
+      <span class="ic"><span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309;width:24px;height:24px;font-size:10px">AY</span></span>
+      <div class="desc"><div class="nm">Adeyemi, Yetunde</div><div class="sub">10712083 · 32F · clinic</div></div>
+    </div>
+  </div>
+  <div class="cmd-group" style="border-top:1px solid #F1F5F8">
+    <div class="cmd-glabel">Actions</div>
+    <div class="cmd-row"><span class="ic" style="background:#E0F2F7;color:#0A6F87"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><div class="desc"><div class="nm">New patient registration</div></div><span class="kbd">⌘N</span></div>
+    <div class="cmd-row"><span class="ic" style="background:#F0FDF4;color:#15803D"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></span><div class="desc"><div class="nm">Sign all pending notes</div><div class="sub">3 awaiting</div></div><span class="kbd">⌘⇧S</span></div>
+  </div>
+  <div class="cmd-group" style="border-top:1px solid #F1F5F8">
+    <div class="cmd-glabel">Recent</div>
+    <div class="cmd-row"><span class="ic" style="background:#F1F5F8;color:#64748B"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div class="desc"><div class="nm">Hadi, Samira · CCU 207A</div><div class="sub">opened 2h ago</div></div></div>
+    <div class="cmd-row"><span class="ic" style="background:#F1F5F8;color:#64748B"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div class="desc"><div class="nm">Diallo, Mariama · 314A</div><div class="sub">opened yesterday</div></div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Quick-action speed dial — mobile</div>
+<div style="position:relative;width:100px;height:200px">
+  <button style="position:absolute;bottom:0;right:0;width:48px;height:48px;border-radius:9999px;background:#0A87A3;color:#fff;border:none;box-shadow:0 8px 24px rgba(10,135,163,0.30);font-size:24px;cursor:pointer">+</button>
+  <button style="position:absolute;bottom:60px;right:6px;width:36px;height:36px;border-radius:9999px;background:#fff;border:1px solid #E2E8F0;color:#1D4ED8;cursor:pointer"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+  <button style="position:absolute;bottom:106px;right:6px;width:36px;height:36px;border-radius:9999px;background:#fff;border:1px solid #E2E8F0;color:#7C3AED;cursor:pointer"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></button>
+  <button style="position:absolute;bottom:152px;right:6px;width:36px;height:36px;border-radius:9999px;background:#fff;border:1px solid #E2E8F0;color:#16A34A;cursor:pointer"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></button>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Badges & pills</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.badge-dot { display:inline-flex; width:8px; height:8px; border-radius:50%; background:#DC2626; }
+.badge-num { display:inline-flex; min-width:16px; height:16px; padding:0 4px; border-radius:9999px; background:#DC2626; color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; align-items:center; justify-content:center; }
+.acuity {
+  display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 10px;
+  border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:0.04em;
+}
+.acuity .num { font-family:'JetBrains Mono',monospace; font-size:13px; }
+.allergy-band {
+  display:flex; align-items:center; gap:8px; background:#DC2626; color:#fff;
+  padding:8px 12px; border-radius:6px; font-size:13px; font-weight:600;
+  letter-spacing:0.01em;
+}
+.kbd-pill {
+  display:inline-flex; gap:3px; align-items:center;
+}
+.kbd-pill kbd { font-size:10px; }
+.row-show { padding:14px; background:#fff; border:1px solid #E2E8F0; border-radius:8px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.row-show.dark { background:#0E1117; border-color:#21262D; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Badges &amp; pills</h1>
+<p class="spec-sub">Status pills are the densest information surface in healthcare UIs. The full taxonomy: workflow statuses, acuity (ESI), code status, isolation, fall-risk, NPO, insurance, priority. Each color carries meaning — red is reserved for clinically critical only.</p>
+
+<div class="spec-section-label">Count badges — dot · number · 99+</div>
+<div class="row-show">
+  <span class="badge-dot"></span>
+  <span class="badge-num">3</span>
+  <span class="badge-num">12</span>
+  <span class="badge-num">99+</span>
+  <button class="btn btn-secondary" style="position:relative">Inbox <span class="badge-num" style="position:absolute;top:-6px;right:-6px;border:2px solid #fff">7</span></button>
+  <button class="btn btn-secondary" style="position:relative"><svg class="icon-20" viewBox="0 0 24 24" style="stroke:#475569;fill:none;stroke-width:1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> <span class="badge-dot" style="position:absolute;top:6px;right:6px;border:2px solid #fff"></span></button>
+</div>
+
+<div class="spec-section-label">Generic semantic pills</div>
+<div class="row-show">
+  <span class="pill pill-success"><span class="dot"></span>Success</span>
+  <span class="pill pill-warning"><span class="dot"></span>Warning</span>
+  <span class="pill pill-danger"><span class="dot"></span>Danger</span>
+  <span class="pill pill-info"><span class="dot"></span>Info</span>
+  <span class="pill pill-neutral"><span class="dot"></span>Neutral</span>
+</div>
+
+<div class="spec-section-label">Healthcare workflow status — full taxonomy</div>
+<div class="row-show">
+  <span class="pill" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE"><span class="dot"></span>Scheduled</span>
+  <span class="pill" style="background:#F0FDF4;color:#15803D;border-color:#86EFAC"><span class="dot"></span>Checked-in</span>
+  <span class="pill" style="background:#FFF7ED;color:#C2410C;border-color:#FED7AA"><span class="dot"></span>In-triage</span>
+  <span class="pill" style="background:#EEF2FF;color:#3730A3;border-color:#C7D2FE"><span class="dot"></span>In-room</span>
+  <span class="pill" style="background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE"><span class="dot"></span>With provider</span>
+  <span class="pill" style="background:#FFFBEB;color:#B45309;border-color:#FDE68A"><span class="dot"></span>Awaiting labs</span>
+  <span class="pill" style="background:#FAF5FF;color:#7C3AED;border-color:#E9D5FF"><span class="dot"></span>Awaiting discharge</span>
+  <span class="pill" style="background:#F1F5F8;color:#475569;border-color:#CBD5E1"><span class="dot"></span>Discharged</span>
+  <span class="pill" style="background:#FEF2F2;color:#B91C1C;border-color:#FECACA"><span class="dot"></span>No-show</span>
+  <span class="pill" style="background:#FEF2F2;color:#991B1B;border-color:#FCA5A5"><span class="dot"></span>Cancelled</span>
+  <span class="pill" style="background:#F0FDF4;color:#166534;border-color:#BBF7D0"><span class="dot"></span>Admitted</span>
+  <span class="pill" style="background:#EFF6FF;color:#1E40AF;border-color:#DBEAFE"><span class="dot"></span>Transferred</span>
+</div>
+
+<div class="spec-section-label">ESI triage acuity 1–5 — severity gradient</div>
+<div class="row-show">
+  <span class="acuity" style="background:#7F1D1D;color:#fff"><span class="num">1</span>Resuscitation</span>
+  <span class="acuity" style="background:#DC2626;color:#fff"><span class="num">2</span>Emergent</span>
+  <span class="acuity" style="background:#F59E0B;color:#fff"><span class="num">3</span>Urgent</span>
+  <span class="acuity" style="background:#16A34A;color:#fff"><span class="num">4</span>Less urgent</span>
+  <span class="acuity" style="background:#3B82F6;color:#fff"><span class="num">5</span>Non-urgent</span>
+</div>
+
+<div class="spec-section-label">Allergy bands — red · orange · yellow (non-dismissible)</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+  <div class="allergy-band" style="background:#DC2626"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg> ALLERGY · Penicillin (anaphylaxis), Sulfa drugs (rash)</div>
+  <div class="allergy-band" style="background:#EA580C"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg> PRECAUTION · Latex sensitivity, IV contrast</div>
+  <div class="allergy-band" style="background:#CA8A04"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> ADVISORY · Adhesive tape · mild reaction documented</div>
+</div>
+
+<div class="spec-section-label">Code status — distinct hues, ALL CAPS</div>
+<div class="row-show">
+  <span class="pill" style="background:#0E1117;color:#fff;border-color:#0E1117">FULL CODE</span>
+  <span class="pill" style="background:#7F1D1D;color:#fff;border-color:#7F1D1D">DNR</span>
+  <span class="pill" style="background:#92400E;color:#fff;border-color:#92400E">DNI</span>
+  <span class="pill" style="background:#4C1D95;color:#fff;border-color:#4C1D95">DNAR</span>
+  <span class="pill" style="background:#1E40AF;color:#fff;border-color:#1E40AF">CMO</span>
+</div>
+
+<div class="spec-section-label">Isolation precautions</div>
+<div class="row-show">
+  <span class="pill" style="background:#FEF3C7;color:#92400E;border-color:#FCD34D">Contact</span>
+  <span class="pill" style="background:#DBEAFE;color:#1E40AF;border-color:#93C5FD">Droplet</span>
+  <span class="pill" style="background:#F3E8FF;color:#6B21A8;border-color:#C4B5FD">Airborne</span>
+  <span class="pill" style="background:#FEF2F2;color:#991B1B;border-color:#FCA5A5">Neutropenic</span>
+  <span class="pill" style="background:#F0FDF4;color:#15803D;border-color:#86EFAC">Standard</span>
+</div>
+
+<div class="spec-section-label">Risk pills — fall · aspiration · NPO · seizure · sepsis</div>
+<div class="row-show">
+  <span class="pill" style="background:#FFF7ED;color:#9A3412;border-color:#FDBA74">Fall risk</span>
+  <span class="pill" style="background:#FEF2F2;color:#991B1B;border-color:#FCA5A5">Aspiration risk</span>
+  <span class="pill" style="background:#F1F5F8;color:#0E1117;border-color:#0E1117;font-weight:700">NPO</span>
+  <span class="pill" style="background:#FAF5FF;color:#6B21A8;border-color:#D8B4FE">Seizure precautions</span>
+  <span class="pill" style="background:#FEF2F2;color:#7F1D1D;border-color:#DC2626">Sepsis bundle</span>
+  <span class="pill" style="background:#FEF2F2;color:#991B1B;border-color:#FCA5A5">Bleeding precautions</span>
+</div>
+
+<div class="spec-section-label">Insurance status</div>
+<div class="row-show">
+  <span class="pill pill-success">Verified</span>
+  <span class="pill pill-warning">Pending</span>
+  <span class="pill pill-neutral">Self-pay</span>
+  <span class="pill pill-danger">Denied</span>
+  <span class="pill" style="background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE">Auth required</span>
+</div>
+
+<div class="spec-section-label">Priority — STAT · ASAP · routine</div>
+<div class="row-show">
+  <span class="pill pill-stat">STAT</span>
+  <span class="pill" style="background:#FFF7ED;color:#9A3412;border-color:#FDBA74">ASAP</span>
+  <span class="pill pill-neutral">Routine</span>
+  <span class="pill pill-critical"><svg width="10" height="10" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> CODE BLUE</span>
+</div>
+
+<div class="spec-section-label">Keyboard shortcut pills</div>
+<div class="row-show">
+  <div class="kbd-pill"><kbd>⌘</kbd><kbd>K</kbd></div>
+  <div class="kbd-pill"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd></div>
+  <div class="kbd-pill"><kbd>↵</kbd></div>
+  <div class="kbd-pill"><kbd>Esc</kbd></div>
+  <div class="kbd-pill"><kbd>?</kbd></div>
+  <div class="kbd-pill"><kbd>g</kbd> <kbd>p</kbd></div>
+</div>
+
+<div class="spec-section-label">Dark theme</div>
+<div class="row-show dark">
+  <span class="pill" style="background:#052E16;color:#86EFAC;border-color:#166534"><span class="dot"></span>Checked-in</span>
+  <span class="pill" style="background:#2D1B00;color:#FCD34D;border-color:#92400E"><span class="dot"></span>Awaiting labs</span>
+  <span class="pill" style="background:#2D0505;color:#FCA5A5;border-color:#991B1B"><span class="dot"></span>No-show</span>
+  <span class="pill pill-stat">STAT</span>
+  <span class="pill pill-critical">CODE BLUE</span>
+  <span class="pill" style="background:#0E1117;color:#fff;border:1px solid #1E2530">FULL CODE</span>
+  <span class="pill" style="background:#7F1D1D;color:#fff">DNR</span>
+</div>
+
+</body>
+</html>

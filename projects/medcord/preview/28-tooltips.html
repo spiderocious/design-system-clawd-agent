@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tooltips · popovers · hovercards</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* TOOLTIPS · POPOVERS · HOVERCARDS — small surfaces that float above the page.
+     Tooltip: a single ink chip, no arrow ostentation, mono caps for shortcuts.
+     Popover: a sheet with a hairline edge and a soft shadow.
+     Hovercard: a richer popover; the four kinds — patient, staff, medication,
+     room — each have their own typeset specimen. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  .stage {
+    background: var(--paper-deep);
+    border: 1px solid var(--hair);
+    padding: 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    place-items: center;
+  }
+
+  /* Tooltip — ink chip with a tiny triangle */
+  .tt {
+    background: var(--ink); color: var(--paper);
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: var(--sans); font-size: 12px;
+    box-shadow: 0 4px 8px rgba(24,22,19,0.16);
+    position: relative;
+    display: inline-flex; align-items: center; gap: 8px;
+    letter-spacing: 0.005em;
+  }
+  .tt::after {
+    content: ""; position: absolute;
+    width: 0; height: 0;
+    border: 4px solid transparent;
+  }
+  .tt-bottom::after { top: -8px; left: calc(50% - 4px); border-bottom-color: var(--ink); }
+  .tt-top::after    { bottom: -8px; left: calc(50% - 4px); border-top-color: var(--ink); }
+  .tt-left::after   { right: -8px; top: calc(50% - 4px); border-left-color: var(--ink); }
+  .tt-right::after  { left: -8px;  top: calc(50% - 4px); border-right-color: var(--ink); }
+
+  .kbd {
+    font-family: var(--mono); font-size: 10px;
+    background: rgba(244,239,230,0.18); padding: 1px 5px; border-radius: 2px;
+    letter-spacing: 0;
+  }
+
+  /* Popover — sheet with hairline edge */
+  .pop {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    box-shadow: 0 12px 32px rgba(24,22,19,0.18);
+    width: 280px;
+    border-radius: 4px;
+  }
+  .pop-h { padding: 12px 16px; border-bottom: 1px solid var(--hair); display: flex; align-items: baseline; gap: 8px; }
+  .pop-h h4 { margin: 0; font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .pop-h .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .pop-body { padding: 12px 16px; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+  .pop-foot { padding: 10px 16px; border-top: 1px solid var(--hair); display: flex; gap: 8px; justify-content: flex-end; background: var(--paper-deep); }
+
+  .b {
+    height: 28px; padding: 0 12px;
+    border-radius: 4px; border: 1px solid transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    cursor: pointer; background: transparent;
+  }
+  .b-quiet { color: var(--ink-3); }
+  .b-quiet:hover { color: var(--ink); }
+  .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .b-primary   { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+
+  /* Menu items inside popover */
+  .menu { display: flex; flex-direction: column; padding: 4px 0; }
+  .menu .row {
+    padding: 6px 16px;
+    display: grid; grid-template-columns: 16px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    font-size: 13px; color: var(--ink); cursor: pointer;
+  }
+  .menu .row:hover { background: var(--paper-deep); }
+  .menu .row .glyph { color: var(--ink-3); font-family: var(--serif); font-size: 16px; font-style: italic; line-height: 1; text-align: center; }
+  .menu .row .kbd-i { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .menu .row.danger { color: var(--crit); }
+  .menu .div { height: 1px; background: var(--hair); margin: 4px 0; }
+  .menu .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 16px 2px; }
+
+  /* HOVERCARDS — four specimens */
+  .hover-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .hcard {
+    background: var(--sheet); border: 1px solid var(--ink);
+    box-shadow: 0 12px 32px rgba(24,22,19,0.18);
+    width: 320px;
+    border-radius: 4px;
+  }
+  .hcard .h {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+    display: grid; grid-template-columns: 36px 1fr;
+    gap: 10px; align-items: start;
+  }
+  .hcard .nm { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; }
+  .hcard .nm .alt { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .hcard .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+  .hcard .b-content { padding: 10px 16px 12px; }
+  .hcard .kv {
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 4px 12px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+  }
+  .hcard .kv .k { color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; padding-top: 2px; }
+  .hcard .kv .v { color: var(--ink); }
+  .hcard .kv .v.serif { font-family: var(--serif); letter-spacing: 0; font-size: 13px; font-style: normal; }
+
+  .hcard .av-pat-c {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid #D4C4A6;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 13px;
+  }
+  .hcard .av-staff {
+    width: 36px; height: 36px;
+    background: #DEE6D6; color: #2F4226;
+    border: 1px solid #C4D2BC; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 13px;
+  }
+  .hcard .av-rx {
+    width: 36px; height: 36px;
+    background: var(--paper-deep); color: var(--ink);
+    border: 1px solid var(--sheet-edge); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hcard .av-bed {
+    width: 36px; height: 36px;
+    background: var(--paper-deep); color: var(--ink);
+    border: 1px solid var(--sheet-edge); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  }
+  .hcard .allergy-mini {
+    background: var(--crit); color: #fff;
+    padding: 6px 16px;
+    font-family: var(--serif); font-style: italic; font-size: 12px;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .hcard .allergy-mini::before {
+    content: "ALLERGY ·";
+    font-family: var(--mono); font-style: normal; font-size: 9px;
+    letter-spacing: 0.22em; font-weight: 600; margin-right: 4px;
+  }
+
+  .hcard .next-due {
+    font-family: var(--mono); font-size: 11px; color: var(--green-700); letter-spacing: 0;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 09</span>
+    <h1>Tooltips · popovers · hovercards.</h1>
+    <span class="meta">small surfaces that float</span>
+  </header>
+
+  <!-- A. TOOLTIPS — top, right, bottom, left -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Tooltip — a single line of paper.</h2>
+      <div class="sub">Ink chip, paper letters. A small triangle points to the anchor; shortcuts are mono and quiet inside the chip.</div>
+    </div>
+
+    <div class="stage" style="grid-template-columns:repeat(4,1fr);place-items:center">
+      <div class="tt tt-bottom">Sign &amp; submit note <span class="kbd">↵</span></div>
+      <div class="tt tt-right">Open chart <span class="kbd">⌘ ↵</span></div>
+      <div class="tt tt-top">Discharge against advice</div>
+      <div class="tt tt-left">Search · <span class="kbd">/</span></div>
+    </div>
+  </section>
+
+  <!-- B. POPOVERS — form, menu, with footer -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Popover — a small sheet.</h2>
+      <div class="sub">A title, a body, and (sometimes) a footer with two actions. Forms and menus inherit the same chrome.</div>
+    </div>
+
+    <div class="stage" style="grid-template-columns:repeat(3,1fr);place-items:start">
+
+      <!-- Form -->
+      <div class="pop">
+        <div class="pop-h"><h4>Add note</h4><span class="meta">⌘N</span></div>
+        <div class="pop-body">
+          <textarea style="width:100%;height:72px;padding:8px 10px;border:1px solid var(--sheet-edge);background:var(--paper);font-family:var(--serif);font-size:13px;color:var(--ink);font-style:italic;outline:none;resize:none">"Quick note to chart…"</textarea>
+        </div>
+        <div class="pop-foot"><button class="b b-quiet">Cancel</button><button class="b b-primary">Post</button></div>
+      </div>
+
+      <!-- Menu -->
+      <div class="pop" style="width:240px">
+        <div class="menu">
+          <div class="lbl">Patient</div>
+          <div class="row"><span class="glyph">→</span><span>Open chart</span><span class="kbd-i">↵</span></div>
+          <div class="row"><span class="glyph">+</span><span>Add note</span><span class="kbd-i">N</span></div>
+          <div class="row"><span class="glyph">›</span><span>More…</span><span class="kbd-i">›</span></div>
+          <div class="div"></div>
+          <div class="lbl">Workflow</div>
+          <div class="row"><span class="glyph">⇄</span><span>Transfer bed</span></div>
+          <div class="row"><span class="glyph">✓</span><span>Mark seen</span></div>
+          <div class="div"></div>
+          <div class="row danger"><span class="glyph">×</span><span>Discharge AMA</span><span class="kbd-i">⌫</span></div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="pop" style="width:240px">
+        <div class="pop-h"><h4>Filter status</h4></div>
+        <div class="pop-body" style="padding:10px 16px">
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px"><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink);background:var(--ink);align-items:center;justify-content:center;color:var(--paper);font-size:9px">✓</span>In room</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px"><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink);background:var(--ink);align-items:center;justify-content:center;color:var(--paper);font-size:9px">✓</span>Awaiting labs</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px"><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent"></span>Discharged</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px"><span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--ink-3);background:transparent"></span>No-show</label>
+        </div>
+        <div class="pop-foot"><button class="b b-quiet">Reset</button><button class="b b-primary">Apply</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. HOVERCARDS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Hovercards — four specimens.</h2>
+      <div class="sub">Patient, staff, medication, bed. Each one shows the smallest set of facts a clinician would need at a glance, before navigating in.</div>
+    </div>
+
+    <div class="hover-grid">
+
+      <!-- PATIENT -->
+      <div class="hcard">
+        <div class="h">
+          <span class="av-pat-c">OA</span>
+          <div>
+            <div class="nm">Adebayo, Olumide <span class="alt">"Olu"</span></div>
+            <div class="role">Male · 64 y · DOB 14 Mar 1962</div>
+          </div>
+        </div>
+        <div class="allergy-mini">Penicillin causes anaphylaxis. Sulfa drugs cause rash.</div>
+        <div class="b-content">
+          <div class="kv">
+            <span class="k">MRN</span><span class="v">10458291</span>
+            <span class="k">Bed</span><span class="v">3-N · 312A</span>
+            <span class="k">Code</span><span class="v">FULL CODE</span>
+            <span class="k">Attending</span><span class="v serif">Patel, Reema MD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAFF -->
+      <div class="hcard">
+        <div class="h">
+          <span class="av-staff">RP</span>
+          <div>
+            <div class="nm">Patel, Reema MD <span class="alt">— FACC</span></div>
+            <div class="role">Cardiology · attending · NPI 1093847562</div>
+          </div>
+        </div>
+        <div class="b-content">
+          <div class="kv">
+            <span class="k">Status</span><span class="v"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green-600);margin-right:6px"></span>On shift · ends 19:00</span>
+            <span class="k">Pager</span><span class="v">×4187</span>
+            <span class="k">Mobile</span><span class="v">+1 (312) 555-0148</span>
+            <span class="k">License</span><span class="v">IL 036-018392 · exp 2027</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDICATION -->
+      <div class="hcard">
+        <div class="h">
+          <span class="av-rx"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 9 14 18l5-5L10 4z"/><path d="M11 7l5 5"/></svg></span>
+          <div>
+            <div class="nm" style="font-style:italic">Lisinopril <span class="alt" style="font-style:normal;font-family:var(--mono);font-size:13px;color:var(--ink-2);letter-spacing:0">10 mg PO</span></div>
+            <div class="role">ACE inhibitor · generic for Prinivil, Zestril</div>
+          </div>
+        </div>
+        <div class="b-content">
+          <div class="kv">
+            <span class="k">Sig</span><span class="v serif">1 tab by mouth, once daily</span>
+            <span class="k">For</span><span class="v serif">Hypertension · I10</span>
+            <span class="k">Last given</span><span class="v">04/30 · 08:14</span>
+            <span class="k">Next due</span><span class="v next-due">05/01 · 08:00</span>
+            <span class="k">By</span><span class="v serif">Patel, R MD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROOM / BED -->
+      <div class="hcard">
+        <div class="h">
+          <span class="av-bed">312A</span>
+          <div>
+            <div class="nm">Room 312 · Bed A</div>
+            <div class="role">3-North · cardiac step-down</div>
+          </div>
+        </div>
+        <div class="b-content">
+          <div class="kv">
+            <span class="k">Occupant</span><span class="v serif">Adebayo, Olumide</span>
+            <span class="k">Admitted</span><span class="v">29 Apr · 08:32</span>
+            <span class="k">Isolation</span><span class="v serif" style="font-style:italic;color:var(--ink-3)">— none —</span>
+            <span class="k">Cleaning</span><span class="v" style="color:var(--green-700)">Clean</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

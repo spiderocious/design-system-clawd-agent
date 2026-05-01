@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  
+  <rect x="4" y="13" width="6" height="14" rx="1.5" fill="#0A87A3"></rect>
+  <rect x="0" y="17" width="14" height="6" rx="1.5" fill="#0A87A3"></rect>
+  
+  <text x="22" y="28" font-family="Inter, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#0E1117" letter-spacing="-0.5">medcord</text>
+</svg>

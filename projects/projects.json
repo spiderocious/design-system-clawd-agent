@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "slug": "medcord",
+      "name": "Medcord",
+      "tagline": "A clinical record system for an enterprise hospital management SaaS — patients, staff, EMR, equipment.",
+      "type": "Enterprise · healthcare SaaS",
+      "style": "Surgical paper",
+      "stylePrinciples": "Bone-paper canvas with warm ink, apothecary green as the single accent, hairlines instead of shadows, serif for thinking, mono for record. Critical-red reserved for life-threatening only.",
+      "accent": "#16A34A",
+      "paper": "#F4EFE6",
+      "ink": "#181613",
+      "entry": "projects/medcord/index.html",
+      "thumb": "projects/medcord/thumb.html",
+      "createdAt": "2026-05-01",
+      "surfaceCount": 30
+    }
+  ]
+}

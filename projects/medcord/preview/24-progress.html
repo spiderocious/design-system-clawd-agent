@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Progress</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* PROGRESS — printed gauges. Linear bars, rings, drips, steppers.
+     Same hairline-and-ink stance. The IV drip is a real glass bottle. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* Linear bar */
+  .bar-row { display: grid; grid-template-columns: 200px 1fr 80px; gap: 18px; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--hair-soft); }
+  .bar-row:last-child { border-bottom: 0; }
+  .bar-row .nm { font-family: var(--sans); font-size: 13px; color: var(--ink); }
+  .bar-row .nm .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); display: block; margin-top: 2px; letter-spacing: 0; }
+  .bar { height: 6px; background: var(--paper-deep); position: relative; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--ink); }
+  .bar.warn > span { background: var(--warn); }
+  .bar.crit > span { background: var(--crit); }
+  .bar.ok   > span { background: var(--green-700); }
+  .bar.indet { background: var(--paper-deep); }
+  .bar.indet > span { animation: glide 1500ms ease-in-out infinite; width: 30%; background: var(--ink); }
+  @keyframes glide { 0% { margin-left: -30%; width: 30% } 50% { margin-left: 30%; width: 50% } 100% { margin-left: 100%; width: 30% } }
+  .bar-row .pct { font-family: var(--mono); font-size: 12px; color: var(--ink); text-align: right; letter-spacing: 0; }
+  .bar-row.warn .pct { color: var(--warn); }
+  .bar-row.crit .pct { color: var(--crit); }
+  .bar-row.ok   .pct { color: var(--green-700); }
+
+  /* Rings */
+  .ring-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .ring-cell {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px; text-align: center;
+  }
+  .ring-cell svg { display: block; margin: 0 auto; }
+  .ring-cell .pct { font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--ink); margin-top: 8px; letter-spacing: -0.02em; }
+  .ring-cell .nm { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.16em; margin-top: 4px; }
+
+  /* Drips — glass bottle SVGs */
+  .drips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .drip {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px; display: grid; grid-template-columns: 60px 1fr; gap: 18px;
+    align-items: center;
+  }
+  .drip .glass {
+    width: 60px; height: 96px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px 4px 12px 12px;
+    background: var(--paper);
+    position: relative; overflow: hidden;
+  }
+  .drip .glass::before {
+    content: ""; position: absolute; left: 0; right: 0;
+    background: var(--ink-2);
+  }
+  .drip.ok    .glass::before { bottom: 0; height: 30%; background: var(--green-700); }
+  .drip.warn  .glass::before { bottom: 0; height: 4%;  background: var(--warn); }
+  .drip.held  .glass::before { bottom: 0; height: 70%; background: var(--paper-deep); border-top: 1px dashed var(--ink); }
+  .drip .glass::after {
+    content: ""; position: absolute; top: 6px; left: calc(50% - 1px);
+    width: 2px; height: 6px; background: var(--ink-3);
+  }
+  .drip h4 {
+    margin: 0 0 4px;
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    font-weight: 500; letter-spacing: -0.005em;
+  }
+  .drip .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .drip .bar { margin-top: 10px; }
+  .drip .row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; letter-spacing: 0; }
+  .drip.ok .row { color: var(--ink-2); }
+  .drip.warn .row { color: var(--warn); }
+  .drip.held .row { color: var(--ink-3); }
+
+  /* Stepper — discharge progress */
+  .stepper {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--ink); background: var(--sheet);
+  }
+  .stepper .stp {
+    padding: 18px 16px;
+    border-right: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative;
+  }
+  .stepper .stp:last-child { border-right: 0; }
+  .stepper .stp .ord {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .stepper .stp .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .stepper .stp .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .stepper .stp.done .ord { color: var(--green-800); }
+  .stepper .stp.done::after {
+    content: "✓"; position: absolute; top: 12px; right: 14px;
+    font-family: var(--serif); font-size: 18px; color: var(--green-700);
+  }
+  .stepper .stp.cur {
+    background: var(--paper);
+    box-shadow: inset 0 -3px 0 var(--ink);
+  }
+  .stepper .stp.cur .ord { color: var(--ink); }
+  .stepper .stp.todo { color: var(--ink-3); }
+  .stepper .stp.todo .nm { color: var(--ink-3); }
+
+  /* Goal progress — three KPI tiles */
+  .goals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .goal { background: var(--sheet); border: 1px solid var(--ink); padding: 18px 22px; }
+  .goal .nm { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .goal .now { font-family: var(--serif); font-size: 32px; font-weight: 500; line-height: 1; letter-spacing: -0.022em; margin-top: 8px; }
+  .goal .now .u { font-family: var(--sans); font-size: 14px; color: var(--ink-3); margin-left: 4px; }
+  .goal .now.warn { color: var(--warn); }
+  .goal .now.ok { color: var(--green-800); }
+  .goal .bar-wrap { margin-top: 12px; }
+  .goal .target { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; letter-spacing: 0; }
+  .goal .target.warn { color: var(--warn); }
+  .goal .target.ok { color: var(--green-800); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 05</span>
+    <h1>Progress.</h1>
+    <span class="meta">printed gauges, drips, steppers</span>
+  </header>
+
+  <!-- A. LINEAR BARS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Linear bars.</h2>
+      <div class="sub">Hairline track, ink fill. Warning amber for "approaching cap"; arterial red for "over"; green for "at target."</div>
+    </div>
+
+    <div>
+      <div class="bar-row">
+        <div class="nm">House occupancy<span class="meta">312 of 460 beds</span></div>
+        <div class="bar"><span style="width:68%"></span></div>
+        <div class="pct">68%</div>
+      </div>
+      <div class="bar-row warn">
+        <div class="nm">3-North<span class="meta">42 of 48 beds</span></div>
+        <div class="bar warn"><span style="width:88%"></span></div>
+        <div class="pct">88%</div>
+      </div>
+      <div class="bar-row crit">
+        <div class="nm">CCU<span class="meta">8 of 8 beds</span></div>
+        <div class="bar crit"><span style="width:100%"></span></div>
+        <div class="pct">100%</div>
+      </div>
+      <div class="bar-row ok">
+        <div class="nm">Hand hygiene<span class="meta">target ≥ 90%</span></div>
+        <div class="bar ok"><span style="width:94%"></span></div>
+        <div class="pct">94%</div>
+      </div>
+      <div class="bar-row">
+        <div class="nm">Importing patients<span class="meta">indeterminate · validating</span></div>
+        <div class="bar indet"><span></span></div>
+        <div class="pct">…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. RINGS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Rings — the wall meter.</h2>
+      <div class="sub">Used on dashboards and unit overviews. Ink stroke, hairline track, mono percentage in the centre.</div>
+    </div>
+
+    <div class="ring-row">
+      <div class="ring-cell">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--paper-deep)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--ink)" stroke-width="6"
+            stroke-dasharray="80 213" transform="rotate(-90 40 40)" stroke-linecap="butt"/>
+        </svg>
+        <div class="pct">38%</div>
+        <div class="nm">3-N · staffing</div>
+      </div>
+      <div class="ring-cell">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--paper-deep)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--green-700)" stroke-width="6"
+            stroke-dasharray="200 213" transform="rotate(-90 40 40)" stroke-linecap="butt"/>
+        </svg>
+        <div class="pct">94%</div>
+        <div class="nm">hand hygiene</div>
+      </div>
+      <div class="ring-cell">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--paper-deep)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--warn)" stroke-width="6"
+            stroke-dasharray="186 213" transform="rotate(-90 40 40)" stroke-linecap="butt"/>
+        </svg>
+        <div class="pct" style="color:var(--warn)">87%</div>
+        <div class="nm">3-N · occupancy</div>
+      </div>
+      <div class="ring-cell">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--paper-deep)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--crit)" stroke-width="6"
+            stroke-dasharray="213 213" transform="rotate(-90 40 40)" stroke-linecap="butt"/>
+        </svg>
+        <div class="pct" style="color:var(--crit)">100%</div>
+        <div class="nm">CCU · full</div>
+      </div>
+      <div class="ring-cell">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--paper-deep)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--ink)" stroke-width="6"
+            stroke-dasharray="50 213" transform="rotate(-90 40 40)">
+            <animateTransform attributeName="transform" type="rotate" from="-90 40 40" to="270 40 40" dur="1500ms" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <div class="pct" style="color:var(--ink-3)">…</div>
+        <div class="nm">indeterminate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. STEPPER -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Stepper — discharge progress.</h2>
+      <div class="sub">Five stages from triage to home. The active stage is underlined; completed stages carry a serif tick.</div>
+    </div>
+
+    <div class="stepper">
+      <div class="stp done">
+        <span class="ord">01</span>
+        <span class="nm">Triaged</span>
+        <span class="meta">12:08 · ESI 3</span>
+      </div>
+      <div class="stp done">
+        <span class="ord">02</span>
+        <span class="nm">Roomed</span>
+        <span class="meta">12:42 · 3-N · 312A</span>
+      </div>
+      <div class="stp done">
+        <span class="ord">03</span>
+        <span class="nm">Seen by attending</span>
+        <span class="meta">14:08 · Patel R MD</span>
+      </div>
+      <div class="stp cur">
+        <span class="ord">04</span>
+        <span class="nm">Awaiting disposition</span>
+        <span class="meta">labs pending · cardiology</span>
+      </div>
+      <div class="stp todo">
+        <span class="ord">05</span>
+        <span class="nm">Discharge</span>
+        <span class="meta">— pending</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. IV DRIPS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>IV drips — volume left, time left.</h2>
+      <div class="sub">A real glass bottle. The fill drops as it infuses; the bar below tracks volume; numbers track minutes.</div>
+    </div>
+
+    <div class="drips">
+      <div class="drip ok">
+        <div class="glass"></div>
+        <div>
+          <h4>0.9% NaCl</h4>
+          <div class="meta">125 mL/h · bed 312A</div>
+          <div class="bar ok"><span style="width:70%"></span></div>
+          <div class="row"><span>700 / 1,000 mL</span><span>2 h 24 m left</span></div>
+        </div>
+      </div>
+
+      <div class="drip warn">
+        <div class="glass"></div>
+        <div>
+          <h4>Vancomycin 1 g</h4>
+          <div class="meta">CCU · 207A · ending soon</div>
+          <div class="bar warn"><span style="width:96%"></span></div>
+          <div class="row"><span>192 / 200 mL</span><span style="color:var(--warn);font-weight:500">4 m left</span></div>
+        </div>
+      </div>
+
+      <div class="drip held">
+        <div class="glass"></div>
+        <div>
+          <h4>Heparin drip</h4>
+          <div class="meta">held — awaiting aPTT</div>
+          <div class="bar"><span style="width:30%;background:var(--ink-3)"></span></div>
+          <div class="row"><span>300 / 1,000 U/mL</span><span>HELD</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. GOAL PROGRESS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Goal progress — three numbers.</h2>
+      <div class="sub">A KPI tile carries one figure, one target, one bar. The colour follows the target, not the metric direction.</div>
+    </div>
+
+    <div class="goals">
+      <div class="goal">
+        <div class="nm">Hand hygiene</div>
+        <div class="now ok">94<span class="u">%</span></div>
+        <div class="bar-wrap"><div class="bar ok"><span style="width:94%"></span></div></div>
+        <div class="target ok">target ≥ 90% · ↑ 2 pp wow</div>
+      </div>
+      <div class="goal">
+        <div class="nm">CLABSI · per 1k cath days</div>
+        <div class="now ok">0.4</div>
+        <div class="bar-wrap"><div class="bar ok"><span style="width:30%"></span></div></div>
+        <div class="target ok">target ≤ 1.0 · 30% of cap</div>
+      </div>
+      <div class="goal">
+        <div class="nm">Sepsis bundle compliance</div>
+        <div class="now warn">78<span class="u">%</span></div>
+        <div class="bar-wrap"><div class="bar warn"><span style="width:78%"></span></div></div>
+        <div class="target warn">target ≥ 85% · below target</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

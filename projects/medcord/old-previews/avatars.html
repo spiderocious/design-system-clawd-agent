@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Avatars</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.avatar-stack { display:inline-flex; }
+.avatar-stack .avatar { box-shadow:0 0 0 2px #fff; margin-left:-10px; }
+.avatar-stack .avatar:first-child { margin-left:0; }
+.avatar-stack .avatar.more { background:#F1F5F8; color:#475569; font-size:11px; }
+.dot {
+  position:absolute; width:10px; height:10px; border-radius:50%; bottom:0; right:0;
+  border:2px solid #fff;
+}
+.dot.online { background:#16A34A; }
+.dot.offline { background:#94A3B8; }
+.dot.busy { background:#DC2626; }
+.dot.away { background:#F59E0B; }
+.role-ring { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--ring); }
+.id-band { position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); background:#0E1117; color:#fff; font-family:'JetBrains Mono',monospace; font-size:9px; padding:1px 6px; border-radius:9999px; white-space:nowrap; }
+.shift-pulse { position:absolute; right:-2px; top:-2px; width:10px; height:10px; border-radius:50%; background:#16A34A; box-shadow:0 0 0 2px #fff; animation:pul 2s infinite; }
+@keyframes pul {
+  0%,100% { box-shadow:0 0 0 2px #fff, 0 0 0 4px rgba(22,163,74,0.4); }
+  50% { box-shadow:0 0 0 2px #fff, 0 0 0 8px rgba(22,163,74,0); }
+}
+.crit-ring { box-shadow:0 0 0 3px #DC2626; }
+.dept-square { border-radius:6px !important; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Avatars</h1>
+<p class="spec-sub">Patient avatars carry the MRN-band when used in compact contexts. Staff avatars use a role-ring color (MD = blue, RN = green, Tech = bronze, Pharmacist = violet, Admin = neutral). Critical patients have a red ring that overrides the role-ring.</p>
+
+<div class="spec-section-label">Sizes — xs · sm · md · lg · xl · 2xl</div>
+<div class="spec-row" style="align-items:center;gap:14px">
+  <span class="avatar avatar-xs" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+  <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+  <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+  <span class="avatar avatar-lg" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+  <span class="avatar avatar-xl" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+  <span class="avatar avatar-2xl" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+</div>
+
+<div class="spec-section-label">Patient avatar — initials · photo · with status dot · with MRN-band</div>
+<div class="spec-row" style="gap:24px">
+  <div style="text-align:center"><span class="avatar avatar-lg" style="background:#FEF3C7;color:#B45309">CL</span><div class="spec-caption">initials</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg" style="background:linear-gradient(135deg,#FEF3C7,#F59E0B);color:#fff;font-size:0">·</span><div class="spec-caption">photo</div></div>
+  <div style="text-align:center;position:relative"><span class="avatar avatar-lg" style="background:#DBEAFE;color:#1D4ED8">OA"<span class="dot online"></span></span><div class="spec-caption">with status dot</div></div>
+  <div style="text-align:center;position:relative;padding-bottom:14px"><span class="avatar avatar-lg" style="background:#DBEAFE;color:#1D4ED8">OA</span><span class="id-band">10458291</span><div class="spec-caption" style="margin-top:14px">with MRN-band</div></div>
+  <div style="text-align:center;position:relative"><span class="avatar avatar-lg crit-ring" style="background:#FECACA;color:#991B1B">DM</span><div class="spec-caption" style="color:#991B1B">critical-patient ring</div></div>
+</div>
+
+<div class="spec-section-label">Staff avatar — role-ring colors</div>
+<div class="spec-row" style="gap:18px">
+  <div style="text-align:center"><span class="avatar avatar-lg role-ring" style="--ring:#1D4ED8;background:#DBEAFE;color:#1D4ED8;position:relative">RP<span class="shift-pulse"></span></span><div class="spec-caption" style="color:#1D4ED8;margin-top:6px">MD · on-shift</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg role-ring" style="--ring:#16A34A;background:#DCFCE7;color:#15803D;position:relative">AW<span class="shift-pulse"></span></span><div class="spec-caption" style="color:#15803D;margin-top:6px">RN · on-shift</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg role-ring" style="--ring:#B45309;background:#FEF3C7;color:#B45309">TJ</span><div class="spec-caption" style="color:#B45309;margin-top:6px">Tech</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg role-ring" style="--ring:#7C3AED;background:#EDE9FE;color:#6D28D9">SH</span><div class="spec-caption" style="color:#6D28D9;margin-top:6px">Pharmacist</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg role-ring" style="--ring:#475569;background:#F1F5F8;color:#475569">MK</span><div class="spec-caption" style="color:#475569;margin-top:6px">Admin</div></div>
+  <div style="text-align:center"><span class="avatar avatar-lg" style="background:#F1F5F8;color:#94A3B8;position:relative">HJ<span class="dot offline"></span></span><div class="spec-caption" style="color:#64748B;margin-top:6px">Off-shift</div></div>
+</div>
+
+<div class="spec-section-label">Department / ward avatars — squared</div>
+<div class="spec-row" style="gap:14px">
+  <div style="text-align:center">
+    <span class="avatar avatar-lg dept-square" style="background:#EFF6FF;color:#1D4ED8;font-size:18px"><svg class="icon-24" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:1.6"><path d="M3 18v-6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></span>
+    <div class="spec-caption">3-North · 18 beds</div>
+  </div>
+  <div style="text-align:center">
+    <span class="avatar avatar-lg dept-square" style="background:#FEF2F2;color:#991B1B;font-size:18px"><svg class="icon-24" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+    <div class="spec-caption">CCU · 8 beds</div>
+  </div>
+  <div style="text-align:center">
+    <span class="avatar avatar-lg dept-square" style="background:#F0FDFA;color:#0F766E;font-size:18px"><svg class="icon-24" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:1.6"><path d="M14.5 2 21 8.5 12 17.5 4.5 21 7 13.5z"/></svg></span>
+    <div class="spec-caption">OR · 6 suites</div>
+  </div>
+  <div style="text-align:center">
+    <span class="avatar avatar-lg dept-square" style="background:#FFFBEB;color:#B45309;font-size:18px"><svg class="icon-24" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:1.6"><path d="M9 2h6"/><path d="M10 2v3l-3 7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9l-3-7V2"/></svg></span>
+    <div class="spec-caption">Lab</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Avatar group / stack — overflow count</div>
+<div class="spec-row" style="gap:24px;align-items:center">
+  <div class="avatar-stack">
+    <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">RP</span>
+    <span class="avatar avatar-md" style="background:#DCFCE7;color:#15803D">AW</span>
+    <span class="avatar avatar-md" style="background:#FEF3C7;color:#B45309">TJ</span>
+  </div>
+  <div class="avatar-stack">
+    <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">RP</span>
+    <span class="avatar avatar-md" style="background:#DCFCE7;color:#15803D">AW</span>
+    <span class="avatar avatar-md" style="background:#FEF3C7;color:#B45309">TJ</span>
+    <span class="avatar avatar-md" style="background:#EDE9FE;color:#6D28D9">SH</span>
+    <span class="avatar avatar-md more">+8</span>
+  </div>
+  <div class="avatar-stack">
+    <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">RP</span>
+    <span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">AW</span>
+    <span class="avatar avatar-sm more">+12</span>
+  </div>
+</div>
+
+<div class="spec-section-label">Status dots — online · busy · away · offline</div>
+<div class="spec-row" style="gap:16px;align-items:center">
+  <div style="position:relative;display:inline-block"><span class="avatar avatar-md" style="background:#DCFCE7;color:#15803D">AW</span><span class="dot online"></span></div>
+  <div style="position:relative;display:inline-block"><span class="avatar avatar-md" style="background:#FEE2E2;color:#991B1B">DR</span><span class="dot busy"></span></div>
+  <div style="position:relative;display:inline-block"><span class="avatar avatar-md" style="background:#FEF3C7;color:#B45309">TJ</span><span class="dot away"></span></div>
+  <div style="position:relative;display:inline-block"><span class="avatar avatar-md" style="background:#F1F5F8;color:#94A3B8">HJ</span><span class="dot offline"></span></div>
+</div>
+
+</body>
+</html>

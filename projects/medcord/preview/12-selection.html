@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Selection</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* SELECTION — checkboxes, radios, switches, chips, combobox.
+     Stance: ink squares and circles, not blue iOS controls.
+     Selection is a TICK (drawn), not a fill.
+     Switches are the only "modern" idiom kept, and even they are tight. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1100px; }
+
+  .lab { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 8px; }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  .holder { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+  .holder .legend h4 { margin: 0 0 6px; font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .holder .legend p { margin: 0; font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+  /* CHECKBOX — drawn ink square with a hand-tick svg */
+  .cb {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--ink-2);
+    background: transparent;
+    border-radius: 2px;
+    flex-shrink: 0;
+    color: var(--ink);
+  }
+  .cb.checked { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .cb.checked::after {
+    content: ""; width: 8px; height: 5px;
+    border-left: 1.5px solid var(--paper);
+    border-bottom: 1.5px solid var(--paper);
+    transform: rotate(-45deg) translate(1px,-1px);
+  }
+  .cb.indet { background: var(--ink); border-color: var(--ink); }
+  .cb.indet::after { content: ""; width: 7px; height: 1.5px; background: var(--paper); }
+  .cb.dis { opacity: 0.35; }
+
+  .cb-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0;
+    font-size: 14px; color: var(--ink); cursor: pointer;
+  }
+  .cb-row .help { color: var(--ink-3); font-size: 12px; margin-left: auto; font-family: var(--mono); letter-spacing: 0; }
+
+  /* Discharge checklist scene */
+  .checklist { background: var(--sheet); border: 1px solid var(--ink); padding: 18px 22px; max-width: 480px; }
+  .checklist h3 {
+    margin: 0 0 12px;
+    font-family: var(--serif); font-size: 18px; font-weight: 500;
+    letter-spacing: -0.012em;
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .checklist h3 .ct {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; font-weight: 500;
+    margin-left: auto;
+  }
+  .checklist .cb-row { padding: 7px 0; border-bottom: 1px dashed var(--hair-soft); }
+  .checklist .cb-row:last-child { border-bottom: 0; }
+  .checklist .cb-row.done { color: var(--ink-3); }
+  .checklist .cb-row.done .label { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  /* RADIO — drawn ink circle with a centered ink dot */
+  .ra {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--ink-2);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ra.on { border-color: var(--ink); }
+  .ra.on::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+  .ra.dis { opacity: 0.35; }
+
+  /* Sex picker — radios in a row, each with a subtle pictogram */
+  .sex-row { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .sex-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+
+  /* Wong-Baker pain scale: 6 cards, each with a face drawn in serif italic
+     instead of an emoji. */
+  .pain-row {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;
+    border: 1px solid var(--ink);
+  }
+  .pain {
+    padding: 18px 16px 14px;
+    border-right: 1px solid var(--hair);
+    cursor: pointer;
+    text-align: center;
+    background: var(--sheet);
+  }
+  .pain:last-child { border-right: 0; }
+  .pain .face {
+    font-family: var(--serif); font-style: italic; font-size: 28px;
+    color: var(--ink); line-height: 1;
+  }
+  .pain .num { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--ink); margin: 8px 0 4px; letter-spacing: 0; }
+  .pain .word { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); }
+  .pain.on { background: var(--paper); }
+  .pain.on .face { color: var(--ink); transform: scale(1.05); }
+  .pain.on .word { color: var(--ink); }
+  .pain.on { box-shadow: inset 0 -3px 0 var(--ink); }
+
+  /* SWITCH — small, tight. */
+  .sw {
+    display: inline-flex; align-items: center;
+    width: 32px; height: 18px;
+    border: 1px solid var(--ink-3);
+    border-radius: 9999px;
+    background: transparent;
+    position: relative; flex-shrink: 0;
+    transition: background 100ms ease, border-color 100ms ease;
+    cursor: pointer;
+  }
+  .sw::after {
+    content: ""; position: absolute; left: 1px; top: 1px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink-2);
+    transition: left 120ms ease, background 120ms ease;
+  }
+  .sw.on { background: var(--ink); border-color: var(--ink); }
+  .sw.on::after { left: calc(100% - 15px); background: var(--paper); }
+  .sw.dis { opacity: 0.35; pointer-events: none; }
+
+  /* CHIPS — toggle filters, removable */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 24px; padding: 0 10px;
+    border: 1px solid var(--ink-3); background: transparent;
+    border-radius: 9999px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+    cursor: pointer;
+    letter-spacing: 0.005em;
+  }
+  .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip .x { color: var(--ink-3); margin-left: 2px; cursor: pointer; }
+  .chip.on .x { color: var(--paper); }
+  .chip.crit { color: var(--crit); border-color: var(--crit-edge); background: var(--crit-bg); }
+
+  /* MULTI-CHIP INPUT — allergies */
+  .chips-input {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 8px 10px;
+    border: 1px solid var(--ink);
+    background: var(--sheet);
+    align-items: center;
+    min-height: 44px;
+    border-radius: 4px;
+  }
+  .chips-input .chip-item {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--crit-edge); background: var(--crit-bg); color: var(--crit);
+    font-size: 12px; font-weight: 500;
+    border-radius: 3px;
+  }
+  .chips-input .chip-item .x { color: var(--crit); cursor: pointer; opacity: 0.6; }
+  .chips-input .chip-item.warn { border-color: var(--warn-edge); background: var(--warn-bg); color: var(--warn); }
+  .chips-input .chip-item.warn .x { color: var(--warn); }
+  .chips-input input { flex: 1; min-width: 100px; border: 0; background: transparent; outline: none; font-size: 13px; padding: 4px 0; }
+
+  /* COMBOBOX — provider picker, like the ICD-10 from inputs but for people */
+  .picker { border: 1px solid var(--ink); background: var(--sheet); }
+  .picker .head {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--ink);
+  }
+  .picker .head .pre {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .picker .head input { flex: 1; border: 0; background: transparent; outline: none; font-size: 15px; }
+  .picker .group {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 10px 16px 4px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--hair);
+  }
+  .picker .row {
+    display: grid; grid-template-columns: 32px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 10px 16px; cursor: pointer;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .picker .row:last-child { border-bottom: 0; }
+  .picker .row:hover { background: var(--paper-deep); }
+  .picker .row.on { background: var(--paper); border-left: 2px solid var(--ink); padding-left: 14px; }
+  .picker .row .who { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .picker .row .meta { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .picker .row .when {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+    text-align: right;
+  }
+  .picker .row .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green-600); display: inline-block; }
+
+  /* ROOM / BED PICKER — a small map of the wing */
+  .map {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--ink); background: var(--sheet);
+  }
+  .map .cell {
+    padding: 12px; border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
+    cursor: pointer; min-height: 84px;
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--sheet);
+    position: relative;
+  }
+  .map .cell:nth-child(even) { border-right: 1px solid var(--ink); }
+  .map .cell.last-row { border-bottom: 0; }
+  .map .cell.last-col { border-right: 0; }
+  .map .cell .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .map .cell .who { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.005em; }
+  .map .cell.empty .who { font-style: italic; color: var(--ink-3); font-weight: 400; }
+  .map .cell.empty { background: var(--paper); }
+  .map .cell.clean { background: var(--warn-bg); }
+  .map .cell.clean .who { color: var(--warn); font-style: italic; font-weight: 400; }
+  .map .cell.iso::before {
+    content: "ISO"; position: absolute; top: 0; right: 0;
+    background: var(--low); color: #fff;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.16em; padding: 2px 6px;
+    border-bottom-left-radius: 3px;
+  }
+  .map .cell.sel { background: var(--ink); color: var(--paper); }
+  .map .cell.sel .num { color: rgba(244,239,230,0.7); }
+  .map .cell.sel .who { color: var(--paper); }
+  .map .cell.off {
+    background: repeating-linear-gradient(135deg, var(--paper) 0 6px, var(--paper-deep) 6px 12px);
+  }
+  .map .cell.off .who { font-style: italic; text-decoration: line-through; color: var(--ink-3); font-weight: 400; }
+
+  .pair-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">II · 03</span>
+    <h1 class="ttl">Selection</h1>
+    <span class="meta">tick the box, draw the choice · ink controls, no iOS blue</span>
+  </header>
+
+  <!-- A. CHECKBOXES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Checkbox — discharge checklist.</h2>
+      <div class="sub">A drawn ink square with a hand-tick. Done items are struck through and quieted.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The tick</h4>
+        <p>The state isn't a coloured fill — it's a mark. Indeterminate is a single bar; that's all.</p>
+
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:11px;color:var(--ink-3)">
+          <div style="display:flex;gap:10px;align-items:center"><span class="cb"></span> default</div>
+          <div style="display:flex;gap:10px;align-items:center"><span class="cb checked"></span> checked</div>
+          <div style="display:flex;gap:10px;align-items:center"><span class="cb indet"></span> indeterminate</div>
+          <div style="display:flex;gap:10px;align-items:center"><span class="cb dis"></span> disabled</div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <h3>Pre-discharge — Adebayo, O. <span class="ct">4 of 6</span></h3>
+        <label class="cb-row done"><span class="cb checked"></span><span class="label">Medications reconciled — 8 active</span><span class="help">14:08</span></label>
+        <label class="cb-row done"><span class="cb checked"></span><span class="label">Follow-up scheduled — Patel R, 14 May</span><span class="help">14:09</span></label>
+        <label class="cb-row done"><span class="cb checked"></span><span class="label">Discharge education — cardiac diet, activity</span><span class="help">14:18</span></label>
+        <label class="cb-row done"><span class="cb checked"></span><span class="label">Prescriptions sent — Walgreens, 142 Main</span><span class="help">14:24</span></label>
+        <label class="cb-row"><span class="cb"></span><span class="label">Transportation home confirmed</span><span class="help">— pending</span></label>
+        <label class="cb-row"><span class="cb"></span><span class="label">Home health referral, if needed</span><span class="help">— pending</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. RADIO + SEX -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Radio — sex assigned at birth.</h2>
+      <div class="sub">A drawn ink circle with an ink dot. Mutually exclusive choices, four at most before they become a select.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The dot</h4>
+        <p>Same square-becomes-tick logic, but as a circle. Use for short lists; if it's longer than four, use a select.</p>
+      </div>
+
+      <div class="sex-row">
+        <label><span class="ra on"></span> Male</label>
+        <label><span class="ra"></span> Female</label>
+        <label><span class="ra"></span> Intersex</label>
+        <label><span class="ra"></span> Prefer not to say</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. WONG-BAKER PAIN -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Wong–Baker — pain scale.</h2>
+      <div class="sub">Six radio cards, drawn faces in the serif. The selected card carries an ink rule under it instead of a fill.</div>
+    </div>
+
+    <div class="pain-row">
+      <div class="pain"><div class="face">:&nbsp;)</div><div class="num">0</div><div class="word">no hurt</div></div>
+      <div class="pain on"><div class="face">: )</div><div class="num">2</div><div class="word">hurts a little</div></div>
+      <div class="pain"><div class="face">: |</div><div class="num">4</div><div class="word">hurts a little more</div></div>
+      <div class="pain"><div class="face">: (</div><div class="num">6</div><div class="word">hurts even more</div></div>
+      <div class="pain"><div class="face">&gt; (</div><div class="num">8</div><div class="word">hurts a whole lot</div></div>
+      <div class="pain"><div class="face">&gt; ;(</div><div class="num">10</div><div class="word">hurts worst</div></div>
+    </div>
+  </section>
+
+  <!-- D. SWITCHES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Switches — the only "modern" idiom.</h2>
+      <div class="sub">Tight, mono-grey when off, full ink when on. For binary preferences only — never for actions.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>When to use</h4>
+        <p>Settings panels: alarm tones, notifications, auto-page on critical, tabular figures. Never replaces a button.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;max-width:480px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hair-soft)">
+          <div>
+            <div style="font-size:14px">Auto-page attending on critical lab</div>
+            <div style="font-size:12px;color:var(--ink-3);margin-top:2px">Sends a page if a value crosses the critical line.</div>
+          </div>
+          <span class="sw on"></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hair-soft)">
+          <div>
+            <div style="font-size:14px">Tabular numerals in tables</div>
+            <div style="font-size:12px;color:var(--ink-3);margin-top:2px">Aligns digits in lab and vital columns.</div>
+          </div>
+          <span class="sw on"></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hair-soft)">
+          <div>
+            <div style="font-size:14px">Alarm tone — bedside</div>
+            <div style="font-size:12px;color:var(--ink-3);margin-top:2px">Plays an audible tone on alarms armed at this workstation.</div>
+          </div>
+          <span class="sw"></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;opacity:0.5">
+          <div>
+            <div style="font-size:14px">Beta — predictive deterioration alerts</div>
+            <div style="font-size:12px;color:var(--ink-3);margin-top:2px">Disabled by hospital administrator.</div>
+          </div>
+          <span class="sw dis"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. CHIPS — filters & removable -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Chips — filters &amp; allergies.</h2>
+      <div class="sub">Two uses: filter chips on a list (toggle on/off) and content chips inside a multi-value field.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>Filters</h4>
+        <p>The active filter is filled ink; others are outline. Use a chip when the filter is one-of-many; switch to a select when it is one-of-twenty.</p>
+      </div>
+
+      <div>
+        <div class="lab">Filter status</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px">
+          <span class="chip on">All</span>
+          <span class="chip">Admitted</span>
+          <span class="chip">In ED</span>
+          <span class="chip">Awaiting labs</span>
+          <span class="chip">Awaiting DC</span>
+          <span class="chip">Discharged</span>
+          <span class="chip crit">STAT only</span>
+        </div>
+
+        <div class="lab">Allergies — multi-value input</div>
+        <div class="chips-input">
+          <span class="chip-item">Penicillin · anaphylaxis <span class="x">×</span></span>
+          <span class="chip-item">Sulfa drugs · rash <span class="x">×</span></span>
+          <span class="chip-item warn">Latex · contact dermatitis <span class="x">×</span></span>
+          <input placeholder="Add allergy…">
+        </div>
+
+        <div class="lab" style="margin-top:24px">Active filters — removable</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="chip on">Ward · 3-North <span class="x">×</span></span>
+          <span class="chip on">Acuity · ESI 1–2 <span class="x">×</span></span>
+          <span class="chip on">Attending · Patel R <span class="x">×</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- F. COMBOBOX -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Combobox — provider picker.</h2>
+      <div class="sub">Same chart-book idiom from <em>Inputs</em>, but for people. Group by department; show on-shift status with a pulse.</div>
+    </div>
+
+    <div class="picker" style="max-width:600px">
+      <div class="head">
+        <span class="pre">Pick provider</span>
+        <input value="pa" autofocus>
+      </div>
+      <div class="group">Cardiology — on this floor now</div>
+      <div class="row on">
+        <span class="av av-md av-md-md">RP</span>
+        <div>
+          <div class="who">Patel, Reema MD <span style="color:var(--ink-3);font-style:italic;font-weight:400">— FACC</span></div>
+          <div class="meta">attending · NPI 1093847562 · pager ×4187</div>
+        </div>
+        <span class="when"><span class="pulse"></span> on shift</span>
+      </div>
+      <div class="row">
+        <span class="av av-md av-md-md">PA</span>
+        <div>
+          <div class="who">Park, Aaron DO</div>
+          <div class="meta">cardiology fellow · pager ×4203</div>
+        </div>
+        <span class="when"><span class="pulse"></span> on shift</span>
+      </div>
+      <div class="group">Internal medicine</div>
+      <div class="row">
+        <span class="av av-md av-md-md">PD</span>
+        <div>
+          <div class="who">Park, Daniel MD</div>
+          <div class="meta">hospitalist</div>
+        </div>
+        <span class="when">off shift · returns 19:00</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- G. ROOM / BED MAP -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Room &amp; bed picker — the wing as a small map.</h2>
+      <div class="sub">Same vocabulary as the <em>Bed board</em>: typeset, not coloured. Selected bed inverts to ink-on-paper.</div>
+    </div>
+
+    <div class="map">
+      <div class="cell"><span class="num">312 · A</span><span class="who">Adebayo, O</span></div>
+      <div class="cell"><span class="num">312 · B</span><span class="who">Chen, W</span></div>
+      <div class="cell empty"><span class="num">313 · A</span><span class="who">Available</span></div>
+      <div class="cell clean"><span class="num">313 · B</span><span class="who">Cleaning…</span></div>
+      <div class="cell iso"><span class="num">314 · A</span><span class="who">Diallo, M</span></div>
+      <div class="cell sel last-col"><span class="num">314 · B</span><span class="who">Selected</span></div>
+      <div class="cell off last-row"><span class="num">315 · A</span><span class="who">Off-line</span></div>
+      <div class="cell off last-row"><span class="num">315 · B</span><span class="who">Off-line</span></div>
+      <div class="cell empty last-row"><span class="num">316 · A</span><span class="who">Available</span></div>
+      <div class="cell last-row"><span class="num">316 · B</span><span class="who">Park, J</span></div>
+      <div class="cell iso last-row"><span class="num">317 · A</span><span class="who">Reed, S</span></div>
+      <div class="cell clean last-row last-col"><span class="num">317 · B</span><span class="who">Cleaning…</span></div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cross-record patterns</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* CROSS-RECORD PATTERNS — patterns that appear identically everywhere.
+     Mention chips. Approval card. Sharing dialog. Permissions matrix.
+     Audit log. Activity log. Attachment chips. Saved-view tabs. Bulk-action
+     bar. AI assist (suggestion only). HIPAA / PHI ribbon. Session context. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* MENTION chips — patient & staff */
+  .mention {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 1px 6px;
+    background: var(--paper-deep);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 3px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink);
+    letter-spacing: 0;
+  }
+  .mention .av {
+    width: 14px; height: 14px;
+    border-radius: 2px;
+    background: #DEE6D6; color: #2F4226; border: 1px solid #C4D2BC;
+    font-family: var(--sans); font-weight: 600; font-size: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .mention.patient .av { background: #ECE3D6; color: #5C4B30; border-color: #D4C4A6; border-radius: 50%; width: 14px; height: 14px; }
+  .mention.crit { color: var(--crit); border-color: var(--crit-edge); background: var(--crit-bg); }
+
+  /* DICTATED narrative with mentions inline */
+  .narrative {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 22px 28px;
+    font-family: var(--serif); font-size: 16px; line-height: 1.7;
+    color: var(--ink); letter-spacing: -0.005em;
+    max-width: 880px;
+  }
+  .narrative .speaker { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-right: 10px; }
+
+  /* APPROVAL CARD — used across modules */
+  .appr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .appr {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 18px 22px;
+  }
+  .appr .h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .appr .h .stamp { font-family: var(--mono); font-size: 9px; font-weight: 600; padding: 2px 7px; letter-spacing: 0.18em; text-transform: uppercase; background: var(--ink); color: var(--paper); }
+  .appr .h .ttl { margin-left: 4px; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; }
+  .appr .who { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-bottom: 12px; letter-spacing: 0; }
+  .appr .why { font-family: var(--serif); font-style: italic; font-size: 14px; line-height: 1.5; color: var(--ink-2); padding: 10px 14px; background: var(--paper-deep); border-left: 2px solid var(--ink); margin-bottom: 14px; }
+  .appr .meta { display: flex; gap: 18px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .appr .meta strong { color: var(--ink); font-weight: 500; }
+  .appr .actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair); justify-content: flex-end; }
+  .appr .b {
+    height: 30px; padding: 0 14px;
+    border-radius: 4px; border: 1px solid transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer;
+    background: transparent; color: var(--ink);
+  }
+  .appr .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .appr .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .appr .b-danger { color: var(--crit); }
+
+  /* SHARING DIALOG */
+  .share {
+    background: var(--sheet); border: 1px solid var(--ink);
+    box-shadow: 0 16px 36px rgba(24,22,19,0.18);
+    width: 540px;
+    overflow: hidden;
+  }
+  .share-h {
+    padding: 14px 20px; border-bottom: 1px solid var(--ink);
+    background: var(--paper-deep);
+  }
+  .share-h h3 { margin: 0; font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.012em; }
+  .share-h .sub { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+  .share-body { padding: 18px 20px; }
+  .share-input {
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 4px;
+    font-family: var(--sans); font-size: 14px; color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .share-input::after { content: "search by name, role, or department…"; color: var(--ink-3); font-style: italic; font-family: var(--serif); }
+
+  .share .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 8px; }
+
+  .share .row {
+    display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center;
+    padding: 10px 0; border-bottom: 1px dashed var(--hair-soft);
+  }
+  .share .row:last-child { border-bottom: 0; }
+  .share .row .av { width: 28px; height: 28px; background: #DEE6D6; color: #2F4226; border: 1px solid #C4D2BC; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-weight: 600; font-size: 10px; }
+  .share .row .av.role-pill { background: var(--paper-deep); border-color: var(--sheet-edge); color: var(--ink); border-radius: 9999px; padding: 0 10px; width: auto; height: 28px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .share .row .nm { font-family: var(--sans); font-size: 13px; }
+  .share .row .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0; }
+  .share .row select {
+    background: transparent; border: 0;
+    border-bottom: 1px solid var(--ink-3);
+    font-family: var(--mono); font-size: 11px; padding: 2px 4px;
+    color: var(--ink); outline: none; letter-spacing: 0;
+  }
+
+  .expiry {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--warn-bg); border: 1px dashed var(--warn-edge);
+    color: var(--warn);
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--serif); font-style: italic; font-size: 13px;
+    line-height: 1.45;
+  }
+  .expiry input[type="checkbox"] { accent-color: var(--warn); }
+  .expiry input[type="text"] {
+    background: transparent; border: 0; border-bottom: 1px solid var(--warn);
+    font-family: var(--mono); font-size: 12px; color: var(--warn); width: 110px;
+    padding: 0 4px; outline: none; font-style: normal;
+  }
+
+  /* PERMISSIONS MATRIX */
+  .matrix {
+    background: var(--sheet); border: 1px solid var(--ink);
+    overflow: hidden;
+  }
+  .matrix table { border-collapse: collapse; width: 100%; }
+  .matrix th, .matrix td {
+    padding: 10px 12px;
+    text-align: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+    border-bottom: 1px solid var(--hair);
+    border-right: 1px solid var(--hair);
+  }
+  .matrix th:last-child, .matrix td:last-child { border-right: 0; }
+  .matrix tr:last-child td { border-bottom: 0; }
+  .matrix th {
+    background: var(--paper-deep);
+    font-size: 10px; font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em;
+    border-bottom: 1px solid var(--ink);
+  }
+  .matrix td:first-child, .matrix th:first-child {
+    text-align: left;
+    font-family: var(--sans); font-size: 13px; color: var(--ink); font-weight: 500;
+    letter-spacing: 0;
+    padding-left: 18px;
+  }
+  .matrix td.y { color: var(--green-800); font-weight: 600; }
+  .matrix td.n { color: var(--ink-4); }
+  .matrix td.warn { color: var(--warn); font-weight: 600; }
+  .matrix td.read { color: var(--ink-2); }
+
+  /* AUDIT LOG */
+  .audit {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .audit-row {
+    display: grid; grid-template-columns: 140px 1fr 2fr auto;
+    gap: 14px; align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px dashed var(--hair-soft);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0;
+  }
+  .audit-row:last-child { border-bottom: 0; }
+  .audit-row.head-row {
+    background: var(--paper-deep); border-bottom: 1px solid var(--ink); padding: 8px 20px;
+    font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .audit-row.warn { background: var(--warn-bg); }
+  .audit-row.warn td { color: var(--warn); }
+  .audit-row.crit { background: var(--crit-bg); box-shadow: inset 4px 0 0 var(--crit); }
+  .audit-row .when { color: var(--ink); }
+  .audit-row .who { font-family: var(--sans); color: var(--ink); font-size: 13px; font-weight: 500; }
+  .audit-row .what { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); letter-spacing: 0; }
+  .audit-row.warn .what { color: var(--warn); }
+  .audit-row.crit .what { color: var(--crit); }
+  .audit-row .stat {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 9999px; border: 1px solid;
+  }
+  .audit-row .stat.ok { color: var(--green-800); border-color: var(--green-200); background: var(--green-50); }
+  .audit-row .stat.warn { color: var(--warn); border-color: var(--warn-edge); background: var(--paper); }
+  .audit-row .stat.crit { color: var(--crit); border-color: var(--crit); background: var(--paper); }
+
+  /* ATTACHMENT chips */
+  .att {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: var(--paper-deep); border: 1px solid var(--sheet-edge);
+    border-radius: 4px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink);
+  }
+  .att .icon {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    color: #fff; padding: 1px 4px; border-radius: 1px;
+    letter-spacing: 0.06em;
+  }
+  .att .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-left: 4px; letter-spacing: 0; }
+
+  /* SAVED-VIEW TABS */
+  .saved {
+    display: flex; gap: 6px; padding: 6px 8px;
+    background: var(--paper-deep); border: 1px solid var(--ink);
+    align-items: center;
+  }
+  .saved .tab {
+    height: 26px; padding: 0 12px;
+    border: 1px solid var(--sheet-edge); background: var(--sheet);
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+    border-radius: 3px; cursor: pointer;
+  }
+  .saved .tab.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .saved .tab .ct { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .saved .tab.on .ct { color: rgba(244,239,230,0.65); }
+  .saved .tab.crit { color: var(--crit); border-color: var(--crit-edge); background: var(--crit-bg); }
+  .saved .tab.crit .ct { color: var(--crit); }
+  .saved .add {
+    color: var(--ink-3); font-family: var(--sans); font-size: 12px; cursor: pointer;
+    border-bottom: 1px dashed var(--ink-3); padding: 0 4px 1px;
+  }
+
+  /* BULK-ACTION BAR — black tape */
+  .bulk {
+    display: inline-flex; align-items: center; gap: 18px;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 18px;
+    box-shadow: 0 16px 36px rgba(24,22,19,0.18);
+    border-radius: 9999px;
+  }
+  .bulk .ct { font-family: var(--mono); font-size: 11px; color: rgba(244,239,230,0.65); letter-spacing: 0; }
+  .bulk .ct strong { color: var(--paper); font-weight: 500; }
+  .bulk a {
+    color: var(--paper); font-family: var(--sans); font-size: 12px; text-decoration: none;
+    border-bottom: 1px solid transparent; padding-bottom: 2px; cursor: pointer; letter-spacing: 0.005em;
+  }
+  .bulk a:hover { border-bottom-color: var(--paper); }
+  .bulk a.danger { color: #FCA5A5; }
+  .bulk .x { color: rgba(244,239,230,0.65); cursor: pointer; opacity: 0.85; }
+
+  /* AI ASSIST chips */
+  .ai-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ai-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 12px;
+    background: var(--paper); border: 1px dashed var(--ink);
+    font-family: var(--mono); font-size: 11px; color: var(--ink); letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .ai-chip svg { width: 12px; height: 12px; }
+  .ai-note {
+    font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3);
+    margin-top: 12px; line-height: 1.5; max-width: 56ch;
+  }
+
+  /* PHI RIBBON */
+  .phi-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .phi {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; border-radius: 1px;
+  }
+  .phi.crit { background: var(--crit); }
+  .phi.deid { background: var(--green-700); }
+  .phi .lock {
+    width: 10px; height: 10px;
+    border: 1.5px solid currentColor;
+    border-radius: 1px;
+    position: relative;
+  }
+  .phi .lock::before {
+    content: ""; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+    width: 6px; height: 6px;
+    border: 1.5px solid currentColor; border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+  }
+
+  /* SESSION CONTEXT */
+  .sess {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 12px 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-2); letter-spacing: 0;
+  }
+  .sess .live { width: 6px; height: 6px; border-radius: 50%; background: var(--green-600); }
+  .sess strong { color: var(--ink); font-weight: 500; }
+  .sess .clock { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">V · 03</span>
+    <h1>Cross-record patterns.</h1>
+    <span class="meta">identical wherever they appear</span>
+  </header>
+
+  <!-- A. MENTIONS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Mention chips — patient &amp; staff.</h2>
+      <div class="sub">A small mono chip with a tiny avatar. Set inside running narrative; reads as <em>part of</em> the sentence, not a button.</div>
+    </div>
+
+    <div class="narrative">
+      <div style="margin-bottom:12px"><span class="speaker">Note · 14:08</span></div>
+      <span class="mention patient"><span class="av">OA</span>@MRN-10458291 Adebayo, O.</span>
+      was seen by
+      <span class="mention"><span class="av">RP</span>@Dr.Patel</span>
+      at 14:08. Repeat troponin pending. Plan to discharge after the 6-hour result if negative.
+      <br><br>
+      <span class="mention crit"><span class="av" style="background:#F2DCD8;color:#7F1D1D;border-color:#E5BAB3;border-radius:50%">SH</span>@MRN-10778123 Hadi, S.</span>
+      transferred to CCU 207A; cath team paged.
+      <span class="mention"><span class="av" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">AW</span>@Williams.RN</span>
+      bedside.
+    </div>
+  </section>
+
+  <!-- B. APPROVAL CARDS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Approval card — one shape, three modules.</h2>
+      <div class="sub">PTO, equipment, consults — the same card. A serif title, an italic quote of the request, mono metadata, two actions.</div>
+    </div>
+
+    <div class="appr-grid">
+      <div class="appr">
+        <div class="h">
+          <span class="stamp">PTO</span>
+          <span class="ttl">Five-day vacation request.</span>
+        </div>
+        <div class="who">Williams, A RN · 3-N · charge</div>
+        <div class="why">"Daughter's school recital in Cleveland. Happy to take any of yours next week — let me know."</div>
+        <div class="meta">
+          <span><strong>May 12 → May 18</strong> · 5 working days</span>
+          <span>balance after · <strong>42 h</strong></span>
+        </div>
+        <div class="actions">
+          <button class="b b-danger">Decline</button>
+          <button class="b b-primary">Approve</button>
+        </div>
+      </div>
+
+      <div class="appr">
+        <div class="h">
+          <span class="stamp">Equipment</span>
+          <span class="ttl">Bedside ultrasound request.</span>
+        </div>
+        <div class="who">Williams, A RN · 3-N · for 312A</div>
+        <div class="why">"Difficult IV access on Mr. Adebayo. Bedside vascular ultrasound to find a usable vein."</div>
+        <div class="meta">
+          <span>requested <strong>14:42</strong></span>
+          <span>nearest unit · <strong>BP-04</strong></span>
+        </div>
+        <div class="actions">
+          <button class="b b-danger">Decline</button>
+          <button class="b b-primary">Send unit BP-04</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. SHARING DIALOG -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Sharing — specific people, roles, expiry.</h2>
+      <div class="sub">Share an encounter with a person, a role, or a service. Temporary access expires; permanent access requires HR approval.</div>
+    </div>
+
+    <div style="display:flex;justify-content:center;padding:24px 0">
+      <div class="share">
+        <div class="share-h">
+          <h3>Share access · ENC-2026-04-29-1184 · Adebayo, O.</h3>
+          <div class="sub">requested by R. Patel MD · 14:42</div>
+        </div>
+        <div class="share-body">
+          <div class="share-input"></div>
+
+          <div class="lbl">Currently shared with</div>
+
+          <div class="row">
+            <span class="av">RP</span>
+            <div>
+              <div class="nm">Patel, Reema MD</div>
+              <div class="meta">attending · cardiology</div>
+            </div>
+            <select><option>Edit</option><option>View only</option></select>
+          </div>
+
+          <div class="row">
+            <span class="av" style="background:#DDE3D4;color:#495939;border-color:#C2CCB4">AW</span>
+            <div>
+              <div class="nm">Williams, Aiyana RN</div>
+              <div class="meta">3-N · charge</div>
+            </div>
+            <select><option>Edit</option><option>View only</option></select>
+          </div>
+
+          <div class="row">
+            <span class="av role-pill">Cardiology · all attendings</span>
+            <div></div>
+            <select><option>View only</option></select>
+          </div>
+
+          <div class="expiry">
+            <input type="checkbox" checked>
+            Temporary access · expires
+            <input type="text" value="2026-05-08">
+            at 23:59. After this, sharing is automatically revoked.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. PERMISSIONS MATRIX -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Permissions matrix — role × resource × action.</h2>
+      <div class="sub">The same matrix decides what can be done in every module. Y for full read/write, R for read-only, "warn" for actions that log to audit, dash for "not applicable."</div>
+    </div>
+
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Patient demographics</th>
+            <th>Vitals · labs</th>
+            <th>Order entry</th>
+            <th>Sign notes</th>
+            <th>e-Prescribe</th>
+            <th>Override allergy</th>
+            <th>Audit log</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MD · Attending</td>
+            <td class="y">R / W</td><td class="y">R / W</td><td class="y">R / W</td><td class="y">R / W</td><td class="y">R / W</td><td class="warn">Y · logged</td><td class="read">R</td>
+          </tr>
+          <tr>
+            <td>MD · Resident</td>
+            <td class="y">R / W</td><td class="y">R / W</td><td class="y">R / W *</td><td class="warn">co-sign req</td><td class="y">R / W</td><td class="n">No</td><td class="read">R</td>
+          </tr>
+          <tr>
+            <td>RN · Charge</td>
+            <td class="y">R / W</td><td class="y">R / W</td><td class="warn">protocols only</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="read">R</td>
+          </tr>
+          <tr>
+            <td>RN · Bedside</td>
+            <td class="read">R</td><td class="y">R / W</td><td class="warn">verbal · co-sign</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">—</td>
+          </tr>
+          <tr>
+            <td>Pharmacist</td>
+            <td class="read">R</td><td class="read">R</td><td class="warn">verify only</td><td class="n">No</td><td class="y">R / W</td><td class="warn">flag · contest</td><td class="read">R</td>
+          </tr>
+          <tr>
+            <td>Front desk · Admin</td>
+            <td class="y">R / W</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">—</td>
+          </tr>
+          <tr>
+            <td>Patient · portal</td>
+            <td class="read">R own</td><td class="read">R own</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="read">R own</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- E. AUDIT LOG -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Audit log — HIPAA, always present.</h2>
+      <div class="sub">Every PHI read and every record write. Override and break-the-glass entries highlight in amber and red.</div>
+    </div>
+
+    <div class="audit">
+      <div class="audit-row head-row">
+        <div>Timestamp</div>
+        <div>User · workstation</div>
+        <div>Action · resource</div>
+        <div>Outcome</div>
+      </div>
+      <div class="audit-row">
+        <div class="when">2026-05-01 14:42:08</div>
+        <div class="who">Patel, R MD · NUR-CCU-02</div>
+        <div class="what">Acknowledged critical lab — Troponin 2.10 ng/mL · Hadi, S</div>
+        <div><span class="stat ok">OK</span></div>
+      </div>
+      <div class="audit-row">
+        <div class="when">2026-05-01 14:08:14</div>
+        <div class="who">Patel, R MD · NUR-3N-04</div>
+        <div class="what">Signed progress note · ENC-2026-04-29-1184 · Adebayo, O</div>
+        <div><span class="stat ok">OK</span></div>
+      </div>
+      <div class="audit-row warn">
+        <div class="when">2026-05-01 09:18:42</div>
+        <div class="who">Khan, M MD · NUR-IM-01</div>
+        <div class="what">Override penicillin allergy — ordered Cefepime · justification logged</div>
+        <div><span class="stat warn">Override · logged</span></div>
+      </div>
+      <div class="audit-row crit">
+        <div class="when">2026-04-30 22:14:08</div>
+        <div class="who">Reed, J · NUR-3N-02</div>
+        <div class="what">Break-the-glass · accessed Adebayo, O — no treatment relationship</div>
+        <div><span class="stat crit">Flagged · review</span></div>
+      </div>
+      <div class="audit-row">
+        <div class="when">2026-04-30 06:38:02</div>
+        <div class="who">system · LIS-INTERFACE</div>
+        <div class="what">Lab results imported · CBC, BMP · Adebayo, O</div>
+        <div><span class="stat ok">OK</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- F. ATTACHMENTS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Attachments — labelled like file folders.</h2>
+      <div class="sub">A coloured-mono tag (PDF, DCM, JPG, LAB), the filename in sans, the meta in mono. The tag never carries decorative colour.</div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <span class="att"><span class="icon" style="background:var(--ink)">PDF</span> ECG_2026-04-30.pdf <span class="meta">218 KB</span></span>
+      <span class="att"><span class="icon" style="background:var(--ink)">DCM</span> chest_pa_001.dcm <span class="meta">2.1 MB</span></span>
+      <span class="att"><span class="icon" style="background:var(--green-700)">LAB</span> trop_trend.csv <span class="meta">resulted 14:42</span></span>
+      <span class="att"><span class="icon" style="background:var(--low)">JPG</span> wound_photo.jpg <span class="meta">1.4 MB · sensitive</span></span>
+      <span class="att"><span class="icon" style="background:var(--ink-2)">DOC</span> consent_signed.pdf <span class="meta">+ witness sig</span></span>
+      <span class="att"><span class="icon" style="background:var(--warn)">CARD</span> BCBS_member.pdf <span class="meta">verified</span></span>
+    </div>
+  </section>
+
+  <!-- G. SAVED VIEWS + BULK -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Saved views &amp; bulk-action bar.</h2>
+      <div class="sub">Saved worklists are tabs along the top of the worklist. The bulk bar is a black tape that appears when rows are selected.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="saved">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-right:6px">Saved</span>
+        <span class="tab on">My panel <span class="ct">12</span></span>
+        <span class="tab">3-North all <span class="ct">42</span></span>
+        <span class="tab">Discharge today <span class="ct">8</span></span>
+        <span class="tab crit">STAT only <span class="ct">1</span></span>
+        <span class="tab">Awaiting labs <span class="ct">11</span></span>
+        <span class="add">+ Save current view</span>
+      </div>
+
+      <div style="display:flex;justify-content:center;padding:24px 0;background:var(--paper-deep);border:1px solid var(--hair)">
+        <div class="bulk">
+          <span style="display:inline-flex;width:14px;height:14px;border:1.5px solid var(--paper);background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:9px;align-items:center;justify-content:center">✓</span>
+          <span class="ct"><strong>3</strong> patients selected</span>
+          <a>Assign attending</a>
+          <a>Add tag</a>
+          <a>Export CSV</a>
+          <a class="danger">Discharge × 3</a>
+          <span class="x">×</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H. AI ASSIST -->
+  <section class="section">
+    <div class="section-h">
+      <h2>AI assist — suggestions, never actions.</h2>
+      <div class="sub">A row of mono chips with dashed borders. Pressing one drafts a suggestion; the clinician reviews and accepts. AI never writes to the chart unattended.</div>
+    </div>
+
+    <div class="ai-row">
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Summarize chart</span>
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Draft progress note</span>
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Suggest differential</span>
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Auto-code · ICD-10</span>
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Translate consent · ESP</span>
+      <span class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>Find recent imaging</span>
+    </div>
+    <p class="ai-note">"AI is a junior on the team — it drafts, you sign. Every suggestion is logged with which model produced it; nothing goes to the chart without your name on it."</p>
+  </section>
+
+  <!-- I. PHI / SESSION -->
+  <section class="section">
+    <div class="section-h">
+      <h2>HIPAA · PHI ribbon &amp; session context.</h2>
+      <div class="sub">Three sensitivity levels — protected, sensitive, de-identified. The session-context strip names the workstation and the auto-lock countdown.</div>
+    </div>
+
+    <div class="phi-row" style="margin-bottom:18px">
+      <span class="phi"><span class="lock"></span>Contains PHI · HIPAA-protected</span>
+      <span class="phi crit"><span class="lock"></span>Sensitive · psychiatric</span>
+      <span class="phi deid"><span class="lock"></span>De-identified · safe to share</span>
+    </div>
+
+    <div class="sess">
+      <span class="live"></span>
+      <span><strong>NUR-3N-04</strong> · 3-North charge desk · shared device</span>
+      <span class="clock">⏱ 4 m 12 s since last input · auto-locks at 5 m</span>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

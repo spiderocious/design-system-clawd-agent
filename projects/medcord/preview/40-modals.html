@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Modals</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* MODALS — the sheets that block the page.
+     Stance: a sheet fastened to the desk with a paper clip.
+     Confirm-modal is a small sheet. The CRITICAL modal carries an
+     arterial-red rule on the leading edge and a mono stamp; two-person
+     verification splits the sheet down the middle; break-the-glass is
+     the heaviest, ink-on-paper. */
+
+  body { background: var(--paper); }
+  .stage { max-width: 1180px; margin: 0 auto; padding: 28px 32px 96px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* STAGE — a darker-paper field with a faint scrim, modal centred */
+  .modal-stage {
+    background: var(--paper-deep);
+    border: 1px solid var(--hair);
+    padding: 56px;
+    margin-bottom: 36px;
+    position: relative;
+    display: flex; align-items: flex-start; justify-content: center;
+    min-height: 200px;
+  }
+  .modal-stage::before {
+    content: ""; position: absolute; inset: 0;
+    background: rgba(24,22,19,0.18);
+  }
+  .modal-stage .label {
+    position: absolute; top: 14px; left: 18px;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    z-index: 1;
+  }
+
+  /* MODAL base */
+  .modal {
+    position: relative; z-index: 2;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    box-shadow: 0 24px 48px rgba(24,22,19,0.24);
+    width: 480px;
+    overflow: hidden;
+  }
+  .modal.sm { width: 380px; }
+  .modal.md { width: 520px; }
+  .modal.lg { width: 720px; }
+
+  .modal-h {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 12px;
+    background: var(--paper-deep);
+  }
+  .modal-h h2 { margin: 0; font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.012em; }
+  .modal-h .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .modal-h .x {
+    background: transparent; border: 0; cursor: pointer;
+    color: var(--ink-3); font-size: 18px; line-height: 1;
+  }
+
+  .modal-b {
+    padding: 22px 26px;
+    font-size: 14px; line-height: 1.55; color: var(--ink-2);
+  }
+  .modal-b .quote {
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    color: var(--ink); line-height: 1.5; letter-spacing: -0.005em;
+    margin-bottom: 14px;
+  }
+
+  .modal-foot {
+    padding: 14px 22px;
+    border-top: 1px solid var(--hair);
+    display: flex; align-items: center; gap: 8px;
+    background: var(--paper-deep);
+  }
+  .modal-foot .gap { flex: 1; }
+
+  .b {
+    height: 32px; padding: 0 14px;
+    border-radius: 4px; border: 1px solid transparent;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    cursor: pointer; background: transparent;
+    color: var(--ink);
+  }
+  .b-quiet { color: var(--ink-3); }
+  .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .b-danger { color: var(--crit); border-color: var(--crit); }
+  .b-danger:hover { background: var(--crit); color: #fff; }
+  .b-irrev { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; padding: 0 18px; }
+  .b-irrev::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--crit); }
+
+  /* CRITICAL MODAL — special framing */
+  .modal.critical {
+    border-color: var(--ink);
+    box-shadow: 0 24px 48px rgba(24,22,19,0.32);
+    position: relative;
+  }
+  .modal.critical::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 6px; background: var(--crit);
+  }
+  .modal.critical .modal-h {
+    background: var(--crit); color: #fff;
+    border-bottom-color: var(--crit);
+  }
+  .modal.critical .modal-h h2 { color: #fff; }
+  .modal.critical .modal-h .meta { color: rgba(255,255,255,0.75); }
+  .modal.critical .modal-h .x { color: rgba(255,255,255,0.85); }
+
+  .crit-callout {
+    background: var(--crit-bg);
+    border: 1px solid var(--crit-edge);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .crit-callout .nm {
+    font-family: var(--serif); font-size: 17px; font-weight: 500;
+    color: var(--crit); letter-spacing: -0.005em;
+  }
+  .crit-callout .quote {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--crit); margin-top: 6px; line-height: 1.5;
+  }
+  .crit-callout .quote strong { font-style: normal; font-weight: 600; }
+
+  .field {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-bottom: 14px;
+  }
+  .field .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .field input, .field select, .field textarea {
+    background: transparent; border: 0;
+    border-bottom: 1px solid var(--ink-3);
+    padding: 4px 0 6px;
+    font-family: var(--sans); font-size: 14px;
+    outline: none; color: var(--ink); letter-spacing: 0;
+    width: 100%;
+  }
+  .field textarea {
+    border: 1px solid var(--ink-3);
+    background: var(--paper);
+    padding: 8px 10px;
+    font-family: var(--serif); font-style: italic;
+    line-height: 1.5;
+    resize: vertical; min-height: 64px;
+  }
+  .field input:focus, .field select:focus { border-bottom-color: var(--ink); }
+  .field textarea:focus { border-color: var(--ink); }
+
+  .audit-note {
+    margin-top: 14px;
+    padding: 8px 12px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .audit-note .stamp {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    background: var(--crit); color: #fff;
+    padding: 2px 6px; border-radius: 1px;
+  }
+
+  /* DESTRUCTIVE TYPED CONFIRM */
+  .typed {
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .typed code {
+    font-family: var(--mono); font-size: 13px;
+    background: var(--paper-deep); color: var(--ink);
+    padding: 2px 6px; border-radius: 2px; letter-spacing: 0.12em;
+  }
+  .typed input {
+    background: transparent; border: 0;
+    border-bottom: 1.5px solid var(--ink);
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 18px; padding: 4px 0; outline: none; flex: 1;
+    color: var(--ink); letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* TWO-PERSON VERIFICATION — split modal */
+  .two {
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .two .col {
+    padding: 22px 26px;
+    border-right: 1px solid var(--ink);
+  }
+  .two .col:last-child { border-right: 0; background: var(--paper); }
+  .two .col h3 {
+    margin: 0 0 4px;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .two .col .who {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .two .col .who .av {
+    width: 36px; height: 36px;
+    background: #DDE3D4; color: #495939; border: 1px solid #C2CCB4; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 13px;
+  }
+  .two .col .who .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .two .col .who .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .two .col.pending .who .av { background: var(--paper-deep); color: var(--ink-3); border-color: var(--sheet-edge); border-style: dashed; }
+  .two .col.pending .who .nm { color: var(--ink-3); font-style: italic; }
+  .two .verified {
+    font-family: var(--mono); font-size: 11px; color: var(--green-800); letter-spacing: 0;
+    margin-top: 10px;
+  }
+
+  /* SESSION TIMEOUT */
+  .timeout-h { text-align: center; padding: 24px 22px 0; background: var(--sheet); border-bottom: 0; }
+  .timeout-h h2 { margin: 0 0 8px; }
+  .timeout-clock {
+    display: inline-flex; align-items: baseline; justify-content: center; gap: 4px;
+    margin: 18px 0 6px;
+  }
+  .timeout-clock .num {
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 56px; font-weight: 500; letter-spacing: -0.04em;
+    line-height: 1; color: var(--ink);
+  }
+  .timeout-clock .num.warn { color: var(--warn); }
+  .timeout-clock .u {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .timeout-msg {
+    font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px;
+    text-align: center; margin: 0 0 18px; padding: 0 22px;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">V · 01</span>
+    <h1>Modals.</h1>
+    <span class="meta">five sheets, fastened to the desk</span>
+  </header>
+
+  <!-- A. CONFIRM -->
+  <div class="modal-stage" style="min-height:240px">
+    <span class="label">a · confirm</span>
+    <div class="modal sm">
+      <div class="modal-h">
+        <h2>Discontinue Lisinopril?</h2>
+        <button class="x">×</button>
+      </div>
+      <div class="modal-b">
+        This medication will be marked discontinued effective now. The MAR row will close. You can reorder from the chart if needed.
+      </div>
+      <div class="modal-foot">
+        <span class="gap"></span>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-danger">Discontinue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. CRITICAL — drug allergy override -->
+  <div class="modal-stage" style="min-height:480px">
+    <span class="label">b · critical · drug allergy override</span>
+    <div class="modal critical md">
+      <div class="modal-h">
+        <h2>Allergy override · explicit acknowledgement required</h2>
+        <span class="meta">CRITICAL</span>
+        <button class="x">×</button>
+      </div>
+      <div class="modal-b">
+        <div class="crit-callout">
+          <div class="nm">Penicillin · anaphylaxis</div>
+          <div class="quote">You are ordering <strong>Amoxicillin 500 mg PO TID</strong> — same drug class. This is a potentially life-threatening interaction.</div>
+        </div>
+
+        <div class="field">
+          <div class="lbl">Reason for override · required</div>
+          <select>
+            <option>— select reason —</option>
+            <option>Benefit outweighs risk · documented</option>
+            <option>Reaction was non-anaphylactic / mild</option>
+            <option>Patient tolerates current dose</option>
+            <option>Other (specify)</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <div class="lbl">Clinical justification</div>
+          <textarea placeholder="Detail the clinical rationale and what alternatives were considered…"></textarea>
+        </div>
+
+        <div class="audit-note">
+          <span class="stamp">Audit</span>
+          This action will be logged with your name, time, and workstation. The pharmacist will review.
+        </div>
+      </div>
+      <div class="modal-foot">
+        <span class="gap"></span>
+        <button class="b b-secondary">Cancel · do not order</button>
+        <button class="b b-irrev">Override and order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. TYPED CONFIRM — discharge AMA -->
+  <div class="modal-stage" style="min-height:280px">
+    <span class="label">c · typed confirm · discharge AMA</span>
+    <div class="modal sm">
+      <div class="modal-h">
+        <h2>Discharge against medical advice</h2>
+        <button class="x">×</button>
+      </div>
+      <div class="modal-b">
+        <p style="margin:0 0 14px;font-size:13px;color:var(--ink-2);line-height:1.55">This action is irreversible and requires attending sign-off. The patient will be marked AMA, and the consequences will be entered into the chart.</p>
+
+        <div class="field" style="margin-bottom:6px">
+          <div class="lbl">Type <code style="font-family:var(--mono);font-size:13px;background:var(--paper-deep);padding:2px 6px;border-radius:2px;letter-spacing:0.06em">DISCHARGE</code> to confirm</div>
+        </div>
+        <div class="typed">
+          <input value="DISCHARG" placeholder="DISCHARGE">
+        </div>
+        <div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--warn);margin-top:8px">
+          one character missing
+        </div>
+      </div>
+      <div class="modal-foot">
+        <span class="gap"></span>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-danger" style="opacity:0.4;cursor:not-allowed">Discharge AMA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. TWO-PERSON VERIFICATION -->
+  <div class="modal-stage" style="min-height:420px">
+    <span class="label">d · two-person verification · insulin drip</span>
+    <div class="modal lg">
+      <div class="modal-h">
+        <h2>Two-person verification · Insulin drip</h2>
+        <span class="meta">high-risk</span>
+        <button class="x">×</button>
+      </div>
+      <div class="modal-b" style="padding:0">
+        <div style="padding:14px 22px;background:var(--ink);color:var(--paper);font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5">
+          Verify dose, concentration, and patient identity. Both signatures are required before infusion can begin.
+        </div>
+
+        <div class="two">
+          <div class="col">
+            <h3>Primary nurse</h3>
+            <div class="who">
+              <span class="av">AW</span>
+              <div>
+                <div class="nm">Williams, Aiyana RN</div>
+                <div class="role">3-N · BSN · pager ×3214</div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="lbl">Badge PIN</div>
+              <input type="password" value="••••••" style="font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:18px;letter-spacing:0.2em">
+            </div>
+            <div class="verified">✓ authenticated · 14:42:08</div>
+          </div>
+
+          <div class="col pending">
+            <h3>Witness · second RN</h3>
+            <div class="who">
+              <span class="av">?</span>
+              <div>
+                <div class="nm">Awaiting witness</div>
+                <div class="role">scan badge or type ID</div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="lbl">Badge ID</div>
+              <input placeholder="scan or type">
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <div class="lbl">PIN</div>
+              <input type="password" placeholder="••••••" style="font-family:var(--mono)">
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 22px;background:var(--crit-bg);border-top:1px solid var(--crit-edge)">
+          <div style="font-family:var(--serif);font-size:13px;color:var(--crit);font-weight:500;margin-bottom:4px">Verifying</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--crit);letter-spacing:0">Insulin regular · 100 U / 100 mL NS · start 4 U/h · titrate per protocol</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <span class="gap"></span>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-primary" style="opacity:0.4;cursor:not-allowed">Both signatures required</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- E. SESSION TIMEOUT -->
+  <div class="modal-stage" style="min-height:340px">
+    <span class="label">e · session timeout · HIPAA</span>
+    <div class="modal sm">
+      <div class="modal-h" style="background:var(--warn-bg);border-bottom-color:var(--warn-edge)">
+        <h2 style="color:var(--warn)">Session locking soon</h2>
+        <button class="x" style="color:var(--warn)">×</button>
+      </div>
+      <div class="timeout-h">
+        <div class="timeout-clock">
+          <span class="num warn">0</span><span class="num warn">:</span><span class="num warn">42</span>
+          <span class="u" style="margin-left:10px">remaining</span>
+        </div>
+      </div>
+      <p class="timeout-msg">Workstation NUR-3N-04 will lock for HIPAA in 42 seconds. Move the mouse or press a key to extend.</p>
+      <div class="modal-foot">
+        <button class="b b-secondary">Lock now</button>
+        <span class="gap"></span>
+        <button class="b b-primary">Stay signed in</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- F. BREAK-THE-GLASS -->
+  <div class="modal-stage" style="min-height:480px">
+    <span class="label">f · break-the-glass · emergency PHI access</span>
+    <div class="modal critical md">
+      <div class="modal-h" style="background:var(--ink);border-bottom-color:var(--ink)">
+        <h2>⚡ Break-the-glass · emergency access</h2>
+        <span class="meta">requires reason</span>
+        <button class="x">×</button>
+      </div>
+      <div class="modal-b">
+        <div class="crit-callout">
+          <div class="nm">No treatment relationship</div>
+          <div class="quote">You are not currently caring for this patient. Accessing this chart will open an audit alert and trigger a HIPAA review by the privacy officer.</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper-deep);border:1px solid var(--sheet-edge);margin-bottom:18px">
+          <span style="width:32px;height:32px;border-radius:50%;background:#ECE3D6;color:#5C4B30;border:1px solid #D4C4A6;display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-weight:600;font-size:12px">OA</span>
+          <div>
+            <div style="font-family:var(--serif);font-size:15px;font-weight:500">Adebayo, Olumide · 64 M</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">MRN 10458291 · 3-N · 312A</div>
+          </div>
+          <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--crit);letter-spacing:0.18em;text-transform:uppercase;border:1px solid var(--crit);padding:3px 8px">Contains PHI</span>
+        </div>
+
+        <div class="field">
+          <div class="lbl">Reason for access · required</div>
+          <select>
+            <option>— select —</option>
+            <option>Emergency treatment</option>
+            <option>Code response (rapid response / code blue)</option>
+            <option>Cross-coverage for absent provider</option>
+            <option>Quality / peer review</option>
+            <option>Other (specify)</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <div class="lbl">Clinical justification</div>
+          <textarea placeholder="Specific reason · what care is being delivered · who requested…"></textarea>
+        </div>
+
+        <div class="audit-note">
+          <span class="stamp">Logged</span>
+          your name · timestamp · workstation · every field viewed
+        </div>
+      </div>
+      <div class="modal-foot">
+        <span class="gap"></span>
+        <button class="b b-secondary">Cancel</button>
+        <button class="b b-irrev">Acknowledge &amp; access chart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

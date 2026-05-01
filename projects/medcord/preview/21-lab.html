@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lab specimen</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* LAB SPECIMEN — the showpiece data display.
+     Each lab row is treated as TYPESET, not tabular: a big mono number,
+     the unit small to its right, the reference range under it, and a
+     marker on a hairline where the value sits within range.
+     Critical values bleed arterial red from the leading edge. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1100px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink);
+    margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 {
+    margin: 0; flex: 1;
+    font-family: var(--serif); font-size: 28px; font-weight: 500;
+    letter-spacing: var(--track-display);
+  }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* Panel — a printed lab printout */
+  .panel {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    margin-bottom: 36px;
+  }
+  .panel-h {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 16px;
+    background: var(--paper-deep);
+  }
+  .panel-h h2 {
+    margin: 0;
+    font-family: var(--serif); font-size: 20px; font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+  .panel-h .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+    margin-left: auto;
+  }
+  .panel-h .lot {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em;
+  }
+
+  /* Each lab is a row; rows separated by hairlines */
+  .lab-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1.2fr 1fr;
+    column-gap: 24px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--hair-soft);
+    align-items: center;
+  }
+  .lab-row:last-child { border-bottom: 0; }
+  .lab-row.crit { background: linear-gradient(to right, var(--crit-bg) 0%, transparent 60%); box-shadow: inset 4px 0 0 var(--crit); }
+  .lab-row.h { background: linear-gradient(to right, var(--warn-bg) 0%, transparent 60%); }
+  .lab-row.l { background: linear-gradient(to right, var(--low-bg) 0%, transparent 60%); }
+
+  .lab-row .name {
+    font-family: var(--serif); font-size: 17px; font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .lab-row .name .full { color: var(--ink); }
+  .lab-row .name .alt { color: var(--ink-3); font-style: italic; font-weight: 400; font-size: 14px; }
+  .lab-row .ord { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0; }
+
+  /* The value — big mono. Unit is small. */
+  .lab-row .val {
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 36px; font-weight: 500; line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .lab-row .val .u {
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    font-weight: 500; letter-spacing: 0.02em;
+  }
+  .lab-row.h .val { color: var(--warn); }
+  .lab-row.l .val { color: var(--low); }
+  .lab-row.crit .val { color: var(--crit); }
+
+  .lab-row .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    margin-top: 6px; letter-spacing: 0;
+  }
+  .lab-row .meta .when { color: var(--ink-2); }
+
+  /* Range bar — a hairline with a marker at the value position.
+     Reference range marked by two short verticals; out-of-range fills are
+     lightly tinted. */
+  .range {
+    display: flex; flex-direction: column; gap: 4px;
+    align-items: stretch;
+  }
+  .range .top {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0;
+  }
+  .range .bar {
+    position: relative;
+    height: 10px;
+    background: var(--paper-deep);
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .range .bar .ok-band {
+    position: absolute; top: 0; bottom: 0;
+    background: var(--green-50);
+    border-left: 1px solid var(--green-300);
+    border-right: 1px solid var(--green-300);
+  }
+  .range .bar .marker {
+    position: absolute; top: -3px; bottom: -3px;
+    width: 2px; background: var(--ink);
+  }
+  .lab-row.h .range .bar .marker { background: var(--warn); }
+  .lab-row.l .range .bar .marker { background: var(--low); }
+  .lab-row.crit .range .bar .marker { background: var(--crit); width: 3px; }
+
+  /* Trend — a 7-point sparkline. */
+  .trend { display: flex; align-items: center; gap: 14px; }
+  .trend svg { width: 100%; height: 36px; }
+  .trend .arrow {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-3);
+  }
+  .trend .arrow.up { color: var(--warn); }
+  .trend .arrow.up.crit { color: var(--crit); }
+  .trend .arrow.down { color: var(--low); }
+  .trend .delta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+
+  /* Single-value spotlight — a "framed" specimen of one critical lab */
+  .spotlight {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    padding: 32px 36px 28px;
+    margin-bottom: 36px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 36px;
+    align-items: center;
+    position: relative;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 6px; background: var(--crit);
+  }
+  .spotlight .stamp {
+    position: absolute;
+    top: -1px; left: 36px; transform: translateY(-50%);
+    background: var(--paper); padding: 0 10px;
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--crit);
+    border: 1px solid var(--crit);
+  }
+  .spotlight .name {
+    font-family: var(--serif); font-size: 22px; font-weight: 500;
+    letter-spacing: -0.012em;
+    margin-bottom: 4px;
+  }
+  .spotlight .who {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink-3); margin-bottom: 18px;
+  }
+  .spotlight .big {
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 96px; line-height: 0.9; font-weight: 500; letter-spacing: -0.04em;
+    color: var(--crit);
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .spotlight .big .u { font-family: var(--sans); font-size: 18px; color: var(--ink-3); font-weight: 500; }
+  .spotlight .ref {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    margin-top: 8px; letter-spacing: 0;
+  }
+  .spotlight .ref strong { color: var(--ink); }
+  .spotlight .right .lab { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .spotlight .right .v { font-family: var(--mono); font-size: 13px; color: var(--ink); margin-bottom: 12px; letter-spacing: 0; }
+  .spotlight .right .v strong { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--crit); font-size: 16px; }
+
+  .ack {
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; gap: 10px; font-size: 12px;
+  }
+  .ack .ttl { font-weight: 600; }
+  .ack .b {
+    margin-left: auto;
+    background: var(--crit); color: #fff; border: 0;
+    height: 26px; padding: 0 12px; border-radius: 2px;
+    font-size: 11px; font-family: var(--sans); font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .section-cap { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin: 36px 0 12px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 02</span>
+    <h1>Lab specimen.</h1>
+    <span class="meta">Adebayo, O. — May 1, 14:42</span>
+  </header>
+
+  <!-- A. CRITICAL SPOTLIGHT -->
+  <div class="spotlight">
+    <span class="stamp">Critical · acknowledge required</span>
+    <div>
+      <div class="name">Troponin I</div>
+      <div class="who">cardiac biomarker — repeat draw at 14:42</div>
+      <div class="big">2.10<span class="u">ng/mL</span></div>
+      <div class="ref">reference range <strong>0.00 – 0.04</strong> ng/mL — <span style="color:var(--crit)">52× upper limit</span></div>
+
+      <div class="ack">
+        <span class="ttl">Awaiting acknowledgement</span>
+        <span style="color:rgba(244,239,230,0.7)">auto-page sent to Patel R MD at 14:42</span>
+        <button class="b">Acknowledge</button>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="lab">Initial draw</div>
+      <div class="v">06:14 · <strong>0.04</strong> ng/mL — within range</div>
+
+      <div class="lab">Repeat — 6 hours</div>
+      <div class="v">14:08 · 1.22 ng/mL — flagged H</div>
+
+      <div class="lab">Now — auto-repeat</div>
+      <div class="v">14:42 · <strong>2.10 ng/mL — critical</strong></div>
+
+      <div class="lab">Trend</div>
+      <svg viewBox="0 0 240 60" style="width:100%;height:60px">
+        <line x1="0" y1="55" x2="240" y2="55" stroke="var(--hair)"/>
+        <line x1="0" y1="48" x2="240" y2="48" stroke="var(--green-300)" stroke-dasharray="2 3"/>
+        <polyline points="20,55 110,40 220,8" stroke="var(--crit)" stroke-width="1.6" fill="none"/>
+        <circle cx="20" cy="55" r="3" fill="var(--green-700)"/>
+        <circle cx="110" cy="40" r="3" fill="var(--warn)"/>
+        <circle cx="220" cy="8" r="4" fill="var(--crit)" stroke="var(--paper)" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section-cap">— Panel · BMP · CBC · LFTs —</div>
+
+  <!-- B. BMP PANEL -->
+  <div class="panel">
+    <div class="panel-h">
+      <h2>Basic metabolic panel</h2>
+      <span class="lot">BMP · LIS-29384</span>
+      <span class="meta">collected 06:14 · resulted 06:38</span>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">Sodium</span> <span class="alt">— Na</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">138<span class="u">mEq/L</span></div>
+      <div class="range">
+        <div class="top"><span>135</span><span>145</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:0"></span>
+          <span class="marker" style="left:30%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row h">
+      <div class="name">
+        <span class="full">Potassium</span> <span class="alt">— K</span>
+        <div class="ord">04/30 06:38 · ↑ from 4.6</div>
+      </div>
+      <div class="val">5.4<span class="u">mEq/L</span></div>
+      <div class="range">
+        <div class="top"><span>3.5</span><span>5.0</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:33%"></span>
+          <span class="marker" style="left:88%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">Chloride</span> <span class="alt">— Cl</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">102<span class="u">mEq/L</span></div>
+      <div class="range">
+        <div class="top"><span>98</span><span>107</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:0"></span>
+          <span class="marker" style="left:44%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">CO₂</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">24<span class="u">mEq/L</span></div>
+      <div class="range">
+        <div class="top"><span>22</span><span>29</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:0"></span>
+          <span class="marker" style="left:28%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row h">
+      <div class="name">
+        <span class="full">BUN</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">22<span class="u">mg/dL</span></div>
+      <div class="range">
+        <div class="top"><span>7</span><span>20</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:30%"></span>
+          <span class="marker" style="left:78%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">Creatinine</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">0.9<span class="u">mg/dL</span></div>
+      <div class="range">
+        <div class="top"><span>0.6</span><span>1.3</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:0"></span>
+          <span class="marker" style="left:42%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row crit">
+      <div class="name">
+        <span class="full">Glucose · random</span>
+        <div class="ord">04/30 06:38 · ↑ from 248</div>
+      </div>
+      <div class="val">312<span class="u">mg/dL</span></div>
+      <div class="range">
+        <div class="top"><span>70</span><span>140</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:50%"></span>
+          <span class="marker" style="left:96%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">Calcium</span> <span class="alt">— Ca</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">9.4<span class="u">mg/dL</span></div>
+      <div class="range">
+        <div class="top"><span>8.5</span><span>10.5</span></div>
+        <div class="bar">
+          <span class="ok-band" style="left:0;right:0"></span>
+          <span class="marker" style="left:46%"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. CBC PANEL -->
+  <div class="panel">
+    <div class="panel-h">
+      <h2>Complete blood count <span style="color:var(--ink-3);font-style:italic;font-weight:400">— with diff</span></h2>
+      <span class="lot">CBC-D · LIS-29385</span>
+      <span class="meta">collected 06:14</span>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">White blood cells</span> <span class="alt">— WBC</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">7.8<span class="u">×10³/µL</span></div>
+      <div class="range">
+        <div class="top"><span>4.0</span><span>11.0</span></div>
+        <div class="bar"><span class="ok-band" style="left:0;right:0"></span><span class="marker" style="left:54%"></span></div>
+      </div>
+    </div>
+
+    <div class="lab-row l">
+      <div class="name">
+        <span class="full">Red blood cells</span> <span class="alt">— RBC</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">3.4<span class="u">×10⁶/µL</span></div>
+      <div class="range">
+        <div class="top"><span>4.0</span><span>5.5</span></div>
+        <div class="bar"><span class="ok-band" style="left:60%;right:0"></span><span class="marker" style="left:14%"></span></div>
+      </div>
+    </div>
+
+    <div class="lab-row l">
+      <div class="name">
+        <span class="full">Hemoglobin</span> <span class="alt">— Hgb</span>
+        <div class="ord">04/30 06:38 · ↓ from 11.4</div>
+      </div>
+      <div class="val">10.1<span class="u">g/dL</span></div>
+      <div class="range">
+        <div class="top"><span>12.0</span><span>17.5</span></div>
+        <div class="bar"><span class="ok-band" style="left:60%;right:0"></span><span class="marker" style="left:8%"></span></div>
+      </div>
+    </div>
+
+    <div class="lab-row l">
+      <div class="name">
+        <span class="full">Hematocrit</span> <span class="alt">— Hct</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">31.2<span class="u">%</span></div>
+      <div class="range">
+        <div class="top"><span>36</span><span>48</span></div>
+        <div class="bar"><span class="ok-band" style="left:60%;right:0"></span><span class="marker" style="left:18%"></span></div>
+      </div>
+    </div>
+
+    <div class="lab-row">
+      <div class="name">
+        <span class="full">MCV</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">88<span class="u">fL</span></div>
+      <div class="range">
+        <div class="top"><span>80</span><span>100</span></div>
+        <div class="bar"><span class="ok-band" style="left:0;right:0"></span><span class="marker" style="left:48%"></span></div>
+      </div>
+    </div>
+
+    <div class="lab-row l">
+      <div class="name">
+        <span class="full">Platelets</span> <span class="alt">— PLT</span>
+        <div class="ord">04/30 06:38</div>
+      </div>
+      <div class="val">142<span class="u">×10³/µL</span></div>
+      <div class="range">
+        <div class="top"><span>150</span><span>450</span></div>
+        <div class="bar"><span class="ok-band" style="left:60%;right:0"></span><span class="marker" style="left:6%"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. TREND -->
+  <div class="panel">
+    <div class="panel-h">
+      <h2>Glucose — last seven days</h2>
+      <span class="lot">trend · 7 d</span>
+      <span class="meta">target 70 – 140 mg/dL fasting</span>
+    </div>
+
+    <div style="padding: 22px 24px;">
+      <svg viewBox="0 0 720 200" width="100%" height="200">
+        <!-- band -->
+        <rect x="40" y="86" width="660" height="44" fill="var(--green-50)" stroke="var(--green-200)" stroke-dasharray="2 3"/>
+        <text x="48" y="100" font-family="JetBrains Mono" font-size="10" fill="var(--green-800)">target band 70–140</text>
+        <!-- horizontal grid -->
+        <line x1="40" y1="40" x2="700" y2="40" stroke="var(--hair-soft)"/>
+        <line x1="40" y1="86" x2="700" y2="86" stroke="var(--green-300)" stroke-dasharray="2 3"/>
+        <line x1="40" y1="130" x2="700" y2="130" stroke="var(--green-300)" stroke-dasharray="2 3"/>
+        <line x1="40" y1="180" x2="700" y2="180" stroke="var(--ink)"/>
+
+        <text x="6" y="44" font-family="JetBrains Mono" font-size="10" fill="var(--ink-3)">350</text>
+        <text x="6" y="90" font-family="JetBrains Mono" font-size="10" fill="var(--ink-3)">140</text>
+        <text x="6" y="134" font-family="JetBrains Mono" font-size="10" fill="var(--ink-3)">70</text>
+
+        <!-- line -->
+        <polyline points="80,150 180,138 280,118 380,92 480,60 580,32 680,16" stroke="var(--ink)" stroke-width="1.6" fill="none"/>
+        <!-- points -->
+        <circle cx="80" cy="150" r="3.5" fill="var(--green-700)"/>
+        <circle cx="180" cy="138" r="3.5" fill="var(--green-700)"/>
+        <circle cx="280" cy="118" r="3.5" fill="var(--green-700)"/>
+        <circle cx="380" cy="92" r="3.5" fill="var(--ink)"/>
+        <circle cx="480" cy="60" r="3.5" fill="var(--warn)"/>
+        <circle cx="580" cy="32" r="4" fill="var(--warn)"/>
+        <circle cx="680" cy="16" r="5" fill="var(--crit)" stroke="var(--paper)" stroke-width="2"/>
+
+        <!-- labels -->
+        <g font-family="JetBrains Mono" font-size="10" fill="var(--ink-3)">
+          <text x="80" y="196" text-anchor="middle">04/24</text>
+          <text x="180" y="196" text-anchor="middle">04/25</text>
+          <text x="280" y="196" text-anchor="middle">04/26</text>
+          <text x="380" y="196" text-anchor="middle">04/27</text>
+          <text x="480" y="196" text-anchor="middle">04/28</text>
+          <text x="580" y="196" text-anchor="middle">04/29</text>
+          <text x="680" y="196" text-anchor="middle" fill="var(--crit)" font-weight="600">04/30 ↑↑</text>
+        </g>
+      </svg>
+
+      <div style="display:flex;gap:18px;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green-700);margin-right:5px"></span>within target</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:5px"></span>flagged H</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--crit);margin-right:5px"></span>critical</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

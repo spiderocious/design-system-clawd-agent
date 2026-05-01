@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient management</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.banner-sticky {
+  background:#fff; border:1px solid #E2E8F0; border-radius:10px; overflow:hidden;
+}
+.bn-row1 {
+  display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center;
+  padding:12px 16px; background:#fff; border-bottom:1px solid #F1F5F8;
+}
+.bn-id { display:flex; align-items:center; gap:12px; }
+.bn-id .name { font-size:17px; font-weight:600; letter-spacing:-0.005em; }
+.bn-id .nick { color:#94A3B8; font-weight:400; }
+.bn-id .meta { font-family:'JetBrains Mono',monospace; font-size:11px; color:#64748B; }
+.bn-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.bn-loc { display:flex; flex-direction:column; align-items:flex-end; gap:6px; font-size:11px; color:#475569; font-family:'JetBrains Mono',monospace; }
+.bn-allergy { background:#DC2626; color:#fff; padding:6px 16px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; }
+.bn-actions { background:#F8FAFB; padding:8px 16px; display:flex; gap:6px; border-top:1px solid #F1F5F8; }
+.idcard {
+  width:340px; aspect-ratio:1.6; background:#fff; border:1px solid #E2E8F0; border-radius:10px;
+  padding:14px; display:flex; gap:12px; position:relative; box-shadow:0 8px 24px rgba(14,17,23,0.08);
+  overflow:hidden;
+}
+.idcard.issued::after {
+  content:"ISSUED"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-12deg);
+  font-size:48px; font-weight:800; color:rgba(15,118,110,0.18); letter-spacing:0.1em;
+}
+.idcard .photo { width:80px; height:96px; background:linear-gradient(135deg,#DBEAFE,#1D4ED8); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; font-size:24px; }
+.idcard .body { flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+.idcard .logo { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:#0A87A3; }
+.idcard .logo span { width:14px; height:14px; background:#0A87A3; border-radius:3px; color:#fff; display:flex; align-items:center; justify-content:center; font-size:9px; }
+.idcard .pn { font-size:14px; font-weight:600; line-height:1.2; }
+.idcard .dob { font-size:11px; color:#475569; font-family:'JetBrains Mono',monospace; }
+.idcard .barcode { display:flex; gap:1px; align-items:flex-end; height:32px; margin-top:6px; }
+.idcard .barcode span { width:2px; background:#0E1117; }
+.scanner { padding:14px; background:#0E1117; color:#fff; border-radius:10px; display:flex; gap:14px; align-items:center; }
+.scanner .frame { width:90px; height:54px; border:2px solid #14B8A6; border-radius:6px; position:relative; background:rgba(20,184,166,0.06); display:flex; align-items:center; justify-content:center; }
+.scanner .frame::before { content:""; position:absolute; left:0; right:0; top:50%; height:2px; background:#14B8A6; box-shadow:0 0 8px #14B8A6; animation:scan 1.6s infinite; }
+@keyframes scan { 0%,100% { top:8% } 50% { top:88% } }
+.checkin-row { display:grid; grid-template-columns:60px 1fr auto auto auto; gap:10px; align-items:center; padding:12px 14px; border-bottom:1px solid #F1F5F8; font-size:13px; }
+.checkin-row:last-child { border-bottom:none; }
+.checkin-row .arr { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; }
+.bedboard { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+.bedtile { aspect-ratio:1.05; border:1px solid #E2E8F0; border-radius:8px; padding:10px; background:#fff; position:relative; }
+.bedtile .room { font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#475569; }
+.bedtile.avail { background:#F0FDF4; border-color:#86EFAC; }
+.bedtile.occ { background:#FEF2F2; border-color:#FCA5A5; }
+.bedtile.cln { background:#FFFBEB; border-color:#FCD34D; }
+.bedtile.iso { box-shadow:inset 0 -3px 0 #7C3AED; }
+.bedtile .occn { font-size:11px; color:#0E1117; margin-top:4px; }
+.triage-card { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:14px; }
+.dc-checklist { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:14px; }
+.dc-row { display:flex; align-items:center; gap:8px; padding:6px 0; font-size:13px; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Patient management</h1>
+<p class="spec-sub">The signature components for the Patient module: the patient banner (the most important persistent object in the system), patient registration card, ID card preview/issued, check-in scanner, queue rows, triage card, bed board, admission/transfer/discharge cards, and discharge checklist.</p>
+
+<div class="spec-section-label">Patient banner — sticky at top of chart</div>
+<div class="banner-sticky">
+  <div class="bn-row1">
+    <div class="bn-id">
+      <span class="avatar avatar-lg" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div>
+        <div class="name">Adebayo, Olumide <span class="nick">"Olu"</span></div>
+        <div class="meta">MRN 10458291 · M · 64 y · DOB 1962-03-14</div>
+      </div>
+    </div>
+    <div class="bn-pills">
+      <span class="pill" style="background:#0E1117;color:#fff;border-color:#0E1117">FULL CODE</span>
+      <span class="pill" style="background:#FEF3C7;color:#92400E;border-color:#FCD34D">Contact iso</span>
+      <span class="pill" style="background:#FFF7ED;color:#9A3412;border-color:#FDBA74">Fall risk</span>
+      <span class="pill pill-info">Admitted</span>
+      <span class="pill pill-warning">Insurance: BCBS · verified</span>
+    </div>
+    <div class="bn-loc">
+      <span style="font-family:'Inter',sans-serif;font-size:12px;color:#0E1117;font-weight:600">Patel, R MD</span>
+      <span>3-North · 312A</span>
+      <span>ENC-2026-04-29-1184</span>
+      <span>LOS 2d</span>
+    </div>
+  </div>
+  <div class="bn-allergy"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>ALLERGY · Penicillin (anaphylaxis), Sulfa drugs (rash) <span style="margin-left:auto;font-weight:400;opacity:0.85;font-size:11px">documented 2018-04 by Dr. R. Patel</span></div>
+  <div class="bn-actions">
+    <button class="btn btn-sm btn-primary">Open chart</button>
+    <button class="btn btn-sm btn-secondary">Add note</button>
+    <button class="btn btn-sm btn-secondary">Place order</button>
+    <button class="btn btn-sm btn-secondary">Transfer</button>
+    <button class="btn btn-sm btn-destructive-ghost" style="margin-left:auto">Discharge</button>
+  </div>
+</div>
+
+<div class="spec-section-label">Patient registration — mini-form card</div>
+<div class="card" style="max-width:760px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <div class="spec-tile-label">Demographics</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <input class="input" value="Olumide" placeholder="Given name">
+        <input class="input" value="Adebayo" placeholder="Family name">
+        <input class="input" value="1962-03-14" style="font-family:'JetBrains Mono',monospace" placeholder="DOB">
+        <select class="input"><option>M</option><option>F</option></select>
+        <input class="input" value="English" placeholder="Preferred language">
+        <input class="input" value="Yoruba" placeholder="Other languages">
+      </div>
+    </div>
+    <div>
+      <div class="spec-tile-label">Contact &amp; emergency</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px">
+        <input class="input" value="+1 (312) 555-0148" style="font-family:'JetBrains Mono',monospace" placeholder="Mobile">
+        <input class="input" value="m.adebayo@example.com" placeholder="Email">
+        <input class="input" value="142 W Lakeside Dr · Chicago IL 60615" placeholder="Address">
+        <input class="input" value="Funmi Adebayo · spouse · +1 (312) 555-0193" placeholder="Emergency contact">
+      </div>
+    </div>
+    <div style="grid-column:span 2">
+      <div class="spec-tile-label">Consent checklist</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:13px">
+        <label><input type="checkbox" checked> General treatment</label>
+        <label><input type="checkbox" checked> HIPAA NPP</label>
+        <label><input type="checkbox" checked> Financial responsibility</label>
+        <label><input type="checkbox"> Photo/video for telehealth</label>
+        <label><input type="checkbox"> Research participation</label>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:14px"><button class="btn btn-secondary btn-sm">Save draft</button><button class="btn btn-primary btn-sm">Continue to insurance</button></div>
+</div>
+
+<div class="spec-section-label">Patient ID card — preview &amp; issued</div>
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+  <div class="idcard">
+    <div class="photo">OA</div>
+    <div class="body">
+      <div class="logo"><span>M</span> Medcord · St. Catherine's General</div>
+      <div>
+        <div class="pn">Adebayo, Olumide</div>
+        <div class="dob">DOB 1962-03-14</div>
+        <div class="dob" style="margin-top:4px">MRN <strong style="color:#0E1117">10458291</strong></div>
+      </div>
+      <div class="barcode">
+        <span style="height:32px;width:2px"></span><span style="height:24px"></span><span style="height:32px;width:3px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:28px;width:3px"></span><span style="height:18px"></span><span style="height:32px"></span><span style="height:24px;width:2px"></span><span style="height:30px"></span><span style="height:20px"></span><span style="height:32px;width:3px"></span><span style="height:26px"></span><span style="height:22px"></span><span style="height:32px"></span><span style="height:24px"></span><span style="height:30px;width:2px"></span><span style="height:32px"></span>
+      </div>
+    </div>
+  </div>
+  <div class="idcard issued">
+    <div class="photo">OA</div>
+    <div class="body">
+      <div class="logo"><span>M</span> Medcord · St. Catherine's General</div>
+      <div>
+        <div class="pn">Adebayo, Olumide</div>
+        <div class="dob">DOB 1962-03-14</div>
+        <div class="dob" style="margin-top:4px">MRN <strong style="color:#0E1117">10458291</strong></div>
+      </div>
+      <div class="barcode">
+        <span style="height:32px;width:2px"></span><span style="height:24px"></span><span style="height:32px;width:3px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:28px;width:3px"></span><span style="height:18px"></span><span style="height:32px"></span><span style="height:24px;width:2px"></span><span style="height:30px"></span><span style="height:20px"></span><span style="height:32px;width:3px"></span><span style="height:26px"></span><span style="height:22px"></span><span style="height:32px"></span><span style="height:24px"></span><span style="height:30px;width:2px"></span><span style="height:32px"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Check-in scanner widget</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+  <div class="scanner">
+    <div class="frame"><svg width="32" height="20" viewBox="0 0 24 16" stroke="#14B8A6" fill="none" stroke-width="1.5"><line x1="2" y1="2" x2="2" y2="14"/><line x1="6" y1="2" x2="6" y2="14"/><line x1="10" y1="2" x2="10" y2="14"/><line x1="14" y1="2" x2="14" y2="14"/><line x1="20" y1="2" x2="20" y2="14"/></svg></div>
+    <div><div style="font-size:13px;font-weight:600">Scan patient ID</div><div style="font-size:11px;opacity:0.7;font-family:'JetBrains Mono',monospace;margin-top:2px">last scan 14:08 · MRN 10458291 ✓</div></div>
+  </div>
+  <div class="scanner" style="background:#052E16;color:#86EFAC">
+    <div class="frame" style="border-color:#86EFAC"><svg class="icon-32" viewBox="0 0 24 24" stroke="#86EFAC" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div><div style="font-size:13px;font-weight:600">Check-in success</div><div style="font-size:11px;opacity:0.85;font-family:'JetBrains Mono',monospace;margin-top:2px">Adebayo, O · routed to triage</div></div>
+  </div>
+  <div class="scanner" style="background:#2D0505;color:#FCA5A5">
+    <div class="frame" style="border-color:#FCA5A5"><svg class="icon-32" viewBox="0 0 24 24" stroke="#FCA5A5" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+    <div><div style="font-size:13px;font-weight:600">Card not recognized</div><div style="font-size:11px;opacity:0.85;margin-top:2px">Use manual lookup or reissue card</div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Check-in queue</div>
+<div class="card" style="padding:0;overflow:hidden">
+  <div class="checkin-row" style="background:#F8FAFB;border-bottom:1px solid #E2E8F0;font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">
+    <div>Arrived</div><div>Patient · reason</div><div>Provider</div><div>Wait</div><div>Acuity</div>
+  </div>
+  <div class="checkin-row">
+    <div class="arr">07:42</div>
+    <div><div style="font-weight:600">Hadi, Samira</div><div class="spec-caption">Chest pain · STEMI alert</div></div>
+    <div class="spec-caption">Patel, R</div>
+    <div class="mono" style="color:#991B1B">2 min</div>
+    <div><span class="pill" style="background:#7F1D1D;color:#fff;border-color:#7F1D1D"><strong>1</strong> Resus</span></div>
+  </div>
+  <div class="checkin-row">
+    <div class="arr">07:58</div>
+    <div><div style="font-weight:600">Adebayo, Olumide</div><div class="spec-caption">F/u cardiology · 09:00 appt</div></div>
+    <div class="spec-caption">Patel, R</div>
+    <div class="mono">14 min</div>
+    <div><span class="pill" style="background:#FEF3C7;color:#92400E;border-color:#FCD34D"><strong>3</strong> Urgent</span></div>
+  </div>
+  <div class="checkin-row">
+    <div class="arr">08:04</div>
+    <div><div style="font-weight:600">Chen, Wei-Lin</div><div class="spec-caption">Lab draw · BMP, CBC</div></div>
+    <div class="spec-caption">—</div>
+    <div class="mono">22 min</div>
+    <div><span class="pill" style="background:#F0FDF4;color:#15803D;border-color:#86EFAC"><strong>4</strong> Less urg</span></div>
+  </div>
+  <div class="checkin-row">
+    <div class="arr">08:18</div>
+    <div><div style="font-weight:600">Diallo, Mariama</div><div class="spec-caption">Pre-op consult</div></div>
+    <div class="spec-caption">Okafor, C</div>
+    <div class="mono">36 min</div>
+    <div><span class="pill" style="background:#EFF6FF;color:#1E40AF;border-color:#BFDBFE"><strong>5</strong> Non-urg</span></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Triage card</div>
+<div class="triage-card" style="max-width:520px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+    <div>
+      <div style="font-size:14px;font-weight:600">Hadi, Samira · 38F</div>
+      <div class="mono" style="font-size:11px;color:#64748B">10778123 · arrived 07:42 · 8 min ago</div>
+    </div>
+    <span class="pill" style="background:#7F1D1D;color:#fff;border-color:#7F1D1D"><strong>ESI 1</strong> · Resuscitation</span>
+  </div>
+  <div style="font-size:13px;color:#1E293B;background:#F8FAFB;padding:10px;border-radius:6px;margin-bottom:10px"><strong>Chief complaint:</strong> "Crushing chest pressure × 30 min, sweating, nausea." Last meal 04:00.</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+    <div style="text-align:center;padding:6px;background:#FEF2F2;border-radius:6px"><div class="spec-caption">HR</div><div class="mono" style="font-size:14px;font-weight:600;color:#7F1D1D">112</div></div>
+    <div style="text-align:center;padding:6px;background:#FEF2F2;border-radius:6px"><div class="spec-caption">BP</div><div class="mono" style="font-size:14px;font-weight:600;color:#7F1D1D">158/96</div></div>
+    <div style="text-align:center;padding:6px;background:#F8FAFB;border-radius:6px"><div class="spec-caption">RR</div><div class="mono" style="font-size:14px;font-weight:600">22</div></div>
+    <div style="text-align:center;padding:6px;background:#FEF2F2;border-radius:6px"><div class="spec-caption">SpO₂</div><div class="mono" style="font-size:14px;font-weight:600;color:#7F1D1D">91%</div></div>
+    <div style="text-align:center;padding:6px;background:#F8FAFB;border-radius:6px"><div class="spec-caption">Temp</div><div class="mono" style="font-size:14px;font-weight:600">98.7</div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Bed board — 3-North</div>
+<div class="bedboard">
+  <div class="bedtile occ"><div class="room">312A</div><div class="occn">Adebayo, O · 64M</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#991B1B">Patel R MD</div></div>
+  <div class="bedtile occ iso"><div class="room">312B</div><div class="occn">Chen, W · 40F</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#6D28D9">Droplet iso</div></div>
+  <div class="bedtile cln"><div class="room">313A</div><div class="occn" style="color:#92400E">Cleaning</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#92400E">~12 min</div></div>
+  <div class="bedtile occ"><div class="room">313B</div><div class="occn">Diallo, M · 54F</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#991B1B">Okafor C MD</div></div>
+  <div class="bedtile avail"><div class="room">314A</div><div class="occn" style="color:#15803D">Available</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#15803D">↑ next on board</div></div>
+  <div class="bedtile occ"><div class="room">314B</div><div class="occn">García, L · 77F</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#475569">DC pending</div></div>
+  <div class="bedtile" style="background:#F1F5F8;border-color:#CBD5E1;border-style:dashed"><div class="room" style="color:#94A3B8">315A</div><div class="occn" style="color:#94A3B8">Off-line</div><div class="spec-caption" style="position:absolute;bottom:8px;left:10px;color:#94A3B8">biomed hold</div></div>
+  <div class="bedtile" style="background:#F1F5F8;border-color:#CBD5E1;border-style:dashed"><div class="room" style="color:#94A3B8">315B</div><div class="occn" style="color:#94A3B8">Off-line</div></div>
+  <div class="bedtile avail"><div class="room">316A</div><div class="occn" style="color:#15803D">Available</div></div>
+  <div class="bedtile occ"><div class="room">316B</div><div class="occn">Park, J · 71M</div></div>
+  <div class="bedtile occ"><div class="room">317A</div><div class="occn">Reed, S · 58F</div></div>
+  <div class="bedtile cln"><div class="room">317B</div><div class="occn" style="color:#92400E">Cleaning</div></div>
+</div>
+
+<div class="spec-section-label">Admission · transfer · discharge cards</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><svg class="icon-20" viewBox="0 0 24 24" stroke="#15803D" fill="none" stroke-width="1.6"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:13px;font-weight:600;color:#15803D">Admission</div></div>
+    <div class="kv"><div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em">Service</div><div style="font-size:13px;font-weight:500">Cardiology · Step-down</div></div>
+    <div class="kv"><div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;margin-top:8px">Bed</div><div style="font-size:13px;font-weight:500">3-North · 312A</div></div>
+    <div class="kv"><div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;margin-top:8px">Diagnosis</div><div style="font-size:13px;font-weight:500">NSTEMI · I21.4</div></div>
+    <button class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">Admit patient</button>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><svg class="icon-20" viewBox="0 0 24 24" stroke="#0A87A3" fill="none" stroke-width="1.6"><polyline points="14 18 18 14 14 10"/><line x1="6" y1="14" x2="18" y2="14"/></svg><div style="font-size:13px;font-weight:600;color:#0A87A3">Transfer</div></div>
+    <div style="font-size:13px;color:#475569">From <strong style="color:#0E1117">3-North · 312A</strong></div>
+    <div style="font-size:13px;color:#475569;margin-top:4px">To <strong style="color:#0E1117">CCU · 207A</strong></div>
+    <div style="font-size:12px;color:#64748B;margin-top:8px">Reason: troponin 2.1 ↑↑, telemetry escalation</div>
+    <button class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">Transfer</button>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><svg class="icon-20" viewBox="0 0 24 24" stroke="#475569" fill="none" stroke-width="1.6"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/></svg><div style="font-size:13px;font-weight:600">Discharge summary</div></div>
+    <div style="font-size:13px;color:#475569">Disposition · <strong style="color:#0E1117">Home with home health</strong></div>
+    <div style="font-size:13px;color:#475569;margin-top:4px">Follow-up · <strong style="color:#0E1117">Patel R MD · 2026-05-14</strong></div>
+    <div style="font-size:13px;color:#475569;margin-top:4px">Anticipated · <strong style="color:#0E1117">2026-05-03</strong></div>
+    <div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-sm btn-secondary" style="flex:1">Preview</button><button class="btn btn-sm btn-primary" style="flex:1">Sign &amp; release</button></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Discharge checklist</div>
+<div class="dc-checklist" style="max-width:520px">
+  <div style="font-size:14px;font-weight:600;margin-bottom:8px">Pre-discharge checklist · Adebayo, O · ENC-1184</div>
+  <div class="dc-row"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">Medications reconciled · 8 active</span></div>
+  <div class="dc-row"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">Follow-up scheduled · Patel R · 05/14 09:30</span></div>
+  <div class="dc-row"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">Discharge education provided · cardiac diet, activity</span></div>
+  <div class="dc-row"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">e-prescriptions sent · Walgreens · 142 Main St</span></div>
+  <div class="dc-row"><span class="cb" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span><span style="color:#475569">Transportation home confirmed · spouse</span></div>
+  <div class="dc-row"><span class="cb" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span><span style="color:#475569">Home health · referral pending</span></div>
+  <div style="margin-top:10px;padding-top:10px;border-top:1px solid #F1F5F8;display:flex;justify-content:space-between;font-size:12px"><span style="color:#475569">4 of 6 complete</span><a href="#" style="color:#0A87A3;font-weight:600">View summary</a></div>
+</div>
+
+<div class="spec-section-label">No-show · cancellation reason · insurance &amp; consent rows</div>
+<div class="card" style="padding:0;overflow:hidden">
+  <div style="padding:12px 14px;background:#FEF2F2;border-bottom:1px solid #FECACA;display:flex;align-items:center;gap:10px"><span class="pill" style="background:#FEF2F2;color:#B91C1C;border-color:#FCA5A5">No-show</span><span style="font-size:13px;font-weight:600">Park, Daniel · 09:00 appointment</span><span style="margin-left:auto;font-size:11px;color:#991B1B;font-family:'JetBrains Mono',monospace">marked 09:18 by AW RN</span></div>
+  <div style="padding:12px 14px;display:flex;align-items:center;gap:10px"><span class="pill pill-danger">Cancelled</span><span style="font-size:13px;font-weight:600">Reed, Sarah · pre-op consult</span><span style="font-size:12px;color:#475569;margin-left:6px">reason: surgery rescheduled</span><span style="margin-left:auto;font-size:11px;color:#475569;font-family:'JetBrains Mono',monospace">04/29 16:42</span></div>
+  <div style="padding:12px 14px;border-top:1px solid #F1F5F8;display:flex;align-items:center;gap:10px"><span class="pill pill-warning">Insurance · pending</span><span style="font-size:13px;font-weight:600">García, Lucía</span><span style="font-size:12px;color:#475569">Aetna · MID 81923-X · copay $35</span><button class="btn btn-sm btn-tertiary" style="margin-left:auto">Verify now</button></div>
+  <div style="padding:12px 14px;border-top:1px solid #F1F5F8;display:flex;align-items:center;gap:10px"><span class="pill pill-warning">Consent missing</span><span style="font-size:13px;font-weight:600">Hadi, Samira</span><span style="font-size:12px;color:#475569">Surgical consent — required before OR</span><button class="btn btn-sm btn-primary" style="margin-left:auto">Capture signature</button></div>
+</div>
+
+</body>
+</html>

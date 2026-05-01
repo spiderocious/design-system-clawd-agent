@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Avatars · pills · status taxonomy</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* AVATARS, PILLS, STATUS — the small marks that sit on every page.
+     Avatars are square-with-tight-radius for staff (the badge), round for
+     patients (the photo). Pills are hairline outlines, never coloured fills
+     except when carrying real clinical state. The full status taxonomy is
+     printed once, here, with the colour rule applied. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* Patient avatars — round, paper-tinted */
+  .av-pat-c {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid #D4C4A6;
+    font-family: var(--sans); font-weight: 600;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .av-xs { width: 18px; height: 18px; font-size: 8px; }
+  .av-sm { width: 24px; height: 24px; font-size: 10px; }
+  .av-md { width: 32px; height: 32px; font-size: 11px; }
+  .av-lg { width: 48px; height: 48px; font-size: 16px; }
+  .av-xl { width: 80px; height: 80px; font-size: 24px; }
+
+  /* Staff avatars — squared with 4px radius. The badge. */
+  .av-staff {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--paper-deep); color: var(--ink);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 4px;
+    font-family: var(--sans); font-weight: 600;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .av-staff.md { background: #DEE6D6; color: #2F4226; border-color: #C4D2BC; }
+  .av-staff.rn { background: #DDE3D4; color: #495939; border-color: #C2CCB4; }
+  .av-staff.tech { background: #ECE3D6; color: #5C4B30; border-color: #D4C4A6; }
+  .av-staff.pharm { background: #DEDAE8; color: #3A3349; border-color: #BCB7CB; }
+  .av-staff.adm { background: var(--paper-deep); color: var(--ink-2); border-color: var(--sheet-edge); }
+
+  /* Critical-patient ring */
+  .av-pat-c.crit { box-shadow: 0 0 0 2px var(--crit); border-color: var(--crit); }
+
+  /* Role glyph: a small mono badge on the bottom-right of staff avatars */
+  .av-staff::after {
+    content: attr(data-role);
+    position: absolute; right: -3px; bottom: -3px;
+    font-family: var(--mono); font-size: 8px; font-weight: 600;
+    background: var(--ink); color: var(--paper);
+    padding: 1px 3px; border-radius: 2px; letter-spacing: 0.06em;
+    line-height: 1;
+  }
+  .av-staff.no-role::after { display: none; }
+
+  /* On-shift dot */
+  .av-pulse {
+    position: relative;
+  }
+  .av-pulse::before {
+    content: ""; position: absolute; right: -2px; top: -2px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green-600);
+    border: 2px solid var(--paper);
+  }
+
+  /* Avatar stack */
+  .stack { display: inline-flex; }
+  .stack > * + * { margin-left: -10px; box-shadow: 0 0 0 2px var(--paper); }
+  .stack .more {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--paper); color: var(--ink-3);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0;
+    border: 1px solid var(--sheet-edge);
+    box-shadow: 0 0 0 2px var(--paper);
+  }
+
+  /* Pills */
+  .pill-x {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 22px; padding: 0 10px;
+    border: 1px solid var(--ink-3); background: transparent;
+    border-radius: 9999px;
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    color: var(--ink-2); letter-spacing: 0.005em;
+  }
+  .pill-x .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+  .pill-x.ok    { color: var(--green-800); border-color: var(--green-200); background: var(--green-50); }
+  .pill-x.warn  { color: var(--warn);  border-color: var(--warn-edge); background: var(--warn-bg); }
+  .pill-x.crit  { color: var(--crit);  border-color: var(--crit-edge); background: var(--crit-bg); }
+  .pill-x.low   { color: var(--low);   border-color: var(--low-edge);  background: var(--low-bg); }
+  .pill-x.ink   { color: var(--paper); border-color: var(--ink); background: var(--ink); }
+  .pill-x.outline { color: var(--ink); border-color: var(--ink); background: transparent; }
+
+  .stamp-mark {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 22px; padding: 0 8px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .stamp-mark.dnr { background: var(--ink); color: var(--paper); border: 1px solid var(--crit); box-shadow: inset 0 -2px 0 var(--crit); }
+  .stamp-mark.cmo { background: var(--ink); color: #FCE5A6; }
+  .stamp-mark.dni { background: var(--ink); color: var(--paper); }
+  .stamp-mark.npo { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
+
+  .iso-tape {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px;
+    background: var(--low); color: #fff;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border-radius: 1px;
+  }
+  .iso-tape.contact { background: var(--warn); }
+  .iso-tape.airborne { background: var(--low); }
+  .iso-tape.neutro { background: var(--crit); }
+
+  .row-show {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    padding: 16px 0;
+  }
+
+  /* Acuity — ESI 1–5 */
+  .esi {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 24px; padding: 0 10px;
+    border-radius: 9999px;
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em;
+    background: var(--paper-deep); color: var(--ink-2);
+    border: 1px solid var(--sheet-edge);
+  }
+  .esi .num { font-family: var(--mono); font-size: 13px; letter-spacing: 0; }
+  .esi.e1 { background: var(--ink); color: var(--paper); border-color: var(--ink); box-shadow: inset 0 -3px 0 var(--crit); }
+  .esi.e2 { background: var(--crit-bg); color: var(--crit); border-color: var(--crit-edge); }
+  .esi.e3 { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-edge); }
+  .esi.e4 { background: var(--green-50); color: var(--green-800); border-color: var(--green-200); }
+  .esi.e5 { background: var(--paper-deep); color: var(--ink-2); border-color: var(--sheet-edge); }
+
+  /* Allergy band — repeated from banner */
+  .allergy-band {
+    background: var(--crit); color: #fff;
+    padding: 8px 18px;
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .allergy-band::before {
+    content: "ALLERGY"; font-family: var(--mono); font-style: normal;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+    background: rgba(0,0,0,0.32); padding: 3px 7px; border-radius: 1px;
+  }
+
+  /* Workflow status taxonomy table */
+  .taxonomy {
+    display: grid; grid-template-columns: 200px 1fr 120px;
+    border: 1px solid var(--ink); background: var(--sheet);
+  }
+  .taxonomy > div {
+    padding: 12px 16px;
+    border-bottom: 1px dashed var(--hair-soft);
+    display: flex; align-items: center;
+  }
+  .taxonomy > div:nth-last-child(-n+3) { border-bottom: 0; }
+  .taxonomy > div:nth-child(3n+1) { font-family: var(--sans); font-size: 13px; color: var(--ink); border-right: 1px solid var(--hair); }
+  .taxonomy > div:nth-child(3n+2) { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); border-right: 1px solid var(--hair); }
+  .taxonomy > div:nth-child(3n+3) { justify-content: flex-end; }
+
+  /* Badges (notification dots) */
+  .with-badge { position: relative; display: inline-block; }
+  .with-badge .nb {
+    position: absolute; top: -4px; right: -6px;
+    min-width: 14px; height: 14px;
+    padding: 0 3px;
+    background: var(--crit); color: #fff;
+    border: 2px solid var(--paper);
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    border-radius: 9999px;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">III · 07</span>
+    <h1>Avatars · pills · status taxonomy.</h1>
+    <span class="meta">round for patients, square for staff, ink for state</span>
+  </header>
+
+  <!-- A. PATIENT AVATARS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Patient — round.</h2>
+      <div class="sub">Round, paper-tinted. Initials only. The critical-patient ring overrides the regular border with arterial red.</div>
+    </div>
+
+    <div class="row-show">
+      <span class="av-pat-c av-xs">OA</span>
+      <span class="av-pat-c av-sm">OA</span>
+      <span class="av-pat-c av-md">OA</span>
+      <span class="av-pat-c av-lg">OA</span>
+      <span class="av-pat-c av-xl">OA</span>
+      <span style="margin-left:32px;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.16em;text-transform:uppercase">xs · sm · md · lg · xl</span>
+    </div>
+
+    <div class="row-show">
+      <span class="av-pat-c av-md">OA</span>
+      <span class="av-pat-c av-md crit">SH</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">regular · critical-ring</span>
+    </div>
+  </section>
+
+  <!-- B. STAFF AVATARS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Staff — square. The badge.</h2>
+      <div class="sub">Squared with a tight 4-px radius. A small mono tag at the bottom-right names the role; an ink-green dot at the top-right marks "on shift."</div>
+    </div>
+
+    <div class="row-show">
+      <span class="av-staff av-md md av-pulse" data-role="MD">RP</span>
+      <span class="av-staff av-md rn av-pulse" data-role="RN">AW</span>
+      <span class="av-staff av-md tech" data-role="TC">TJ</span>
+      <span class="av-staff av-md pharm" data-role="RX">SH</span>
+      <span class="av-staff av-md adm" data-role="AD">MK</span>
+      <span class="av-staff av-md no-role" style="opacity:0.5">HJ</span>
+      <span style="margin-left:32px;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.16em;text-transform:uppercase">MD · RN · Tech · Pharm · Admin · off-shift</span>
+    </div>
+
+    <div class="row-show">
+      <div class="stack">
+        <span class="av-staff av-md md no-role">RP</span>
+        <span class="av-staff av-md rn no-role">AW</span>
+        <span class="av-staff av-md tech no-role">TJ</span>
+        <span class="av-staff av-md pharm no-role">SH</span>
+        <span class="more">+8</span>
+      </div>
+      <span style="margin-left:24px;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">team-of-twelve · stack with overflow</span>
+    </div>
+  </section>
+
+  <!-- C. PILLS — workflow status taxonomy -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Workflow status — the full taxonomy.</h2>
+      <div class="sub">Twelve workflow states, each with its own pill. Colour is reserved: green for "good," amber for "waiting," red for "wrong," ink for "ended."</div>
+    </div>
+
+    <div class="taxonomy">
+      <div>Scheduled</div>      <div>"on the books, not yet here"</div> <div><span class="pill-x outline"><span class="dot"></span>Scheduled</span></div>
+      <div>Checked in</div>     <div>"arrived, before triage"</div>      <div><span class="pill-x ok"><span class="dot"></span>Checked in</span></div>
+      <div>In triage</div>      <div>"being assessed at the desk"</div> <div><span class="pill-x warn"><span class="dot"></span>In triage</span></div>
+      <div>In room</div>        <div>"placed, awaiting provider"</div>  <div><span class="pill-x outline"><span class="dot"></span>In room</span></div>
+      <div>With provider</div>  <div>"being seen now"</div>              <div><span class="pill-x ink"><span class="dot"></span>With provider</span></div>
+      <div>Awaiting labs</div>  <div>"work pending in the LIS"</div>     <div><span class="pill-x warn"><span class="dot"></span>Awaiting labs</span></div>
+      <div>Awaiting DC</div>    <div>"medically ready, paperwork in flight"</div> <div><span class="pill-x outline"><span class="dot"></span>Awaiting DC</span></div>
+      <div>Admitted</div>       <div>"on a bed, on the floor"</div>      <div><span class="pill-x ok"><span class="dot"></span>Admitted</span></div>
+      <div>Discharged</div>     <div>"left the building"</div>           <div><span class="pill-x"><span class="dot"></span>Discharged</span></div>
+      <div>Transferred</div>    <div>"moved to another unit or hospital"</div> <div><span class="pill-x outline"><span class="dot"></span>Transferred</span></div>
+      <div>No-show</div>        <div>"didn't arrive"</div>               <div><span class="pill-x crit"><span class="dot"></span>No-show</span></div>
+      <div>Cancelled</div>      <div>"called off, before arrival"</div>  <div><span class="pill-x crit"><span class="dot"></span>Cancelled</span></div>
+    </div>
+  </section>
+
+  <!-- D. ESI ACUITY -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Acuity — ESI 1 through 5.</h2>
+      <div class="sub">Five levels, mono numerals. ESI-1 is ink with a critical underbar; the others step down into amber, green, paper.</div>
+    </div>
+
+    <div class="row-show">
+      <span class="esi e1"><span class="num">1</span> Resuscitation</span>
+      <span class="esi e2"><span class="num">2</span> Emergent</span>
+      <span class="esi e3"><span class="num">3</span> Urgent</span>
+      <span class="esi e4"><span class="num">4</span> Less urgent</span>
+      <span class="esi e5"><span class="num">5</span> Non-urgent</span>
+    </div>
+  </section>
+
+  <!-- E. CODE STATUS / ISOLATION / RISK STAMPS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Code status, isolation, risk — stamped marks.</h2>
+      <div class="sub">These are not pills; they are stamps. Mono caps with generous tracking, often inverted. The kind of mark you'd find pressed onto a chart cover.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="row-show">
+        <span class="stamp-mark">FULL CODE</span>
+        <span class="stamp-mark dnr">DNR</span>
+        <span class="stamp-mark dni">DNR · DNI</span>
+        <span class="stamp-mark cmo">CMO</span>
+        <span class="stamp-mark npo">NPO</span>
+      </div>
+
+      <div class="row-show">
+        <span class="iso-tape contact">Contact</span>
+        <span class="iso-tape">Droplet</span>
+        <span class="iso-tape airborne">Airborne</span>
+        <span class="iso-tape neutro">Neutropenic</span>
+      </div>
+
+      <div class="row-show">
+        <span class="pill-x warn">Fall risk</span>
+        <span class="pill-x crit">Aspiration</span>
+        <span class="pill-x"><span class="dot"></span>Seizure precautions</span>
+        <span class="pill-x crit">Bleeding</span>
+        <span class="pill-x crit">Sepsis bundle</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- F. ALLERGY BAND -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Allergy band — never dismissible.</h2>
+      <div class="sub">A red mark across the chart, set in serif italic. The "ALLERGY" label is a mono stamp inside it. Different shades for advisory, precaution, anaphylactic.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="allergy-band">
+        Penicillin causes anaphylaxis. Sulfa drugs cause rash.
+        <span style="margin-left:auto;font-family:var(--mono);font-style:normal;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0">documented Apr 2018 · R. Patel MD</span>
+      </div>
+      <div class="allergy-band" style="background:var(--warn);color:#fff">
+        Latex causes contact dermatitis. Use non-latex gloves and tape.
+        <span style="margin-left:auto;font-family:var(--mono);font-style:normal;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0">moderate · Mar 2022</span>
+      </div>
+      <div class="allergy-band" style="background:#8C6E1D;color:#fff">
+        Adhesive tape — mild reaction documented previously.
+        <span style="margin-left:auto;font-family:var(--mono);font-style:normal;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0">advisory · Feb 2024</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- G. NOTIFICATION BADGES -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Badges — small numbers on small things.</h2>
+      <div class="sub">A red mark with a small mono numeral. Two-digit max; "99+" beyond that. Always paper-bordered so it can sit on any background.</div>
+    </div>
+
+    <div class="row-show" style="gap:36px">
+      <div class="with-badge">
+        <span class="av-staff av-md md no-role">RP</span>
+        <span class="nb">3</span>
+      </div>
+      <div class="with-badge">
+        <span class="av-pat-c av-md">OA</span>
+        <span class="nb">12</span>
+      </div>
+      <div class="with-badge">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--ink);border-radius:4px;background:var(--sheet);color:var(--ink);font-family:var(--mono);font-size:14px">≡</span>
+        <span class="nb">99+</span>
+      </div>
+      <div class="with-badge">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--ink);border-radius:4px;background:var(--sheet);color:var(--ink);font-family:var(--serif);font-size:18px">⚐</span>
+        <span class="nb" style="background:var(--ink);color:var(--paper)">7</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

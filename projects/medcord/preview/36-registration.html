@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient registration</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* PATIENT REGISTRATION — one designed scene.
+     A multi-step intake form, presented as a printed admissions document.
+     Stance: a clipboard with carbon copies — each step is a sheet, the
+     completed steps stamped, the current step in front. */
+
+  body { background: var(--paper); }
+  .stage { max-width: 1100px; margin: 0 auto; padding: 28px 64px 96px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 24px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* STEPPER — printed across the top */
+  .stepper {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--ink);
+    background: var(--sheet);
+    margin-bottom: 28px;
+  }
+  .step {
+    padding: 14px 18px; border-right: 1px solid var(--hair);
+    position: relative;
+  }
+  .step:last-child { border-right: 0; }
+  .step .ord {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .step .nm {
+    font-family: var(--serif); font-size: 17px; font-weight: 500;
+    letter-spacing: -0.005em; margin-top: 4px;
+  }
+  .step .meta {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0;
+    margin-top: 4px;
+  }
+  .step.done .ord { color: var(--green-800); }
+  .step.done .meta { color: var(--green-700); }
+  .step.done::after {
+    content: "✓"; position: absolute; top: 12px; right: 18px;
+    font-family: var(--serif); font-size: 22px; color: var(--green-700);
+  }
+  .step.cur { background: var(--paper); box-shadow: inset 0 -3px 0 var(--ink); }
+  .step.cur .ord { color: var(--ink); }
+  .step.todo .nm { color: var(--ink-3); }
+
+  /* SHEET — current step's form */
+  .sheet-h {
+    padding: 18px 24px;
+    background: var(--paper-deep);
+    border: 1px solid var(--ink);
+    border-bottom: 0;
+  }
+  .sheet-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.018em; }
+  .sheet-h .sub { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); margin-top: 6px; line-height: 1.5; max-width: 56ch; }
+
+  .sheet-body {
+    background: var(--sheet); border: 1px solid var(--ink);
+    border-top: 0; padding: 28px 32px;
+  }
+
+  /* The intake form itself — line-fields, paired */
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 32px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  .field .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .field input, .field select {
+    background: transparent; border: 0;
+    border-bottom: 1px solid var(--ink-3);
+    padding: 4px 0 6px;
+    font-family: var(--sans); font-size: 16px;
+    outline: none; color: var(--ink); letter-spacing: 0;
+  }
+  .field input.mono, .field select.mono { font-family: var(--mono); font-feature-settings: "tnum" 1; }
+  .field input:focus, .field select:focus { border-bottom-color: var(--ink); }
+  .field .help {
+    font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); line-height: 1.4;
+  }
+  .field.computed .compute { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+  .field.computed .compute strong { color: var(--ink); font-style: normal; font-family: var(--mono); }
+
+  .field-group { display: flex; align-items: baseline; gap: 8px; }
+
+  /* CONSENT cards */
+  .consent {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 28px;
+  }
+  .consent-row {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    gap: 14px; align-items: center;
+    padding: 14px 18px;
+    border: 1px solid var(--sheet-edge);
+  }
+  .consent-row.required { border-color: var(--warn); border-style: dashed; background: var(--warn-bg); }
+  .consent-row.signed   { border-color: var(--green-300); background: var(--green-50); }
+
+  .consent-row .cb {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--ink-2); border-radius: 2px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+  }
+  .consent-row .cb.checked {
+    background: var(--ink); border-color: var(--ink);
+  }
+  .consent-row .cb.checked::after {
+    content: ""; width: 8px; height: 5px;
+    border-left: 1.5px solid var(--paper);
+    border-bottom: 1.5px solid var(--paper);
+    transform: rotate(-45deg) translate(1px,-1px);
+  }
+
+  .consent-row .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .consent-row .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; margin-top: 2px;
+  }
+  .consent-row.required .nm { color: var(--warn); }
+  .consent-row.required .meta { color: var(--warn); }
+
+  .consent-row .b {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    height: 30px; padding: 0 14px;
+    border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  }
+  .consent-row .b.primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .consent-row .b.muted { color: var(--ink-3); border-color: var(--sheet-edge); }
+  .consent-row.required .b.primary { background: var(--warn); border-color: var(--warn); }
+
+  /* INSURANCE preview cards (re-used) */
+  .ins-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 18px; }
+  .ins-card {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .ins-card .h {
+    padding: 12px 16px; border-bottom: 1px solid var(--ink);
+    background: var(--paper-deep);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .ins-card .h .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .ins-card .h .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .ins-card .body { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); }
+  .ins-card .body .face {
+    aspect-ratio: 1.6; padding: 12px;
+    background: var(--sheet);
+    display: flex; flex-direction: column; gap: 4px;
+    position: relative;
+  }
+  .ins-card .face .lbl { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .ins-card .face .who { font-family: var(--serif); font-size: 16px; font-weight: 500; }
+  .ins-card .face .num { font-family: var(--mono); font-size: 11px; color: var(--ink-2); letter-spacing: 0; }
+  .ins-card .face.bcbs { background: linear-gradient(135deg,#1F2D4A,#395282); color: var(--paper); }
+  .ins-card .face.bcbs .lbl { color: rgba(244,239,230,0.55); }
+  .ins-card .face.bcbs .who, .ins-card .face.bcbs .num { color: var(--paper); }
+
+  /* FOOTER bar */
+  .foot {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 24px;
+    border: 1px solid var(--ink); border-top: 0;
+    background: var(--paper-deep);
+  }
+  .foot .why {
+    font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3);
+    margin-right: auto; max-width: 50ch; line-height: 1.5;
+  }
+  .foot .b {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    height: 32px; padding: 0 14px;
+    border-radius: 4px; border: 1px solid transparent; cursor: pointer; background: transparent;
+  }
+  .foot .b-quiet { color: var(--ink-3); }
+  .foot .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .foot .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .foot .b-primary[disabled] { opacity: 0.4; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">IV · 07</span>
+    <h1>Register a new patient.</h1>
+    <span class="meta">Wed, May 1 · front desk · workstation REG-02</span>
+  </header>
+
+  <!-- STEPPER -->
+  <div class="stepper">
+    <div class="step done">
+      <div class="ord">01</div>
+      <div class="nm">Identity</div>
+      <div class="meta">Adebayo, O. · 64 M · 14 Mar 1962</div>
+    </div>
+    <div class="step done">
+      <div class="ord">02</div>
+      <div class="nm">Contact</div>
+      <div class="meta">+1 (312) 555-0148 · m.adebayo@…</div>
+    </div>
+    <div class="step done">
+      <div class="ord">03</div>
+      <div class="nm">Insurance</div>
+      <div class="meta">BCBS · verified · copay $30</div>
+    </div>
+    <div class="step cur">
+      <div class="ord">04</div>
+      <div class="nm">Consents</div>
+      <div class="meta">3 signed · 1 required</div>
+    </div>
+    <div class="step todo">
+      <div class="ord">05</div>
+      <div class="nm">Triage</div>
+      <div class="meta">— pending</div>
+    </div>
+  </div>
+
+  <!-- SHEET — currently consents -->
+  <div>
+    <div class="sheet-h">
+      <h2>Step four — consents.</h2>
+      <p class="sub">All required consents must be signed before the patient may be roomed. Optional consents can be added during the visit.</p>
+    </div>
+    <div class="sheet-body">
+
+      <!-- A. Patient summary so far — verification -->
+      <div class="form">
+        <div class="field">
+          <div class="lbl">Family name</div>
+          <input value="Adebayo">
+        </div>
+        <div class="field">
+          <div class="lbl">Given name</div>
+          <input value="Olumide">
+        </div>
+        <div class="field computed">
+          <div class="lbl">Date of birth</div>
+          <input class="mono" value="1962-03-14">
+          <div class="compute">= <strong>64</strong> years</div>
+        </div>
+        <div class="field">
+          <div class="lbl">Sex assigned at birth</div>
+          <select><option>Male</option><option>Female</option><option>Intersex</option><option>Prefer not to say</option></select>
+        </div>
+        <div class="field">
+          <div class="lbl">Mobile</div>
+          <input class="mono" value="+1 (312) 555-0148">
+          <div class="help">verified · primary contact</div>
+        </div>
+        <div class="field">
+          <div class="lbl">Email</div>
+          <input value="m.adebayo@example.com">
+        </div>
+        <div class="field full">
+          <div class="lbl">Address</div>
+          <input value="142 W Lakeside Dr · Chicago, IL 60615">
+        </div>
+        <div class="field full">
+          <div class="lbl">Emergency contact</div>
+          <input value="Funmi Adebayo · spouse · +1 (312) 555-0193">
+        </div>
+      </div>
+
+      <!-- B. Insurance verification preview -->
+      <div class="ins-pair">
+        <div class="ins-card">
+          <div class="h">
+            <span class="nm">Insurance — BlueCross BlueShield</span>
+            <span class="meta">verified · 12 min ago</span>
+          </div>
+          <div class="body">
+            <div class="face bcbs">
+              <span class="lbl">Front · Member</span>
+              <div class="who">ADEBAYO O</div>
+              <div class="num">XYL923847562</div>
+              <div class="num" style="margin-top:auto">Group · 1184-CORP</div>
+            </div>
+            <div class="face">
+              <span class="lbl">Back</span>
+              <div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-2);line-height:1.4">Customer service<br>1-800-555-0148</div>
+              <div class="num" style="margin-top:auto">RxBIN 003858 · PCN A4</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-rows:auto auto;gap:14px">
+          <div style="background:var(--green-50);border:1px solid var(--green-200);padding:14px 18px">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green-800);margin-bottom:4px">Eligibility</div>
+            <div style="font-family:var(--serif);font-size:16px;color:var(--green-800);font-weight:500">Active · in-network</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--green-800);letter-spacing:0;margin-top:4px">copay $30 · deductible $1,250 met</div>
+          </div>
+          <div style="border:1px solid var(--sheet-edge);padding:14px 18px">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px">Estimate · today</div>
+            <div style="font-family:var(--serif);font-size:18px;font-weight:500">$30 + lab fees</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0;margin-top:4px">final billed amount may differ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. Consent forms -->
+      <div class="consent">
+
+        <div class="consent-row signed">
+          <span class="cb checked"></span>
+          <div>
+            <div class="nm">General consent for treatment</div>
+            <div class="meta">signed 14:08 · witness A. Williams RN · valid 12 mo</div>
+          </div>
+          <button class="b muted">View</button>
+        </div>
+
+        <div class="consent-row signed">
+          <span class="cb checked"></span>
+          <div>
+            <div class="nm">HIPAA notice of privacy practices</div>
+            <div class="meta">acknowledged 14:09 · electronic signature</div>
+          </div>
+          <button class="b muted">View</button>
+        </div>
+
+        <div class="consent-row signed">
+          <span class="cb checked"></span>
+          <div>
+            <div class="nm">Photography &amp; telehealth recording</div>
+            <div class="meta">consented 14:10 · revocable any time</div>
+          </div>
+          <button class="b muted">View</button>
+        </div>
+
+        <div class="consent-row required">
+          <span class="cb"></span>
+          <div>
+            <div class="nm">Financial responsibility — required</div>
+            <div class="meta">patient + witness signature · before roomed</div>
+          </div>
+          <button class="b primary">Capture signature</button>
+        </div>
+
+        <div class="consent-row">
+          <span class="cb"></span>
+          <div>
+            <div class="nm">Optional · research participation</div>
+            <div class="meta">may be added during the visit</div>
+          </div>
+          <button class="b muted">Skip</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="foot">
+      <div class="why">
+        <em>"One signature remains. The patient may be roomed once financial responsibility is signed by both parties."</em>
+      </div>
+      <button class="b b-quiet">Save draft</button>
+      <button class="b b-secondary">‹ Back · Insurance</button>
+      <button class="b b-primary" disabled>Continue · Triage →</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

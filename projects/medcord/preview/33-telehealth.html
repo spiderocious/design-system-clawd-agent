@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Telehealth</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* TELEHEALTH — one designed scene.
+     The patient is on the call. The chart sits open beside the video, and
+     the dictated note runs underneath. The video stage is a single wide
+     dark rectangle (paper-after-dark) with two video tiles. Captions appear
+     under the call as a serif italic transcript, like a stenographer. */
+
+  body { background: var(--paper); }
+  .stage { max-width: 1280px; margin: 0 auto; padding: 28px 32px 96px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* The room — call canvas + side panel */
+  .room {
+    display: grid; grid-template-columns: 1fr 320px;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .call {
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    color: var(--paper);
+    display: grid; grid-template-rows: 1fr auto auto;
+  }
+  .stage-tiles {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 1px;
+    background: var(--ink-2);
+    height: 360px;
+  }
+  .tile {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile.patient { background: linear-gradient(135deg,#1F2A1B,#3B4A2F 60%,#6B7958); }
+  .tile.provider { background: linear-gradient(135deg,#241F1A,#3F3A33 60%,#6E665B); }
+  .tile .initials {
+    font-family: var(--serif); font-size: 88px; font-weight: 500;
+    color: rgba(244,239,230,0.85);
+    letter-spacing: -0.04em;
+  }
+  .tile .nm-tag {
+    position: absolute; left: 12px; bottom: 12px;
+    background: rgba(0,0,0,0.5);
+    padding: 4px 10px;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    border-radius: 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tile .nm-tag .nm { color: var(--paper); }
+  .tile .nm-tag .role { font-family: var(--mono); font-size: 9px; color: rgba(244,239,230,0.7); letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* Recording marker on the provider tile */
+  .tile .rec {
+    position: absolute; left: 12px; top: 12px;
+    background: var(--crit); color: #fff;
+    padding: 3px 9px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; border-radius: 2px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tile .rec::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 0 0 rgba(255,255,255,0.6);
+    animation: blink 1400ms ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 0.3 } 50% { opacity: 1 } }
+
+  /* Network mark on the patient tile */
+  .tile .net {
+    position: absolute; right: 12px; top: 12px;
+    background: rgba(0,0,0,0.5);
+    padding: 3px 8px;
+    font-family: var(--mono); font-size: 9px; color: var(--paper);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border-radius: 2px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tile .net .bars { display: inline-flex; gap: 1px; align-items: flex-end; }
+  .tile .net .bars span { width: 2px; background: #86EFAC; }
+
+  /* Captions row — serif italic, under the call */
+  .captions {
+    background: rgba(24,22,19,0.92);
+    color: var(--paper);
+    padding: 12px 24px;
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    line-height: 1.45;
+    border-top: 1px solid var(--ink-2);
+  }
+  .captions .who { color: rgba(244,239,230,0.55); font-style: normal; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; margin-right: 10px; }
+
+  /* Controls — bottom bar */
+  .controls {
+    background: var(--ink);
+    padding: 12px 24px;
+    border-top: 1px solid var(--ink-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ctrl {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--ink-2); color: var(--paper);
+    border: 1px solid var(--ink-2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .ctrl:hover { background: #4A4540; }
+  .ctrl svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .ctrl.muted { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .ctrl.danger { background: var(--crit); color: #fff; border-color: var(--crit); margin-left: auto; padding: 0 14px; width: auto; height: 36px; border-radius: 4px; font-family: var(--sans); font-size: 12px; font-weight: 500; gap: 8px; }
+  .ctrl.danger:hover { background: #9A1B12; border-color: #9A1B12; }
+  .controls .duration {
+    font-family: var(--mono); font-size: 11px; color: rgba(244,239,230,0.55);
+    margin-right: auto; padding-left: 10px; letter-spacing: 0;
+  }
+
+  /* SIDE PANEL — patient context & vitals */
+  .side {
+    background: var(--sheet); border: 1px solid var(--ink);
+    display: flex; flex-direction: column;
+  }
+  .side .h {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper-deep);
+  }
+  .side .nm { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.1; }
+  .side .demo { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; margin-top: 4px; }
+  .side .body { padding: 16px 18px; flex: 1; overflow: auto; }
+  .side .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .side .block { margin-bottom: 18px; }
+  .side .quote {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink); line-height: 1.5;
+  }
+  .side .vitals {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .side .v {
+    background: var(--paper-deep); border: 1px solid var(--sheet-edge);
+    padding: 8px 10px;
+  }
+  .side .v .lbl { margin-bottom: 4px; }
+  .side .v .num { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.015em; }
+
+  /* Below the call: queue + dictation note */
+  .below { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+
+  .queue {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .queue h3 { margin: 0; padding: 14px 18px; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; border-bottom: 1px solid var(--ink); background: var(--paper-deep); }
+  .queue .row {
+    padding: 12px 18px; border-bottom: 1px dashed var(--hair-soft);
+    display: grid; grid-template-columns: 1fr auto; gap: 8px;
+  }
+  .queue .row:last-child { border-bottom: 0; }
+  .queue .row.now {
+    background: var(--paper);
+    border-left: 2px solid var(--ink);
+    padding-left: 16px;
+  }
+  .queue .row .nm { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .queue .row .nm .age { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: 6px; letter-spacing: 0; }
+  .queue .row .why { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; margin-top: 2px; }
+  .queue .row .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .queue .row .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-600);
+    animation: pulse 1.6s ease-out infinite;
+    align-self: center; justify-self: end;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.45); }
+    100% { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+  }
+
+  .dict {
+    background: var(--sheet); border: 1px solid var(--ink);
+  }
+  .dict h3 { margin: 0; padding: 14px 22px; font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; border-bottom: 1px solid var(--ink); background: var(--paper-deep); display: flex; align-items: baseline; gap: 12px; }
+  .dict h3 .meta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .dict .body { padding: 22px 28px; font-family: var(--serif); font-size: 16px; line-height: 1.65; color: var(--ink); letter-spacing: -0.005em; }
+  .dict .body em { font-style: italic; }
+  .dict .body p { margin: 0 0 14px; }
+  .dict .body p:last-child { margin-bottom: 0; }
+  .dict .controls-row {
+    border-top: 1px solid var(--hair); padding: 12px 22px;
+    display: flex; align-items: center; gap: 12px;
+    background: var(--paper-deep);
+  }
+  .dict .b {
+    height: 32px; padding: 0 14px;
+    border-radius: 4px; border: 1px solid transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    cursor: pointer; background: transparent;
+  }
+  .dict .b-quiet { color: var(--ink-3); }
+  .dict .b-secondary { border-color: var(--ink); color: var(--ink); }
+  .dict .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .dict .ai-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 10px;
+    background: var(--paper); border: 1px dashed var(--ink);
+    font-family: var(--mono); font-size: 11px; color: var(--ink); letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .dict .ai-chip svg { width: 12px; height: 12px; }
+  .dict .ai-note {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+    margin-left: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="head">
+    <span class="num">IV · 04</span>
+    <h1>Telehealth · video visit.</h1>
+    <span class="meta">Adebayo, O — follow-up · 14:30</span>
+  </header>
+
+  <!-- ROOM: video + side panel -->
+  <div class="room">
+    <div class="call">
+      <div class="stage-tiles">
+        <div class="tile patient">
+          <span class="initials">OA</span>
+          <span class="net">
+            <span class="bars">
+              <span style="height:4px"></span>
+              <span style="height:6px"></span>
+              <span style="height:8px"></span>
+              <span style="height:10px"></span>
+            </span>
+            Excellent · 78 ms
+          </span>
+          <span class="nm-tag">
+            <span class="nm">Adebayo, O</span>
+            <span class="role">Patient · 64 M</span>
+          </span>
+        </div>
+        <div class="tile provider">
+          <span class="initials">RP</span>
+          <span class="rec">REC</span>
+          <span class="nm-tag">
+            <span class="nm">Patel, R MD</span>
+            <span class="role">Cardiology</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="captions">
+        <span class="who">Patient</span>
+        "…the chest pressure started two hours ago, after I walked up the stairs at home. It felt like a weight, then it went away after I sat down."
+      </div>
+
+      <div class="controls">
+        <span class="duration">14:32 / connected for 4 m 18 s</span>
+        <span class="ctrl" title="Mute"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></span>
+        <span class="ctrl" title="Camera"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+        <span class="ctrl muted" title="Captions on"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 14h2"/><path d="M11 14h2"/></svg></span>
+        <span class="ctrl" title="Share screen"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg></span>
+        <span class="ctrl" title="Chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <button class="ctrl danger">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11"/></svg>
+          End call
+        </button>
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <aside class="side">
+      <div class="h">
+        <div class="nm">Adebayo, Olumide</div>
+        <div class="demo">MRN 10458291 · 64 M · DOB 14 Mar 1962</div>
+      </div>
+      <div class="body">
+
+        <div class="block">
+          <div class="lbl">Reason for visit</div>
+          <div class="quote">"Two-week follow-up after NSTEMI admission. Reports occasional chest tightness with stairs."</div>
+        </div>
+
+        <div class="block">
+          <div class="lbl">Last vitals · self-reported</div>
+          <div class="vitals">
+            <div class="v"><div class="lbl">HR</div><div class="num">78</div></div>
+            <div class="v"><div class="lbl">BP · home</div><div class="num">132/86</div></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="lbl">Current medications</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--ink-2);line-height:1.7;letter-spacing:0">
+            Lisinopril 10 mg PO QD<br>
+            Atorvastatin 40 mg PO QHS<br>
+            Aspirin 81 mg PO QD<br>
+            Metformin 500 mg PO BID<br>
+            Metoprolol 25 mg PO BID
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="lbl">Last admit</div>
+          <div style="font-family:var(--serif);font-size:14px;line-height:1.5;color:var(--ink-2)">
+            29 Apr — 02 May. NSTEMI. Cath: 90% LAD lesion, stent placed. Discharged on dual antiplatelet therapy.
+          </div>
+        </div>
+
+      </div>
+    </aside>
+  </div>
+
+  <!-- BELOW: queue + dictation -->
+  <div class="below">
+
+    <!-- QUEUE -->
+    <div class="queue">
+      <h3>Patient queue</h3>
+      <div class="row now">
+        <div>
+          <div class="nm">Adebayo, O. <span class="age">64 M</span></div>
+          <div class="why">"chest tightness with stairs"</div>
+        </div>
+        <span class="pulse"></span>
+      </div>
+      <div class="row">
+        <div>
+          <div class="nm">Chen, W. <span class="age">40 F</span></div>
+          <div class="why">"hypertension follow-up"</div>
+          <div class="when" style="margin-top:4px">14:45 · in 12 m</div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="nm">Diallo, M. <span class="age">54 F</span></div>
+          <div class="why">"pre-op consult — needs interpreter"</div>
+          <div class="when" style="margin-top:4px">15:00</div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="nm" style="color:var(--ink-3)">Park, D. <span class="age">52 M</span></div>
+          <div class="why">"unrouted — no service tag"</div>
+          <div class="when" style="margin-top:4px;color:var(--warn)">needs assignment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DICTATION NOTE -->
+    <div class="dict">
+      <h3>
+        Dictated note · in progress
+        <span class="meta">auto-saved 14:32</span>
+      </h3>
+      <div class="body">
+        <p><strong>HPI.</strong> Mr. Adebayo is a 64-year-old man, two weeks post stent for NSTEMI, who reports occasional chest tightness with exertion. He describes this as <em>different from his prior pain</em>, less severe and resolving with rest. Denies dyspnea, diaphoresis, palpitations.</p>
+        <p><strong>Plan.</strong> Continue dual antiplatelet therapy. Stress test scheduled for next week. Reviewed warning signs and when to call. Patient is reassured.</p>
+      </div>
+      <div class="controls-row">
+        <button class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg> Rewrite as SOAP</button>
+        <button class="ai-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg> Suggest ICD-10</button>
+        <span class="ai-note">suggestions only — never auto-applied</span>
+        <button class="b b-quiet">Save draft</button>
+        <button class="b b-secondary">Send for co-sign</button>
+        <button class="b b-primary">Sign &amp; close visit</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

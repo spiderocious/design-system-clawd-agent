@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lists & tables</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.list { background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; }
+.list-row { display:flex; align-items:center; gap:12px; padding:12px 14px; border-bottom:1px solid #F1F5F8; cursor:pointer; }
+.list-row:last-child { border-bottom:none; }
+.list-row:hover { background:#F8FAFB; }
+.list-row .name { font-size:13px; font-weight:600; color:#0E1117; }
+.list-row .meta { font-size:11px; color:#64748B; font-family:'JetBrains Mono',monospace; }
+.list-row .actions { display:flex; gap:4px; opacity:0; transition:opacity 0.12s; }
+.list-row:hover .actions { opacity:1; }
+.tbl { width:100%; border-collapse:separate; border-spacing:0; background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; }
+.tbl thead th { font-size:10px; font-weight:600; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; text-align:left; padding:10px 12px; background:#F8FAFB; border-bottom:1px solid #E2E8F0; white-space:nowrap; user-select:none; }
+.tbl thead th .sort { color:#94A3B8; margin-left:4px; font-family:'JetBrains Mono',monospace; }
+.tbl thead th.sort-asc .sort { color:#0A87A3; }
+.tbl tbody td { padding:10px 12px; font-size:13px; border-bottom:1px solid #F1F5F8; vertical-align:middle; }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:hover td { background:#F8FAFB; }
+.tbl tbody tr.crit td { background:#FEF6F6; }
+.tbl tbody tr.crit { box-shadow:inset 3px 0 0 #DC2626; }
+.tbl tbody tr.selected td { background:#F0FBFD; }
+.tbl .num { text-align:right; font-family:'JetBrains Mono',monospace; }
+.tbl .mrn { font-family:'JetBrains Mono',monospace; color:#475569; }
+.tbl .filter-row td { background:#F8FAFB; padding:6px 10px; }
+.tbl .filter-row input { width:100%; height:24px; border:1px solid #CBD5E1; border-radius:4px; padding:0 6px; font-size:12px; }
+.bulk-bar { background:#0E1117; color:#fff; padding:8px 14px; display:flex; align-items:center; gap:12px; border-radius:8px 8px 0 0; }
+.col-handle { color:#CBD5E1; cursor:col-resize; padding:0 2px; }
+.expand-btn { width:18px; height:18px; border:1px solid #CBD5E1; border-radius:4px; background:#fff; color:#475569; font-size:12px; line-height:0; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.spark { display:inline-block; }
+.tree { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:8px 10px; }
+.tree ul { list-style:none; padding:0; margin:0; }
+.tree li { padding:4px 0; font-size:13px; color:#0E1117; }
+.tree li ul { padding-left:18px; border-left:1px dashed #E2E8F0; margin-left:6px; }
+.tree .tg { display:inline-block; width:14px; color:#94A3B8; font-family:'JetBrains Mono',monospace; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Lists &amp; tables</h1>
+<p class="spec-sub">Healthcare lives in tables. This page covers the full taxonomy: simple list, patient list row, worklist row, inset list, tree, and the data table with every sub-variant — selection, bulk action bar, filter row, expandable, grouped, sticky, density, inline edit, cell types, critical highlight, pagination.</p>
+
+<div class="spec-section-label">Simple list — with avatar &amp; metadata</div>
+<div class="list">
+  <div class="list-row">
+    <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+    <div style="flex:1"><div class="name">Adebayo, Olumide</div><div class="meta">10458291 · 64M · 312A</div></div>
+    <span class="pill pill-info">In room</span>
+    <div class="actions"><button class="btn btn-sm btn-tertiary">Open</button></div>
+  </div>
+  <div class="list-row">
+    <span class="avatar avatar-md" style="background:#FEF3C7;color:#B45309">CL</span>
+    <div style="flex:1"><div class="name">Chen, Wei-Lin</div><div class="meta">10293874 · 40F · 312B</div></div>
+    <span class="pill pill-warning">Awaiting labs</span>
+    <div class="actions"><button class="btn btn-sm btn-tertiary">Open</button></div>
+  </div>
+  <div class="list-row">
+    <span class="avatar avatar-md" style="background:#DCFCE7;color:#15803D">DM</span>
+    <div style="flex:1"><div class="name">Diallo, Mariama</div><div class="meta">10883204 · 54F · 314A</div></div>
+    <span class="pill pill-success">Admitted</span>
+    <div class="actions"><button class="btn btn-sm btn-tertiary">Open</button></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Patient list row — full <span class="count">avatar · name · MRN · DOB+age · location · attending · status · alert strip</span></div>
+<div class="list">
+  <div class="list-row" style="padding:14px;border-left:3px solid #DC2626">
+    <span class="avatar avatar-md" style="background:#FECACA;color:#991B1B">SH</span>
+    <div style="flex:1.5;min-width:0"><div class="name">Hadi, Samira</div><div class="meta">10778123 · DOB 1988-02-14 · 38F</div></div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">CCU · 207A</div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">Patel, R MD</div>
+    <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <span class="pill pill-stat">STAT</span>
+      <span style="font-size:10px;color:#991B1B;font-weight:600">Trop ↑ critical</span>
+    </div>
+  </div>
+  <div class="list-row" style="padding:14px">
+    <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+    <div style="flex:1.5;min-width:0"><div class="name">Adebayo, Olumide</div><div class="meta">10458291 · DOB 1962-03-14 · 64M</div></div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">3-North · 312A</div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">Patel, R MD</div>
+    <div style="flex:0 0 auto"><span class="pill pill-info">In room</span></div>
+  </div>
+  <div class="list-row" style="padding:14px">
+    <span class="avatar avatar-md" style="background:#FEF3C7;color:#B45309">CL</span>
+    <div style="flex:1.5;min-width:0"><div class="name">Chen, Wei-Lin</div><div class="meta">10293874 · DOB 1985-11-02 · 40F</div></div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">3-North · 312B</div>
+    <div style="flex:1;min-width:0;font-size:12px;color:#475569">Patel, R MD</div>
+    <div style="flex:0 0 auto"><span class="pill pill-warning">Awaiting labs</span></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Tree — Department › Ward › Room › Bed</div>
+<div class="tree" style="max-width:480px">
+  <ul>
+    <li><span class="tg">▾</span><strong>Cardiology</strong> · 32 beds
+      <ul>
+        <li><span class="tg">▾</span>3-North · Step-down · 18 beds
+          <ul>
+            <li><span class="tg">▸</span>Room 312 · 2 beds <span class="pill pill-warning" style="font-size:10px">2 occupied</span></li>
+            <li><span class="tg">▸</span>Room 313 · 2 beds <span class="pill pill-warning" style="font-size:10px">2 occupied</span></li>
+            <li><span class="tg">▸</span>Room 314 · 2 beds <span class="pill" style="font-size:10px;background:#F0FDF4;color:#15803D;border-color:#86EFAC">1 available</span></li>
+          </ul>
+        </li>
+        <li><span class="tg">▸</span>CCU · 8 beds <span class="pill" style="font-size:10px;background:#FEF2F2;color:#991B1B;border-color:#FCA5A5">8 occupied</span></li>
+      </ul>
+    </li>
+    <li><span class="tg">▸</span>Internal Medicine · 24 beds</li>
+    <li><span class="tg">▸</span>Surgery · 16 beds</li>
+  </ul>
+</div>
+
+<div class="spec-section-label">Data table — full feature surface</div>
+<div class="list" style="border:none">
+<div class="bulk-bar">
+  <span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #fff;background:#0A87A3;align-items:center;justify-content:center;color:#fff"><span style="font-size:11px">✓</span></span>
+  <span style="font-size:13px;font-weight:600">3 patients selected</span>
+  <button class="btn btn-sm" style="background:#1E2530;color:#fff;border-color:#475569">Assign attending</button>
+  <button class="btn btn-sm" style="background:#1E2530;color:#fff;border-color:#475569">Add tag</button>
+  <button class="btn btn-sm" style="background:transparent;color:#fff;border-color:#475569">Export CSV</button>
+  <button class="btn btn-sm btn-destructive-ghost" style="margin-left:auto;color:#FCA5A5">Discharge × 3</button>
+</div>
+<table class="tbl" style="border-radius:0 0 8px 8px;border-top:none">
+  <thead>
+    <tr>
+      <th style="width:32px"><span class="cb checked" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3"></span></th>
+      <th class="sort-asc">Patient <span class="sort">↑</span><span class="col-handle">⋮</span></th>
+      <th>MRN<span class="col-handle">⋮</span></th>
+      <th>DOB · Age<span class="col-handle">⋮</span></th>
+      <th>Bed</th>
+      <th>Attending</th>
+      <th>Last vitals (HR · BP · SpO₂)</th>
+      <th>Trend</th>
+      <th>Status</th>
+      <th style="width:32px"></th>
+    </tr>
+    <tr class="filter-row">
+      <td></td>
+      <td><input placeholder="Filter name"></td>
+      <td><input placeholder="MRN"></td>
+      <td></td>
+      <td><input placeholder="Bed"></td>
+      <td><input placeholder="Attending"></td>
+      <td></td>
+      <td></td>
+      <td><input placeholder="Status"></td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="crit selected">
+      <td><span class="cb checked" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3"></span></td>
+      <td><div style="display:flex;gap:8px;align-items:center"><span class="avatar avatar-sm" style="background:#FECACA;color:#991B1B">SH</span><div><div style="font-weight:600">Hadi, Samira</div><div style="font-size:11px;color:#991B1B">Trop 2.1 ↑↑ Critical</div></div></div></td>
+      <td class="mrn">10778123</td>
+      <td>1988-02-14 · 38F</td>
+      <td>CCU · 207A</td>
+      <td>Patel, R MD</td>
+      <td><span class="mono" style="color:#7F1D1D;font-weight:600">112 · 158/96 · 91%</span></td>
+      <td><svg class="spark" width="60" height="20" viewBox="0 0 60 20"><polyline points="0,16 10,15 20,12 30,11 40,8 50,5 60,3" stroke="#DC2626" stroke-width="1.5" fill="none"/></svg></td>
+      <td><span class="pill pill-stat">STAT</span></td>
+      <td><span style="cursor:pointer;color:#94A3B8;font-size:18px;line-height:1">⋯</span></td>
+    </tr>
+    <tr class="selected">
+      <td><span class="cb checked" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3"></span></td>
+      <td><div style="display:flex;gap:8px;align-items:center"><span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span><span style="font-weight:600">Adebayo, Olumide</span></div></td>
+      <td class="mrn">10458291</td>
+      <td>1962-03-14 · 64M</td>
+      <td>3-North · 312A</td>
+      <td>Patel, R MD</td>
+      <td><span class="mono">76 · 128/82 · 98%</span></td>
+      <td><svg class="spark" width="60" height="20" viewBox="0 0 60 20"><polyline points="0,12 10,11 20,10 30,11 40,9 50,10 60,9" stroke="#0A87A3" stroke-width="1.5" fill="none"/></svg></td>
+      <td><span class="pill pill-info">In room</span></td>
+      <td><span style="cursor:pointer;color:#94A3B8;font-size:18px">⋯</span></td>
+    </tr>
+    <tr class="selected">
+      <td><span class="cb checked" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3"></span></td>
+      <td><div style="display:flex;gap:8px;align-items:center"><span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">CL</span><span style="font-weight:600">Chen, Wei-Lin</span></div></td>
+      <td class="mrn">10293874</td>
+      <td>1985-11-02 · 40F</td>
+      <td>3-North · 312B</td>
+      <td>Patel, R MD</td>
+      <td><span class="mono">88 · 122/78 · 99%</span></td>
+      <td><svg class="spark" width="60" height="20" viewBox="0 0 60 20"><polyline points="0,10 10,11 20,12 30,10 40,11 50,9 60,10" stroke="#475569" stroke-width="1.5" fill="none"/></svg></td>
+      <td><span class="pill pill-warning">Awaiting labs</span></td>
+      <td><span style="cursor:pointer;color:#94A3B8;font-size:18px">⋯</span></td>
+    </tr>
+    <tr>
+      <td><span class="cb" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span></td>
+      <td><span class="expand-btn">+</span> <span style="font-weight:600;margin-left:4px">Diallo, Mariama</span></td>
+      <td class="mrn">10883204</td>
+      <td>1971-07-23 · 54F</td>
+      <td>3-North · 314A</td>
+      <td>Okafor, C MD</td>
+      <td><span class="mono">72 · 118/76 · 98%</span></td>
+      <td><svg class="spark" width="60" height="20" viewBox="0 0 60 20"><polyline points="0,11 10,10 20,11 30,10 40,11 50,11 60,10" stroke="#475569" stroke-width="1.5" fill="none"/></svg></td>
+      <td><span class="pill pill-success">Admitted</span></td>
+      <td><span style="cursor:pointer;color:#94A3B8;font-size:18px">⋯</span></td>
+    </tr>
+    <tr>
+      <td colspan="10" style="background:#F8FAFB;padding:14px 24px;border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
+        <div style="display:flex;gap:24px;align-items:center;font-size:12px">
+          <div><div class="spec-tile-label">Trend · last 24h</div><svg width="280" height="40" viewBox="0 0 280 40"><path d="M 0 26 L 20 24 L 40 28 L 60 22 L 80 26 L 100 20 L 120 22 L 140 18 L 160 14 L 180 18 L 200 12 L 220 16 L 240 10 L 260 12 L 280 8" stroke="#0A87A3" stroke-width="1.6" fill="none"/><rect x="0" y="6" width="280" height="22" fill="rgba(10,135,163,0.06)"/></svg></div>
+          <div class="kv"><span class="k">Diet</span><span class="v" style="font-family:'Inter',sans-serif">Cardiac · low Na</span></div>
+          <div class="kv"><span class="k">Mobility</span><span class="v" style="font-family:'Inter',sans-serif">Up with assist</span></div>
+          <div class="kv"><span class="k">Anticipated DC</span><span class="v">2026-05-03</span></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="10" style="background:#F1F5F8;padding:6px 14px;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">3-North · Step-down (4)</td>
+    </tr>
+    <tr>
+      <td><span class="cb" style="display:inline-flex;width:14px;height:14px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span></td>
+      <td><div style="display:flex;gap:8px;align-items:center"><span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">GL</span><span style="font-weight:600">García, Lucía</span></div></td>
+      <td class="mrn">10712558</td>
+      <td>1948-09-30 · 77F</td>
+      <td>3-North · 314B</td>
+      <td>Okafor, C MD</td>
+      <td><span class="mono">80 · 132/84 · 96%</span></td>
+      <td><svg class="spark" width="60" height="20" viewBox="0 0 60 20"><polyline points="0,8 10,9 20,8 30,10 40,9 50,11 60,12" stroke="#475569" stroke-width="1.5" fill="none"/></svg></td>
+      <td><span class="pill pill-neutral">Awaiting DC</span></td>
+      <td></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr><td colspan="10" style="background:#F8FAFB;padding:8px 14px;font-size:12px">
+      <div style="display:flex;align-items:center;gap:14px;color:#475569">
+        <span style="font-family:'JetBrains Mono',monospace">5 of 42 · page 1 of 9</span>
+        <span style="margin-left:auto;display:inline-flex;gap:4px">
+          <button class="btn btn-sm btn-secondary">‹</button>
+          <button class="btn btn-sm" style="background:#0A87A3;color:#fff;border-color:#0A87A3">1</button>
+          <button class="btn btn-sm btn-secondary">2</button>
+          <button class="btn btn-sm btn-secondary">3</button>
+          <button class="btn btn-sm btn-secondary" disabled>···</button>
+          <button class="btn btn-sm btn-secondary">9</button>
+          <button class="btn btn-sm btn-secondary">›</button>
+        </span>
+        <select style="font-size:12px;padding:4px 6px;border:1px solid #CBD5E1;border-radius:4px;font-family:'Inter',sans-serif"><option>5 / page</option><option>10 / page</option><option>25 / page</option></select>
+      </div>
+    </td></tr>
+  </tfoot>
+</table>
+</div>
+
+<div class="spec-section-label">Empty · loading · error states inside table</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+  <table class="tbl">
+    <thead><tr><th>Patient</th><th>MRN</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td colspan="3" style="padding:36px 14px;text-align:center;color:#64748B"><svg class="icon-32" viewBox="0 0 24 24" stroke="#94A3B8" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg><div style="margin-top:8px;font-size:13px;font-weight:600;color:#0E1117">No patients match this filter</div><div style="font-size:12px">Clear filters to see all patients</div></td></tr>
+    </tbody>
+  </table>
+  <table class="tbl">
+    <thead><tr><th>Patient</th><th>MRN</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:140px"></div></td><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:80px"></div></td><td><div style="height:18px;background:#F1F5F8;border-radius:9999px;width:80px"></div></td></tr>
+      <tr><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:120px"></div></td><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:80px"></div></td><td><div style="height:18px;background:#F1F5F8;border-radius:9999px;width:64px"></div></td></tr>
+      <tr><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:160px"></div></td><td><div style="height:14px;background:#F1F5F8;border-radius:3px;width:80px"></div></td><td><div style="height:18px;background:#F1F5F8;border-radius:9999px;width:90px"></div></td></tr>
+    </tbody>
+  </table>
+  <table class="tbl">
+    <thead><tr><th>Patient</th><th>MRN</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td colspan="3" style="padding:36px 14px;text-align:center;background:#FEF2F2"><svg class="icon-32" viewBox="0 0 24 24" stroke="#DC2626" fill="none" stroke-width="1.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><div style="margin-top:8px;font-size:13px;font-weight:600;color:#991B1B">Couldn't load worklist</div><div style="font-size:12px;color:#991B1B">EMR connection timed out · <a href="#" style="color:#DC2626">retry</a></div></td></tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

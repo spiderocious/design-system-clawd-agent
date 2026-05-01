@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colors — Data Visualization Palette</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 20px; background: #F8FAFB; font-family: 'Inter', sans-serif; }
+  .label { font-size: 11px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .palette { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid #E2E8F0; margin-bottom: 16px; }
+  .swatch { flex: 1; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 6px; gap: 2px; }
+  .swatch span { font-size: 9px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .swatch .num { font-size: 10px; font-weight: 700; }
+
+  /* Usage demos */
+  .demo-section { margin-bottom: 16px; }
+  .chart-bar-row { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 4px; }
+  .bar { border-radius: 3px 3px 0 0; flex: 1; transition: opacity 0.15s; }
+  .chart-wrap { background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px 8px; margin-bottom: 10px; }
+  .chart-title { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 8px; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .leg-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #64748B; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* Line chart mini */
+  .line-chart { position: relative; height: 60px; background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px; overflow: hidden; }
+
+  .divider { height: 1px; background: #E2E8F0; margin: 14px 0; }
+  .dark-bg { background: #0E1117; border-radius: 8px; padding: 12px; margin-top: 4px; }
+  .dark-label { color: #64748B; }
+</style>
+</head>
+<body>
+
+<div class="label">Data Visualization — 8 Categorical Colors</div>
+<div class="palette">
+  <div class="swatch" style="background:#0A87A3"><span class="num" style="color:#fff">1</span><span style="color:#B3E3EF">#0A87A3</span></div>
+  <div class="swatch" style="background:#2563EB"><span class="num" style="color:#fff">2</span><span style="color:#BFDBFE">#2563EB</span></div>
+  <div class="swatch" style="background:#7C3AED"><span class="num" style="color:#fff">3</span><span style="color:#DDD6FE">#7C3AED</span></div>
+  <div class="swatch" style="background:#16A34A"><span class="num" style="color:#fff">4</span><span style="color:#BBF7D0">#16A34A</span></div>
+  <div class="swatch" style="background:#D97706"><span class="num" style="color:#fff">5</span><span style="color:#FDE68A">#D97706</span></div>
+  <div class="swatch" style="background:#DC2626"><span class="num" style="color:#fff">6</span><span style="color:#FECACA">#DC2626</span></div>
+  <div class="swatch" style="background:#0891B2"><span class="num" style="color:#fff">7</span><span style="color:#A5F3FC">#0891B2</span></div>
+  <div class="swatch" style="background:#BE185D"><span class="num" style="color:#fff">8</span><span style="color:#FBCFE8">#BE185D</span></div>
+</div>
+
+<div class="chart-wrap">
+  <div class="chart-title">Bar chart specimen — Patient census by department</div>
+  <div class="chart-bar-row">
+    <div class="bar" style="height:75%;background:#0A87A3;"></div>
+    <div class="bar" style="height:55%;background:#2563EB;"></div>
+    <div class="bar" style="height:90%;background:#7C3AED;"></div>
+    <div class="bar" style="height:40%;background:#16A34A;"></div>
+    <div class="bar" style="height:65%;background:#D97706;"></div>
+    <div class="bar" style="height:30%;background:#DC2626;"></div>
+    <div class="bar" style="height:50%;background:#0891B2;"></div>
+    <div class="bar" style="height:70%;background:#BE185D;"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;padding:4px 4px 0;border-top:1px solid #F1F5F8;margin-top:4px;">
+    <span style="font-size:9px;color:#94A3B8;">ICU</span>
+    <span style="font-size:9px;color:#94A3B8;">ED</span>
+    <span style="font-size:9px;color:#94A3B8;">Cardio</span>
+    <span style="font-size:9px;color:#94A3B8;">Onco</span>
+    <span style="font-size:9px;color:#94A3B8;">Ortho</span>
+    <span style="font-size:9px;color:#94A3B8;">Peds</span>
+    <span style="font-size:9px;color:#94A3B8;">OB</span>
+    <span style="font-size:9px;color:#94A3B8;">Neuro</span>
+  </div>
+</div>
+
+<div class="chart-wrap">
+  <div class="chart-title">Multi-line vitals chart specimen (SVG)</div>
+  <svg width="100%" height="70" viewBox="0 0 500 70" preserveAspectRatio="none">
+    <!-- Reference bands -->
+    <rect x="0" y="15" width="500" height="25" fill="#F0FDF4" opacity="0.6"/>
+    <!-- HR line -->
+    <polyline points="0,30 60,28 120,32 180,25 240,20 300,26 360,28 420,22 500,24" stroke="#0A87A3" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- BP systolic line -->
+    <polyline points="0,20 60,22 120,18 180,16 240,14 300,17 360,19 420,15 500,18" stroke="#2563EB" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- SpO2 line -->
+    <polyline points="0,35 60,34 120,36 180,38 240,42 300,37 360,35 420,33 500,34" stroke="#16A34A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Temp line -->
+    <polyline points="0,50 60,49 120,51 180,52 240,50 300,48 360,50 420,51 500,49" stroke="#D97706" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,2"/>
+    <!-- Abnormal marker -->
+    <circle cx="240" cy="42" r="3.5" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+  </svg>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#0A87A3"></div>HR (bpm)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2563EB"></div>BP Systolic</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#16A34A"></div>SpO₂ (%)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#D97706"></div>Temp (°F)</div>
+    <div class="leg-item" style="color:#DC2626;"><div class="leg-dot" style="background:#FEF2F2;border:1.5px solid #DC2626;"></div>Abnormal flag</div>
+  </div>
+</div>
+
+<div class="dark-bg">
+  <div class="label dark-label">Data-viz palette — Dark Theme</div>
+  <div class="palette" style="margin-top:8px;border-color:#21262D;">
+    <div class="swatch" style="background:#0A87A3"><span class="num" style="color:#fff">1</span></div>
+    <div class="swatch" style="background:#3B82F6"><span class="num" style="color:#fff">2</span></div>
+    <div class="swatch" style="background:#8B5CF6"><span class="num" style="color:#fff">3</span></div>
+    <div class="swatch" style="background:#22C55E"><span class="num" style="color:#fff">4</span></div>
+    <div class="swatch" style="background:#F59E0B"><span class="num" style="color:#fff">5</span></div>
+    <div class="swatch" style="background:#EF4444"><span class="num" style="color:#fff">6</span></div>
+    <div class="swatch" style="background:#06B6D4"><span class="num" style="color:#fff">7</span></div>
+    <div class="swatch" style="background:#EC4899"><span class="num" style="color:#fff">8</span></div>
+  </div>
+</div>
+</body>
+</html>

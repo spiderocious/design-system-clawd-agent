@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Toasts · banners · alerts</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* TOASTS · BANNERS · ALERTS — non-blocking feedback surfaces.
+     Stance: a slip of paper on the desk for toasts; a typeset rule across
+     the page for banners; a callout indented from the body for alerts. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1180px; }
+
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 36px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 { margin: 0; flex: 1; font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: var(--track-display); }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* TOASTS */
+  .toast-stage {
+    background: var(--paper-deep);
+    border: 1px solid var(--hair);
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 12px;
+    align-items: flex-end;
+  }
+
+  .toast {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    box-shadow: 0 8px 16px rgba(24,22,19,0.16);
+    width: 360px;
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 12px; align-items: start;
+    position: relative;
+  }
+  .toast::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--ink-3);
+  }
+  .toast.ok::before    { background: var(--green-700); }
+  .toast.warn::before  { background: var(--warn); }
+  .toast.crit::before  { background: var(--crit); }
+  .toast.info::before  { background: var(--ink); }
+  .toast .glyph {
+    font-family: var(--serif); font-style: italic;
+    font-size: 18px; line-height: 1; color: var(--ink); padding-top: 1px;
+    text-align: center;
+  }
+  .toast.ok .glyph { color: var(--green-700); }
+  .toast.warn .glyph { color: var(--warn); }
+  .toast.crit .glyph { color: var(--crit); }
+  .toast .body .ttl { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); }
+  .toast .body .desc { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); margin-top: 2px; line-height: 1.45; }
+  .toast .x { background: transparent; border: 0; cursor: pointer; color: var(--ink-3); font-size: 16px; line-height: 1; }
+  .toast .actions { display: flex; gap: 12px; margin-top: 8px; align-items: center; }
+  .toast .actions a {
+    font-family: var(--sans); font-size: 12px; color: var(--ink); cursor: pointer;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1px; text-decoration: none;
+  }
+  .toast .actions a.danger { color: var(--crit); border-bottom-color: var(--crit); }
+  .toast .pb { height: 3px; background: var(--paper-deep); margin-top: 8px; }
+  .toast .pb > span { display: block; height: 100%; background: var(--ink); }
+
+  /* UNDO STRIP — black tape */
+  .undo-strip {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 16px;
+    width: 360px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 8px 16px rgba(24,22,19,0.16);
+  }
+  .undo-strip .glyph { font-family: var(--serif); font-style: italic; font-size: 16px; }
+  .undo-strip .ttl { flex: 1; font-family: var(--sans); font-size: 13px; }
+  .undo-strip a { color: var(--paper); font-family: var(--sans); font-size: 12px; cursor: pointer; border-bottom: 1px solid var(--paper); padding-bottom: 1px; text-decoration: none; }
+
+  /* OPTIMISTIC indicator */
+  .optim {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+  .optim .puck {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink-3);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.3 } 50% { opacity: 1 } }
+
+  /* BANNERS — across the page */
+  .banner-stage {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    padding: 0;
+    display: flex; flex-direction: column;
+  }
+  .banner {
+    display: grid; grid-template-columns: 18px 110px 1fr auto;
+    gap: 14px; align-items: center;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .banner:last-child { border-bottom: 0; }
+  .banner .stamp {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper);
+    padding: 3px 8px; text-align: center;
+  }
+  .banner .body {
+    font-family: var(--sans); font-size: 13px; color: var(--ink); line-height: 1.5;
+  }
+  .banner .body em { font-family: var(--serif); font-style: italic; color: var(--ink-2); }
+  .banner .body strong { font-weight: 600; }
+  .banner .actions { display: flex; gap: 12px; }
+  .banner .actions a {
+    font-family: var(--sans); font-size: 12px; color: var(--ink);
+    cursor: pointer; border-bottom: 1px solid var(--ink); padding-bottom: 1px; text-decoration: none;
+  }
+  .banner.info .stamp  { background: var(--ink); }
+  .banner.info::before { background: var(--ink); }
+
+  .banner.warn { background: var(--warn-bg); }
+  .banner.warn .stamp { background: var(--warn); color: #fff; }
+
+  .banner.crit { background: var(--crit-bg); }
+  .banner.crit .stamp { background: var(--crit); color: #fff; }
+  .banner.crit .body strong { color: var(--crit); }
+
+  .banner.ok { background: var(--green-50); }
+  .banner.ok .stamp { background: var(--green-700); color: #fff; }
+  .banner.ok .body strong { color: var(--green-800); }
+
+  .banner.system {
+    background: var(--ink); color: var(--paper);
+    border-bottom-color: var(--ink-2);
+  }
+  .banner.system .stamp { background: var(--paper); color: var(--ink); }
+  .banner.system .body { color: var(--paper); }
+  .banner.system .body em { color: rgba(244,239,230,0.65); }
+  .banner.system .actions a { color: var(--paper); border-bottom-color: var(--paper); }
+
+  /* ALERTS / CALLOUTS */
+  .callouts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .callout {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    padding: 14px 18px 14px 22px;
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: var(--ink);
+  }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-bg); }
+  .callout.crit { border-left-color: var(--crit); background: var(--crit-bg); }
+  .callout.ok   { border-left-color: var(--green-700); background: var(--green-50); }
+
+  .callout .h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .callout .h .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; padding: 2px 6px; border: 1px solid currentColor; }
+  .callout.warn .h .lbl { color: var(--warn); }
+  .callout.crit .h .lbl { color: var(--crit); }
+  .callout.ok .h   .lbl { color: var(--green-800); }
+  .callout .h .ttl { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+  .callout.warn .h .ttl { color: var(--warn); }
+  .callout.crit .h .ttl { color: var(--crit); }
+  .callout.ok .h   .ttl { color: var(--green-800); }
+  .callout .body {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink-2); line-height: 1.5;
+  }
+  .callout.warn .body { color: var(--warn); }
+  .callout.crit .body { color: var(--crit); }
+  .callout.ok   .body { color: var(--green-800); }
+
+  /* CONTEXT MENU */
+  .ctx-stage { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .ctx-menu {
+    background: var(--sheet); border: 1px solid var(--ink);
+    box-shadow: 0 12px 32px rgba(24,22,19,0.18);
+    width: 240px;
+    padding: 4px 0;
+  }
+  .ctx-menu .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 8px 14px 4px;
+  }
+  .ctx-menu .row {
+    padding: 7px 14px;
+    display: grid; grid-template-columns: 16px 1fr auto;
+    gap: 10px; align-items: center;
+    font-family: var(--sans); font-size: 13px; color: var(--ink);
+    cursor: pointer;
+  }
+  .ctx-menu .row:hover { background: var(--paper-deep); }
+  .ctx-menu .row .glyph { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--ink-3); text-align: center; line-height: 1; }
+  .ctx-menu .row .kbd { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0; }
+  .ctx-menu .row.danger { color: var(--crit); }
+  .ctx-menu .row.danger .glyph { color: var(--crit); }
+  .ctx-menu .div { height: 1px; background: var(--hair); margin: 4px 8px; }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="head">
+    <span class="num">V · 02</span>
+    <h1>Toasts · banners · alerts.</h1>
+    <span class="meta">slips, rules, callouts</span>
+  </header>
+
+  <!-- A. TOASTS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Toasts — slips on the desk.</h2>
+      <div class="sub">Sheet, hairline edge, 3-pixel ink rule on the leading edge that takes the colour of the state. The desc is serif italic, like a marginal note.</div>
+    </div>
+
+    <div class="toast-stage">
+
+      <div class="toast info">
+        <span class="glyph">·</span>
+        <div class="body">
+          <div class="ttl">Patient roomed</div>
+          <div class="desc">Adebayo, O. moved to 312A.</div>
+        </div>
+        <button class="x">×</button>
+      </div>
+
+      <div class="toast ok">
+        <span class="glyph">✓</span>
+        <div class="body">
+          <div class="ttl">Order signed</div>
+          <div class="desc">Lisinopril 10 mg PO daily — sent to pharmacy.</div>
+        </div>
+        <button class="x">×</button>
+      </div>
+
+      <div class="toast warn">
+        <span class="glyph">!</span>
+        <div class="body">
+          <div class="ttl">Auto-logout in 60 seconds</div>
+          <div class="desc">Your session will lock for HIPAA. Move the mouse to extend.</div>
+          <div class="actions">
+            <a>Stay signed in</a>
+            <a>Lock now</a>
+          </div>
+        </div>
+        <button class="x">×</button>
+      </div>
+
+      <div class="toast crit">
+        <span class="glyph">!</span>
+        <div class="body">
+          <div class="ttl">Lab order failed</div>
+          <div class="desc">EMR connection timed out at 14:42.</div>
+          <div class="actions">
+            <a class="danger">Retry</a>
+            <a>Open offline</a>
+          </div>
+        </div>
+        <button class="x">×</button>
+      </div>
+
+      <div class="toast info">
+        <span class="glyph">·</span>
+        <div class="body">
+          <div class="ttl">Uploading echocardiogram</div>
+          <div class="desc">echo_2026-04-30.dcm · 14.2 MB</div>
+          <div class="pb"><span style="width:62%"></span></div>
+        </div>
+      </div>
+
+      <div class="undo-strip">
+        <span class="glyph">⤺</span>
+        <span class="ttl">Encounter wrap-up complete.</span>
+        <a>Undo</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- B. BANNERS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Banners — typeset rules across the page.</h2>
+      <div class="sub">A mono stamp on the left, the message in serif/sans, actions on the right. Persistent across page changes; rare.</div>
+    </div>
+
+    <div class="banner-stage">
+
+      <div class="banner info">
+        <span></span>
+        <span class="stamp">Read-only</span>
+        <div class="body">This chart is signed and cannot be edited. <em>Open an addendum to add new findings.</em></div>
+        <div class="actions"><a>Open addendum</a></div>
+      </div>
+
+      <div class="banner warn">
+        <span></span>
+        <span class="stamp">Maintenance</span>
+        <div class="body"><strong>EMR maintenance window</strong> · 2026-05-04 02:00 – 04:00 CDT. Use offline downtime forms during this window.</div>
+        <div class="actions"><a>View checklist</a></div>
+      </div>
+
+      <div class="banner ok">
+        <span></span>
+        <span class="stamp">Bundle</span>
+        <div class="body"><strong>Sepsis bundle complete.</strong> All five elements documented within the 1-hour window.</div>
+      </div>
+
+      <div class="banner crit">
+        <span></span>
+        <span class="stamp">Critical</span>
+        <div class="body"><strong>Troponin 2.10 ng/mL</strong> for Hadi, S. acknowledged by R. Patel MD at 14:42. Consider STEMI workup.</div>
+        <div class="actions"><a>Open chart</a></div>
+      </div>
+
+      <div class="banner system">
+        <span></span>
+        <span class="stamp">Workstation</span>
+        <div class="body"><strong>NUR-3N-04</strong> · 3-North charge desk · shared device. <em>Charts auto-lock after five minutes idle.</em></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- C. ALERTS / CALLOUTS -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Alerts &amp; callouts — quotes from the page.</h2>
+      <div class="sub">For tips, drug-interactions, and inline guidance. The body is serif italic — they read like a note in the margin.</div>
+    </div>
+
+    <div class="callouts">
+      <div class="callout">
+        <div class="h"><span class="lbl">Tip</span><span class="ttl">Pin frequent worklists.</span></div>
+        <div class="body">Pin a worklist with ⌘ P; it will appear in your sidebar across sessions, on any workstation.</div>
+      </div>
+      <div class="callout warn">
+        <div class="h"><span class="lbl">Drug interaction</span><span class="ttl">Bleeding risk increased.</span></div>
+        <div class="body">Warfarin + Aspirin · INR check recommended within 72 hours.</div>
+      </div>
+      <div class="callout crit">
+        <div class="h"><span class="lbl">Critical</span><span class="ttl">Acknowledgement required.</span></div>
+        <div class="body">Troponin 2.10 ng/mL crossed the critical line at 14:42. The auto-page has been sent.</div>
+      </div>
+      <div class="callout ok">
+        <div class="h"><span class="lbl">Confirmed</span><span class="ttl">Note signed.</span></div>
+        <div class="body">Progress note for Adebayo, O. signed and locked. Visible to the care team.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. OPTIMISTIC + CONTEXT MENU -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Optimistic indicator &amp; context menu.</h2>
+      <div class="sub">Saving lives in the background; right-click sheets the rest.</div>
+    </div>
+
+    <div class="ctx-stage">
+
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px">Optimistic update</div>
+
+        <div style="display:flex;flex-direction:column;gap:14px;background:var(--sheet);border:1px solid var(--ink);padding:18px 22px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="font-family:var(--serif);font-size:18px;font-weight:500">Vital signs · 14:42</div>
+            <span class="optim"><span class="puck"></span>Saving…</span>
+          </div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--ink);letter-spacing:0">HR 76 · BP 128/82 · SpO₂ 98% · Temp 98.6 °F</div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-3);line-height:1.5">"The values are visible to your team immediately. They will be reconciled with the server when the connection is restored."</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px">Context menu</div>
+        <div class="ctx-menu">
+          <div class="lbl">Patient</div>
+          <div class="row"><span class="glyph">→</span><span>Open chart</span><span class="kbd">↵</span></div>
+          <div class="row"><span class="glyph">+</span><span>Add note</span><span class="kbd">N</span></div>
+          <div class="row"><span class="glyph">›</span><span>More…</span><span class="kbd">›</span></div>
+          <div class="div"></div>
+          <div class="lbl">Workflow</div>
+          <div class="row"><span class="glyph">⇄</span><span>Transfer bed</span></div>
+          <div class="row"><span class="glyph">✓</span><span>Mark seen</span></div>
+          <div class="div"></div>
+          <div class="row danger"><span class="glyph">×</span><span>Discharge AMA</span><span class="kbd">⌫</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

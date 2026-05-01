@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EMR — chart open</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* THE EMR — one designed scene. The chart is open on the desk.
+     The page is a SINGLE COLUMN of paper, like a paper chart, with a
+     left-side rail of section marks and a right-side notes margin.
+     There is no toolbar, no breadcrumb, no module switcher. The chart
+     is the chart.
+
+     Idiom: a binder.
+       - LEFT  · "tabs" — vertical, mono, hairline-separated
+       - CENTER · the running record, top-to-bottom
+       - RIGHT · the audit margin: who looked, who wrote, when
+  */
+
+  body { background: var(--paper); }
+  .desk {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 32px 96px;
+  }
+
+  /* ========== TOP STAMP ========== */
+  .head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 28px;
+  }
+  .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head h1 {
+    margin: 0; flex: 1;
+    font-family: var(--serif); font-size: 24px; font-weight: 500;
+    letter-spacing: var(--track-display);
+  }
+  .head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* ========== BANNER STRIP ========== */
+  .banner {
+    background: var(--sheet);
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+  .banner-row {
+    display: grid; grid-template-columns: 56px 1fr auto;
+    gap: 22px; padding: 20px 24px 14px;
+  }
+  .banner .photo {
+    width: 56px; height: 56px;
+    background: #ECE3D6; color: #5C4B30;
+    border: 1px solid var(--sheet-edge);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 18px;
+  }
+  .banner h2 { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.022em; }
+  .banner h2 .nick { color: var(--ink-3); font-style: italic; font-weight: 400; }
+  .banner .demo { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+  .banner .demo .sep { color: var(--ink-4); margin: 0 8px; }
+  .banner .ids { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 4px; letter-spacing: 0; }
+  .banner .ids strong { color: var(--ink); font-weight: 500; }
+  .banner .right { text-align: right; font-size: 12px; color: var(--ink-2); }
+  .banner .right .row { margin-bottom: 2px; }
+  .banner .right .lbl { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.16em; margin-right: 8px; }
+  .banner .stamp {
+    position: absolute; top: -1px; left: 24px; transform: translateY(-50%);
+    background: var(--paper); padding: 0 10px;
+    font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; border: 1px solid var(--ink); border-radius: 1px;
+  }
+  .banner .allergy {
+    background: var(--crit); color: #fff;
+    padding: 8px 24px;
+    font-family: var(--serif); font-style: italic; font-size: 13px;
+    border-bottom: 2px solid var(--ink);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .banner .allergy::before {
+    content: "ALLERGY"; font-family: var(--mono); font-style: normal;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+    background: rgba(0,0,0,0.32); padding: 3px 8px; border-radius: 2px;
+  }
+
+  /* ========== BINDER LAYOUT ========== */
+  .binder {
+    display: grid; grid-template-columns: 156px 1fr 220px;
+    border-left: 1px solid var(--ink);
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+    min-height: 720px;
+  }
+  /* LEFT — vertical tabs */
+  .tabs {
+    border-right: 1px solid var(--ink);
+    background: var(--paper-deep);
+    padding: 18px 0;
+  }
+  .tab {
+    display: grid; grid-template-columns: 22px 1fr auto;
+    align-items: baseline; gap: 8px;
+    padding: 8px 16px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+  .tab .ord { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0; }
+  .tab .ct  { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0; }
+  .tab:hover { background: rgba(24,22,19,0.04); }
+  .tab.on {
+    background: var(--paper); color: var(--ink);
+    border-left-color: var(--ink); font-weight: 500;
+  }
+  .tab.on .ord, .tab.on .ct { color: var(--ink); }
+  .tab.alert .ct { color: var(--crit); font-weight: 600; }
+
+  .tabs .gap {
+    height: 1px; background: var(--hair); margin: 14px 16px;
+  }
+  .tabs .lbl-sm {
+    padding: 0 16px 6px; font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+  }
+
+  /* CENTER — the running record */
+  .record { padding: 28px 36px; min-width: 0; }
+
+  .entry { padding: 20px 0; border-bottom: 1px solid var(--hair); }
+  .entry:first-child { padding-top: 0; }
+  .entry:last-child { border-bottom: 0; }
+  .entry-h {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .entry-h h3 {
+    margin: 0; flex: 1;
+    font-family: var(--serif); font-size: 20px; font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+  .entry-h h3 .by { color: var(--ink-3); font-style: italic; font-weight: 400; font-size: 16px; }
+  .entry-h .when {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+  }
+  .entry-h .signed { color: var(--green-700); font-weight: 500; }
+
+  /* problem list — flat lines, codes in mono */
+  .pl { display: flex; flex-direction: column; }
+  .pl .row {
+    display: grid; grid-template-columns: 1fr 80px 100px 70px;
+    gap: 16px; align-items: baseline;
+    padding: 8px 0; border-bottom: 1px dashed var(--hair-soft);
+    font-size: 13px;
+  }
+  .pl .row:last-child { border-bottom: 0; }
+  .pl .row .nm { color: var(--ink); }
+  .pl .row .code { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .pl .row .since { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0; }
+  .pl .row .by { font-size: 12px; color: var(--ink-3); text-align: right; }
+
+  /* meds — drug name in italic serif, dose mono, sig sans */
+  .meds .row {
+    padding: 10px 0; border-bottom: 1px dashed var(--hair-soft);
+    display: grid; grid-template-columns: 1fr auto;
+    column-gap: 16px;
+    align-items: baseline;
+  }
+  .meds .row:last-child { border-bottom: 0; }
+  .meds .name {
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    font-weight: 500; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .meds .dose { font-family: var(--mono); font-size: 13px; color: var(--ink); margin-left: 6px; letter-spacing: 0; }
+  .meds .sig { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+  .meds .ind { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .meds .when {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; letter-spacing: 0;
+  }
+  .meds .next { color: var(--green-800); font-weight: 500; }
+  .meds .row.held .name { color: var(--warn); }
+  .meds .row.held .when { color: var(--warn); }
+
+  /* labs — the central object. Big number first, range secondary, flag right. */
+  .labs { display: flex; flex-direction: column; }
+  .labs .row {
+    display: grid; grid-template-columns: 1fr auto 110px 70px;
+    gap: 14px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--hair-soft);
+  }
+  .labs .row:last-child { border-bottom: 0; }
+  .labs .nm { font-family: var(--sans); font-size: 13px; }
+  .labs .nm strong { font-weight: 600; }
+  .labs .val {
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 22px; font-weight: 500; letter-spacing: -0.015em;
+    color: var(--ink); white-space: nowrap;
+  }
+  .labs .val .u { font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-left: 4px; font-weight: 500; }
+  .labs .row.h .val { color: var(--warn); }
+  .labs .row.l .val { color: var(--low); }
+  .labs .row.crit .val { color: var(--crit); }
+  .labs .range {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0;
+    text-align: right;
+  }
+  .labs .flag-cell { display: flex; justify-content: flex-end; }
+  .labs .flag {
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    padding: 2px 6px; border-radius: 2px; letter-spacing: 0.04em;
+  }
+  .labs .flag-h { color: var(--warn); border: 1px solid var(--warn-edge); background: var(--warn-bg); }
+  .labs .flag-l { color: var(--low);  border: 1px solid var(--low-edge);  background: var(--low-bg); }
+  .labs .flag-c { color: #fff; background: var(--crit); border: 1px solid var(--crit); }
+
+  .labs .row.crit { background: linear-gradient(to right, var(--crit-bg) 0, transparent 65%); }
+
+  /* progress note — written like a letter */
+  .note {
+    font-family: var(--serif); font-size: 16px; line-height: 1.6;
+    color: var(--ink); letter-spacing: -0.005em;
+  }
+  .note .blk { display: block; margin-bottom: 14px; }
+  .note .blk:last-child { margin-bottom: 0; }
+  .note .blk-h {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .note em { font-style: italic; color: var(--ink); }
+  .note code {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-2);
+    background: var(--paper-deep);
+    padding: 1px 5px; border-radius: 2px; letter-spacing: 0;
+  }
+  .note .signature {
+    margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--hair);
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    color: var(--ink-2);
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .note .signature .who { color: var(--ink); font-style: normal; font-weight: 500; }
+  .note .signature .stamp {
+    margin-left: auto;
+    font-family: var(--mono); font-style: normal;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--green-800);
+    border: 1px solid var(--green-300); background: var(--green-50);
+    padding: 3px 8px; border-radius: 1px;
+  }
+
+  /* RIGHT — the audit margin */
+  .margin {
+    border-left: 1px solid var(--ink);
+    padding: 28px 22px;
+    background: var(--paper-deep);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+    letter-spacing: 0;
+  }
+  .margin h4 {
+    margin: 0 0 12px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .margin .ev {
+    display: grid; grid-template-columns: 36px 1fr;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--hair-soft);
+  }
+  .margin .ev:last-child { border-bottom: 0; }
+  .margin .ev .t { color: var(--ink-3); }
+  .margin .ev .b { color: var(--ink); line-height: 1.5; }
+  .margin .ev.flag { background: var(--crit-bg); margin: 0 -22px; padding: 6px 22px; }
+  .margin .ev.flag .b { color: var(--crit); }
+
+  .margin .gap { margin: 16px 0 12px; padding-top: 12px; border-top: 1px solid var(--hair); }
+
+  .margin .rx {
+    display: flex; align-items: baseline; gap: 6px;
+    padding: 4px 0;
+  }
+  .margin .rx .who { color: var(--ink); }
+  .margin .rx .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-600); flex-shrink: 0;
+    transform: translateY(-1px);
+  }
+
+  /* "Acknowledge" callout for the critical lab */
+  .ack {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 4px;
+    font-family: var(--sans);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+  }
+  .ack .ttl { font-weight: 600; }
+  .ack .b {
+    margin-left: auto;
+    background: var(--crit); color: #fff; border: 0;
+    height: 26px; padding: 0 10px; border-radius: 3px;
+    font-size: 11px; font-family: var(--sans); font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="desk">
+
+  <header class="head">
+    <span class="num">IV · 03</span>
+    <h1>The chart, open.</h1>
+    <span class="meta">Adebayo, O — single column, top to bottom</span>
+  </header>
+
+  <!-- =================== BANNER STRIP =================== -->
+  <div class="banner">
+    <span class="stamp">Full code</span>
+    <div class="banner-row">
+      <div class="photo">OA</div>
+      <div>
+        <h2>Adebayo, Olumide <span class="nick">"Olu"</span></h2>
+        <div class="demo">64 years <span class="sep">·</span> Male <span class="sep">·</span> DOB 14 Mar 1962</div>
+        <div class="ids">MRN <strong>10458291</strong> &nbsp; ENC <strong>2026-04-29-1184</strong> &nbsp; Day <strong>3</strong></div>
+      </div>
+      <div class="right">
+        <div class="row"><span class="lbl">Attending</span> Patel, R MD</div>
+        <div class="row"><span class="lbl">Bed</span> 3-N · 312A</div>
+        <div class="row"><span class="lbl">Insurance</span> BCBS · verified</div>
+      </div>
+    </div>
+    <div class="allergy">Penicillin causes anaphylaxis. Sulfa drugs cause rash.</div>
+  </div>
+
+  <!-- =================== BINDER =================== -->
+  <div class="binder">
+
+    <!-- ========== LEFT TABS ========== -->
+    <aside class="tabs">
+      <div class="lbl-sm">Record</div>
+      <div class="tab on"><span class="ord">01</span><span>Summary</span><span class="ct">↑</span></div>
+      <div class="tab"><span class="ord">02</span><span>Vitals</span><span class="ct">24h</span></div>
+      <div class="tab"><span class="ord">03</span><span>Meds</span><span class="ct">8</span></div>
+      <div class="tab"><span class="ord">04</span><span>Labs</span><span class="ct">12</span></div>
+      <div class="tab"><span class="ord">05</span><span>Imaging</span><span class="ct">3</span></div>
+      <div class="tab"><span class="ord">06</span><span>Notes</span><span class="ct">7</span></div>
+
+      <div class="gap"></div>
+
+      <div class="lbl-sm">Decisions</div>
+      <div class="tab"><span class="ord">07</span><span>Orders</span><span class="ct">5</span></div>
+      <div class="tab"><span class="ord">08</span><span>Problems</span><span class="ct">3</span></div>
+      <div class="tab alert"><span class="ord">09</span><span>Allergies</span><span class="ct">2</span></div>
+
+      <div class="gap"></div>
+
+      <div class="lbl-sm">History</div>
+      <div class="tab"><span class="ord">10</span><span>Immunizations</span><span class="ct"></span></div>
+      <div class="tab"><span class="ord">11</span><span>Procedures</span><span class="ct"></span></div>
+      <div class="tab"><span class="ord">12</span><span>Documents</span><span class="ct">14</span></div>
+      <div class="tab"><span class="ord">13</span><span>Audit</span><span class="ct"></span></div>
+    </aside>
+
+    <!-- ========== RECORD ========== -->
+    <main class="record">
+
+      <!-- Active problems -->
+      <article class="entry">
+        <header class="entry-h">
+          <h3>Active problems</h3>
+          <span class="when">last addressed Apr 30 by R. Patel</span>
+        </header>
+        <div class="pl">
+          <div class="row">
+            <span class="nm">Essential hypertension</span>
+            <span class="code">I10</span>
+            <span class="since">since Aug 2014</span>
+            <span class="by">R. Patel MD</span>
+          </div>
+          <div class="row">
+            <span class="nm">Hyperlipidemia</span>
+            <span class="code">E78.5</span>
+            <span class="since">since Mar 2016</span>
+            <span class="by">R. Patel MD</span>
+          </div>
+          <div class="row">
+            <span class="nm">Type 2 diabetes mellitus, without complications</span>
+            <span class="code">E11.9</span>
+            <span class="since">since Nov 2018</span>
+            <span class="by">M. Khan MD</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Current meds — abridged, six lines. -->
+      <article class="entry">
+        <header class="entry-h">
+          <h3>Current medications</h3>
+          <span class="when">3 of 8 shown · open Meds for full list</span>
+        </header>
+        <div class="meds">
+          <div class="row">
+            <div>
+              <span class="name">Lisinopril</span><span class="dose">10 mg PO</span>
+              <div class="sig">1 tablet by mouth, once daily, in the morning</div>
+              <div class="ind">for hypertension</div>
+            </div>
+            <div class="when">last 04/30 08:14<br><span class="next">due 05/01 08:00</span></div>
+          </div>
+          <div class="row held">
+            <div>
+              <span class="name">Furosemide</span><span class="dose">40 mg IV</span>
+              <div class="sig">stat × 1, push over 1 minute</div>
+              <div class="ind" style="color:var(--warn)">held — BP 96/52 at 08:00</div>
+            </div>
+            <div class="when">held 05/01 08:00<br>by A. Williams RN</div>
+          </div>
+          <div class="row">
+            <div>
+              <span class="name">Atorvastatin</span><span class="dose">40 mg PO</span>
+              <div class="sig">1 tablet by mouth, at bedtime</div>
+              <div class="ind">for hyperlipidemia · started today</div>
+            </div>
+            <div class="when"><span class="next">due 05/01 21:00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Labs — with the critical row at the top -->
+      <article class="entry">
+        <header class="entry-h">
+          <h3>Labs <span class="by">— results from May 1, 14:42</span></h3>
+          <span class="when">collected 06:14 · resulted 06:38</span>
+        </header>
+        <div class="labs">
+          <div class="row crit">
+            <span class="nm"><strong>Troponin I</strong> — initial 0.04 → <span style="color:var(--crit);font-weight:600">repeat critical</span></span>
+            <span class="val">2.10<span class="u">ng/mL</span></span>
+            <span class="range">0.00–0.04</span>
+            <span class="flag-cell"><span class="flag flag-c">CRIT ↑↑</span></span>
+          </div>
+          <div class="row l">
+            <span class="nm">Hemoglobin</span>
+            <span class="val">10.1<span class="u">g/dL</span></span>
+            <span class="range">12.0–17.5</span>
+            <span class="flag-cell"><span class="flag flag-l">L</span></span>
+          </div>
+          <div class="row">
+            <span class="nm">Sodium</span>
+            <span class="val">138<span class="u">mEq/L</span></span>
+            <span class="range">135–145</span>
+            <span class="flag-cell"></span>
+          </div>
+          <div class="row h">
+            <span class="nm">Potassium</span>
+            <span class="val">5.4<span class="u">mEq/L</span></span>
+            <span class="range">3.5–5.0</span>
+            <span class="flag-cell"><span class="flag flag-h">H</span></span>
+          </div>
+          <div class="row">
+            <span class="nm">Creatinine</span>
+            <span class="val">0.9<span class="u">mg/dL</span></span>
+            <span class="range">0.6–1.3</span>
+            <span class="flag-cell"></span>
+          </div>
+          <div class="row h">
+            <span class="nm">Glucose · random</span>
+            <span class="val">312<span class="u">mg/dL</span></span>
+            <span class="range">70–140</span>
+            <span class="flag-cell"><span class="flag flag-h">HH</span></span>
+          </div>
+        </div>
+
+        <div class="ack">
+          <span class="ttl">Critical value awaits acknowledgement.</span>
+          <span style="color:rgba(244,239,230,0.65)">Troponin 2.10 ng/mL · resulted 14:42 · auto-page sent</span>
+          <button class="b">Acknowledge</button>
+        </div>
+      </article>
+
+      <!-- Progress note — written, signed -->
+      <article class="entry">
+        <header class="entry-h">
+          <h3>Progress note <span class="by">— Patel, R MD</span></h3>
+          <span class="when">May 1, 14:08 <span class="signed">· signed</span></span>
+        </header>
+
+        <div class="note">
+          <div class="blk">
+            <div class="blk-h">Subjective</div>
+            <em>"Pressure is gone now. Walked the unit twice without symptoms. He'd like to know when he can go home."</em>
+          </div>
+
+          <div class="blk">
+            <div class="blk-h">Objective</div>
+            Vital signs stable through morning rounds. Repeat troponin at six hours
+            <em>still pending</em>. ECG unchanged from prior. Patient ambulates without
+            chest pain or dyspnea.
+          </div>
+
+          <div class="blk">
+            <div class="blk-h">Assessment</div>
+            NSTEMI <code>I21.4</code>, day 3, recovering. HEART score now 4 (down from 6).
+            Glucose elevated likely from morning steroid; will recheck.
+          </div>
+
+          <div class="blk">
+            <div class="blk-h">Plan</div>
+            Repeat troponin at 18:00. If negative, plan discharge home with cardiology
+            follow-up in clinic 14 May. Continue dual antiplatelet therapy. Add
+            atorvastatin 40 mg nightly. Spouse has been notified of plan.
+          </div>
+
+          <div class="signature">
+            Signed,
+            <span class="who">Reema Patel, MD &nbsp;<span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0">NPI 1093847562</span></span>
+            <span class="stamp">14:08 · NUR-3N-04</span>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- ========== RIGHT MARGIN — audit ========== -->
+    <aside class="margin">
+      <h4>Margin · audit · access</h4>
+
+      <div class="ev flag">
+        <span class="t">14:42</span>
+        <span class="b">Critical lab posted — Troponin 2.10 ng/mL. Auto-page to attending.</span>
+      </div>
+      <div class="ev">
+        <span class="t">14:08</span>
+        <span class="b"><span class="who" style="color:var(--ink);font-family:var(--mono)">R. Patel</span> signed progress note.</span>
+      </div>
+      <div class="ev">
+        <span class="t">13:40</span>
+        <span class="b"><span class="who" style="color:var(--ink);font-family:var(--mono)">A. Williams</span> charted vitals.</span>
+      </div>
+      <div class="ev">
+        <span class="t">09:18</span>
+        <span class="b"><span class="who" style="color:var(--warn);font-family:var(--mono)">M. Khan</span> overrode penicillin allergy — ordered Cefepime. <em style="font-style:italic">justification logged</em>.</span>
+      </div>
+      <div class="ev">
+        <span class="t">06:38</span>
+        <span class="b">LIS imported BMP, CBC, troponin.</span>
+      </div>
+
+      <div class="gap"></div>
+
+      <h4>Watching this chart</h4>
+
+      <div class="rx"><span class="pulse"></span><span class="who">R. Patel MD</span> &mdash; attending</div>
+      <div class="rx"><span class="pulse"></span><span class="who">A. Williams RN</span> &mdash; bedside</div>
+      <div class="rx" style="opacity:0.6"><span class="pulse" style="background:var(--ink-4);box-shadow:none;animation:none"></span><span class="who" style="color:var(--ink-2)">M. Khan MD</span> &mdash; consult</div>
+
+      <div class="gap"></div>
+
+      <h4>Provenance</h4>
+
+      <div class="ev"><span class="t">2014</span><span class="b">First registered at this hospital, August.</span></div>
+      <div class="ev"><span class="t">2018</span><span class="b">Penicillin allergy documented after surgical reaction. Confirmed twice.</span></div>
+      <div class="ev"><span class="t">2024</span><span class="b">Last admission, two days, congestive symptoms.</span></div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+</body>
+</html>

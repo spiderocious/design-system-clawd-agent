@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Consultation</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.tele {
+  background:#0E1117; border-radius:10px; padding:12px;
+  display:grid; grid-template-columns:2fr 1fr; gap:10px; height:380px; color:#fff;
+}
+.tile-prov, .tile-pat {
+  background:linear-gradient(135deg,#0F766E,#115E59); border-radius:8px;
+  display:flex; align-items:center; justify-content:center; position:relative;
+  font-size:36px; font-weight:600; color:rgba(255,255,255,0.92);
+}
+.tile-pat { background:linear-gradient(135deg,#1D4ED8,#1E3A8A); }
+.tile-prov .nm, .tile-pat .nm {
+  position:absolute; left:8px; bottom:8px; padding:3px 8px;
+  background:rgba(0,0,0,0.5); border-radius:4px; font-size:11px; font-weight:600;
+}
+.tile-prov .net {
+  position:absolute; top:8px; right:8px; display:flex; align-items:center; gap:4px;
+  background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:4px; font-size:10px; font-family:'JetBrains Mono',monospace;
+}
+.tile-prov .net .bars { display:flex; gap:1px; align-items:flex-end; }
+.tile-prov .net .bars span { width:2px; background:#86EFAC; }
+.tile-prov .rec {
+  position:absolute; top:8px; left:8px; display:flex; align-items:center; gap:4px;
+  background:rgba(220,38,38,0.85); padding:3px 8px; border-radius:4px; font-size:10px; font-weight:700;
+}
+.tile-prov .rec::before { content:""; width:6px; height:6px; border-radius:50%; background:#fff; animation:pul 1.4s infinite; }
+@keyframes pul { 0%,100% { opacity:0.4 } 50% { opacity:1 } }
+.tele-side { display:flex; flex-direction:column; gap:8px; }
+.tele-side .panel { background:#161B22; border:1px solid #21262D; border-radius:8px; padding:10px; color:#F1F5F8; }
+.tele-side .ttl { font-size:11px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; }
+.captions { padding:6px 12px; background:rgba(0,0,0,0.7); color:#fff; border-radius:0 0 8px 8px; font-size:13px; }
+.controls { display:flex; gap:6px; justify-content:center; padding:8px; background:#161B22; border-radius:8px; grid-column:1 / 3; }
+.controls button { width:40px; height:40px; border-radius:9999px; background:#21262D; color:#F1F5F8; border:none; cursor:pointer; }
+.controls button.danger { background:#DC2626; }
+.controls button.muted { background:#FCA5A5; color:#7F1D1D; }
+.queue-row { display:grid; grid-template-columns:auto 1fr auto auto auto; gap:10px; align-items:center; padding:10px 12px; border:1px solid #E2E8F0; border-radius:8px; background:#fff; }
+.assignment { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px; }
+.thread { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:12px; max-width:560px; }
+.msg { display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; }
+.msg.you { flex-direction:row-reverse; }
+.msg .bub { padding:8px 12px; border-radius:10px; max-width:70%; font-size:13px; line-height:1.5; }
+.msg .bub.them { background:#F1F5F8; color:#0E1117; border-top-left-radius:3px; }
+.msg.you .bub { background:#0A87A3; color:#fff; border-top-right-radius:3px; }
+.msg .meta { font-size:10px; color:#94A3B8; margin-top:2px; font-family:'JetBrains Mono',monospace; }
+.erx { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Online consultation &amp; assignments</h1>
+<p class="spec-sub">Telehealth call frame, pre-visit waiting room card, consultation queue, drag-to-provider assignment, auto-routing rule chip, async message thread, e-prescription card, encounter wrap-up checklist, and visit summary handoff.</p>
+
+<div class="spec-section-label">Telehealth call frame</div>
+<div class="tele">
+  <div class="tile-prov">
+    <span style="opacity:0.92">RP</span>
+    <span class="rec">REC</span>
+    <span class="net"><span class="bars"><span style="height:6px"></span><span style="height:8px"></span><span style="height:10px"></span><span style="height:12px"></span></span> Excellent · 78 ms</span>
+    <span class="nm">Patel, R MD</span>
+  </div>
+  <div class="tile-pat">
+    <span style="opacity:0.92">OA</span>
+    <span class="nm">Adebayo, Olumide · 64M</span>
+  </div>
+  <div style="grid-column:1 / 3" class="captions"><strong>Caption:</strong> "…and the chest pressure started about two hours ago, after walking up stairs. It feels like…"</div>
+  <div style="grid-column:1 / 3" class="controls">
+    <button title="Mute"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></button>
+    <button title="Video off"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></button>
+    <button title="Share"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg></button>
+    <button title="Captions"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 14h2"/><path d="M11 14h2"/></svg></button>
+    <button title="Chat"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+    <button class="danger" title="End call"><svg class="icon-20" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11"/></svg></button>
+  </div>
+</div>
+
+<div class="spec-section-label">Pre-visit waiting room · queue · auto-routing</div>
+<div style="display:grid;grid-template-columns:1fr 2fr;gap:14px">
+  <div class="card">
+    <div class="spec-tile-label">Pre-visit waiting room</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#F0FBFD;border:1px solid #7DD1E7;border-radius:6px;margin-top:8px">
+      <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">Adebayo, Olumide</div><div class="spec-caption">In waiting room · 4 min</div></div>
+      <span class="pill pill-success"><span class="dot"></span>Ready</span>
+    </div>
+    <div class="spec-tile-label" style="margin-top:14px">Tech check</div>
+    <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;margin-top:6px">
+      <div style="display:flex;justify-content:space-between"><span>Mic</span><span style="color:#15803D;font-weight:600">✓ ok</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Camera</span><span style="color:#15803D;font-weight:600">✓ ok</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Network</span><span style="color:#15803D;font-weight:600">Excellent · 78 ms</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Intake form</span><span style="color:#9A3412;font-weight:600">⚠ partial · 80%</span></div>
+    </div>
+    <button class="btn btn-sm btn-primary" style="width:100%;margin-top:12px">Admit to consultation</button>
+  </div>
+
+  <div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+      <span class="pill" style="background:#F0FDFA;color:#0F766E;border-color:#5EEAD4">Auto-routing</span>
+      <span style="font-size:12px;color:#475569">Cardiology requests → Patel R MD queue</span>
+      <span class="pill" style="background:#F0FDFA;color:#0F766E;border-color:#5EEAD4">Auto-routing</span>
+      <span style="font-size:12px;color:#475569">Spanish-speaking → Hernandez J MD</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="queue-row">
+        <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">OA</span>
+        <div><div style="font-size:13px;font-weight:600">Adebayo, Olumide</div><div class="spec-caption">Cardiology f/u · "chest pressure"</div></div>
+        <span class="mono" style="font-size:11px;color:#475569">14:30 · 4 min wait</span>
+        <span class="pill pill-success"><span class="dot"></span>In progress</span>
+        <span style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500">Patel, R MD</span>
+      </div>
+      <div class="queue-row">
+        <span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">CL</span>
+        <div><div style="font-size:13px;font-weight:600">Chen, Wei-Lin</div><div class="spec-caption">Hypertension management · routine</div></div>
+        <span class="mono" style="font-size:11px;color:#475569">14:45 · in 11 min</span>
+        <span class="pill pill-info">Waiting</span>
+        <span style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500">Patel, R MD</span>
+      </div>
+      <div class="queue-row">
+        <span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">DM</span>
+        <div><div style="font-size:13px;font-weight:600">Diallo, Mariama</div><div class="spec-caption">Pre-op consult · ESP</div></div>
+        <span class="mono" style="font-size:11px;color:#475569">15:00</span>
+        <span class="pill pill-info">Waiting</span>
+        <span style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500">Hernandez, J MD</span>
+      </div>
+      <div class="queue-row" style="background:#F8FAFB">
+        <span class="avatar avatar-sm" style="background:#F1F5F8;color:#475569">?</span>
+        <div><div style="font-size:13px;font-weight:600;color:#475569">Park, Daniel</div><div class="spec-caption">Manual review needed · no service tag</div></div>
+        <span class="mono" style="font-size:11px;color:#475569">15:15</span>
+        <span class="pill pill-warning">Unrouted</span>
+        <button class="btn btn-sm btn-primary">Assign</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Provider assignment — drag patient to provider</div>
+<div class="assignment">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:14px">
+    <div>
+      <div class="spec-tile-label">Unassigned · 3</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+        <div style="padding:8px;border:1px solid #E2E8F0;border-radius:6px;background:#fff;cursor:grab;display:flex;gap:8px;align-items:center"><span style="color:#CBD5E1;font-family:monospace">⋮⋮</span><span class="avatar avatar-sm" style="background:#FEF3C7;color:#B45309">PD</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Park, Daniel</div><div class="spec-caption">Cardiology</div></div></div>
+        <div style="padding:8px;border:1px solid #E2E8F0;border-radius:6px;background:#fff;cursor:grab;display:flex;gap:8px;align-items:center"><span style="color:#CBD5E1;font-family:monospace">⋮⋮</span><span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">JR</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Reed, James</div><div class="spec-caption">Endocrinology</div></div></div>
+        <div style="padding:8px;border:1px dashed #0EA5E9;border-radius:6px;background:#F0FBFD;cursor:grab;display:flex;gap:8px;align-items:center;box-shadow:0 4px 12px rgba(14,165,233,0.18)"><span style="color:#0A87A3;font-family:monospace">⋮⋮</span><span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">MK</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Khan, Mira</div><div class="spec-caption">Internal medicine</div></div><span style="font-size:10px;color:#0A6F87;font-weight:600">DRAGGING</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="spec-tile-label">Provider queues</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px">
+        <div style="border:1px solid #E2E8F0;border-radius:6px;padding:10px;background:#fff"><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><span class="avatar avatar-sm role-ring" style="--ring:#1D4ED8;background:#DBEAFE;color:#1D4ED8;box-shadow:0 0 0 2px #fff,0 0 0 3px #1D4ED8">RP</span><div style="font-size:13px;font-weight:600">Patel, R MD</div></div><div class="spec-caption">3 in queue · avg 18 min</div></div>
+        <div style="border:1px dashed #0EA5E9;border-radius:6px;padding:10px;background:#F0FBFD;box-shadow:inset 0 0 0 2px rgba(14,165,233,0.4)"><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><span class="avatar avatar-sm role-ring" style="--ring:#16A34A;background:#DCFCE7;color:#15803D;box-shadow:0 0 0 2px #fff,0 0 0 3px #16A34A">MK</span><div style="font-size:13px;font-weight:600;color:#0A6F87">Khan, M MD</div></div><div class="spec-caption" style="color:#0A6F87">drop here · 2 in queue</div></div>
+        <div style="border:1px solid #E2E8F0;border-radius:6px;padding:10px;background:#fff"><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><span class="avatar avatar-sm role-ring" style="--ring:#7C3AED;background:#EDE9FE;color:#6D28D9;box-shadow:0 0 0 2px #fff,0 0 0 3px #7C3AED">JH</span><div style="font-size:13px;font-weight:600">Hernandez, J MD</div></div><div class="spec-caption">5 in queue</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Consult request form</div>
+<div class="card" style="max-width:560px">
+  <div style="font-size:14px;font-weight:600;margin-bottom:10px">Cardiology consult request</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div><label class="label">Referring provider</label><div class="select-trigger" style="display:flex;align-items:center;justify-content:space-between;height:34px;padding:0 10px;border:1px solid #CBD5E1;border-radius:6px;font-size:13px;background:#fff"><span>Khan, M MD · IM</span><span style="color:#94A3B8">▾</span></div></div>
+    <div><label class="label">Urgency</label><select class="input"><option>Routine · within 7 days</option><option>ASAP · within 24h</option><option>STAT · within 1h</option></select></div>
+    <div style="grid-column:span 2"><label class="label">Reason for consult</label><textarea class="input" style="min-height:80px;padding:8px 12px;line-height:1.5">64M with troponin 2.1 ng/mL, ECG showing ST depression V4–V6. Hx HTN, HLD. Requesting urgent eval for ACS.</textarea></div>
+    <div style="grid-column:span 2"><label class="label">Attachments</label><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill pill-info">📎 ECG_2026-04-30.pdf</span><span class="pill pill-info">📎 Trop trend</span><span class="pill pill-info">📎 BMP, CBC</span></div></div>
+  </div>
+  <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:14px"><button class="btn btn-sm btn-secondary">Save draft</button><button class="btn btn-sm btn-primary">Send to Cardiology</button></div>
+</div>
+
+<div class="spec-section-label">Asynchronous consult thread</div>
+<div class="thread">
+  <div class="msg">
+    <span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">MK</span>
+    <div><div class="bub them">Patel, would you mind taking a look at this ECG? 64M with chest pressure × 2h, trop 2.1.</div><div class="meta">Khan, M MD · 14:08</div></div>
+  </div>
+  <div class="msg">
+    <span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">MK</span>
+    <div>
+      <div class="bub them" style="padding:6px"><div style="background:#0E1117;color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px;border-radius:4px;margin-bottom:4px">ECG_2026-04-30.pdf</div><div style="background:linear-gradient(180deg,#fff,#F1F5F8);height:80px;border-radius:4px;border:1px solid #E2E8F0;display:flex;align-items:center;justify-content:center;color:#475569;font-size:10px">12-lead ECG · click to enlarge</div></div>
+      <div class="meta">Khan, M MD · 14:09</div>
+    </div>
+  </div>
+  <div class="msg you">
+    <span class="avatar avatar-sm" style="background:#DBEAFE;color:#1D4ED8">RP</span>
+    <div><div class="bub">ST depression V4–V6 with reciprocal changes. Concerning for NSTEMI. Initiate ACS protocol — ASA, heparin, atorvastatin. I'm en route to CCU. Hold off on tPA until I see them.</div><div class="meta" style="text-align:right">Patel, R MD · 14:14</div></div>
+  </div>
+  <div class="msg">
+    <span class="avatar avatar-sm" style="background:#DCFCE7;color:#15803D">MK</span>
+    <div><div class="bub them">Will do. Transferring to CCU 207A. Thanks.</div><div class="meta">Khan, M MD · 14:15</div></div>
+  </div>
+  <div style="display:flex;gap:6px;align-items:center;border-top:1px solid #F1F5F8;padding-top:8px;margin-top:6px">
+    <input class="input" placeholder="Reply…" style="flex:1;height:32px">
+    <button class="btn btn-sm btn-primary">Send</button>
+  </div>
+</div>
+
+<div class="spec-section-label">e-Prescription card</div>
+<div class="erx" style="max-width:560px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="width:36px;height:36px;border-radius:8px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center"><svg class="icon-20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-30 12 12)"/></svg></div><div><div style="font-size:14px;font-weight:600">New e-prescription</div><div class="spec-caption">For: Adebayo, Olumide · MRN 10458291</div></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div><label class="label">Drug</label><input class="input" value="Atorvastatin 40 mg tablet"></div>
+    <div><label class="label">Sig</label><input class="input" value="1 tab PO QHS"></div>
+    <div><label class="label">Quantity</label><input class="input" value="30" style="font-family:'JetBrains Mono',monospace;text-align:right"></div>
+    <div><label class="label">Refills</label><input class="input" value="3" style="font-family:'JetBrains Mono',monospace;text-align:right"></div>
+    <div style="grid-column:span 2"><label class="label">Pharmacy</label><div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #E2E8F0;border-radius:6px;background:#F8FAFB"><svg class="icon" viewBox="0 0 24 24" stroke="#475569" fill="none" stroke-width="1.6"><circle cx="12" cy="10" r="4"/><path d="M12 14a8 8 0 0 1 8 8H4a8 8 0 0 1 8-8z"/></svg><div style="flex:1"><div style="font-size:13px;font-weight:600">Walgreens · 142 Main St</div><div class="spec-caption">NCPDP 1234567 · open until 22:00</div></div><a href="#" style="color:#0A87A3;font-size:12px;font-weight:600">change</a></div></div>
+  </div>
+  <div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn btn-sm btn-secondary">Save draft</button><button class="btn btn-sm btn-primary">Sign &amp; send · ↵</button></div>
+  <div style="margin-top:10px;padding:8px 10px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:6px;font-size:12px;color:#15803D;display:flex;align-items:center;gap:6px"><svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><polyline points="20 6 9 17 4 12"/></svg> Sent to Walgreens · ready in ~30 min</div>
+</div>
+
+<div class="spec-section-label">Encounter wrap-up · visit summary</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <div class="card">
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">Wrap-up checklist · ENC-1184</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+      <div style="display:flex;align-items:center;gap:8px"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">Note signed</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">CPT codes captured · 99214, 93000</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="cb checked" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #0A87A3;background:#0A87A3;align-items:center;justify-content:center;color:#fff;font-size:10px">✓</span><span style="color:#15803D">e-Prescription sent · Atorvastatin 40 mg</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="cb" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span>Follow-up appointment scheduled</div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="cb" style="display:inline-flex;width:16px;height:16px;border-radius:3px;border:1.5px solid #94A3B8;background:#fff"></span>Patient instructions reviewed</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-sm btn-tertiary">Save &amp; close</button><button class="btn btn-sm btn-primary">Finalize encounter</button></div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:14px;font-weight:600;margin-bottom:8px">Visit summary handoff · AVS</div>
+    <div style="background:#F8FAFB;border-radius:6px;padding:12px;font-size:13px;line-height:1.55">
+      <strong>What we discussed</strong><br>
+      Your blood pressure is well controlled. Lab work today shows mild kidney irritation, likely from dehydration.<br><br>
+      <strong>What you should do</strong><br>
+      • Drink 8 glasses of water daily<br>
+      • Continue Lisinopril 10 mg every morning<br>
+      • Start Atorvastatin 40 mg at bedtime (new)<br>
+      • Watch for chest pain, dizziness, or swelling<br><br>
+      <strong>Follow-up</strong><br>
+      In 4 weeks with Dr. Patel · 2026-05-29
+    </div>
+    <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end"><button class="btn btn-sm btn-secondary">Print</button><button class="btn btn-sm btn-primary">Send to portal</button></div>
+  </div>
+</div>
+
+</body>
+</html>

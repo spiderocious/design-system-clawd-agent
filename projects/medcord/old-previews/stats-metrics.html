@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stats & metrics</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.stat { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px; }
+.stat .lbl { font-size:11px; font-weight:600; color:#475569; text-transform:uppercase; letter-spacing:0.06em; }
+.stat .num { font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:600; letter-spacing:-0.02em; line-height:1.1; margin-top:4px; }
+.stat .delta { font-size:11px; margin-top:6px; display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; }
+.stat .delta.up { color:#15803D; }
+.stat .delta.down { color:#991B1B; }
+.stat .delta.flat { color:#475569; }
+.gauge-wrap { display:flex; flex-direction:column; align-items:center; }
+.vitals-stack { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+.vital-tile { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:12px; text-align:center; }
+.vital-tile .lbl { font-size:10px; font-weight:600; color:#475569; text-transform:uppercase; letter-spacing:0.06em; }
+.vital-tile .val { font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:600; line-height:1.1; margin-top:4px; }
+.vital-tile .val small { font-size:11px; color:#94A3B8; font-weight:500; }
+.vital-tile.high .val { color:#9A3412; }
+.vital-tile.low .val { color:#4C1D95; }
+.vital-tile.crit { background:#FEF2F2; border-color:#DC2626; }
+.vital-tile.crit .val { color:#7F1D1D; }
+.kpi { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px; display:grid; grid-template-columns:1fr 80px; gap:12px; align-items:end; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Stats &amp; metrics</h1>
+<p class="spec-sub">Big numbers, deltas, KPI tiles with sparklines, comparison tiles, gauge meters, and the vitals stat group — five values in a single horizontal sweep, with abnormal flagging baked in.</p>
+
+<div class="spec-section-label">Big number with delta</div>
+<div class="stat-grid">
+  <div class="stat"><div class="lbl">Active patients</div><div class="num">12,418</div><div class="delta up">↑ 312 vs last month</div></div>
+  <div class="stat"><div class="lbl">Avg LOS</div><div class="num">4.2 <span style="font-size:13px;color:#94A3B8">days</span></div><div class="delta up">↓ 0.3 d · target ≤ 4.5</div></div>
+  <div class="stat"><div class="lbl">30-day readmit</div><div class="num" style="color:#9A3412">11.4 <span style="font-size:13px;color:#94A3B8">%</span></div><div class="delta down">↑ 0.8 pp · target ≤ 9</div></div>
+  <div class="stat"><div class="lbl">Patient sat (Press Ganey)</div><div class="num">4.2 <span style="font-size:13px;color:#94A3B8">/ 5</span></div><div class="delta flat">→ flat wow</div></div>
+</div>
+
+<div class="spec-section-label">KPI tiles with sparkline</div>
+<div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="kpi">
+    <div>
+      <div class="lbl" style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">Census · 3-North</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600">42 / 48</div>
+      <div style="font-size:11px;color:#15803D;font-family:'JetBrains Mono',monospace">87.5% occupancy</div>
+    </div>
+    <svg viewBox="0 0 80 40" style="width:80px"><polyline points="0,30 16,28 32,32 48,24 64,20 80,18" stroke="#0A87A3" stroke-width="1.6" fill="none"/><polyline points="0,30 16,28 32,32 48,24 64,20 80,18 80,40 0,40" fill="rgba(10,135,163,0.08)"/></svg>
+  </div>
+  <div class="kpi">
+    <div>
+      <div class="lbl" style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">ED door-to-doc</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600">14 <span style="font-size:13px;color:#94A3B8">min avg</span></div>
+      <div style="font-size:11px;color:#15803D;font-family:'JetBrains Mono',monospace">↓ 3 vs target</div>
+    </div>
+    <svg viewBox="0 0 80 40" style="width:80px"><polyline points="0,12 16,18 32,22 48,28 64,30 80,32" stroke="#16A34A" stroke-width="1.6" fill="none"/></svg>
+  </div>
+  <div class="kpi">
+    <div>
+      <div class="lbl" style="font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.06em">OR utilization</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600">82 <span style="font-size:13px;color:#94A3B8">%</span></div>
+      <div style="font-size:11px;color:#9A3412;font-family:'JetBrains Mono',monospace">↑ 4 pp · approaching cap</div>
+    </div>
+    <svg viewBox="0 0 80 40" style="width:80px"><polyline points="0,28 16,26 32,22 48,20 64,15 80,10" stroke="#D97706" stroke-width="1.6" fill="none"/></svg>
+  </div>
+</div>
+
+<div class="spec-section-label">Comparison stat — vs prev period</div>
+<div class="stat-grid" style="grid-template-columns:repeat(2,1fr)">
+  <div class="stat" style="display:grid;grid-template-columns:1fr 1px 1fr;gap:14px">
+    <div><div class="lbl">This week</div><div class="num">128</div><div class="spec-caption">discharges</div></div>
+    <div style="background:#E2E8F0"></div>
+    <div><div class="lbl">Prev week</div><div class="num" style="color:#94A3B8">114</div><div class="spec-caption" style="color:#15803D">↑ 12.3% wow</div></div>
+  </div>
+  <div class="stat" style="display:grid;grid-template-columns:1fr 1px 1fr;gap:14px">
+    <div><div class="lbl">Today</div><div class="num">42</div><div class="spec-caption">new admissions</div></div>
+    <div style="background:#E2E8F0"></div>
+    <div><div class="lbl">7-day avg</div><div class="num" style="color:#94A3B8">38</div><div class="spec-caption" style="color:#15803D">+10.5%</div></div>
+  </div>
+</div>
+
+<div class="spec-section-label">Gauge — bed occupancy</div>
+<div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+  <div class="stat gauge-wrap">
+    <svg viewBox="0 0 100 60" width="100" height="60">
+      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#F1F5F8" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 10 50 A 40 40 0 0 1 78 22" fill="none" stroke="#16A34A" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;margin-top:-12px">68%</div>
+    <div class="spec-caption">Bed occupancy · House</div>
+  </div>
+  <div class="stat gauge-wrap">
+    <svg viewBox="0 0 100 60" width="100" height="60">
+      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#F1F5F8" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 10 50 A 40 40 0 0 1 88 32" fill="none" stroke="#D97706" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;margin-top:-12px">87%</div>
+    <div class="spec-caption">3-North · approaching cap</div>
+  </div>
+  <div class="stat gauge-wrap">
+    <svg viewBox="0 0 100 60" width="100" height="60">
+      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#F1F5F8" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#DC2626" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:#991B1B;margin-top:-12px">100%</div>
+    <div class="spec-caption" style="color:#991B1B">CCU · full</div>
+  </div>
+  <div class="stat gauge-wrap">
+    <svg viewBox="0 0 100 60" width="100" height="60">
+      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#F1F5F8" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 10 50 A 40 40 0 0 1 56 14" fill="none" stroke="#0A87A3" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;margin-top:-12px">52%</div>
+    <div class="spec-caption">L&D · normal</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Domain tiles — census · ED · OR</div>
+<div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stat" style="border-top:3px solid #1D4ED8">
+    <div class="lbl">House census</div>
+    <div style="display:flex;align-items:baseline;gap:10px"><div class="num">312</div><div style="color:#15803D;font-family:'JetBrains Mono',monospace;font-size:12px">↑ 8</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px">
+      <div><div style="color:#94A3B8">Adm</div><div>42</div></div>
+      <div><div style="color:#94A3B8">Disch</div><div>38</div></div>
+      <div><div style="color:#94A3B8">ED</div><div>87</div></div>
+      <div><div style="color:#94A3B8">L&D</div><div>12</div></div>
+    </div>
+  </div>
+  <div class="stat" style="border-top:3px solid #DC2626">
+    <div class="lbl">ED throughput</div>
+    <div style="display:flex;align-items:baseline;gap:10px"><div class="num">3:42</div><div style="color:#15803D;font-family:'JetBrains Mono',monospace;font-size:12px">↓ 8m</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px">
+      <div><div style="color:#94A3B8">Door-to-doc</div><div>14m</div></div>
+      <div><div style="color:#94A3B8">In dept</div><div>87</div></div>
+      <div><div style="color:#94A3B8">Boarding</div><div style="color:#9A3412">11</div></div>
+    </div>
+  </div>
+  <div class="stat" style="border-top:3px solid #0F766E">
+    <div class="lbl">OR utilization</div>
+    <div style="display:flex;align-items:baseline;gap:10px"><div class="num">82%</div><div style="color:#9A3412;font-family:'JetBrains Mono',monospace;font-size:12px">↑ 4pp</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px">
+      <div><div style="color:#94A3B8">Cases</div><div>48</div></div>
+      <div><div style="color:#94A3B8">Turn time</div><div>22m</div></div>
+      <div><div style="color:#94A3B8">Late starts</div><div style="color:#9A3412">5</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section-label">Vitals stat group — 5-up tile, abnormal flagging</div>
+<div class="vitals-stack">
+  <div class="vital-tile high">
+    <div class="lbl">Heart rate</div>
+    <div class="val">112 <small>bpm</small></div>
+    <div class="spec-caption" style="color:#9A3412">↑ above 100</div>
+  </div>
+  <div class="vital-tile high">
+    <div class="lbl">Blood pressure</div>
+    <div class="val">158<small>/</small>96 <small>mmHg</small></div>
+    <div class="spec-caption" style="color:#9A3412">Stage 2 HTN</div>
+  </div>
+  <div class="vital-tile">
+    <div class="lbl">Resp rate</div>
+    <div class="val">22 <small>/min</small></div>
+    <div class="spec-caption">within range</div>
+  </div>
+  <div class="vital-tile crit">
+    <div class="lbl">SpO₂</div>
+    <div class="val">91 <small>%</small></div>
+    <div class="spec-caption" style="color:#7F1D1D">Critical · room air</div>
+  </div>
+  <div class="vital-tile">
+    <div class="lbl">Temp</div>
+    <div class="val">98.7 <small>°F</small></div>
+    <div class="spec-caption">37.1 °C · oral</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Goal progress</div>
+<div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stat">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div class="lbl">Hand hygiene compliance</div><div class="mono" style="font-size:13px;font-weight:600;color:#15803D">94%</div></div>
+    <div style="height:6px;background:#F1F5F8;border-radius:3px;overflow:hidden"><div style="width:94%;height:100%;background:#16A34A"></div></div>
+    <div class="spec-caption" style="margin-top:6px">target ≥ 90% · ↑ 2pp wow</div>
+  </div>
+  <div class="stat">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div class="lbl">CLABSI · per 1k cath days</div><div class="mono" style="font-size:13px;font-weight:600;color:#15803D">0.4</div></div>
+    <div style="height:6px;background:#F1F5F8;border-radius:3px;overflow:hidden"><div style="width:30%;height:100%;background:#16A34A"></div></div>
+    <div class="spec-caption" style="margin-top:6px">target ≤ 1.0 · 30% of cap</div>
+  </div>
+  <div class="stat">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div class="lbl">Sepsis bundle compliance</div><div class="mono" style="font-size:13px;font-weight:600;color:#9A3412">78%</div></div>
+    <div style="height:6px;background:#F1F5F8;border-radius:3px;overflow:hidden"><div style="width:78%;height:100%;background:#D97706"></div></div>
+    <div class="spec-caption" style="margin-top:6px;color:#9A3412">target ≥ 85% · below target</div>
+  </div>
+</div>
+
+</body>
+</html>

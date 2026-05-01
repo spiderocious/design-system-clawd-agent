@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Progress</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.bar { height:6px; background:#F1F5F8; border-radius:3px; overflow:hidden; }
+.bar > span { display:block; height:100%; background:#0A87A3; border-radius:3px; }
+.bar.thick { height:10px; }
+.bar.lean { height:4px; }
+.ring { width:64px; height:64px; }
+.steps { display:flex; gap:0; }
+.step { flex:1; height:6px; background:#F1F5F8; border-radius:3px; }
+.step.done { background:#0A87A3; }
+.step.cur { background:#7DD1E7; }
+.step + .step { margin-left:4px; }
+.indet {
+  height:4px; background:#F1F5F8; border-radius:2px; overflow:hidden; position:relative;
+}
+.indet::after {
+  content:""; position:absolute; left:-30%; width:30%; height:100%; background:#0A87A3; border-radius:2px;
+  animation:indet 1500ms ease-in-out infinite;
+}
+@keyframes indet {
+  0% { left:-30%; width:30%; }
+  50% { left:30%; width:50%; }
+  100% { left:100%; width:30%; }
+}
+.dots { display:flex; gap:6px; align-items:center; }
+.dots span { width:8px; height:8px; border-radius:50%; background:#0A87A3; animation:bounce 1.2s ease-in-out infinite; }
+.dots span:nth-child(2) { animation-delay:0.2s; }
+.dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes bounce {
+  0%,100% { transform:translateY(0); opacity:0.4; }
+  50% { transform:translateY(-4px); opacity:1; }
+}
+.triage { display:flex; gap:0; align-items:center; }
+.triage .seg { flex:1; height:36px; background:#F8FAFB; border:1px solid #E2E8F0; border-right:none; display:flex; align-items:center; justify-content:center; gap:6px; font-size:11px; color:#475569; position:relative; }
+.triage .seg.done { background:#0A87A3; color:#fff; border-color:#0A87A3; }
+.triage .seg.cur { background:#E0F2F7; color:#0A6F87; border-color:#0A87A3; box-shadow:inset 0 -3px 0 #0A87A3; font-weight:600; }
+.triage .seg:last-child { border-right:1px solid #E2E8F0; }
+.triage .seg::after { content:""; position:absolute; right:-7px; top:50%; transform:translateY(-50%) rotate(45deg); width:14px; height:14px; background:inherit; border-top:1px solid #E2E8F0; border-right:1px solid #E2E8F0; z-index:1; }
+.triage .seg.done::after { background:#0A87A3; border-color:#0A87A3; }
+.triage .seg.cur::after { background:#E0F2F7; border-color:#0A87A3; }
+.triage .seg:last-child::after { display:none; }
+.iv-card { background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px; max-width:320px; }
+</style>
+</head>
+<body>
+
+<h1 class="spec-h1">Progress</h1>
+<p class="spec-sub">Linear, circular, segmented, indeterminate, plus domain progress for triage, discharge checklist, and IV drip volume.</p>
+
+<div class="spec-section-label">Linear bars</div>
+<div class="card" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <div><div class="spec-tile-label">42% — default</div><div class="bar"><span style="width:42%"></span></div></div>
+  <div><div class="spec-tile-label">68% — thick</div><div class="bar thick"><span style="width:68%"></span></div></div>
+  <div><div class="spec-tile-label">85% — lean</div><div class="bar lean"><span style="width:85%"></span></div></div>
+  <div><div class="spec-tile-label">at-target — green</div><div class="bar"><span style="width:96%;background:#16A34A"></span></div></div>
+  <div><div class="spec-tile-label">at-cap — amber</div><div class="bar"><span style="width:88%;background:#D97706"></span></div></div>
+  <div><div class="spec-tile-label">over — red</div><div class="bar"><span style="width:100%;background:#DC2626"></span></div></div>
+</div>
+
+<div class="spec-section-label">Circular rings</div>
+<div class="card" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+  <div style="text-align:center">
+    <svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#F1F5F8" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#0A87A3" stroke-width="6" stroke-dasharray="100 163" transform="rotate(-90 32 32)" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700">38%</text></svg>
+  </div>
+  <div style="text-align:center">
+    <svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#F1F5F8" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#16A34A" stroke-width="6" stroke-dasharray="155 163" transform="rotate(-90 32 32)" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700">94%</text></svg>
+  </div>
+  <div style="text-align:center">
+    <svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#F1F5F8" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#D97706" stroke-width="6" stroke-dasharray="142 163" transform="rotate(-90 32 32)" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700">87%</text></svg>
+  </div>
+  <div style="text-align:center">
+    <svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#F1F5F8" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#DC2626" stroke-width="6" stroke-dasharray="163 163" transform="rotate(-90 32 32)" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700">100%</text></svg>
+  </div>
+  <div style="text-align:center">
+    <svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#F1F5F8" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="#0A87A3" stroke-width="6" stroke-dasharray="40 163" transform="rotate(-90 32 32)" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="0" to="-163" dur="1.2s" repeatCount="indefinite"/></circle></svg>
+    <div class="spec-caption">indeterminate</div>
+  </div>
+</div>
+
+<div class="spec-section-label">Segmented / stepped</div>
+<div class="card" style="max-width:520px">
+  <div class="spec-tile-label">Discharge progress · 4 of 6 complete</div>
+  <div class="steps" style="margin-bottom:14px">
+    <div class="step done"></div>
+    <div class="step done"></div>
+    <div class="step done"></div>
+    <div class="step done"></div>
+    <div class="step cur"></div>
+    <div class="step"></div>
+  </div>
+  <ul style="font-size:13px;color:#475569;margin:0;padding-left:18px;line-height:1.7">
+    <li style="color:#15803D">✓ Medications reconciled</li>
+    <li style="color:#15803D">✓ Follow-up scheduled · 05/14 with Patel R</li>
+    <li style="color:#15803D">✓ Discharge education provided</li>
+    <li style="color:#15803D">✓ Prescriptions sent to pharmacy</li>
+    <li style="color:#0A6F87;font-weight:600">→ Transportation home — pending</li>
+    <li>Home health referral</li>
+  </ul>
+</div>
+
+<div class="spec-section-label">Indeterminate — bar &amp; dots</div>
+<div class="card" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center">
+  <div><div class="spec-tile-label">Loading bar</div><div class="indet"></div></div>
+  <div><div class="spec-tile-label">Dot bounce</div><div class="dots"><span></span><span></span><span></span></div></div>
+</div>
+
+<div class="spec-section-label">Triage progress — Registered → Disposition</div>
+<div class="triage">
+  <div class="seg done"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><polyline points="20 6 9 17 4 12"/></svg> Registered</div>
+  <div class="seg done"><svg class="icon" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.6"><polyline points="20 6 9 17 4 12"/></svg> Triaged</div>
+  <div class="seg cur">→ Roomed</div>
+  <div class="seg">Seen by provider</div>
+  <div class="seg">Disposition</div>
+</div>
+
+<div class="spec-section-label">IV drip progress — volume infused / total</div>
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+  <div class="iv-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:32px;height:48px;border:1.5px solid #94A3B8;border-radius:6px 6px 12px 12px;background:linear-gradient(180deg,#fff 30%,#7DD1E7 30%,#0EB0D1 100%);position:relative"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600">NS · 0.9% NaCl</div>
+        <div class="spec-caption">125 mL/h · Bed 312A</div>
+      </div>
+    </div>
+    <div class="bar" style="height:8px;margin-bottom:6px"><span style="width:70%;background:#0A87A3"></span></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#475569"><span>700 / 1000 mL</span><span>2h 24m left</span></div>
+  </div>
+
+  <div class="iv-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:32px;height:48px;border:1.5px solid #DC2626;border-radius:6px 6px 12px 12px;background:linear-gradient(180deg,#fff 90%,#FCA5A5 90%);position:relative"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600">Vancomycin 1g</div>
+        <div class="spec-caption" style="color:#991B1B">⚠ ending soon · Bed CCU-207A</div>
+      </div>
+    </div>
+    <div class="bar" style="height:8px;margin-bottom:6px"><span style="width:96%;background:#DC2626"></span></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#991B1B"><span>192 / 200 mL</span><span>4 min left</span></div>
+  </div>
+
+  <div class="iv-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:32px;height:48px;border:1.5px solid #94A3B8;border-radius:6px 6px 12px 12px;background:#fff;position:relative"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600">Heparin drip</div>
+        <div class="spec-caption">held · awaiting aPTT</div>
+      </div>
+    </div>
+    <div class="bar" style="height:8px;margin-bottom:6px"><span style="width:30%;background:#94A3B8"></span></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#475569"><span>300 / 1000 U/mL</span><span>HELD</span></div>
+  </div>
+</div>
+
+</body>
+</html>

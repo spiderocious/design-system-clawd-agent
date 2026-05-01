@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Date &amp; time</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* DATE & TIME — calendars, clocks, recurrence builder, DOB.
+     A calendar is a hand-drawn grid: hairlines, mono dates, the selected
+     date is a black square with the day in paper. Today is circled.
+     A range is a pen-stroke between two days. */
+
+  body { background: var(--paper); }
+  .page { padding: 56px 64px 96px; max-width: 1100px; }
+
+  .section { padding: 32px 0; border-bottom: 1px solid var(--hair); }
+  .section:last-child { border-bottom: 0; }
+  .section-h { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .section-h h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: var(--track-h); }
+  .section-h .sub { flex: 1; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+  .lab { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 10px; }
+
+  /* CALENDAR */
+  .cal {
+    background: var(--sheet); border: 1px solid var(--ink); padding: 18px 20px;
+    width: 280px;
+  }
+  .cal-h {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-h .mo { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; }
+  .cal-h .nav button {
+    background: none; border: 0; color: var(--ink-3); font-family: var(--mono); font-size: 13px; cursor: pointer;
+    padding: 0 6px;
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-d {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .cal-d.muted { color: var(--ink-4); }
+  .cal-d:hover { background: var(--paper-deep); }
+  .cal-d.today {
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .cal-d.sel {
+    background: var(--ink); color: var(--paper);
+  }
+  .cal-d.in-range {
+    background: var(--paper-deep);
+    border-radius: 0;
+  }
+  .cal-d.range-start { background: var(--ink); color: var(--paper); border-radius: 2px 0 0 2px; }
+  .cal-d.range-end   { background: var(--ink); color: var(--paper); border-radius: 0 2px 2px 0; }
+  .cal-dow {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .cal-d.has {
+    position: relative;
+  }
+  .cal-d.has::after {
+    content: ""; position: absolute; bottom: 4px; left: 50%; width: 4px; height: 4px;
+    border-radius: 50%; background: var(--green-700); transform: translateX(-50%);
+  }
+  .cal-d.unavail { color: var(--ink-4); cursor: not-allowed; text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  /* TIME — analog face + drum-roll input. */
+  .clock {
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    background: var(--sheet);
+    position: relative;
+  }
+  .clock .tick {
+    position: absolute; left: 50%; top: 4px;
+    width: 1px; height: 6px; background: var(--ink-3);
+    transform-origin: 50% 96px;
+  }
+  .clock .tick-h {
+    position: absolute; left: 50%; top: 4px;
+    width: 2px; height: 10px; background: var(--ink);
+    transform-origin: 50% 96px;
+  }
+  .clock .num {
+    position: absolute; font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    transform: translate(-50%, -50%);
+  }
+  .clock .hand-h {
+    position: absolute; left: 50%; top: 50%;
+    width: 2px; height: 56px;
+    background: var(--ink);
+    transform-origin: 50% 100%;
+    transform: translate(-50%, -100%) rotate(245deg); /* 8:15 */
+  }
+  .clock .hand-m {
+    position: absolute; left: 50%; top: 50%;
+    width: 1.5px; height: 78px;
+    background: var(--ink-2);
+    transform-origin: 50% 100%;
+    transform: translate(-50%, -100%) rotate(90deg); /* :15 */
+  }
+  .clock .pivot {
+    position: absolute; left: 50%; top: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink);
+    transform: translate(-50%,-50%);
+  }
+
+  /* drums for hh:mm:ss */
+  .drum-input {
+    background: var(--sheet); border: 1px solid var(--ink);
+    display: inline-flex; align-items: stretch; padding: 6px 6px;
+  }
+  .drum {
+    display: flex; flex-direction: column; align-items: center;
+    height: 124px; overflow: hidden;
+    width: 56px;
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    color: var(--ink-3);
+    border-right: 1px dashed var(--hair);
+  }
+  .drum:last-of-type { border-right: 0; }
+  .drum span { padding: 5px 0; font-size: 14px; line-height: 1.2; }
+  .drum span.on { color: var(--ink); font-size: 28px; font-weight: 500; padding: 6px 0; letter-spacing: -0.02em; }
+  .drum-label {
+    margin-left: 8px; align-self: center;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em;
+  }
+
+  /* DOB + age block */
+  .dob {
+    display: grid; grid-template-columns: 1fr auto; gap: 22px;
+    align-items: end;
+    padding: 18px 22px;
+    background: var(--sheet); border: 1px solid var(--ink);
+    max-width: 520px;
+  }
+  .dob input {
+    background: transparent; border: 0; border-bottom: 1.5px solid var(--ink);
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 28px; padding: 4px 0; outline: none; width: 220px;
+    letter-spacing: -0.01em;
+  }
+  .dob .age {
+    text-align: right;
+  }
+  .dob .age .num {
+    font-family: var(--serif); font-size: 38px; font-weight: 500;
+    line-height: 1; letter-spacing: -0.022em;
+  }
+  .dob .age .word { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; }
+
+  /* RECURRENCE BUILDER — sentence form */
+  .recur {
+    background: var(--sheet); border: 1px solid var(--ink);
+    padding: 22px 26px;
+  }
+  .recur .sentence {
+    font-family: var(--serif); font-style: italic; font-size: 22px;
+    color: var(--ink); line-height: 1.5;
+    letter-spacing: -0.012em;
+  }
+  .recur .sentence input, .recur .sentence select {
+    background: transparent; border: 0; border-bottom: 1.5px solid var(--ink);
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 22px; padding: 0 4px 4px;
+    outline: none; min-width: 60px;
+    color: var(--ink); font-style: normal;
+    text-align: center; letter-spacing: 0;
+  }
+  .recur .sentence select {
+    font-family: var(--sans); font-style: italic; font-weight: 500; padding: 0 6px 4px;
+  }
+  .recur .shortcuts {
+    margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid var(--hair);
+    display: flex; gap: 6px; flex-wrap: wrap;
+    align-items: center;
+  }
+  .recur .lab-mono {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-right: 8px;
+  }
+  .recur .short {
+    height: 22px; padding: 0 8px;
+    border: 1px solid var(--ink-3); border-radius: 9999px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+    cursor: pointer; background: transparent;
+    letter-spacing: 0;
+  }
+  .recur .short.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .recur .computed {
+    margin-top: 16px;
+    display: flex; gap: 4px; flex-wrap: wrap;
+    align-items: center;
+  }
+  .recur .computed .lab-mono { margin-right: 6px; }
+  .recur .dose-tick {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 8px;
+    background: var(--green-50); border: 1px solid var(--green-200);
+    color: var(--green-800);
+    font-family: var(--mono); font-feature-settings: "tnum" 1;
+    font-size: 11px; letter-spacing: 0;
+  }
+  .recur .dose-tick.next { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* TIMEZONE row */
+  .tz {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: var(--sheet); border: 1px solid var(--ink);
+    max-width: 520px;
+  }
+  .tz .tz-h {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    width: 80px;
+  }
+  .tz .name { font-family: var(--serif); font-size: 17px; font-weight: 500; }
+  .tz .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; letter-spacing: 0; }
+
+  /* DURATION */
+  .dur-row {
+    display: flex; gap: 32px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">II · 04</span>
+    <h1 class="ttl">Date &amp; time</h1>
+    <span class="meta">grids of paper, faces of ink, schedules as sentences</span>
+  </header>
+
+  <!-- A. CALENDAR — single + range -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Calendar — pick a day, or a range.</h2>
+      <div class="sub">Hairline grid, mono dates. Today is circled. Selected is filled. The range pen-strokes between two days.</div>
+    </div>
+
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div>
+        <div class="lab">Single — admission date</div>
+        <div class="cal">
+          <div class="cal-h">
+            <button class="nav" style="background:none;border:0;cursor:pointer;color:var(--ink-3)">‹</button>
+            <span class="mo">May 2026</span>
+            <button class="nav" style="background:none;border:0;cursor:pointer;color:var(--ink-3)">›</button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dow">M</div><div class="cal-dow">T</div><div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div><div class="cal-dow">S</div><div class="cal-dow">S</div>
+            <div class="cal-d muted">28</div><div class="cal-d muted">29</div><div class="cal-d muted">30</div><div class="cal-d today">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
+            <div class="cal-d sel">5</div><div class="cal-d">6</div><div class="cal-d has">7</div><div class="cal-d">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div>
+            <div class="cal-d">12</div><div class="cal-d">13</div><div class="cal-d has">14</div><div class="cal-d">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d">18</div>
+            <div class="cal-d">19</div><div class="cal-d">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div>
+            <div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d">31</div><div class="cal-d muted">1</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="lab">Range — PTO</div>
+        <div class="cal">
+          <div class="cal-h">
+            <button class="nav" style="background:none;border:0;cursor:pointer;color:var(--ink-3)">‹</button>
+            <span class="mo">May 2026</span>
+            <button class="nav" style="background:none;border:0;cursor:pointer;color:var(--ink-3)">›</button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dow">M</div><div class="cal-dow">T</div><div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div><div class="cal-dow">S</div><div class="cal-dow">S</div>
+            <div class="cal-d muted">28</div><div class="cal-d muted">29</div><div class="cal-d muted">30</div><div class="cal-d today">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
+            <div class="cal-d">5</div><div class="cal-d">6</div><div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div>
+            <div class="cal-d range-start">12</div><div class="cal-d in-range">13</div><div class="cal-d in-range">14</div><div class="cal-d in-range">15</div><div class="cal-d in-range">16</div><div class="cal-d in-range">17</div><div class="cal-d range-end">18</div>
+            <div class="cal-d">19</div><div class="cal-d">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div>
+            <div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d unavail">28</div><div class="cal-d unavail">29</div><div class="cal-d">30</div><div class="cal-d">31</div><div class="cal-d muted">1</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:0;margin-top:10px;text-align:center">12 May → 18 May · 5 working days</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. CLOCK + DRUM -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Time — face &amp; drum.</h2>
+      <div class="sub">A face for setting time at-a-glance. A drum for medication timing where the second hand matters.</div>
+    </div>
+
+    <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap">
+      <div>
+        <div class="lab">Round — appointment</div>
+        <div class="clock">
+          <!-- ticks at 12,3,6,9 -->
+          <div class="tick" style="transform: rotate(0deg) translateX(-0.5px)"></div>
+          <div class="tick-h" style="transform: rotate(0deg) translateX(-1px)"></div>
+          <div class="tick-h" style="transform: rotate(90deg) translateX(-1px)"></div>
+          <div class="tick-h" style="transform: rotate(180deg) translateX(-1px)"></div>
+          <div class="tick-h" style="transform: rotate(270deg) translateX(-1px)"></div>
+          <div class="num" style="left:50%; top:14px">12</div>
+          <div class="num" style="left:188px; top:50%">3</div>
+          <div class="num" style="left:50%; top:188px">6</div>
+          <div class="num" style="left:14px; top:50%">9</div>
+          <div class="hand-h"></div>
+          <div class="hand-m"></div>
+          <div class="pivot"></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0;margin-top:10px;text-align:center;width:200px">08:15 — appointment time</div>
+      </div>
+
+      <div>
+        <div class="lab">Drum — first dose</div>
+        <div class="drum-input">
+          <div class="drum"><span>06</span><span>07</span><span class="on">08</span><span>09</span><span>10</span></div>
+          <div class="drum"><span>00</span><span>15</span><span class="on">30</span><span>45</span></div>
+          <div class="drum"><span>00</span><span class="on">15</span><span>30</span><span>45</span></div>
+          <span class="drum-label">hh : mm : ss</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0;margin-top:10px">08 : 30 : 15 — clinical time, 24-hour</div>
+      </div>
+
+      <div>
+        <div class="lab">Timezone</div>
+        <div class="tz">
+          <span class="tz-h">Locale</span>
+          <div>
+            <div class="name">Chicago — Central Time</div>
+            <div class="meta">UTC−05:00 · auto-detected from workstation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. DOB + AGE -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Date of birth — age computes itself.</h2>
+      <div class="sub">The DOB is the field; the age is the consequence. The age is set in serif because it reads as the patient's <em>identity</em>, not as data.</div>
+    </div>
+
+    <div class="dob">
+      <div>
+        <div class="lab">Date of birth</div>
+        <input value="1962-03-14">
+      </div>
+      <div class="age">
+        <div class="num">64</div>
+        <div class="word">years</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. RECURRENCE -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Recurrence — written as a sentence.</h2>
+      <div class="sub">Medication schedules are sentences, not form fields. The clinician reads the order back to themselves; the system parses what they say.</div>
+    </div>
+
+    <div class="recur">
+      <div class="sentence">
+        Give <input value="500" style="width:80px"> <select><option>mg</option><option>mL</option><option>units</option></select>
+        every <input value="8" style="width:40px"> <select><option>hours</option><option>days</option><option>weeks</option></select>,
+        starting at <input value="08:00" style="width:84px">,
+        until <select><option>discontinued</option><option>a date</option><option>after a number of doses</option></select>.
+      </div>
+
+      <div class="shortcuts">
+        <span class="lab-mono">Common</span>
+        <button class="short on">Q8H</button>
+        <button class="short">QID</button>
+        <button class="short">TID</button>
+        <button class="short">BID</button>
+        <button class="short">QD</button>
+        <button class="short">QHS</button>
+        <button class="short">PRN</button>
+        <button class="short">STAT × 1</button>
+      </div>
+
+      <div class="computed">
+        <span class="lab-mono">Computed</span>
+        <span class="dose-tick next">08:00 today</span>
+        <span class="dose-tick">16:00</span>
+        <span class="dose-tick">00:00</span>
+        <span class="dose-tick">08:00 +1d</span>
+        <span class="dose-tick">16:00 +1d</span>
+        <span class="dose-tick">…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. DURATION -->
+  <section class="section">
+    <div class="section-h">
+      <h2>Duration — anticipated &amp; observed.</h2>
+      <div class="sub">For length of stay, infusion duration, visit length. Same line-field idiom; the unit reads as a small italic word.</div>
+    </div>
+
+    <div class="dur-row">
+      <div>
+        <div class="lab">Length of stay — anticipated</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input style="background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:28px;width:60px;text-align:right;outline:none" value="4">
+          <span class="serif" style="font-style:italic;color:var(--ink-3);font-size:18px">days</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="lab">Visit duration</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input style="background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:28px;width:50px;text-align:right;outline:none" value="00">
+          <span class="serif" style="font-style:italic;color:var(--ink-3);font-size:18px">h</span>
+          <input style="background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:28px;width:50px;text-align:right;outline:none" value="45">
+          <span class="serif" style="font-style:italic;color:var(--ink-3);font-size:18px">min</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="lab">Infusion remaining</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input style="background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:28px;width:60px;text-align:right;outline:none" value="2">
+          <span class="serif" style="font-style:italic;color:var(--ink-3);font-size:18px">h</span>
+          <input style="background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-feature-settings:'tnum' 1;font-size:28px;width:60px;text-align:right;outline:none" value="24">
+          <span class="serif" style="font-style:italic;color:var(--ink-3);font-size:18px">min</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

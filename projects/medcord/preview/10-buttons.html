@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Buttons</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  /* Buttons: an opinion, not a catalogue.
+     There are exactly three weights — primary, secondary, quiet — plus
+     the irreversible button, which is its own thing. Sizes are sm/md/lg.
+     States are drawn in scenes, not state grids. */
+
+  /* Re-declare so they read as design, not utility — sharper than the foundation defaults */
+  .b {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
+  }
+  .b svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .b:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(22,163,74,0.28); }
+
+  .b-sm { height: 28px; padding: 0 12px; font-size: 12px; }
+  .b-md { height: 34px; }
+  .b-lg { height: 40px; padding: 0 20px; font-size: 14px; }
+
+  /* Primary: filled apothecary green */
+  .b-primary { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+  .b-primary:hover { background: var(--green-800); border-color: var(--green-800); }
+
+  /* Secondary: ink-outlined, paper-filled */
+  .b-secondary { background: transparent; border-color: var(--ink); color: var(--ink); }
+  .b-secondary:hover { background: var(--ink); color: var(--paper); }
+
+  /* Quiet: no edge, sits on the page */
+  .b-quiet { color: var(--ink-2); padding: 0 10px; }
+  .b-quiet:hover { background: rgba(24,22,19,0.05); color: var(--ink); }
+
+  /* Disabled */
+  .b[disabled], .b.disabled { opacity: 0.38; pointer-events: none; }
+
+  /* Loading: a quiet 1.4s pulse on the leading dot, no spinner spinning ostentation */
+  .b-loading::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; opacity: 0.5;
+    animation: load 1400ms ease-in-out infinite;
+  }
+  @keyframes load { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* Just-saved: a confirming check that fades in */
+  .b-confirmed { background: var(--green-50); color: var(--green-800); border-color: var(--green-300); }
+
+  /* Irreversible: the only ornamented variant.
+     Black ink, with a thin red rule under the label and a "hold to confirm"
+     fill that animates left-to-right in 1.5 seconds. */
+  .b-irrev {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    padding: 0 18px;
+    overflow: hidden;
+  }
+  .b-irrev::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: var(--crit);
+  }
+  .b-irrev .fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: var(--crit);
+    transition: width 80ms linear;
+  }
+  .b-irrev:hover .fill { width: 35%; }
+  .b-irrev .label { position: relative; z-index: 1; }
+
+  /* "Held" demo state, mid-confirmation */
+  .b-irrev.holding .fill { width: 60%; }
+
+  /* The split button — primary action with a related menu */
+  .split-b {
+    display: inline-flex; align-items: stretch;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .split-b .b { border-radius: 0; }
+  .split-b .b:first-child { border-right: 1px solid rgba(255,255,255,0.16); }
+
+  /* Toolbar: the rest button row in a real chart context */
+  .toolbar {
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 8px;
+  }
+  .toolbar .div { width: 1px; height: 18px; background: var(--hair); margin: 0 6px; }
+
+  /* Scene block — every section here is a real situation */
+  .scene { padding: 24px 0 32px; border-bottom: 1px solid var(--hair); }
+  .scene:last-child { border-bottom: 0; }
+  .scene-h {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .scene-h h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: var(--track-h);
+  }
+  .scene-h .sub {
+    font-family: var(--sans); font-size: 13px; color: var(--ink-3);
+    flex: 1;
+  }
+
+  /* Footer-of-modal mockup: where buttons most often live */
+  .modal-foot {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 18px;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 6px;
+  }
+  .modal-foot .gap { flex: 1; }
+
+  /* Inline-row example */
+  .inline-row {
+    display: grid; grid-template-columns: auto 1fr auto auto auto;
+    gap: 12px; align-items: center;
+    padding: 14px 18px;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 6px;
+  }
+  .inline-row .ttl { font-size: 14px; }
+  .inline-row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* "Scenarios" — composed groupings showing how to combine */
+  .holder {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .holder .legend h4 { margin: 0 0 6px; font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0.005em; }
+  .holder .legend p { margin: 0; font-size: 12px; color: var(--ink-3); line-height: 1.55; }
+
+  /* States grid — last, as a reference, but small and quiet */
+  .states {
+    display: grid; grid-template-columns: 100px repeat(3, 1fr);
+    gap: 8px;
+    align-items: center;
+  }
+  .states .row-h, .states .row-c { font-family: var(--mono); font-size: 10px; color: var(--ink-3); padding: 2px 0; }
+  .states .row-c { padding: 6px 0; }
+
+  /* IRRV demo trigger */
+  .holdable { cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="stamp">
+    <span class="num">II · 01</span>
+    <h1 class="ttl">Buttons</h1>
+    <span class="meta">three weights · one irreversible · the rest is restraint</span>
+  </header>
+
+  <p style="font-size:14px;line-height:1.6;color:var(--ink-2);max-width:62ch;margin:0 0 36px">
+    A button system with three actual weights — primary, secondary, quiet —
+    and one ornament: the irreversible button, used for actions that cannot
+    be taken back. Everything else (split, toolbar, icon-only) is a layout of
+    those three. No glow, no gradient, no scale-on-press.
+  </p>
+
+  <!-- Scene 1: signing off on a chart -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>Sign &amp; submit</h3>
+      <div class="sub">Primary action, end of a chart-open task. Lives at the bottom-right of the sheet.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The footer</h4>
+        <p>Quiet on the left for "save draft," secondary for "back," primary for the action that ends the task. Never two primaries.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="b b-quiet">Save draft</button>
+        <div class="gap"></div>
+        <button class="b b-secondary">Discard</button>
+        <button class="b b-primary">Sign &amp; submit
+          <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 2: row action — quiet, in flow -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>In a row</h3>
+      <div class="sub">Quiet buttons sit alongside content. They never compete with the row's primary content.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The list-row</h4>
+        <p>One quiet primary at the end. Secondary and below are kebab-revealed. Hover state on the row reveals the action — it is not always visible.</p>
+      </div>
+      <div class="inline-row">
+        <span class="av av-md av-pat">OA</span>
+        <div>
+          <div class="ttl">Adebayo, Olumide</div>
+          <div class="meta">MRN 10458291 · 64 M · 312A</div>
+        </div>
+        <span class="pill pill-ok"><span class="dot"></span>In room</span>
+        <button class="b b-quiet b-sm">Open chart
+          <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button class="b b-quiet b-sm" style="padding:0 8px" aria-label="More">
+          <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 3: toolbar in the chart -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>In a toolbar</h3>
+      <div class="sub">Icon-only buttons on a single sheet. Tooltips carry the names; the icons carry the meaning.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>The chart toolbar</h4>
+        <p>Three groups separated by hairline rules: navigate, annotate, and write. The active tool is filled. Nothing more.</p>
+      </div>
+      <div class="toolbar">
+        <button class="b b-quiet b-sm" style="padding:0 8px"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="b b-quiet b-sm" style="padding:0 8px"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <div class="div"></div>
+        <button class="b b-quiet b-sm" style="padding:0 8px"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+        <button class="b b-quiet b-sm" style="padding:0 8px"><svg viewBox="0 0 24 24"><path d="M14 4l6 6-10 10H4v-6z"/></svg></button>
+        <button class="b b-quiet b-sm" style="padding:0 8px;background:var(--ink);color:var(--paper);border-radius:4px"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></button>
+        <div class="div"></div>
+        <button class="b b-quiet b-sm">New note
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button class="b b-quiet b-sm">Order
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 4: split button — sign once, with options -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>Split — primary with related</h3>
+      <div class="sub">For an action that has near-twins. The arrow opens a small menu of co-authors of the same intent.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>Sign &amp; …</h4>
+        <p>"Sign &amp; submit" is the default. The chevron offers "Sign &amp; addendum," "Sign with co-signer," "Sign &amp; print AVS."</p>
+      </div>
+      <div class="split-b">
+        <button class="b b-primary">Sign &amp; submit</button>
+        <button class="b b-primary" style="padding:0 12px" aria-label="Sign options">
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 5: irreversible — the system's distinguishing button -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>Irreversible</h3>
+      <div class="sub">For actions that cannot be undone — discharge AMA, override an allergy, void a signed order. Held, not clicked.</div>
+    </div>
+
+    <div class="holder">
+      <div class="legend">
+        <h4>Hold to confirm</h4>
+        <p>Black ink with a hairline of arterial red beneath the label. On press, the red rises through the button over 1.5 seconds. Release before full and the action is cancelled.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+        <button class="b b-md b-irrev">
+          <span class="fill"></span>
+          <span class="label">Hold to discharge against advice</span>
+        </button>
+
+        <button class="b b-md b-irrev holding" style="cursor:default">
+          <span class="fill"></span>
+          <span class="label">Holding · 60%…</span>
+        </button>
+
+        <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3)">
+          confirmed actions log to the audit record with name, time, workstation
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 6: states reference (last, small, quiet) -->
+  <section class="scene">
+    <div class="scene-h">
+      <h3>The four states, one row each</h3>
+      <div class="sub">Hover · focus · disabled · loading — drawn small because the design is the rest of this page.</div>
+    </div>
+
+    <div class="states">
+      <div class="row-h">primary</div>
+      <div class="row-c"><button class="b b-primary">Sign</button> <span class="row-h" style="margin-left:8px">default</span></div>
+      <div class="row-c"><button class="b b-primary" style="background:var(--green-800);border-color:var(--green-800)">Sign</button> <span class="row-h" style="margin-left:8px">hover</span></div>
+      <div class="row-c"><button class="b b-primary b-loading">Signing</button> <span class="row-h" style="margin-left:8px">loading</span></div>
+
+      <div class="row-h">secondary</div>
+      <div class="row-c"><button class="b b-secondary">Cancel</button> <span class="row-h" style="margin-left:8px">default</span></div>
+      <div class="row-c"><button class="b b-secondary" style="outline:none;box-shadow:0 0 0 3px rgba(22,163,74,0.28)">Cancel</button> <span class="row-h" style="margin-left:8px">focus</span></div>
+      <div class="row-c"><button class="b b-secondary" disabled>Cancel</button> <span class="row-h" style="margin-left:8px">disabled</span></div>
+
+      <div class="row-h">quiet</div>
+      <div class="row-c"><button class="b b-quiet">Save draft</button> <span class="row-h" style="margin-left:8px">default</span></div>
+      <div class="row-c"><button class="b b-quiet" style="background:rgba(24,22,19,0.05);color:var(--ink)">Save draft</button> <span class="row-h" style="margin-left:8px">hover</span></div>
+      <div class="row-c"><button class="b b-confirmed b-sm">Saved
+        <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+      </button> <span class="row-h" style="margin-left:8px">just-saved</span></div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
