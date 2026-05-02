@@ -47,13 +47,29 @@ The agent will use that as a starting point and skip the questions you've alread
 
 ---
 
+## Ship it to a real React app
+
+Once you're happy with the design, run:
+
+```
+/ship-design-system <slug> --to ../path/to/your-react-app
+```
+
+A second agent (the implementer) reads your existing repo — Tailwind config, path aliases, component layout, export style, class-composition util — *before it writes anything*. Then it asks you a few discovery questions to confirm conventions, plans the components, and translates the HTML system into real `.tsx` files that match your codebase. Never invents design; only translates what's already in the Studio. Show-the-diff before any package.json or config change, never runs `pnpm install` without permission.
+
+The Studio HTML stays as the canonical visual spec — even after you've shipped, it's the doc your devs reference for *why* a component looks the way it does.
+
+---
+
 ## What the agent reads (in order, every session)
 
-- `CLAUDE.md` — the operating manual (discovery script, build rules, file conventions)
+- `CLAUDE.md` — the operating manual (covers both the designer and implementer agents)
 - `notes/preferences.md` — durable preferences across all your projects
 - `notes/rejected.md` — things you've said no to before
 - `projects/projects.json` — the existing shelf
 - `styles/STYLE-CATALOG.md` — the 25 stances
+- `docs/DISCOVERY-QUESTIONS.md` + `docs/COMPONENT-CHECKLIST.md` — what the *designer* uses
+- `docs/SHIP-DISCOVERY.md` + `docs/SHIP-CALIBRATION.md` — what the *implementer* uses
 
 It'll also write to `notes/` whenever you say something worth remembering.
 
@@ -64,14 +80,17 @@ It'll also write to `notes/` whenever you say something worth remembering.
 ```
 /                         the playground
 ├── index.html            the gallery
-├── CLAUDE.md             the agent's manual
+├── CLAUDE.md             the agents' manual
 ├── styles/               the 25-stance catalog
-├── docs/                 discovery questions & component checklist
-├── notes/                durable preferences, rejections, per-project lessons
+├── docs/                 discovery + checklist (designer) · calibration + discovery (implementer)
+├── notes/                durable preferences, rejections, per-project + per-target lessons
 ├── projects/
 │   ├── projects.json     gallery manifest
 │   └── medcord/          the reference project
-└── .claude/              slash command + permissions
+└── .claude/
+    └── commands/
+        ├── design-system-agent.md   the designer
+        └── ship-design-system.md    the implementer
 ```
 
 ---

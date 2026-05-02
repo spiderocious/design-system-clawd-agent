@@ -2,7 +2,12 @@
 
 This folder is **the user's design-system playground**. Every project that lives here is a complete, opinionated design system built into its own subfolder under `projects/<slug>/`. The home page (`index.html`) is a gallery that reads from `projects/projects.json` and renders one tile per project.
 
-You are the agent that builds the next system.
+The Studio has **two agents** with two jobs:
+
+- **`/design-system-agent`** — the *designer*. Reads the brief, picks a stance, builds the HTML system inside `projects/<slug>/`. This is the design-time companion. **You are this agent if the user invoked `/design-system-agent`.** Continue reading.
+- **`/ship-design-system`** — the *implementer*. Takes a finished Studio project and translates it into a real React (or whatever) component library inside a target codebase. Never invents design — only translates. Has its own playbook in `.claude/commands/ship-design-system.md` plus `docs/SHIP-CALIBRATION.md` and `docs/SHIP-DISCOVERY.md`. **If the user invoked `/ship-design-system`, switch to that command's playbook — not this one.**
+
+The two share the `notes/` folder, the `projects/projects.json` manifest, and the `styles/STYLE-CATALOG.md`. They never overlap in what they write.
 
 The user is non-technical. Treat this document as your operating manual. Read it once at the top of every session. Re-read the relevant section when the user invokes you.
 
@@ -157,9 +162,10 @@ The reference exemplar of a stance done well: **Medcord** (#1 Surgical paper).
 ├── README.md            ← short, generic, points at this CLAUDE.md
 ├── CLAUDE.md            ← this file
 ├── .claude/
-│   ├── settings.json    ← project settings
+│   ├── settings.json                ← project settings
 │   └── commands/
-│       └── design-system-agent.md   ← the slash-command prompt
+│       ├── design-system-agent.md   ← the *designer* — builds the HTML system
+│       └── ship-design-system.md    ← the *implementer* — translates to a React lib
 ├── projects/
 │   ├── projects.json    ← the manifest the gallery reads
 │   ├── medcord/         ← the reference example
@@ -179,13 +185,17 @@ The reference exemplar of a stance done well: **Medcord** (#1 Surgical paper).
 ├── styles/
 │   └── STYLE-CATALOG.md ← the 25 stances
 ├── docs/
-│   ├── DISCOVERY-QUESTIONS.md
-│   └── COMPONENT-CHECKLIST.md
+│   ├── DISCOVERY-QUESTIONS.md      ← used by /design-system-agent (act I)
+│   ├── COMPONENT-CHECKLIST.md      ← used by /design-system-agent (act IV)
+│   ├── SHIP-DISCOVERY.md           ← used by /ship-design-system (act II)
+│   └── SHIP-CALIBRATION.md         ← used by /ship-design-system (act I)
 └── notes/
     ├── _HOW-TO-NOTE.md
     ├── preferences.md
     ├── rejected.md
-    └── <slug>/                     ← per-project lessons
+    ├── <slug>/                     ← per-project lessons (designer)
+    └── <target-repo-name>/         ← per-target lessons (implementer)
+        └── shipped-<YYYY-MM-DD>.md ← what was generated, conventions used
 ```
 
 **Slugs** are kebab-case, derived from the product name: "Caelum" → `caelum`. If a slug is taken, append a numeric suffix.
