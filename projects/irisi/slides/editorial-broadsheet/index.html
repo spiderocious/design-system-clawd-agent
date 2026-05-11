@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 02 · Editorial broadsheet</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  /* Pack 02 — Editorial broadsheet */
+  .ed { background: #FBFAF7; color: #14110D; font-family: 'Source Serif 4', Georgia, serif; padding: 64px 88px; height: 100%; display: flex; flex-direction: column; }
+  .ed .kicker { font-family: 'Inter', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: #B42318; }
+  .ed .head { font-family: 'Source Serif 4', serif; font-weight: 500; line-height: 1.0; letter-spacing: -0.02em; margin: 14px 0 0; }
+  .ed .head .ital { font-style: italic; }
+  .ed hr { border: 0; border-top: 1px solid #14110D; margin: 22px 0 18px; }
+  .ed .by { font-family: 'Inter', sans-serif; font-size: 13px; color: #6E665B; letter-spacing: 0.06em; }
+  .ed .body { column-count: 2; column-gap: 32px; font-size: 16px; line-height: 1.55; color: #3C3833; max-width: 800px; margin-top: 18px; }
+  .ed .body p { margin: 0 0 12px; }
+  .ed .footer { margin-top: auto; padding-top: 14px; border-top: 1px solid #D9D0BB; display: flex; justify-content: space-between; font-family: 'Inter', sans-serif; font-size: 11px; color: #6E665B; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* Layout-specific */
+  .ed.cover { padding: 64px 88px; justify-content: end; }
+  .ed.cover .head { font-size: 96px; max-width: 12ch; }
+  .ed.cover .meta { font-family: 'Inter', sans-serif; font-size: 14px; color: #6E665B; letter-spacing: 0.06em; margin-top: 22px; padding-top: 16px; border-top: 4px double #14110D; }
+
+  .ed.headline .head { font-size: 76px; max-width: 16ch; }
+
+  .ed.agenda { padding: 56px 88px; }
+  .ed.agenda .head { font-size: 56px; }
+  .ed.agenda ol { font-family: 'Source Serif 4', serif; font-size: 22px; line-height: 1.5; color: #14110D; margin: 24px 0 0; padding: 0 0 0 20px; column-count: 2; column-gap: 48px; }
+  .ed.agenda ol li { margin-bottom: 6px; }
+  .ed.agenda ol li .meta { display: inline-block; font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.16em; color: #6E665B; text-transform: uppercase; margin-left: 8px; }
+
+  .ed.section { padding: 0; justify-content: center; align-items: stretch; flex-direction: row; }
+  .ed.section .left { background: #14110D; color: #FBFAF7; padding: 64px 56px; flex: 0 0 35%; display: flex; flex-direction: column; justify-content: end; }
+  .ed.section .left .roman { font-family: 'Source Serif 4', serif; font-size: 88px; font-weight: 500; line-height: 0.9; letter-spacing: -0.02em; color: #C9B27A; }
+  .ed.section .left .lbl { font-family: 'Inter', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: #C9B27A; margin-top: 14px; }
+  .ed.section .right { padding: 64px 88px; flex: 1; display: flex; flex-direction: column; justify-content: end; }
+  .ed.section .right .head { font-size: 64px; max-width: 14ch; }
+
+  .ed.bigstat { padding: 64px 88px; justify-content: center; }
+  .ed.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; padding: 56px 0; border-top: 1px solid #14110D; border-bottom: 1px solid #14110D; }
+  .ed.bigstat .row .stat { font-family: 'Source Serif 4', serif; font-size: 88px; font-weight: 500; letter-spacing: -0.025em; line-height: 0.95; }
+  .ed.bigstat .row .stat .em { color: #B42318; }
+  .ed.bigstat .row .lbl { font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E665B; margin-top: 10px; }
+  .ed.bigstat .ftn { margin-top: 24px; font-family: 'Source Serif 4', serif; font-style: italic; font-size: 16px; color: #6E665B; }
+
+  .ed.twocol { padding: 56px 88px; }
+  .ed.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-top: 24px; border-top: 1px solid #14110D; flex: 1; }
+  .ed.twocol .cols .col h3 { font-family: 'Source Serif 4', serif; font-size: 28px; font-weight: 500; letter-spacing: -0.018em; margin: 0 0 12px; }
+  .ed.twocol .cols .col h3.crit { color: #B42318; }
+  .ed.twocol .cols .col p { font-size: 15px; line-height: 1.55; color: #3C3833; margin: 0 0 10px; }
+  .ed.twocol .cols .col ul { font-size: 15px; line-height: 1.7; color: #3C3833; padding-left: 18px; margin: 0; }
+
+  .ed.threecol { padding: 56px 88px; }
+  .ed.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 22px; border-top: 1px solid #14110D; }
+  .ed.threecol .cols .col h3 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.015em; margin: 0 0 8px; }
+  .ed.threecol .cols .col .nm { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.22em; color: #B42318; text-transform: uppercase; }
+  .ed.threecol .cols .col p { font-size: 14px; line-height: 1.55; color: #3C3833; margin: 8px 0 0; }
+
+  .ed.imgled { padding: 0; flex-direction: row; }
+  .ed.imgled .img { flex: 1; background: linear-gradient(135deg, #6E665B 0%, #14110D 100%); position: relative; }
+  .ed.imgled .img::after { content: "Photograph · Halcyon HQ, May 2026"; position: absolute; bottom: 14px; left: 18px; color: #FBFAF7; font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.8; }
+  .ed.imgled .copy { flex: 0 0 42%; padding: 64px 56px; display: flex; flex-direction: column; justify-content: end; }
+  .ed.imgled .copy .head { font-size: 52px; max-width: 14ch; margin-top: 12px; }
+
+  .ed.quote { justify-content: center; padding: 64px 120px; }
+  .ed.quote .q { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 60px; font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; color: #14110D; max-width: 22ch; }
+  .ed.quote .q::before { content: """; font-size: 90px; line-height: 0; vertical-align: -8px; color: #B42318; margin-right: 4px; }
+  .ed.quote .attr { font-family: 'Inter', sans-serif; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E665B; margin-top: 32px; }
+
+  .ed.timeline { padding: 56px 88px; }
+  .ed.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); margin: 32px 0 8px; padding-bottom: 12px; border-bottom: 1px solid #14110D; gap: 24px; }
+  .ed.timeline .axis .step .wk { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #B42318; }
+  .ed.timeline .axis .step h4 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.015em; margin: 4px 0 6px; }
+  .ed.timeline .axis .step p { font-size: 13px; line-height: 1.5; color: #3C3833; margin: 0; }
+  .ed.timeline .ftn { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 14px; color: #6E665B; margin-top: 14px; }
+
+  .ed.team { padding: 56px 88px; }
+  .ed.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding-top: 24px; border-top: 1px solid #14110D; }
+  .ed.team .person .img { aspect-ratio: 3 / 4; background: linear-gradient(135deg, #C9B27A 0%, #6E665B 100%); border: 1px solid #14110D; }
+  .ed.team .person h4 { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 500; letter-spacing: -0.015em; margin: 10px 0 2px; }
+  .ed.team .person .role { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.16em; color: #B42318; text-transform: uppercase; }
+  .ed.team .person p { font-size: 12px; line-height: 1.5; color: #6E665B; margin: 8px 0 0; }
+
+  .ed.coda { padding: 64px 88px; justify-content: end; align-items: end; flex-direction: column; }
+  .ed.coda .head { font-size: 96px; align-self: start; }
+  .ed.coda .meta { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 22px; color: #6E665B; margin-top: 24px; align-self: end; }
+</style>
+</head>
+<body>
+
+<header class="pack-head">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="crumb">
+    <a href="../index.html">Library</a>
+    <span class="sep">/</span>
+    <span class="ix">02</span>
+    <span class="nm">Editorial broadsheet</span>
+  </div>
+  <div class="meta">
+    <span>12 layouts</span>
+    <span>·</span>
+    <a href="../../index.html">← Project</a>
+  </div>
+</header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 02 · Editorial</div>
+    <h1>Slides that read like a <span class="ital">serious</span> newspaper.</h1>
+    <p>"What if a NYT analyst designed your deck?" Bylines, horizontal rules, kicker-coded sections, two-column body, restrained pull-quotes. One journalistic red used only on critical or breaking-news cues.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · board, research, analysis</div>
+    <div><strong>Type</strong> · Source Serif 4 · Inter</div>
+    <div><strong>Accent</strong> · Halcyon red · #B42318</div>
+    <div><strong>Density</strong> · packed</div>
+    <div><strong>Light</strong> · 12 layouts · dark variant available</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <!-- 01 Cover -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span><span class="desc">Issue, brand, headline · sets the tone</span></div>
+    <div class="slide">
+      <div class="ed cover">
+        <div class="kicker">— Quarterly · Q2 · 2026 —</div>
+        <h2 class="head">Halcyon &amp; Co.<br>Q2 board <span class="ital">update.</span></h2>
+        <div class="meta">May 14, 2026 · founders' edition · Vol. VIII, No. 2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Agenda -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span><span class="desc">Numbered list, two-column · 5–8 items</span></div>
+    <div class="slide">
+      <div class="ed agenda">
+        <div class="kicker">— What we'll cover —</div>
+        <h2 class="head">Today's <span class="ital">agenda.</span></h2>
+        <ol>
+          <li>Where we are <span class="meta">3 min</span></li>
+          <li>The honest part <span class="meta">5 min</span></li>
+          <li>What we're cutting <span class="meta">4 min</span></li>
+          <li>Roadmap &amp; risks <span class="meta">3 min</span></li>
+          <li>Asks of the board <span class="meta">3 min</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Section divider -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">03</span><span class="nm">Section divider</span><span class="desc">Roman numeral · used between major sections</span></div>
+    <div class="slide">
+      <div class="ed section">
+        <div class="left">
+          <div class="roman">I</div>
+          <div class="lbl">— Section one —</div>
+        </div>
+        <div class="right">
+          <div class="kicker">— Where we are —</div>
+          <h2 class="head">The <span class="ital">quiet</span> rebellion of measured growth.</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 Headline (the editorial signature) -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span><span class="desc">Kicker, title, byline, two-col body · the signature layout</span></div>
+    <div class="slide">
+      <div class="ed headline">
+        <div class="kicker">— Quarterly · Q2 2026 —</div>
+        <h2 class="head">The quiet rebellion of <span class="ital">measured</span> growth.</h2>
+        <hr>
+        <div class="by">By the founders · 12 min read · Halcyon &amp; Co.</div>
+        <div class="body">
+          <p>Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the go-to-market team.</p>
+          <p>The reason isn't strategy. It's the unglamorous work of saying no, on time, every quarter, to the dozen things we could have done but chose not to. What follows is the math behind that decision.</p>
+        </div>
+        <div class="footer"><span>04 / 12 — Where we are</span><span>Halcyon &amp; Co. · internal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Big stat -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span><span class="desc">Three numbers between rules · footnote</span></div>
+    <div class="slide">
+      <div class="ed bigstat">
+        <div class="kicker">— Q2 in numbers —</div>
+        <h2 class="head" style="font-size: 44px; max-width: 18ch; margin: 14px 0 32px;">Three numbers we're proud of.</h2>
+        <div class="row">
+          <div>
+            <div class="stat"><span class="em">$4.2</span>M</div>
+            <div class="lbl">— ARR</div>
+          </div>
+          <div>
+            <div class="stat">+42%</div>
+            <div class="lbl">— QoQ revenue</div>
+          </div>
+          <div>
+            <div class="stat">9.1</div>
+            <div class="lbl">— Customer NPS</div>
+          </div>
+        </div>
+        <div class="ftn">— NPS sample size: 184 customers · methodology in appendix A.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 Two-column comparison -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span><span class="desc">Beat / missed · won / lost · then / now</span></div>
+    <div class="slide">
+      <div class="ed twocol">
+        <div class="kicker">— The honest part —</div>
+        <h2 class="head" style="font-size: 44px; margin: 14px 0 18px;">Where we beat plan, where we missed.</h2>
+        <div class="cols">
+          <div class="col">
+            <h3>Where we beat plan.</h3>
+            <ul>
+              <li>Revenue · +42% vs +20% target</li>
+              <li>Customer NPS · 9.1 vs 7.5 target</li>
+              <li>Product velocity · 1.4× last quarter</li>
+              <li>Headcount efficiency · zero new GTM hires</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 class="crit">Where we missed.</h3>
+            <ul>
+              <li>Enterprise churn · 3 logos vs 0 target</li>
+              <li>Time-to-hire · 67 days vs 45 target</li>
+              <li>Onboarding completion · 64% vs 80% target</li>
+              <li>Q2 partnerships · 1 signed vs 3 forecast</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 Three-column list -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span><span class="desc">Three projects, three reasons, three logos</span></div>
+    <div class="slide">
+      <div class="ed threecol">
+        <div class="kicker">— What we're cutting —</div>
+        <h2 class="head" style="font-size: 40px; margin: 14px 0 18px;">Three projects we're sunsetting.</h2>
+        <div class="cols">
+          <div class="col">
+            <span class="nm">— 01 —</span>
+            <h3>Mobile rebuild</h3>
+            <p>Two engineers reclaimed. Web is where 92% of revenue lives — we'll meet mobile users at the web's edge instead.</p>
+          </div>
+          <div class="col">
+            <span class="nm">— 02 —</span>
+            <h3>Partner portal</h3>
+            <p>Three partners signed in eighteen months. Below the bar. We'll handle integrations 1:1 until the next attempt.</p>
+          </div>
+          <div class="col">
+            <span class="nm">— 03 —</span>
+            <h3>The second brand</h3>
+            <p>Cannibalised the first. Lesson learned the slow way; consolidating audiences under the Halcyon mark only.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 Image-led -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span><span class="desc">Photo on left, copy on right · with caption</span></div>
+    <div class="slide">
+      <div class="ed imgled">
+        <div class="img"></div>
+        <div class="copy">
+          <div class="kicker">— A note from the team —</div>
+          <h2 class="head">The room <span class="ital">where</span> the work happens.</h2>
+          <p style="font-size: 14px; color: #6E665B; line-height: 1.5; margin-top: 14px;">Halcyon HQ, fourth floor, photographed the morning we hit ARR target. Sixteen people built this quarter — small, on purpose.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 Quote -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">09</span><span class="nm">Pull-quote</span><span class="desc">Italic serif · single attribution</span></div>
+    <div class="slide">
+      <div class="ed quote">
+        <div class="q">You can't grow your way out of a culture problem — you can only design your way out.</div>
+        <div class="attr">— Ben Horowitz · "What you do is who you are"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 Timeline -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span><span class="desc">Four steps, weeks · with footnote</span></div>
+    <div class="slide">
+      <div class="ed timeline">
+        <div class="kicker">— The fix —</div>
+        <h2 class="head" style="font-size: 40px; margin: 14px 0 4px;">Onboarding redesign · six-week ship.</h2>
+        <div class="axis">
+          <div class="step">
+            <span class="wk">— Week 1–2 —</span>
+            <h4>Customer interviews</h4>
+            <p>Twelve calls with churned and at-risk customers. Synthesise patterns, not anecdotes.</p>
+          </div>
+          <div class="step">
+            <span class="wk">— Week 2–3 —</span>
+            <h4>Prototype</h4>
+            <p>Two competing flows. Test against the same five archetypes. Pick by week's end.</p>
+          </div>
+          <div class="step">
+            <span class="wk">— Week 4–5 —</span>
+            <h4>Build</h4>
+            <p>Two engineers, full-time. Daily check-ins. Beta with five hand-picked customers.</p>
+          </div>
+          <div class="step">
+            <span class="wk">— Week 6 —</span>
+            <h4>Ship · measure</h4>
+            <p>Roll out to 100% on Friday. Onboarding-completion target lifts to 80% by quarter end.</p>
+          </div>
+        </div>
+        <div class="ftn">— Risks called out separately. See appendix C: "what could go wrong."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 Team -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">11</span><span class="nm">Team</span><span class="desc">4-person grid · roles in red</span></div>
+    <div class="slide">
+      <div class="ed team">
+        <div class="kicker">— Asks of the board —</div>
+        <h2 class="head" style="font-size: 40px; margin: 14px 0 0;">Three intros, one decision.</h2>
+        <div class="grid">
+          <div class="person">
+            <div class="img"></div>
+            <h4>Maya Olokun</h4>
+            <span class="role">— VP Product</span>
+            <p>Promoted this quarter. Run-rate hires expected.</p>
+          </div>
+          <div class="person">
+            <div class="img" style="background: linear-gradient(135deg, #6E665B 0%, #14110D 100%);"></div>
+            <h4>Head of CS</h4>
+            <span class="role">— intro requested</span>
+            <p>Top of funnel: Series A SaaS, three-person team experience.</p>
+          </div>
+          <div class="person">
+            <div class="img" style="background: linear-gradient(135deg, #B42318 0%, #14110D 100%);"></div>
+            <h4>Director, GTM</h4>
+            <span class="role">— intro requested</span>
+            <p>Strong fit profile: developer-tools background.</p>
+          </div>
+          <div class="person">
+            <div class="img" style="background: linear-gradient(135deg, #C9B27A 0%, #6E665B 100%);"></div>
+            <h4>Series A timing</h4>
+            <span class="role">— decision needed</span>
+            <p>Q4 raise vs Q1 — board input requested by Friday.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 Coda / Thank you -->
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span><span class="desc">Closing slide · symmetric to cover</span></div>
+    <div class="slide">
+      <div class="ed coda">
+        <h2 class="head">Thank <span class="ital">you.</span></h2>
+        <div class="meta">Questions, on the record · halcyon.co/q2</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<footer class="pack-foot">
+  <p>— End of pack 02 · 12 layouts —</p>
+  <a href="../index.html">← All slide packs</a>
+</footer>
+
+</body>
+</html>

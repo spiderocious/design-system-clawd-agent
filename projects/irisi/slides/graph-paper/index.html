@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 14 · Graph paper</title>
+<link rel="stylesheet" href="../_pack.css">
+<style>
+  .gp { background: #fff; color: #14110D; font-family: 'JetBrains Mono', monospace; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; background-image: linear-gradient(#D4E4ED 1px, transparent 1px), linear-gradient(90deg, #D4E4ED 1px, transparent 1px); background-size: 24px 24px; }
+  .gp h2 { font-family: 'Inter', sans-serif; font-weight: 600; line-height: 1.05; letter-spacing: -0.018em; margin: 14px 0 0; color: #1B3B6F; }
+  .gp .lbl { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #1B3B6F; }
+  .gp .red { color: #B42318; }
+  .gp .blue { color: #1B3B6F; }
+
+  .gp.cover { justify-content: end; }
+  .gp.cover h2 { font-size: 72px; max-width: 14ch; }
+  .gp.cover .meta { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 22px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+
+  .gp.agenda h2 { font-size: 48px; margin: 12px 0 22px; }
+  .gp.agenda ol { padding-left: 0; list-style: none; counter-reset: ag; }
+  .gp.agenda ol li { counter-increment: ag; padding: 8px 0; border-bottom: 1px solid #D4E4ED; display: grid; grid-template-columns: 60px 1fr auto; gap: 14px; align-items: baseline; font-family: 'Inter', sans-serif; font-size: 17px; }
+  .gp.agenda ol li::before { content: "fig. " counter(ag, decimal-leading-zero); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #1B3B6F; letter-spacing: 0.16em; }
+  .gp.agenda ol li .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.04em; }
+
+  .gp.section { justify-content: center; align-items: center; }
+  .gp.section h2 { font-size: 80px; max-width: 14ch; text-align: center; }
+
+  .gp.headline h2 { font-size: 56px; max-width: 18ch; }
+  .gp.headline .body { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; max-width: 64ch; margin-top: 20px; color: #2A2E36; }
+
+  .gp.bigstat { justify-content: center; }
+  .gp.bigstat h2 { font-size: 32px; margin: 12px 0 28px; }
+  .gp.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 24px 0; border-top: 1px solid #1B3B6F; border-bottom: 1px solid #1B3B6F; }
+  .gp.bigstat .col { padding: 0 24px; border-right: 1px solid #D4E4ED; }
+  .gp.bigstat .row .col:last-child { border-right: 0; }
+  .gp.bigstat .stat { font-family: 'JetBrains Mono', monospace; font-size: 76px; font-weight: 500; letter-spacing: -0.04em; line-height: 0.95; color: #1B3B6F; font-feature-settings: "tnum" 1; }
+  .gp.bigstat .lbl { margin-top: 8px; }
+
+  .gp.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .gp.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+  .gp.twocol .cols h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.012em; }
+  .gp.twocol .cols ul { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.7; padding-left: 18px; margin: 0; color: #2A2E36; }
+
+  .gp.threecol h2 { font-size: 32px; margin: 12px 0 22px; }
+  .gp.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+  .gp.threecol .cols .nm { font-size: 11px; letter-spacing: 0.18em; color: #1B3B6F; text-transform: uppercase; }
+  .gp.threecol .cols h3 { font-family: 'Inter', sans-serif; font-size: 19px; font-weight: 600; margin: 6px 0; }
+  .gp.threecol .cols p { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.6; color: #3C3833; margin: 0; }
+
+  .gp.imgled { padding: 0; flex-direction: row; background: #fff; }
+  .gp.imgled .img { flex: 1; background: #fff; padding: 32px; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(#D4E4ED 1px, transparent 1px), linear-gradient(90deg, #D4E4ED 1px, transparent 1px); background-size: 24px 24px; }
+  .gp.imgled .img svg { width: 100%; height: 100%; max-height: 360px; }
+  .gp.imgled .copy { flex: 0 0 42%; padding: 56px 56px; display: flex; flex-direction: column; justify-content: end; background: #fff; background-image: linear-gradient(#D4E4ED 1px, transparent 1px), linear-gradient(90deg, #D4E4ED 1px, transparent 1px); background-size: 24px 24px; }
+  .gp.imgled .copy h2 { font-size: 40px; max-width: 14ch; margin-top: 12px; }
+
+  .gp.quote { justify-content: center; padding: 64px 96px; }
+  .gp.quote .q { font-family: 'Inter', sans-serif; font-style: italic; font-size: 44px; font-weight: 500; line-height: 1.2; max-width: 22ch; color: #1B3B6F; }
+  .gp.quote .attr { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 28px; }
+
+  .gp.timeline h2 { font-size: 32px; margin: 12px 0 22px; }
+  .gp.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+  .gp.timeline .step .wk { font-size: 11px; letter-spacing: 0.18em; color: #B42318; text-transform: uppercase; }
+  .gp.timeline .step h4 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; margin: 6px 0; }
+  .gp.timeline .step p { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.55; color: #3C3833; margin: 0; }
+
+  .gp.team h2 { font-size: 32px; margin: 12px 0 22px; }
+  .gp.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+  .gp.team .person .img { aspect-ratio: 1/1; background: linear-gradient(135deg, #D4E4ED, #1B3B6F); border-radius: 8px; }
+  .gp.team .person h4 { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; margin: 12px 0 2px; }
+  .gp.team .person .role { font-size: 10px; letter-spacing: 0.16em; color: #B42318; text-transform: uppercase; }
+  .gp.team .person p { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.5; color: #3C3833; margin: 6px 0 0; }
+
+  .gp.coda { justify-content: end; }
+  .gp.coda h2 { font-size: 96px; }
+  .gp.coda .meta { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 18px; padding-top: 14px; border-top: 1px solid #1B3B6F; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">14</span><span class="nm">Graph paper</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 14 · Engineering</div>
+    <h1>Engineer's quad-rule paper.</h1>
+    <p>Pale cyan grid, pencil-graphite blacks, ink-blue accent, red for flagged values. Values plot rather than animate. Charts that look hand-drafted.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · engineering, scientific, lab</div>
+    <div><strong>Type</strong> · JetBrains Mono · Inter</div>
+    <div><strong>Accent</strong> · Ink blue · #1B3B6F</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="gp cover">
+    <span class="lbl">— Drawing No. 0421 · Sheet 01 of 12 —</span>
+    <h2>Halcyon Q2.<br>Quarterly review.</h2>
+    <div class="meta"><span>14 / 05 / 2026 — checked</span> · <span class="red">REV. A</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="gp agenda">
+    <span class="lbl">— Index —</span>
+    <h2>Sheets in this drawing.</h2>
+    <ol>
+      <li><span></span><span>Where we are</span><span class="meta">3 min</span></li>
+      <li><span></span><span>The honest part</span><span class="meta">5 min</span></li>
+      <li><span></span><span>What we're cutting</span><span class="meta">4 min</span></li>
+      <li><span></span><span>Roadmap &amp; risks</span><span class="meta">3 min</span></li>
+      <li><span></span><span>Asks of the board</span><span class="meta">3 min</span></li>
+    </ol>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="gp section">
+    <span class="lbl">— Section 01 · sheet 03 of 12 —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="gp headline">
+    <span class="lbl">— Q2 · 2026 · sheet 04 —</span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up 42% without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying no.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="gp bigstat">
+    <span class="lbl">— Readings · trailing 6 mo —</span>
+    <h2>Plot points.</h2>
+    <div class="row">
+      <div class="col"><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div class="col"><div class="stat">+42%</div><div class="lbl">— QoQ revenue</div></div>
+      <div class="col"><div class="stat">9.1</div><div class="lbl">— NPS · n=184</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="gp twocol">
+    <span class="lbl">— The honest part —</span>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div><h3 class="blue">Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="red">Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="gp threecol">
+    <span class="lbl">— What we're cutting —</span>
+    <h2>Three sunsets.</h2>
+    <div class="cols">
+      <div><span class="nm">— fig. 01 —</span><h3>Mobile rebuild.</h3><p>Reclaim two engineers. Web is 92% of revenue.</p></div>
+      <div><span class="nm">— fig. 02 —</span><h3>Partner portal.</h3><p>3 signs in 18 months. Going 1:1 instead.</p></div>
+      <div><span class="nm">— fig. 03 —</span><h3>Second brand.</h3><p>Cannibalised. Consolidating.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="gp imgled">
+    <div class="img">
+      <svg viewBox="0 0 400 240" preserveAspectRatio="none">
+        <line x1="0" y1="200" x2="400" y2="200" stroke="#1B3B6F" stroke-width="1"/>
+        <line x1="0" y1="0" x2="0" y2="200" stroke="#1B3B6F" stroke-width="1"/>
+        <polyline points="0,180 60,160 120,150 180,110 240,90 300,60 400,30" fill="none" stroke="#1B3B6F" stroke-width="2"/>
+        <circle cx="400" cy="30" r="4" fill="#B42318"/>
+        <text x="0" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Dec</text>
+        <text x="60" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Jan</text>
+        <text x="120" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Feb</text>
+        <text x="180" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Mar</text>
+        <text x="240" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Apr</text>
+        <text x="300" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">May</text>
+        <text x="370" y="220" font-size="11" font-family="JetBrains Mono" fill="#1B3B6F">Jun</text>
+        <text x="370" y="20" font-size="10" font-family="JetBrains Mono" fill="#B42318">$4.2M</text>
+      </svg>
+    </div>
+    <div class="copy">
+      <span class="lbl">— Fig. 04 · revenue · trailing six —</span>
+      <h2>Plotted.</h2>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="gp quote">
+    <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— B. HOROWITZ · 14.05.26</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="gp timeline">
+    <span class="lbl">— Schedule · 6-week build —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— wk 1–2 —</span><h4>Interviews</h4><p>12 calls. Synthesise.</p></div>
+      <div class="step"><span class="wk">— wk 2–3 —</span><h4>Prototype</h4><p>2 flows. Pick.</p></div>
+      <div class="step"><span class="wk">— wk 4–5 —</span><h4>Build</h4><p>2 eng. Beta.</p></div>
+      <div class="step"><span class="wk">— wk 6 —</span><h4>Ship</h4><p>100% rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="gp team">
+    <span class="lbl">— Roster —</span>
+    <h2>Asks of the board.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="gp coda">
+    <span class="lbl">— Sheet 12 of 12 · end of drawing —</span>
+    <h2>Thank you.</h2>
+    <div class="meta">— halcyon.co/q2 — questions, on the record</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 14 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

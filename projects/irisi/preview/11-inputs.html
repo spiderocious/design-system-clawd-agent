@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · inputs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .form-row { display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; }
+  .form-row .lab { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--ink-2); padding-top: 10px; }
+  .form-row .lab small { display: block; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 2px; font-weight: 400; }
+
+  /* Prompt textarea (showcase the signature input) */
+  .prompt-frame {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 22px;
+    padding: 16px; box-shadow: var(--shade-2);
+  }
+  .prompt-frame textarea {
+    width: 100%; resize: none; border: 0; outline: 0; background: transparent;
+    font-family: var(--sans); font-size: 16px; line-height: 1.55;
+    color: var(--ink); padding: 6px;
+    min-height: 56px;
+  }
+  .prompt-frame textarea::placeholder { color: var(--ink-4); font-style: italic; font-family: var(--serif); }
+  .prompt-frame .tools { display: flex; gap: 8px; align-items: center; padding-top: 8px; border-top: 1px solid var(--hair-soft); margin-top: 8px; }
+  .prompt-frame .gap { flex: 1; }
+
+  /* Hex input with swatch */
+  .hex-input { display: grid; grid-template-columns: 40px 1fr 100px; gap: 10px; align-items: center; }
+  .hex-input .sw { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--hair); }
+
+  /* File drop */
+  .drop {
+    border: 1.5px dashed var(--ink-5); border-radius: 12px;
+    padding: 22px; background: var(--paper);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center;
+  }
+  .drop .glyph { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-50); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
+  .drop p { font-size: 13px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+  .drop p strong { color: var(--ink); font-weight: 600; }
+
+  /* Range / number stepper */
+  .stepper { display: inline-flex; height: 40px; background: var(--sheet); border: 1px solid var(--hair); border-radius: 10px; overflow: hidden; }
+  .stepper button { width: 36px; background: transparent; border: 0; cursor: pointer; color: var(--ink-2); font-size: 14px; }
+  .stepper button:hover { background: var(--paper-deep); color: var(--ink); }
+  .stepper input { width: 60px; border: 0; outline: 0; text-align: center; font-family: var(--mono); font-weight: 500; font-size: 13px; }
+
+  .help { font-size: 12px; color: var(--ink-3); font-family: var(--serif); font-style: italic; margin-top: 4px; }
+  .err { font-size: 12px; color: var(--crit); font-family: var(--sans); margin-top: 4px; display: inline-flex; align-items: center; gap: 6px; }
+
+  .field-with-icon { position: relative; }
+  .field-with-icon .field { padding-left: 36px; }
+  .field-with-icon .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 11 —</span>
+    <h1 class="ttl">Inputs</h1>
+    <span class="meta">Primitives · the prompt is the signature; everything else supports it</span>
+  </div>
+
+  <!-- Signature input: the prompt textarea -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Signature</span>
+      <h3 class="nm">The prompt.</h3>
+      <span class="why">Where every Irisi session begins.</span>
+    </div>
+
+    <div class="prompt-frame">
+      <textarea>I want to generate a Q2 board update for Halcyon &amp; Co. — focus on growth, churn, and what we're cutting next quarter. Audience: existing investors. Tone: measured, confident.</textarea>
+      <div class="tools">
+        <button class="btn btn-secondary btn-sm">⊕ Brand</button>
+        <button class="btn btn-secondary btn-sm">◐ Stance · auto</button>
+        <button class="btn btn-secondary btn-sm">▤ 12 slides</button>
+        <span class="gap"></span>
+        <span class="kbd">⌘ ⏎</span>
+        <button class="btn btn-accent">Generate →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand inputs scene -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Brand wizard</span>
+      <h3 class="nm">Brand inputs.</h3>
+      <span class="why">Domain-shaped: hex, logo, typeface, tone.</span>
+    </div>
+
+    <div class="stack">
+      <div class="form-row">
+        <div class="lab">Brand colour <small>load-bearing</small></div>
+        <div class="hex-input">
+          <div class="sw" style="background: #B42318"></div>
+          <input class="field tabular" value="#B42318">
+          <input class="field" placeholder="(name)" value="halcyon-red">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="lab">Logo <small>SVG preferred · 1MB max</small></div>
+        <div class="drop">
+          <span class="glyph">⤓</span>
+          <p><strong>Drop your logo</strong>, or click to browse — we'll detect light/dark variants automatically.</p>
+          <button class="btn btn-secondary btn-sm">Browse</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="lab">Display typeface</div>
+        <div>
+          <select class="field">
+            <option>Source Serif 4 — editorial</option>
+            <option>Bricolage Grotesque — modern, condensed</option>
+            <option>Anton — high-impact, condensed</option>
+            <option>Bodoni Moda — luxury, didone</option>
+            <option>Custom upload…</option>
+          </select>
+          <p class="help">— Used for slide titles. The body face is chosen automatically to pair.</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="lab">Default deck length</div>
+        <div>
+          <div class="stepper">
+            <button>−</button>
+            <input value="12">
+            <button>+</button>
+          </div>
+          <p class="help">— Irisi can shrink or grow as the brief demands.</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="lab">Brand domain <small>used in deck footers</small></div>
+        <div class="field-with-icon">
+          <span class="icon">⌘</span>
+          <input class="field" value="halcyon.co" type="text">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="lab">Compliance flags</div>
+        <div>
+          <input class="field" placeholder="e.g. internal-only, GDPR, HIPAA…" value="">
+          <p class="err">⚠ Required if the deck will contain customer PII.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generic inputs reference -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Reference</span>
+      <h3 class="nm">Standard fields.</h3>
+      <span class="why">For settings, login, payment.</span>
+    </div>
+
+    <div class="split split-2" style="gap: 24px;">
+      <div>
+        <label class="lbl">Email</label>
+        <input class="field" type="email" placeholder="you@company.com" value="founders@halcyon.co">
+      </div>
+      <div>
+        <label class="lbl">Workspace name</label>
+        <input class="field" type="text" value="Halcyon &amp; Co.">
+      </div>
+      <div>
+        <label class="lbl">Password</label>
+        <input class="field" type="password" value="••••••••••••">
+      </div>
+      <div>
+        <label class="lbl">Plan</label>
+        <select class="field"><option>Pro · annual</option><option>Team</option><option>Studio</option></select>
+      </div>
+      <div>
+        <label class="lbl">Search</label>
+        <div class="field-with-icon">
+          <span class="icon">⌕</span>
+          <input class="field" type="search" placeholder="Search decks, packs, layouts…">
+        </div>
+      </div>
+      <div>
+        <label class="lbl">Promo code</label>
+        <input class="field tabular" type="text" value="LAUNCH-2026" style="text-transform: uppercase;">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

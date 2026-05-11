@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · cross-record</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* AI suggestion strip */
+  .ai-strip {
+    background: linear-gradient(180deg, var(--accent-50), var(--sheet));
+    border: 1px solid var(--accent-200);
+    border-radius: 14px; padding: 18px 20px;
+  }
+  .ai-strip .h { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .ai-strip .h .glyph { width: 22px; height: 22px; border-radius: 6px; background: var(--accent-600); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+  .ai-strip .h h4 { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: -0.015em; margin: 0; color: var(--accent-800); }
+  .ai-strip p { font-size: 13px; color: var(--ink-2); margin: 0 0 10px; line-height: 1.55; }
+  .ai-strip p em { font-family: var(--serif); }
+  .ai-strip .actions { display: flex; gap: 6px; }
+
+  /* Mention chip */
+  .mention {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 1px 8px 1px 4px;
+    background: var(--accent-50); border: 1px solid var(--accent-200);
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    color: var(--accent-800);
+  }
+  .mention .av { width: 16px; height: 16px; border-radius: 50%; background: var(--accent-600); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 8px; font-weight: 700; }
+
+  /* Approval card */
+  .approve {
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 16px 18px;
+    display: grid; grid-template-columns: 32px 1fr auto auto; gap: 12px; align-items: center;
+  }
+  .approve .av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-100); color: var(--accent-800); display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; }
+  .approve .body strong { font-family: var(--sans); font-size: 14px; font-weight: 600; }
+  .approve .body p { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; }
+
+  /* Permissions matrix */
+  table.perms { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.perms th, table.perms td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--hair-soft); }
+  table.perms th { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; border-bottom: 1px solid var(--ink); }
+  table.perms td.center { text-align: center; }
+  table.perms .yes { color: var(--ok); font-weight: 700; font-size: 14px; }
+  table.perms .no { color: var(--ink-4); }
+
+  /* Audit log */
+  .log {  font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--ink-2); }
+  .log .line { display: grid; grid-template-columns: 110px 90px 1fr; gap: 14px; padding: 6px 0; border-top: 1px solid var(--hair-soft); }
+  .log .line:first-of-type { border-top: 0; }
+  .log .line .t { color: var(--ink-3); letter-spacing: 0.04em; }
+  .log .line .who { color: var(--ink); font-weight: 600; }
+  .log .line .what { color: var(--ink-2); }
+  .log .line .what em { color: var(--accent-700); font-style: normal; }
+  .log .line .what .crit { color: var(--crit); font-weight: 600; }
+
+  /* Sharing card */
+  .share {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px; padding: 18px 22px;
+  }
+  .share .row { display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--hair-soft); }
+  .share .row:first-of-type { border-top: 0; }
+  .share .row .nm { font-size: 13px; font-weight: 500; }
+  .share .row .em { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .share-add { display: flex; gap: 8px; padding: 10px 0; border-top: 1px solid var(--hair); margin-top: 8px; }
+  .share-add input { flex: 1; }
+
+  /* Saved view chip */
+  .views { display: flex; gap: 6px; flex-wrap: wrap; }
+  .view-chip { padding: 6px 12px; background: var(--paper-deep); border-radius: 8px; font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer; }
+  .view-chip.on { background: var(--ink); color: var(--paper); }
+  .view-chip.add { border: 1px dashed var(--ink-5); background: transparent; color: var(--ink-3); }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 42 —</span>
+    <h1 class="ttl">Cross-record patterns</h1>
+    <span class="meta">Overlays · @mentions · approval · share · audit · AI assist</span>
+  </div>
+
+  <!-- AI assist -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— AI assist</span>
+      <h3 class="nm">Suggestions only — never auto-actions.</h3>
+      <span class="why">Irisi proposes; you decide.</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="ai-strip">
+        <div class="h"><span class="glyph">✦</span><h4>Tighten the headline</h4></div>
+        <p>"The quiet rebellion of measured growth and what it taught us about <em>discipline</em>" runs to two lines. Try <em>"The quiet rebellion of measured growth"</em> instead.</p>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm">Apply</button>
+          <button class="btn btn-secondary btn-sm">Try another</button>
+          <button class="btn btn-ghost btn-sm">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="ai-strip">
+        <div class="h"><span class="glyph">✦</span><h4>Pack mismatch</h4></div>
+        <p>Your brief mentions <em>"playful, for new joiners"</em> — but the deck is in <strong>Editorial broadsheet</strong>. Consider <strong>Mid-century playful</strong> or <strong>Risograph print</strong>.</p>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm">Switch pack →</button>
+          <button class="btn btn-ghost btn-sm">Ignore</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mentions in comments -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Mentions</span>
+      <h3 class="nm">In comments and notes.</h3>
+    </div>
+    <div style="background: var(--paper); border-radius: 12px; padding: 18px 22px;">
+      <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+        <span class="mention"><span class="av">MO</span> @maya</span> can we name the three churned logos here? <span class="mention"><span class="av">JK</span> @james</span> mentioned this in the prep call. Linked to <span class="mention" style="background: var(--paper-deep); border-color: var(--hair); color: var(--ink);">▤ Q1 Retro</span>, slide 4.
+      </p>
+    </div>
+  </div>
+
+  <!-- Approvals + sharing -->
+  <div class="grid-2">
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Approval</span>
+        <h3 class="nm">Awaiting review.</h3>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="approve">
+          <span class="av">MO</span>
+          <div class="body">
+            <strong>Maya requested review</strong>
+            <p>Slide 06 · "Where we beat plan, where we missed"</p>
+          </div>
+          <button class="btn btn-secondary btn-sm">Open</button>
+          <button class="btn btn-accent btn-sm">Approve</button>
+        </div>
+        <div class="approve">
+          <span class="av" style="background: #FDE5C9; color: #7A410B;">JK</span>
+          <div class="body">
+            <strong>James requested approval</strong>
+            <p>3 changes on slide 09 · roadmap timeline</p>
+          </div>
+          <button class="btn btn-secondary btn-sm">Open</button>
+          <button class="btn btn-accent btn-sm">Approve</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Saved views</span>
+        <h3 class="nm">Filters with names.</h3>
+      </div>
+      <div class="views">
+        <span class="view-chip on">All decks</span>
+        <span class="view-chip">Mine, this week</span>
+        <span class="view-chip">Shared with me</span>
+        <span class="view-chip">Editorial only</span>
+        <span class="view-chip">Pending review</span>
+        <span class="view-chip">Archived &gt; 90 days</span>
+        <span class="view-chip add">＋ New view</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sharing + permissions -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Share &amp; permissions</span>
+      <h3 class="nm">Who can see what.</h3>
+    </div>
+
+    <div class="grid-2">
+      <div class="share">
+        <div class="row">
+          <span class="avatar avatar-sm">FA</span>
+          <div><div class="nm">Feranmi Adeniji <span style="color: var(--ink-3); font-weight: 400;">(you)</span></div><div class="em">founders@halcyon.co</div></div>
+          <span class="pill pill-ink"><span class="dot"></span> Owner</span>
+        </div>
+        <div class="row">
+          <span class="avatar avatar-sm" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+          <div><div class="nm">Maya Olokun</div><div class="em">maya@halcyon.co</div></div>
+          <select class="field" style="width: 110px; height: 28px; font-size: 12px;"><option>Editor</option><option>Commenter</option><option>Viewer</option></select>
+        </div>
+        <div class="row">
+          <span class="avatar avatar-sm" style="background: #FDE5C9; color: #7A410B;">JK</span>
+          <div><div class="nm">James Karabo</div><div class="em">james@firmcap.vc</div></div>
+          <select class="field" style="width: 110px; height: 28px; font-size: 12px;"><option>Viewer</option></select>
+        </div>
+        <div class="share-add">
+          <input class="field" placeholder="Add by email…">
+          <button class="btn btn-accent btn-sm">Invite</button>
+        </div>
+      </div>
+
+      <div>
+        <table class="perms">
+          <thead>
+            <tr><th>Permission</th><th class="center">Owner</th><th class="center">Editor</th><th class="center">Commenter</th><th class="center">Viewer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>View slides</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center yes">✓</td></tr>
+            <tr><td>Comment</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center no">—</td></tr>
+            <tr><td>Edit slides</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td></tr>
+            <tr><td>Switch pack</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td></tr>
+            <tr><td>Export</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td></tr>
+            <tr><td>Manage sharing</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+            <tr><td>Delete deck</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit log -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Audit</span>
+      <h3 class="nm">Every change, time-stamped.</h3>
+    </div>
+    <div class="log">
+      <div class="line"><span class="t">14:32:08</span><span class="who">Feranmi</span><span class="what">edited slide 03 — <em>"The quiet rebellion of measured growth"</em></span></div>
+      <div class="line"><span class="t">14:31:46</span><span class="who">Irisi</span><span class="what">applied AI suggestion · headline tightened</span></div>
+      <div class="line"><span class="t">14:30:18</span><span class="who">Maya</span><span class="what">commented on slide 06 · <em>"name the three logos"</em></span></div>
+      <div class="line"><span class="t">14:28:02</span><span class="who">Feranmi</span><span class="what">switched pack from <em>Swiss instrument</em> to <em>Editorial broadsheet</em></span></div>
+      <div class="line"><span class="t">14:25:14</span><span class="who">Feranmi</span><span class="what">shared deck with <em>halcyon-board@</em> · view-only · 14d expiry</span></div>
+      <div class="line"><span class="t">14:24:01</span><span class="who">Irisi</span><span class="what">generated 12 slides in 4.2 sec</span></div>
+      <div class="line"><span class="t">14:23:46</span><span class="who">Feranmi</span><span class="what">created deck from voice brief</span></div>
+      <div class="line"><span class="t">14:23:00</span><span class="who">SYS</span><span class="what"><span class="crit">QUOTA-WARN</span> · approaching 90% storage</span></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

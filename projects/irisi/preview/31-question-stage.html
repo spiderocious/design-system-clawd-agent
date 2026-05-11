@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · question stage</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  html, body { margin: 0; min-height: 100vh; }
+  body { background: var(--paper); color: var(--ink); }
+
+  /* ===== Top progress strip ===== */
+  .top {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--hair);
+    background: rgba(247,248,251,0.92);
+    backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .brand {
+    font-family: var(--display);
+    font-size: 20px; font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1; display: inline-flex; align-items: baseline; gap: 6px;
+  }
+  .brand .dot { color: var(--accent-600); font-size: 26px; line-height: 0; }
+
+  .stages {
+    display: flex; gap: 0;
+    padding: 0 40px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .stages .stp {
+    flex: 1;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    position: relative;
+  }
+  .stages .stp .num {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--ink-4); display: inline-flex;
+    align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    background: var(--paper); color: var(--ink-3);
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .stages .stp.done .num { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stages .stp.on .num { background: var(--accent-600); color: #fff; border-color: var(--accent-600); }
+  .stages .stp.on { color: var(--ink); }
+  .stages .stp.done { color: var(--ink-2); }
+  .stages .stp::after {
+    content: ""; height: 1px; flex: 1;
+    background: var(--hair); margin-left: 6px; margin-right: 6px;
+  }
+  .stages .stp:last-child::after { display: none; }
+  .stages .stp.done::after { background: var(--ink); }
+
+  .top .right {
+    display: flex; gap: 10px; align-items: center;
+    justify-content: end;
+  }
+  .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ===== Layout ===== */
+  .stage {
+    max-width: 1080px; margin: 0 auto;
+    padding: 64px 48px 96px;
+    display: grid; grid-template-columns: 1fr 360px; gap: 56px;
+  }
+
+  /* LEFT: the question column */
+  .qcol {}
+  .qhead {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 18px;
+  }
+  .qhead .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .qhead .of {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-4);
+    letter-spacing: 0.04em;
+  }
+  .qhead .skip {
+    margin-left: auto;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-3);
+    background: transparent; border: 0; cursor: pointer;
+    border-bottom: 1px solid var(--ink-4); padding-bottom: 1px;
+  }
+  .qhead .skip:hover { color: var(--ink); border-color: var(--ink); }
+
+  h1.q {
+    font-family: var(--display); font-weight: 700;
+    font-size: 56px; line-height: 1.05; letter-spacing: -0.03em;
+    margin: 0 0 14px;
+    max-width: 18ch;
+    color: var(--ink);
+  }
+  h1.q .ital {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--ink-2);
+  }
+  .q-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 18px; color: var(--ink-3); line-height: 1.45;
+    max-width: 56ch; margin: 0 0 32px;
+  }
+
+  /* Suggested answer chips */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 24px;
+  }
+  .chip-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 120ms var(--ease-out);
+  }
+  .chip-btn:hover { color: var(--ink); border-color: var(--ink-3); transform: translateY(-1px); }
+  .chip-btn.on {
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+  }
+  .chip-btn .glyph {
+    font-size: 13px; opacity: 0.7;
+  }
+  .chip-btn.on .glyph { opacity: 1; color: var(--accent-400); }
+
+  /* Free-text answer */
+  .fa-frame {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: 16px;
+    padding: 6px 6px 6px;
+    box-shadow: var(--shade-2);
+    margin-bottom: 18px;
+  }
+  .fa-frame textarea {
+    width: 100%; resize: none;
+    border: 0; outline: 0; background: transparent;
+    font-family: var(--sans); font-size: 16px; line-height: 1.55;
+    color: var(--ink); padding: 14px 14px 6px;
+    min-height: 64px;
+  }
+  .fa-frame textarea::placeholder { color: var(--ink-4); font-style: italic; font-family: var(--serif); }
+  .fa-tools {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px;
+    border-top: 1px solid var(--hair-soft);
+  }
+  .fa-tools .voice {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 8px;
+    background: transparent; border: 1px solid var(--hair);
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+    cursor: pointer;
+  }
+  .fa-tools .voice:hover { border-color: var(--ink-3); color: var(--ink); }
+  .fa-tools .voice .rec {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--crit);
+    box-shadow: 0 0 0 0 rgba(180,35,24,0.45);
+    animation: pulse-rec 1.4s ease-out infinite;
+  }
+  @keyframes pulse-rec { 0%{box-shadow:0 0 0 0 rgba(180,35,24,0.45);} 100%{box-shadow:0 0 0 8px rgba(180,35,24,0);} }
+  .fa-tools .gap { flex: 1; }
+  .fa-tools .ct {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Action row */
+  .qactions {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 8px;
+  }
+  .qactions .gap { flex: 1; }
+
+  /* AI thinking ribbon */
+  .think {
+    margin-top: 32px;
+    padding: 14px 18px;
+    background: linear-gradient(180deg, var(--accent-50), var(--sheet));
+    border: 1px solid var(--accent-200);
+    border-radius: 12px;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .think .glyph {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-600); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .think .body {
+    flex: 1;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .think .body strong { color: var(--accent-800); font-weight: 600; }
+  .think .body .typing {
+    display: inline-block; width: 6px; height: 14px;
+    background: var(--accent-600); margin-left: 2px; vertical-align: -2px;
+    animation: blink 0.9s steps(2) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* RIGHT: the conversation log */
+  .convo {
+    border-left: 1px solid var(--hair);
+    padding-left: 32px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .convo .h {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .turn {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+  .turn .av {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .turn.ai .av { background: var(--accent-600); color: #fff; }
+  .turn.user .av { background: var(--ink); color: var(--paper); }
+  .turn .role {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .turn .msg {
+    font-family: var(--sans); font-size: 13px; color: var(--ink); line-height: 1.55;
+  }
+  .turn .msg em { font-family: var(--serif); font-style: italic; color: var(--ink-2); }
+  .turn .msg .ans {
+    display: inline-block;
+    background: var(--paper-deep); border-radius: 6px;
+    padding: 2px 8px;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    margin-right: 4px; margin-bottom: 4px;
+    color: var(--ink-2);
+  }
+
+  .convo-foot {
+    margin-top: 12px;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+  .convo-foot strong { color: var(--ink); }
+
+  @media (max-width: 960px) {
+    .stage { grid-template-columns: 1fr; }
+    .convo { border-left: 0; padding-left: 0; border-top: 1px solid var(--hair); padding-top: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="stages">
+    <div class="stp done"><span class="num">1</span> Brief</div>
+    <div class="stp on"><span class="num">2</span> Questions</div>
+    <div class="stp"><span class="num">3</span> Highlights</div>
+    <div class="stp"><span class="num">4</span> Generate</div>
+    <div class="stp"><span class="num">5</span> Edit · Present</div>
+  </div>
+  <div class="right">
+    <span class="meta">Auto-saved · 2s ago</span>
+    <button class="btn btn-secondary btn-sm">Save &amp; exit</button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ===== LEFT: question column ===== -->
+  <section class="qcol">
+    <div class="qhead">
+      <span class="ix">Question 03</span>
+      <span class="of">of 4</span>
+      <button class="skip">Skip · Irisi will guess →</button>
+    </div>
+
+    <h1 class="q">What's the <span class="ital">tone</span> you want to land?</h1>
+    <p class="q-sub">Same numbers can read confident or cautious depending on how they're framed. Pick one — or describe it in your own words below.</p>
+
+    <div class="chips">
+      <button class="chip-btn on"><span class="glyph">●</span> Measured &amp; confident</button>
+      <button class="chip-btn"><span class="glyph">↑</span> Bold &amp; ambitious</button>
+      <button class="chip-btn"><span class="glyph">◎</span> Honest about risk</button>
+      <button class="chip-btn"><span class="glyph">✦</span> Visionary, big-picture</button>
+      <button class="chip-btn"><span class="glyph">▣</span> Clinical, just the facts</button>
+      <button class="chip-btn"><span class="glyph">♥</span> Warm &amp; personal</button>
+    </div>
+
+    <div class="fa-frame">
+      <textarea placeholder="Or in your own words — &quot;I want it to read like a board update from a CEO who's done this twice before…&quot;">I want it to read like a board update from a CEO who's done this twice before — calm, specific, no spin. Mention the churn problem honestly but show we have the fix.</textarea>
+      <div class="fa-tools">
+        <button class="voice"><span class="rec"></span> Recording · 0:08</button>
+        <span class="gap"></span>
+        <span class="ct">240 / 500</span>
+      </div>
+    </div>
+
+    <div class="qactions">
+      <button class="btn btn-secondary"><span style="margin-right: 4px">←</span> Back</button>
+      <button class="btn btn-ghost">Skip</button>
+      <span class="gap"></span>
+      <span class="kbd">⌘ ⏎</span>
+      <button class="btn btn-accent btn-lg">Continue →</button>
+    </div>
+
+    <div class="think">
+      <span class="glyph">✦</span>
+      <div class="body">
+        Irisi is leaning toward <strong>Editorial broadsheet</strong> — measured tone, dense numbers, board-report convention. We'll confirm after the next question<span class="typing"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RIGHT: conversation log ===== -->
+  <aside class="convo">
+    <div class="h">— Conversation so far</div>
+
+    <div class="turn user">
+      <span class="av">YOU</span>
+      <div>
+        <div class="role">Your brief · 0:00</div>
+        <div class="msg">A Q2 board update for Halcyon &amp; Co. Focus on growth, churn, and what we're cutting next quarter. Audience: investors. About 10 slides.</div>
+      </div>
+    </div>
+
+    <div class="turn ai">
+      <span class="av">IRI</span>
+      <div>
+        <div class="role">Irisi · Q1</div>
+        <div class="msg">Got it. Two quick questions to get the framing right. <em>Who's in the room — your existing board only, or are there new investors you're updating too?</em></div>
+      </div>
+    </div>
+
+    <div class="turn user">
+      <span class="av">YOU</span>
+      <div>
+        <div class="role">A1 · 0:32</div>
+        <div class="msg">
+          <span class="ans">Existing board only</span>
+          <span class="ans">+ 2 advisors</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="turn ai">
+      <span class="av">IRI</span>
+      <div>
+        <div class="role">Irisi · Q2</div>
+        <div class="msg">Helpful. <em>Anything you'd rather not have a slide on?</em> (Compensation, runway, anything internal-only?)</div>
+      </div>
+    </div>
+
+    <div class="turn user">
+      <span class="av">YOU</span>
+      <div>
+        <div class="role">A2 · 0:54</div>
+        <div class="msg">
+          <span class="ans">Skip comp details</span>
+          Runway is fine to show — we have 22 months and that's the headline.
+        </div>
+      </div>
+    </div>
+
+    <div class="convo-foot">
+      Brief locked · 4 questions planned · <strong>2 of 4 answered</strong><br>
+      Estimated time to first draft · <strong>14 sec</strong>
+    </div>
+  </aside>
+
+</main>
+
+</body>
+</html>

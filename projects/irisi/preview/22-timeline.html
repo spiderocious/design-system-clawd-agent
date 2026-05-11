@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · timeline</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  /* Generation timeline — the headline data display */
+  .gen-timeline { display: flex; flex-direction: column; gap: 6px; }
+  .gen-row { display: grid; grid-template-columns: 32px 1fr 200px 100px; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--hair-soft); }
+  .gen-row:last-child { border-bottom: 0; }
+  .gen-row .ix {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    background: var(--paper-deep); border: 1px solid var(--hair); color: var(--ink-3);
+  }
+  .gen-row.done .ix { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .gen-row.now .ix { background: var(--accent-600); color: #fff; border-color: var(--accent-600); animation: pulse-now 1.4s ease-out infinite; }
+  @keyframes pulse-now { 0% { box-shadow: 0 0 0 0 rgba(3,97,240,0.45); } 100% { box-shadow: 0 0 0 10px rgba(3,97,240,0); } }
+  .gen-row .body .nm { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: -0.012em; }
+  .gen-row .body .desc { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .gen-row.done .body .desc { color: var(--ok); }
+  .gen-row.now .body .desc { color: var(--accent-700); }
+  .gen-row .progress {
+    height: 4px; background: var(--paper-deep); border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .gen-row .progress .bar {
+    height: 100%; background: var(--accent-600); border-radius: 2px;
+    transition: width 200ms;
+  }
+  .gen-row.done .progress .bar { background: var(--ok); }
+  .gen-row .time { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; letter-spacing: 0.04em; }
+
+  /* Activity feed */
+  .feed { display: flex; flex-direction: column; gap: 0; }
+  .feed-item { display: grid; grid-template-columns: 32px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--hair-soft); }
+  .feed-item:first-child { border-top: 0; }
+  .feed-item .av { width: 28px; height: 28px; border-radius: 50%; background: var(--paper-deep); color: var(--ink-2); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; font-family: var(--sans); border: 1px solid var(--hair); }
+  .feed-item.ai .av { background: var(--accent-600); color: #fff; border-color: var(--accent-600); border-radius: 8px; font-family: var(--mono); font-size: 10px; }
+  .feed-item .body { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  .feed-item .body strong { color: var(--ink); font-weight: 600; }
+  .feed-item .body em { font-family: var(--serif); color: var(--ink-3); }
+  .feed-item .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-4); margin-top: 2px; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 22 —</span>
+    <h1 class="ttl">Generation timeline</h1>
+    <span class="meta">Data &amp; state · what Irisi is doing right now</span>
+  </div>
+
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Live generation</span>
+      <h3 class="nm">From brief to slides, in twelve seconds.</h3>
+      <span class="why">Shown after the user hits "Generate" on the highlights canvas.</span>
+    </div>
+
+    <div class="gen-timeline">
+      <div class="gen-row done">
+        <span class="ix">✓</span>
+        <div class="body">
+          <div class="nm">Reading brief</div>
+          <div class="desc">Brief parsed · 4 questions answered · pack chosen</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 100%"></div></div>
+        <div class="time">0.4 s</div>
+      </div>
+      <div class="gen-row done">
+        <span class="ix">✓</span>
+        <div class="body">
+          <div class="nm">Outlining</div>
+          <div class="desc">12 slides drafted · 5 sections · approved</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 100%"></div></div>
+        <div class="time">2.1 s</div>
+      </div>
+      <div class="gen-row done">
+        <span class="ix">✓</span>
+        <div class="body">
+          <div class="nm">Picking layouts</div>
+          <div class="desc">12 layouts assigned · 3 alternatives per slide</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 100%"></div></div>
+        <div class="time">1.8 s</div>
+      </div>
+      <div class="gen-row now">
+        <span class="ix">●</span>
+        <div class="body">
+          <div class="nm">Writing slides</div>
+          <div class="desc">Slide 7 of 12 · "Where we beat plan, where we missed"</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 58%"></div></div>
+        <div class="time">— 4.2 s</div>
+      </div>
+      <div class="gen-row">
+        <span class="ix">5</span>
+        <div class="body">
+          <div class="nm">Typesetting</div>
+          <div class="desc">Pending — applies pack styles, hyphenation, line-breaks</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 0%"></div></div>
+        <div class="time">~ 1.5 s</div>
+      </div>
+      <div class="gen-row">
+        <span class="ix">6</span>
+        <div class="body">
+          <div class="nm">Speaker notes</div>
+          <div class="desc">Pending — drafts a paragraph per slide</div>
+        </div>
+        <div class="progress"><div class="bar" style="width: 0%"></div></div>
+        <div class="time">~ 2.3 s</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity feed -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Deck activity</span>
+      <h3 class="nm">What's happened on this deck.</h3>
+    </div>
+
+    <div class="feed">
+      <div class="feed-item ai">
+        <span class="av">IRI</span>
+        <div>
+          <div class="body"><strong>Irisi</strong> generated 12 slides in <em>Editorial broadsheet</em>.</div>
+          <div class="meta">12 SECONDS AGO</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <span class="av">FA</span>
+        <div>
+          <div class="body"><strong>Feranmi</strong> updated the headline on slide 03 — <em>"The quiet rebellion of measured growth"</em></div>
+          <div class="meta">38 SECONDS AGO</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <span class="av" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+        <div>
+          <div class="body"><strong>Maya</strong> commented on slide 06 — <em>"Can we name the three churned logos here?"</em></div>
+          <div class="meta">2 MINUTES AGO</div>
+        </div>
+      </div>
+      <div class="feed-item ai">
+        <span class="av">IRI</span>
+        <div>
+          <div class="body"><strong>Irisi</strong> suggests tightening the agenda from 5 to 4 sections — see suggestions panel.</div>
+          <div class="meta">3 MINUTES AGO</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <span class="av">FA</span>
+        <div>
+          <div class="body"><strong>Feranmi</strong> shared the deck with <strong>halcyon-board@</strong> · view-only · expires in 14 days.</div>
+          <div class="meta">8 MINUTES AGO</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <span class="av">FA</span>
+        <div>
+          <div class="body"><strong>Feranmi</strong> created the deck from a voice brief.</div>
+          <div class="meta">12 MINUTES AGO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

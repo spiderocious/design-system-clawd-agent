@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tutorly — variations (A / B / C)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #ECE9E2;
+    color: #1B1F1C;
+    -webkit-font-smoothing: antialiased;
+    padding: 48px 56px 96px;
+  }
+
+  /* -------- page chrome -------- */
+  .page-head {
+    max-width: 1480px;
+    margin: 0 auto 40px;
+  }
+  .page-head .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5A6258;
+    margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 44px;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: #1B1F1C;
+  }
+  .page-head p {
+    max-width: 780px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #4C5249;
+    margin: 0;
+  }
+
+  /* -------- grid -------- */
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1480px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .col-head {
+    padding: 0 4px 14px;
+    border-bottom: 1px solid #C5C2B7;
+    margin-bottom: 28px;
+  }
+  .col-head .letter {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+  }
+  .col-head .name {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 8px 0 6px;
+  }
+  .col-head .caption {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #5A6258;
+  }
+
+  /* -------- specimen frames -------- */
+  .specimen {
+    padding: 32px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .specimen-label {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     A — Oat & forest
+     Paper: warm oat #F7F5F0, ink warm-grey, full #3BB75E
+     Type: Fraunces serif headers + Inter
+     Radii: 16px
+     ============================================================ */
+  .A { color: #1F231C; }
+  .A .specimen { background: #F7F5F0; }
+  .A .h-serif { font-family: 'Fraunces', serif; font-weight: 500; letter-spacing: -0.018em; }
+  .A .label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6A7263; font-weight: 500; }
+
+  .A .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 44px; padding: 0 22px;
+    border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: -0.005em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 120ms ease, background 120ms ease;
+  }
+  .A .btn-primary { background: #3BB75E; color: #FFF; }
+  .A .btn-primary:hover { background: #2EA351; }
+  .A .btn-secondary { background: transparent; border-color: #C7C2B3; color: #1F231C; }
+  .A .btn-ghost { background: transparent; color: #2F6F40; font-weight: 600; padding: 0 14px; }
+
+  .A .field {
+    background: #FFFDF8;
+    border: 1px solid #D7D1C0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1F231C;
+    width: 100%;
+  }
+  .A .field-row { display: grid; gap: 6px; }
+  .A .field-row .label { margin-bottom: 2px; }
+
+  .A .row {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 18px;
+    padding: 20px 22px;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+  .A .avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, #D9C9A9, #B59F76);
+    border: 1px solid #C2B69B;
+  }
+  .A .row .name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: #1F231C; }
+  .A .row .meta { font-size: 13px; color: #5A6258; margin-top: 3px; }
+  .A .row .price { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 500; color: #1F231C; text-align: right; }
+  .A .row .price-unit { font-size: 11px; color: #6A7263; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .A .card {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 20px;
+    padding: 26px;
+  }
+  .A .card .verify {
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #2F6F40; font-weight: 600;
+    display: inline-flex; gap: 6px; align-items: center;
+    margin-bottom: 14px;
+  }
+  .A .card .verify::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #3BB75E; }
+  .A .card h3 { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 500; letter-spacing: -0.018em; margin: 0 0 6px; }
+  .A .card .role { font-size: 13px; color: #5A6258; margin-bottom: 16px; }
+  .A .card .quote { font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; line-height: 1.55; color: #2A2F26; margin: 16px 0 20px; padding-left: 14px; border-left: 2px solid #3BB75E; }
+  .A .card .meta-line { display: flex; gap: 18px; font-size: 12px; color: #6A7263; letter-spacing: 0.04em; margin-bottom: 18px; }
+  .A .card .meta-line strong { color: #1F231C; font-weight: 600; }
+
+  /* ---- A1 lean line ---- */
+  .A .row.a1 { padding: 14px 18px; border-radius: 14px; grid-template-columns: 44px 1fr auto; gap: 14px; }
+  .A .a1-av { width: 44px; height: 44px; }
+  .A .row.a1 .name { font-size: 17px; }
+  .A .row.a1 .meta { font-size: 12.5px; color: #6A7263; margin-top: 2px; }
+  .A .row.a1 .price { font-size: 14px; }
+
+  /* ---- A2 spread reel ---- */
+  .A .reel {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 18px;
+    padding: 22px;
+    display: grid;
+    grid-template-columns: 112px 1fr 168px;
+    gap: 22px;
+    align-items: stretch;
+  }
+  .A .reel-photo {
+    width: 112px; height: 112px; border-radius: 14px;
+    background: linear-gradient(135deg, #D9C9A9, #B59F76);
+    border: 1px solid #C2B69B;
+  }
+  .A .reel-name { font-family: 'Fraunces', serif; font-weight: 500; font-size: 22px; letter-spacing: -0.014em; color: #1F231C; }
+  .A .reel-role { font-size: 12.5px; color: #6A7263; margin-top: 4px; letter-spacing: 0.02em; }
+  .A .reel-quote { font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; line-height: 1.55; color: #2A2F26; margin: 12px 0 14px; }
+  .A .reel-foot { margin-top: auto; }
+  .A .reel-meta { font-size: 12px; color: #6A7263; }
+  .A .reel-meta strong { color: #1F231C; font-weight: 600; }
+  .A .reel-side { text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; padding-left: 18px; border-left: 1px solid #E4DFCE; }
+  .A .reel-price { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; color: #1F231C; }
+  .A .reel-unit { font-size: 11px; color: #6A7263; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+
+  /* ---- A3 ledger ---- */
+  .A .ledger {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1.2fr 1px 180px;
+    gap: 22px;
+    align-items: center;
+  }
+  .A .led-person { display: flex; align-items: center; gap: 14px; }
+  .A .led-name { font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; letter-spacing: -0.01em; color: #1F231C; }
+  .A .led-where { font-size: 12px; color: #6A7263; margin-top: 2px; }
+  .A .led-divider { width: 1px; height: 44px; background: #E4DFCE; }
+  .A .led-subject { font-family: 'Fraunces', serif; font-weight: 500; font-size: 19px; letter-spacing: -0.012em; color: #1F231C; line-height: 1.15; }
+  .A .led-overline { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #6A7263; margin-top: 6px; font-weight: 500; }
+  .A .led-action { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .A .led-price { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500; color: #1F231C; }
+  .A .led-price span { font-family: 'Inter', sans-serif; font-size: 11px; color: #6A7263; margin-left: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .A .led-btn { height: 36px; padding: 0 16px; font-size: 13px; border-radius: 12px; }
+
+  .row-caption {
+    margin-top: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #6A7263;
+    letter-spacing: 0;
+  }
+
+  /* ---- A column hosts B-style profile card on its own paper ---- */
+  .A .card-b {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 24px;
+    padding: 28px;
+  }
+  .A .verify-b {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #E7EFE9; color: #2F6F40;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+  .A .verify-b::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #3BB75E; }
+  .A .card-b h3 { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 0 0 6px; color: #1F231C; }
+  .A .role-b { font-size: 13px; color: #6A7263; margin-bottom: 18px; }
+  .A .blurb-b { font-size: 14px; line-height: 1.65; color: #2A2F26; margin: 0 0 20px; }
+  .A .meta-grid-b { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-bottom: 22px; }
+  .A .label-b { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6A7263; font-weight: 500; margin-bottom: 3px; }
+  .A .val-b { font-size: 14px; font-weight: 600; color: #1F231C; }
+
+  /* ============================================================
+     B — Cool linen & sage
+     Paper: cool linen #F4F4EF, paper-card #FBFBF7
+     Accent: full #3BB75E on primary; muted sage #BFD5C5 on chips
+     Type: Inter only (sans-only)
+     Radii: 20px
+     ============================================================ */
+  .B { color: #14181A; }
+  .B .specimen { background: #F4F4EF; }
+  .B .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #6B756E; font-weight: 600; }
+
+  .B .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 46px; padding: 0 24px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: -0.008em;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .B .btn-primary { background: #3BB75E; color: #FFF; }
+  .B .btn-primary:hover { background: #2EA351; }
+  .B .btn-secondary { background: #FBFBF7; border-color: #D6D6CC; color: #14181A; }
+  .B .btn-ghost { background: transparent; color: #14181A; padding: 0 14px; }
+
+  .B .field {
+    background: #FBFBF7;
+    border: 1px solid #D6D6CC;
+    border-radius: 18px;
+    padding: 16px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #14181A;
+    width: 100%;
+  }
+  .B .field-row { display: grid; gap: 8px; }
+
+  .B .row {
+    background: #FBFBF7;
+    border: 1px solid #DEDED4;
+    border-radius: 22px;
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+  .B .avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #BFD5C5, #8FB39C);
+    border: 1px solid #A8C2B2;
+  }
+  .B .row .name { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.012em; }
+  .B .row .meta { font-size: 13px; color: #6B756E; margin-top: 4px; letter-spacing: 0; }
+  .B .row .chip {
+    display: inline-block; padding: 3px 10px;
+    background: #E7EFE9; color: #2F6F40;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    border-radius: 999px; margin-right: 6px;
+  }
+  .B .row .price { font-size: 16px; font-weight: 600; text-align: right; }
+  .B .row .price-unit { font-size: 11px; color: #6B756E; }
+
+  .B .card {
+    background: #FBFBF7;
+    border: 1px solid #DEDED4;
+    border-radius: 24px;
+    padding: 28px;
+  }
+  .B .card .verify {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #E7EFE9; color: #2F6F40;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+  .B .card .verify::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #3BB75E; }
+  .B .card h3 { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 0 0 6px; }
+  .B .card .role { font-size: 13px; color: #6B756E; margin-bottom: 18px; }
+  .B .card .blurb { font-size: 14px; line-height: 1.65; color: #2A2F2B; margin: 0 0 20px; }
+  .B .card .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-bottom: 22px; }
+  .B .card .meta-grid .label { display: block; margin-bottom: 3px; }
+  .B .card .meta-grid .val { font-size: 14px; font-weight: 600; }
+
+  /* ============================================================
+     C — Warm cream & dusk
+     Paper: cream #FAF6EE, dusk-blue secondary #4D5B6E
+     Accent: #3BB75E primary, italic serif quotes
+     Type: Source Serif 4 (italic) + Inter
+     Radii: 12px
+     ============================================================ */
+  .C { color: #1A1916; }
+  .C .specimen { background: #FAF6EE; }
+  .C .label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #6F6A5E; font-weight: 500; }
+  .C .serif-i { font-family: 'Source Serif 4', serif; font-style: italic; }
+
+  .C .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 42px; padding: 0 20px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .C .btn-primary { background: #3BB75E; color: #FFF; }
+  .C .btn-primary:hover { background: #2EA351; }
+  .C .btn-secondary { background: #FFFCF4; border-color: #4D5B6E; color: #4D5B6E; }
+  .C .btn-ghost { background: transparent; color: #4D5B6E; padding: 0 12px; }
+
+  .C .field {
+    background: #FFFCF4;
+    border: 1px solid #D4CFBE;
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1A1916;
+    width: 100%;
+  }
+  .C .field-row { display: grid; gap: 6px; }
+
+  .C .row {
+    background: #FFFCF4;
+    border: 1px solid #DFD9C4;
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 18px;
+    align-items: center;
+    border-left: 3px solid #3BB75E;
+  }
+  .C .avatar {
+    width: 56px; height: 56px; border-radius: 6px;
+    background: linear-gradient(135deg, #C8C0AA, #8A8473);
+    border: 1px solid #A8A18A;
+  }
+  .C .row .name { font-family: 'Source Serif 4', serif; font-size: 19px; font-weight: 600; letter-spacing: -0.012em; }
+  .C .row .meta { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px; color: #4D5B6E; margin-top: 4px; }
+  .C .row .price { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; text-align: right; }
+  .C .row .price-unit { font-size: 10px; color: #6F6A5E; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .C .card {
+    background: #FFFCF4;
+    border: 1px solid #DFD9C4;
+    border-radius: 14px;
+    padding: 26px;
+    position: relative;
+  }
+  .C .card::before {
+    content: ''; position: absolute; top: 0; left: 26px; right: 26px; height: 3px;
+    background: #3BB75E;
+  }
+  .C .card .byline {
+    font-family: 'Source Serif 4', serif; font-style: italic;
+    font-size: 13px; color: #4D5B6E; margin-bottom: 4px;
+  }
+  .C .card h3 { font-family: 'Source Serif 4', serif; font-size: 26px; font-weight: 600; letter-spacing: -0.018em; margin: 0 0 4px; line-height: 1.1; }
+  .C .card .role { font-size: 12px; color: #6F6A5E; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
+  .C .card .quote { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 17px; line-height: 1.55; color: #1A1916; margin: 0 0 20px; }
+  .C .card .meta-line {
+    display: flex; gap: 24px; padding: 14px 0;
+    border-top: 1px solid #E5DFC8; border-bottom: 1px solid #E5DFC8;
+    font-size: 12px; color: #4D5B6E; margin-bottom: 20px;
+  }
+  .C .card .meta-line strong { color: #1A1916; font-weight: 600; display: block; font-size: 14px; margin-top: 2px; }
+
+  /* -------- shared stack -------- */
+  .stack > * + * { margin-top: 14px; }
+  .stack-tight > * + * { margin-top: 10px; }
+  .row-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .foot-note {
+    max-width: 1480px; margin: 56px auto 0;
+    padding-top: 24px; border-top: 1px solid #C5C2B7;
+    font-size: 13px; line-height: 1.65; color: #5A6258;
+  }
+  .foot-note strong { color: #1B1F1C; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="eyebrow">Tutorly · Act III · variation pick</div>
+  <h1>Three takes on Soft Scandinavian — pick one</h1>
+  <p>All three share the stance: warm pale neutrals, no pure black, light-only, hairlines instead of shadows, <strong>#3BB75E</strong> as the single accent. They differ in <em>paper warmth</em>, <em>type pairing</em>, and <em>corner geometry</em>. Each column shows the four signature components — a button cluster, a search input, a tutor list row, and a tutor profile card — so the difference is material, not theoretical.</p>
+</header>
+
+<section class="columns">
+
+  <!-- =================================================
+       COLUMN A — Oat & forest
+       ================================================= -->
+  <div class="A">
+    <div class="col-head">
+      <div class="letter">A</div>
+      <div class="name">Oat &amp; forest</div>
+      <div class="caption">Warm oat paper. Fraunces serif for tutor names + thinking; Inter for chrome. 16px radii. Reads like a well-printed brochure on a kitchen table — most editorial of the three.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Buttons</div>
+      <div class="stack">
+        <div class="label">Primary action — the connection-fee moment</div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect with Marcus — ₦2,500</button>
+          <button class="btn btn-secondary">Save tutor</button>
+          <button class="btn btn-ghost">View profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Search</div>
+      <div class="stack-tight field-row">
+        <div class="label">Subject</div>
+        <input class="field" value="Further Mathematics — A-Level" />
+      </div>
+      <div class="stack-tight field-row" style="margin-top:12px">
+        <div class="label">Location · within</div>
+        <input class="field" value="Lekki, Lagos · 15 km" />
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">List row · A1 · lean line</div>
+      <div class="stack" style="--rh:0">
+        <div class="row a1">
+          <div class="avatar a1-av"></div>
+          <div>
+            <div class="name">Marcus K.</div>
+            <div class="meta">Further Maths · 8 yrs · Lekki</div>
+          </div>
+          <div>
+            <div class="price">₦12,000</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+        <div class="row a1">
+          <div class="avatar a1-av" style="background:linear-gradient(135deg,#C7BFA2,#998E66);"></div>
+          <div>
+            <div class="name">Aisha O.</div>
+            <div class="meta">English Lit · 5 yrs · Ikeja</div>
+          </div>
+          <div>
+            <div class="price">₦8,500</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+        <div class="row a1">
+          <div class="avatar a1-av" style="background:linear-gradient(135deg,#D3C7A1,#A89464);"></div>
+          <div>
+            <div class="name">Tunde A.</div>
+            <div class="meta">Chemistry · 12 yrs · Yaba</div>
+          </div>
+          <div>
+            <div class="price">₦15,000</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+      </div>
+      <div class="row-caption">Tight directory line — fast to scan a long list. No chips, no decoration.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">List row · A2 · spread reel</div>
+      <div class="stack">
+        <div class="reel">
+          <div class="reel-photo"></div>
+          <div class="reel-body">
+            <div class="reel-name">Marcus K.</div>
+            <div class="reel-role">Further Mathematics &amp; Physics · Lekki, Lagos</div>
+            <div class="reel-quote">I teach mathematics the way I wish I'd been taught — slowly, with the why before the how.</div>
+            <div class="reel-foot">
+              <div class="reel-meta"><strong>8 yrs</strong> teaching &nbsp;·&nbsp; <strong>142</strong> students &nbsp;·&nbsp; Cambridge</div>
+            </div>
+          </div>
+          <div class="reel-side">
+            <div class="reel-price">₦12,000</div>
+            <div class="reel-unit">per hour</div>
+            <button class="btn btn-primary" style="margin-top:14px;">Connect — ₦2,500</button>
+          </div>
+        </div>
+        <div class="reel">
+          <div class="reel-photo" style="background:linear-gradient(135deg,#C7BFA2,#998E66);"></div>
+          <div class="reel-body">
+            <div class="reel-name">Aisha O.</div>
+            <div class="reel-role">English Literature &amp; Essay · Ikeja, Lagos</div>
+            <div class="reel-quote">Essay-writing is thinking made visible. We work sentence by sentence.</div>
+            <div class="reel-foot">
+              <div class="reel-meta"><strong>5 yrs</strong> teaching &nbsp;·&nbsp; <strong>87</strong> students &nbsp;·&nbsp; Published novelist</div>
+            </div>
+          </div>
+          <div class="reel-side">
+            <div class="reel-price">₦8,500</div>
+            <div class="reel-unit">per hour</div>
+            <button class="btn btn-primary" style="margin-top:14px;">Connect — ₦2,500</button>
+          </div>
+        </div>
+      </div>
+      <div class="row-caption">Reads like a person, not an entry. Square photo + italic teaching philosophy. Closest to Airbnb-style spaciousness.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">List row · A3 · three-column ledger</div>
+      <div class="stack">
+        <div class="ledger">
+          <div class="led-person">
+            <div class="avatar" style="width:48px;height:48px;"></div>
+            <div>
+              <div class="led-name">Marcus K.</div>
+              <div class="led-where">Lekki, Lagos</div>
+            </div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-teach">
+            <div class="led-subject">Further Mathematics</div>
+            <div class="led-overline">A-Level · 8 years</div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-action">
+            <div class="led-price">₦12,000<span>/hr</span></div>
+            <button class="btn btn-primary led-btn">Connect</button>
+          </div>
+        </div>
+        <div class="ledger">
+          <div class="led-person">
+            <div class="avatar" style="width:48px;height:48px;background:linear-gradient(135deg,#C7BFA2,#998E66);"></div>
+            <div>
+              <div class="led-name">Aisha O.</div>
+              <div class="led-where">Ikeja, Lagos</div>
+            </div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-teach">
+            <div class="led-subject">English Literature</div>
+            <div class="led-overline">WAEC + SAT · 5 years</div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-action">
+            <div class="led-price">₦8,500<span>/hr</span></div>
+            <button class="btn btn-primary led-btn">Connect</button>
+          </div>
+        </div>
+        <div class="ledger">
+          <div class="led-person">
+            <div class="avatar" style="width:48px;height:48px;background:linear-gradient(135deg,#D3C7A1,#A89464);"></div>
+            <div>
+              <div class="led-name">Tunde A.</div>
+              <div class="led-where">Yaba, Lagos</div>
+            </div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-teach">
+            <div class="led-subject">Chemistry</div>
+            <div class="led-overline">JAMB + A-Level · 12 years</div>
+          </div>
+          <div class="led-divider"></div>
+          <div class="led-action">
+            <div class="led-price">₦15,000<span>/hr</span></div>
+            <button class="btn btn-primary led-btn">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="row-caption">Three legible zones — person · subject · price. Subject gets Fraunces; level + experience in small-caps overline. Most editorial. Best when comparing across tutors.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Profile card · borrowed from B</div>
+      <div class="card-b">
+        <span class="verify-b">Identity verified</span>
+        <h3>Marcus K.</h3>
+        <div class="role-b">Further Mathematics &amp; Physics tutor · Lekki, Lagos</div>
+        <p class="blurb-b">I teach mathematics the way I wish I'd been taught — slowly, with the why before the how. Eight years working with students preparing for WAEC, SAT and Cambridge A-Levels.</p>
+        <div class="meta-grid-b">
+          <div><span class="label-b">Teaching</span><span class="val-b">8 years</span></div>
+          <div><span class="label-b">Students</span><span class="val-b">142</span></div>
+          <div><span class="label-b">Rate</span><span class="val-b">₦12,000 / hour</span></div>
+          <div><span class="label-b">Connect fee</span><span class="val-b">₦2,500</span></div>
+        </div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect with Marcus</button>
+          <button class="btn btn-secondary">Read blog</button>
+        </div>
+      </div>
+      <div class="row-caption">Profile card as picked: column B's calm, sans-only layout — sitting on A's oat paper.</div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       COLUMN B — Cool linen & sage    (RECOMMENDED)
+       ================================================= -->
+  <div class="B">
+    <div class="col-head">
+      <div class="letter">B</div>
+      <div class="name">Cool linen &amp; sage</div>
+      <div class="caption">Cooler linen paper. Sans-only (Inter, two weights). 20px radii — softest of the three. Sage-green chips carry secondary state so the full #3BB75E stays scarce. Reads like a calm faculty page; closest to Aesop's restraint without losing warmth.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Buttons</div>
+      <div class="stack">
+        <div class="label">Primary action — the connection-fee moment</div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect with Marcus — ₦2,500</button>
+          <button class="btn btn-secondary">Save tutor</button>
+          <button class="btn btn-ghost">View profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Search</div>
+      <div class="stack-tight field-row">
+        <div class="label">Subject</div>
+        <input class="field" value="Further Mathematics — A-Level" />
+      </div>
+      <div class="stack-tight field-row" style="margin-top:14px">
+        <div class="label">Location · within</div>
+        <input class="field" value="Lekki, Lagos · 15 km" />
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">List row</div>
+      <div class="stack">
+        <div class="row">
+          <div class="avatar"></div>
+          <div>
+            <div class="name">Marcus K.</div>
+            <div class="meta">Further Maths · 8 yrs · Lekki</div>
+            <div style="margin-top:8px;">
+              <span class="chip">Verified</span>
+              <span class="chip" style="background:#EDEAE0;color:#4C5249;">Cambridge alumnus</span>
+            </div>
+          </div>
+          <div>
+            <div class="price">₦12,000</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="avatar" style="background:linear-gradient(135deg,#D4C7B5,#A89A82);border-color:#B8A992;"></div>
+          <div>
+            <div class="name">Aisha O.</div>
+            <div class="meta">English Literature &amp; Essay · 5 yrs · Ikeja</div>
+            <div style="margin-top:8px;">
+              <span class="chip">Verified</span>
+              <span class="chip" style="background:#EDEAE0;color:#4C5249;">Published novelist</span>
+            </div>
+          </div>
+          <div>
+            <div class="price">₦8,500</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Profile card</div>
+      <div class="card">
+        <span class="verify">Identity verified</span>
+        <h3>Marcus K.</h3>
+        <div class="role">Further Mathematics &amp; Physics tutor · Lekki, Lagos</div>
+        <p class="blurb">I teach mathematics the way I wish I'd been taught — slowly, with the why before the how. Eight years working with students preparing for WAEC, SAT and Cambridge A-Levels.</p>
+        <div class="meta-grid">
+          <div><span class="label">Teaching</span><span class="val">8 years</span></div>
+          <div><span class="label">Students</span><span class="val">142</span></div>
+          <div><span class="label">Rate</span><span class="val">₦12,000 / hour</span></div>
+          <div><span class="label">Connect fee</span><span class="val">₦2,500</span></div>
+        </div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect with Marcus</button>
+          <button class="btn btn-secondary">Read blog</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       COLUMN C — Warm cream & dusk
+       ================================================= -->
+  <div class="C">
+    <div class="col-head">
+      <div class="letter">C</div>
+      <div class="name">Warm cream &amp; dusk</div>
+      <div class="caption">Cream paper. Source Serif italic for thinking / pull-quotes; Inter for chrome; dusk-blue secondary alongside the green. 12px radii — most architectural. Reads like a Sunday-supplement profile page. The leftmost green rule on every card makes the accent feel like a editorial mark.</div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Buttons</div>
+      <div class="stack">
+        <div class="label">Primary action — the connection-fee moment</div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect with Marcus — ₦2,500</button>
+          <button class="btn btn-secondary">Save tutor</button>
+          <button class="btn btn-ghost">View profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Search</div>
+      <div class="stack-tight field-row">
+        <div class="label">Subject</div>
+        <input class="field" value="Further Mathematics — A-Level" />
+      </div>
+      <div class="stack-tight field-row" style="margin-top:12px">
+        <div class="label">Location · within</div>
+        <input class="field" value="Lekki, Lagos · 15 km" />
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">List row</div>
+      <div class="stack">
+        <div class="row">
+          <div class="avatar"></div>
+          <div>
+            <div class="name">Marcus K.</div>
+            <div class="meta">Further Maths · 8 yrs · Lekki · Cambridge alumnus</div>
+          </div>
+          <div>
+            <div class="price">₦12,000</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="avatar" style="background:linear-gradient(135deg,#BFB6A1,#7E7867);"></div>
+          <div>
+            <div class="name">Aisha O.</div>
+            <div class="meta">English Lit &amp; Essay · 5 yrs · Ikeja · published novelist</div>
+          </div>
+          <div>
+            <div class="price">₦8,500</div>
+            <div class="price-unit">per hour</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="specimen-label">Profile card</div>
+      <div class="card">
+        <div class="byline">Verified educator · profile no. 0142</div>
+        <h3>Marcus K.</h3>
+        <div class="role">Further Maths &amp; Physics — Lekki</div>
+        <p class="quote">"I teach mathematics the way I wish I'd been taught — slowly, with the why before the how."</p>
+        <div class="meta-line">
+          <div>Teaching<strong>8 years</strong></div>
+          <div>Students<strong>142</strong></div>
+          <div>Rate<strong>₦12,000 / hr</strong></div>
+        </div>
+        <div class="row-buttons">
+          <button class="btn btn-primary">Connect — ₦2,500</button>
+          <button class="btn btn-secondary">Read blog</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="foot-note">
+  <p><strong>What's varied across A / B / C:</strong> paper warmth (oat → linen → cream), type pairing (Fraunces serif → Inter sans-only → Source Serif italic), corner geometry (16 → 20 → 12 px), and how the green is rationed (full-strength on buttons throughout; A & C use a green rule as decoration; B keeps green scarce and uses sage chips for secondary state).</p>
+  <p><strong>What's locked across all three:</strong> light-only · spacious · no gamification · hairlines over shadows · single accent #3BB75E · masked username convention (first name + initial) · price in tabular weight · "Identity verified" reads as a quiet assertion, not a badge.</p>
+</div>
+
+</body>
+</html>

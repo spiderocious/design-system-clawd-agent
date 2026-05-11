@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · slide library</title>
+<link rel="stylesheet" href="../preview/_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .top { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; padding: 18px 40px; border-bottom: 1px solid var(--hair); background: rgba(247,248,251,0.92); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 30; }
+  .brand { font-family: var(--display); font-size: 20px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: inline-flex; align-items: baseline; gap: 6px; }
+  .brand .dot { color: var(--accent-600); font-size: 26px; line-height: 0; }
+  .crumb { font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em; text-align: center; }
+  .crumb a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; }
+  .crumb a:hover { color: var(--ink); border-color: var(--ink); }
+  .crumb .cur { color: var(--ink); font-weight: 600; }
+  .top .right { display: flex; gap: 10px; align-items: center; justify-content: end; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .top .right a { color: var(--ink-3); text-decoration: none; }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 96px 40px 32px; }
+  .hero .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(64px, 10vw, 144px); letter-spacing: -0.04em; line-height: 0.92; margin: 0; max-width: 14ch; }
+  .hero h1 .em { color: var(--accent-600); }
+  .hero h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+  .hero p { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--ink-3); line-height: 1.45; max-width: 60ch; margin: 24px 0 0; }
+
+  .toolbar { max-width: 1240px; margin: 32px auto 24px; padding: 0 40px; display: flex; gap: 10px; align-items: center; }
+  .toolbar .seg { display: inline-flex; gap: 0; background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 999px; padding: 4px; }
+  .toolbar .seg button { padding: 6px 14px; background: transparent; border: 0; cursor: pointer; font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink-2); border-radius: 999px; }
+  .toolbar .seg button.on { background: var(--ink); color: var(--paper); }
+  .toolbar .ct { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; margin-left: 8px; }
+
+  .grid { max-width: 1240px; margin: 0 auto; padding: 0 40px 96px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+  .pack-card { display: block; text-decoration: none; color: inherit; }
+  .pack-card .preview {
+    aspect-ratio: 16 / 10;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 1px solid var(--hair);
+    box-shadow: var(--shade-1);
+    transition: transform 200ms var(--ease-out), box-shadow 200ms;
+    position: relative;
+  }
+  .pack-card:hover .preview { transform: translateY(-3px); box-shadow: var(--shade-3); }
+  .pack-card .ix { font-family: var(--mono); font-size: 10px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .pack-card .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 4px 0 4px; }
+  .pack-card .desc { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); line-height: 1.4; }
+  .pack-card .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0.04em; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair-soft); }
+  .pack-card .badge { position: absolute; top: 10px; right: 10px; background: rgba(15,17,21,0.9); color: #fff; padding: 4px 10px; border-radius: 999px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+  .pack-card .badge.beta { background: var(--warn); }
+  .pack-card .badge.ok { background: var(--ok); }
+
+  /* Inline previews — different per pack */
+  .preview .demo { width: 100%; height: 100%; padding: 18px 22px; box-sizing: border-box; display: flex; flex-direction: column; }
+
+  .p-surgical { background: #F4EFE6; color: #181613; font-family: 'Newsreader', serif; }
+  .p-surgical .k { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.18em; color: #16A34A; text-transform: uppercase; }
+  .p-surgical .h { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.0; margin: 6px 0 0; }
+
+  .p-editorial { background: #FBFAF7; color: #14110D; font-family: 'Source Serif 4', serif; }
+  .p-editorial .k { font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.22em; color: #B42318; text-transform: uppercase; }
+  .p-editorial .h { font-size: 22px; font-weight: 500; letter-spacing: -0.018em; line-height: 1.04; margin: 6px 0 6px; }
+  .p-editorial hr { border: 0; border-top: 1px solid #14110D; margin: 4px 0; }
+  .p-editorial .b { font-family: 'Inter', sans-serif; font-size: 8px; color: #6E665B; letter-spacing: 0.06em; }
+
+  .p-swiss { background: #FFFFFF; color: #000; font-family: 'Inter', sans-serif; }
+  .p-swiss .n { font-size: 8px; letter-spacing: 0.16em; color: #888; }
+  .p-swiss .h { font-size: 22px; font-weight: 600; letter-spacing: -0.025em; margin: 8px 0 14px; }
+  .p-swiss .row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid #000; padding-top: 8px; }
+  .p-swiss .stat { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; }
+  .p-swiss .stat.em { color: #FF6A00; }
+  .p-swiss .lbl { font-size: 7px; letter-spacing: 0.14em; color: #888; text-transform: uppercase; margin-top: 2px; }
+
+  .p-brutal { background: #E5E2DC; color: #000; font-family: 'IBM Plex Mono', monospace; padding: 14px 18px !important; }
+  .p-brutal .stamp { display: flex; gap: 10px; padding-bottom: 6px; border-bottom: 3px solid #000; font-size: 7px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .p-brutal .stamp .red { color: #B0270F; margin-left: auto; }
+  .p-brutal .h { font-size: 22px; font-weight: 700; line-height: 1.0; margin: 12px 0 0; text-transform: uppercase; }
+
+  .p-glass { background: linear-gradient(135deg, #0F4C5C 0%, #5F0F40 100%); color: rgba(255,255,255,0.95); font-family: 'Inter', sans-serif; padding: 18px 22px !important; }
+  .p-glass .h { font-size: 24px; font-weight: 700; letter-spacing: -0.025em; line-height: 0.95; margin: auto 0 0; }
+  .p-glass .k { font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7; }
+
+  .p-tele { background: #0B0B0B; color: #C7FFD4; font-family: 'JetBrains Mono', monospace; padding: 14px 18px !important; }
+  .p-tele .top { display: flex; justify-content: space-between; font-size: 7px; color: #5C7261; letter-spacing: 0.16em; text-transform: uppercase; }
+  .p-tele .top .live { color: #28E07F; }
+  .p-tele .read { font-size: 44px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; margin: 12px 0 4px; color: #fff; }
+  .p-tele .read .u { font-size: 12px; color: #5C7261; }
+  .p-tele .lbl { font-size: 7px; color: #5C7261; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  .p-scand { background: #F7F5F0; color: #2C2A26; font-family: 'Inter', sans-serif; padding: 18px 22px !important; }
+  .p-scand .by { font-size: 8px; color: #908779; letter-spacing: 0.18em; text-transform: uppercase; }
+  .p-scand .h { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.1; margin: 6px 0 4px; }
+  .p-scand .tag { display: inline-block; padding: 2px 8px; background: #D4C5A9; font-size: 7px; letter-spacing: 0.06em; border-radius: 999px; margin-top: 6px; }
+
+  .p-terminal { background: #0A1010; color: #33FF99; font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; padding: 14px 18px !important; font-size: 9px; line-height: 1.5; }
+  .p-terminal .blink::after { content: "█"; animation: blink 1s steps(2) infinite; margin-left: 2px; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .p-photo { background: linear-gradient(135deg, #6E665B 0%, #181613 100%); color: #fff; padding: 0 !important; position: relative; }
+  .p-photo .copy { padding: 18px 22px; margin-top: auto; background: linear-gradient(0deg, rgba(0,0,0,0.6), transparent); }
+  .p-photo .h { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.018em; line-height: 1.0; margin: 4px 0 0; }
+
+  .p-transit { background: #000; color: #fff; font-family: 'Helvetica Neue', 'Inter', sans-serif; padding: 14px 18px !important; }
+  .p-transit .h { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 0; }
+  .p-transit .row { display: flex; gap: 8px; align-items: center; margin-top: auto; }
+  .p-transit .bullet { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+
+  .p-notebook { background: #FBFAF5; color: #1A1A2E; font-family: 'Caveat', cursive; padding: 14px 18px !important; background-image: radial-gradient(circle at 1px 1px, #d4d4dc 1px, transparent 1px); background-size: 12px 12px; }
+  .p-notebook .h { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.1; margin: 8px 0 0; color: #1B3B6F; }
+  .p-notebook .ann { font-family: 'Caveat', cursive; font-size: 14px; color: #1B3B6F; }
+
+  .p-showroom { background: #1C1A18; color: #F5EFE0; padding: 18px 22px !important; }
+  .p-showroom .by { font-size: 7px; letter-spacing: 0.24em; color: #C9B27A; text-transform: uppercase; }
+  .p-showroom .h { font-family: 'Bodoni Moda', serif; font-style: italic; font-size: 26px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; margin: 10px 0 6px; }
+  .p-showroom .h .em { color: #C9B27A; }
+
+  .p-riso { background: #F4EAD9; color: #14110D; padding: 18px 22px !important; position: relative; overflow: hidden; }
+  .p-riso::before { content: ""; position: absolute; right: -30px; top: -30px; width: 120px; height: 120px; border-radius: 50%; background: #FF4691; mix-blend-mode: multiply; opacity: 0.85; }
+  .p-riso::after { content: ""; position: absolute; right: -10px; top: -10px; width: 120px; height: 120px; border-radius: 50%; background: #00513D; mix-blend-mode: multiply; opacity: 0.75; }
+  .p-riso .h { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 0.92; margin: auto 0 0; position: relative; z-index: 2; max-width: 8ch; }
+
+  .p-graph { background: #fff; padding: 14px 18px !important; background-image: linear-gradient(#D4E4ED 1px, transparent 1px), linear-gradient(90deg, #D4E4ED 1px, transparent 1px); background-size: 16px 16px; color: #14110D; font-family: 'JetBrains Mono', monospace; }
+  .p-graph .h { font-size: 18px; font-weight: 600; margin: 8px 0 0; color: #1B3B6F; }
+
+  .p-liquid { background: linear-gradient(180deg, #4880FE, #062765); color: #fff; padding: 18px 22px !important; }
+  .p-liquid .h { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.025em; margin: auto 0 0; }
+
+  .p-bauhaus { background: #F2EAD3; padding: 14px 18px !important; position: relative; overflow: hidden; }
+  .p-bauhaus::before { content: ""; position: absolute; top: 14px; left: 14px; width: 70px; height: 70px; border-radius: 50%; background: #DC2A2A; }
+  .p-bauhaus::after { content: ""; position: absolute; bottom: 14px; right: 14px; width: 0; height: 0; border-left: 60px solid transparent; border-right: 60px solid transparent; border-bottom: 60px solid #1955B6; }
+  .p-bauhaus .h { font-family: 'Futura', 'Inter', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em; color: #14110D; margin: auto auto 0 0; position: relative; z-index: 2; max-width: 9ch; }
+
+  .p-japan { background: #F5F0E5; padding: 28px 36px !important; color: #14110D; }
+  .p-japan .lbl { font-size: 8px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; }
+  .p-japan .h { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.5; margin: 12px 0 0; max-width: 10ch; }
+
+  .p-maximalist { background: linear-gradient(180deg, #ECF2FF, #FFFFFF); color: #14110D; padding: 18px 22px !important; }
+  .p-maximalist .h { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.04em; line-height: 0.9; margin: auto 0 0; }
+  .p-maximalist .h .em { color: #0361F0; }
+
+  .p-atlas { background: #F4EAD0; color: #3E2A14; padding: 18px 22px !important; font-family: 'Source Serif 4', serif; }
+  .p-atlas .lbl { font-size: 8px; letter-spacing: 0.22em; color: #8B5A3C; text-transform: uppercase; }
+  .p-atlas .h { font-family: 'Trajan Pro', 'Cinzel', serif; font-size: 22px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.1; margin: 10px 0 0; text-transform: uppercase; }
+
+  .p-blueprint { background: #0F3D5C; color: #fff; padding: 14px 18px !important; font-family: 'Inconsolata', monospace; background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 24px 24px; }
+  .p-blueprint .lbl { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7; }
+  .p-blueprint .h { font-family: 'Architects Daughter', cursive; font-size: 26px; font-weight: 400; line-height: 1.1; margin: 8px 0 0; }
+
+  .p-omakase { background: #FBF8F0; color: #1A1A1A; padding: 18px 22px !important; }
+  .p-omakase .lbl { font-size: 8px; letter-spacing: 0.32em; color: #8B7355; text-transform: uppercase; }
+  .p-omakase .h { font-family: 'Source Serif 4', serif; font-weight: 500; font-size: 20px; letter-spacing: -0.012em; line-height: 1.3; margin: 10px 0 0; }
+
+  .p-midcentury { background: #F0E6D2; color: #14110D; padding: 18px 22px !important; }
+  .p-midcentury .lbl { font-size: 8px; letter-spacing: 0.22em; color: #C9602B; text-transform: uppercase; font-weight: 600; }
+  .p-midcentury .h { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.025em; line-height: 1.0; margin: 8px 0 0; color: #1A4D3A; }
+
+  .p-rolling { background: #fff; color: #14110D; padding: 28px 36px !important; }
+  .p-rolling .h { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; margin: auto 0; max-width: 10ch; }
+  .p-rolling .dot { width: 10px; height: 10px; border-radius: 50%; background: #0361F0; margin-bottom: 8px; }
+
+  .p-soviet { background: #F0DCC4; color: #14110D; padding: 14px 18px !important; position: relative; overflow: hidden; }
+  .p-soviet::before { content: ""; position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; background: #B22B16; transform: rotate(15deg); }
+  .p-soviet .h { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.025em; line-height: 0.9; margin: auto 0 0; position: relative; z-index: 2; text-transform: uppercase; max-width: 8ch; }
+
+  .p-workshop { background: #F5EBD8; color: #14110D; padding: 18px 22px !important; font-family: 'Roboto Slab', serif; }
+  .p-workshop .lbl { font-size: 8px; letter-spacing: 0.18em; color: #B85C24; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+  .p-workshop .h { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.05; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="crumb">
+    <a href="../index.html">Project</a> <span style="color: var(--ink-5);">/</span> <span class="cur">Slide library</span> <span style="color: var(--ink-5);">·</span> 25 packs · 12 layouts each
+  </div>
+  <div class="right">
+    <a href="../index.html">← Project</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="ix">— The library</div>
+  <h1>Twenty-five<br><span class="em">slide</span> <span class="ital">stances.</span></h1>
+  <p>Each pack is a complete, opinionated worldview — never a theme. Click any pack to scroll through all twelve layouts. The AI picks the pack to fit your brief; you can always switch.</p>
+</section>
+
+<div class="toolbar">
+  <div class="seg">
+    <button class="on">All</button>
+    <button>Stable</button>
+    <button>Beta</button>
+    <button>Light</button>
+    <button>Dark</button>
+  </div>
+  <span class="ct">25 packs · 300 layouts total</span>
+</div>
+
+<main class="grid">
+
+  <a class="pack-card" href="surgical-paper/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-surgical">
+        <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #181613;"><span class="k" style="color: #6E665B;">— CHART No. 0421 —</span><span class="k" style="color: #6E665B;">VOL VIII</span></div>
+        <div class="h" style="margin-top: auto;">Halcyon Q2 board update</div>
+        <div class="k" style="margin-top: 6px;">Issued · 14 May 2026</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 01 —</div>
+    <div class="nm">Surgical paper</div>
+    <div class="desc">Bone paper, apothecary green, hairlines instead of shadows.</div>
+    <div class="meta">Light · Newsreader · Inter · #16A34A</div>
+  </a>
+
+  <a class="pack-card" href="editorial-broadsheet/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-editorial">
+        <div class="k">— Quarterly · Q2 2026 —</div>
+        <div class="h">The quiet rebellion of measured growth.</div>
+        <hr>
+        <div class="b">By the founders · 12 min read</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 02 —</div>
+    <div class="nm">Editorial broadsheet</div>
+    <div class="desc">"What if a NYT analyst designed your deck?"</div>
+    <div class="meta">Light · Source Serif 4 · #B42318</div>
+  </a>
+
+  <a class="pack-card" href="swiss-instrument/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-swiss">
+        <div class="n">0 1 / 2 4</div>
+        <div class="h">Quarterly results, in numbers.</div>
+        <div class="row">
+          <div><div class="stat em">$4.2M</div><div class="lbl">— ARR</div></div>
+          <div><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+          <div><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ix">— Pack 03 —</div>
+    <div class="nm">Swiss instrument</div>
+    <div class="desc">A Braun calculator from 1972.</div>
+    <div class="meta">Light · Inter · #FF6A00</div>
+  </a>
+
+  <a class="pack-card" href="brutalist-dossier/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-brutal">
+        <div class="stamp"><span>FILE 0421-A</span><span class="red">CLASSIFIED</span></div>
+        <div class="h" style="margin-top: auto;">Halcyon Q2.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 04 —</div>
+    <div class="nm">Brutalist dossier</div>
+    <div class="desc">A security file, declassified.</div>
+    <div class="meta">Light · IBM Plex Mono · acid yellow</div>
+  </a>
+
+  <a class="pack-card" href="glassmorphic-studio/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-glass">
+        <div class="k">— Quarterly · Q2 · 2026 —</div>
+        <div class="h">Halcyon. The Q2 review.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 05 —</div>
+    <div class="nm">Glassmorphic studio</div>
+    <div class="desc">A control room behind frosted glass.</div>
+    <div class="meta">Dark · Inter · saturated gradient</div>
+  </a>
+
+  <a class="pack-card" href="industrial-telemetry/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-tele">
+        <div class="top"><span>UNIT 04 · OK</span><span class="live">● LIVE</span></div>
+        <div class="read">$4.2<span class="u">M</span></div>
+        <div class="lbl">— ARR · TRAILING 6MO</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 06 —</div>
+    <div class="nm">Industrial telemetry</div>
+    <div class="desc">The dashboard of an oil rig.</div>
+    <div class="meta">Dark · JetBrains Mono · #28E07F</div>
+  </a>
+
+  <a class="pack-card" href="soft-scandinavian/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-scand">
+        <div class="by">— A note from the team —</div>
+        <div class="h">Halcyon, in the second quarter.</div>
+        <div style="margin-top: auto;"><span class="tag">Spring 2026</span></div>
+      </div>
+    </div>
+    <div class="ix">— Pack 07 —</div>
+    <div class="nm">Soft Scandinavian</div>
+    <div class="desc">A Nordic apartment in winter light.</div>
+    <div class="meta">Light · Source Serif 4 · sage</div>
+  </a>
+
+  <a class="pack-card" href="retro-terminal/index.html">
+    <div class="preview">
+      <span class="badge beta">beta</span>
+      <div class="demo p-terminal">
+        <div>$ ./halcyon-q2.sh</div>
+        <div style="opacity: 0.6;">[OK] Loading quarterly review…</div>
+        <div style="margin: 8px 0 0;">> ARR ......... $4.2M</div>
+        <div>> QoQ ......... +42%</div>
+        <div>> NPS ......... 9.1</div>
+        <div style="margin-top: auto;">$ <span class="blink"></span></div>
+      </div>
+    </div>
+    <div class="ix">— Pack 08 —</div>
+    <div class="nm">Retro terminal</div>
+    <div class="desc">A green-screen VT220 from 1985.</div>
+    <div class="meta">Dark · JetBrains Mono · phosphor</div>
+  </a>
+
+  <a class="pack-card" href="editorial-photographic/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-photo">
+        <div class="copy">
+          <div style="font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.85;">— Halcyon, photographed —</div>
+          <div class="h">The room where the work happens.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ix">— Pack 09 —</div>
+    <div class="nm">Editorial photographic</div>
+    <div class="desc">A glossy travel magazine cover.</div>
+    <div class="meta">Light · Source Serif 4 · neutral</div>
+  </a>
+
+  <a class="pack-card" href="transit-board/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-transit">
+        <div style="display: flex; gap: 8px; align-items: center; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;"><span class="bullet" style="background: #FFD600; color: #000;">Q</span><span>Q2 · 2026</span></div>
+        <div class="h">Halcyon Q2.<br>Board update.</div>
+        <div class="row" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.8;">14:30 · GATE B · ON TIME</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 10 —</div>
+    <div class="nm">Transit board</div>
+    <div class="desc">An NYC subway sign.</div>
+    <div class="meta">Dark · Helvetica · route-bullets</div>
+  </a>
+
+  <a class="pack-card" href="notebook-grid/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-notebook">
+        <div class="ann">— Q2 thoughts —</div>
+        <div class="h">The quiet rebellion of measured growth.</div>
+        <div class="ann" style="margin-top: auto;">finally agree ↗</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 11 —</div>
+    <div class="nm">Notebook grid</div>
+    <div class="desc">A moleskine with a fountain pen.</div>
+    <div class="meta">Light · Source Serif + Caveat · royal blue</div>
+  </a>
+
+  <a class="pack-card" href="showroom-mono/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-showroom">
+        <div class="by">Volume · 0 4</div>
+        <div class="h">The art of <span class="em">inevitable</span> products.</div>
+        <div style="font-size: 9px; color: rgba(245,239,224,0.7); margin-top: 4px;">A study in restraint.</div>
+        <div style="width: 32px; height: 1px; background: #C9B27A; margin-top: auto;"></div>
+      </div>
+    </div>
+    <div class="ix">— Pack 12 —</div>
+    <div class="nm">Showroom mono</div>
+    <div class="desc">A luxury watch boutique under glass.</div>
+    <div class="meta">Dark · Bodoni Moda · champagne</div>
+  </a>
+
+  <a class="pack-card" href="risograph-print/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-riso">
+        <div style="font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; position: relative; z-index: 2;">— Issue 12 —</div>
+        <div class="h">Make<br>good<br>noise.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 13 —</div>
+    <div class="nm">Risograph print</div>
+    <div class="desc">A screenprinted indie zine.</div>
+    <div class="meta">Light · Inter · pink + green</div>
+  </a>
+
+  <a class="pack-card" href="graph-paper/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-graph">
+        <div style="font-size: 8px; color: #1B3B6F; letter-spacing: 0.18em; text-transform: uppercase;">— Fig. 04 · Halcyon Q2 —</div>
+        <div class="h">Revenue, plotted.</div>
+        <svg viewBox="0 0 100 30" style="width: 100%; height: 50px; margin-top: auto;"><polyline points="0,24 16,20 32,18 48,12 64,14 80,8 100,4" fill="none" stroke="#1B3B6F" stroke-width="1.5"/><circle cx="100" cy="4" r="2" fill="#B42318"/></svg>
+      </div>
+    </div>
+    <div class="ix">— Pack 14 —</div>
+    <div class="nm">Graph paper</div>
+    <div class="desc">Engineer's quad-rule paper.</div>
+    <div class="meta">Light · DM Mono · ink blue</div>
+  </a>
+
+  <a class="pack-card" href="liquid-material/index.html">
+    <div class="preview">
+      <span class="badge beta">beta</span>
+      <div class="demo p-liquid">
+        <div style="font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.8;">— Quarterly · 2026 —</div>
+        <div class="h">A quiet rebellion.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 15 —</div>
+    <div class="nm">Liquid material</div>
+    <div class="desc">Apple's "liquid glass" era.</div>
+    <div class="meta">Adaptive · SF Pro · spring physics</div>
+  </a>
+
+  <a class="pack-card" href="bauhaus-poster/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-bauhaus">
+        <div class="h">Halcyon Q2 review.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 16 —</div>
+    <div class="nm">Bauhaus poster</div>
+    <div class="desc">A 1923 Weimar exhibition poster.</div>
+    <div class="meta">Light · Futura · primaries on cream</div>
+  </a>
+
+  <a class="pack-card" href="japanese-minimalism/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-japan">
+        <div class="lbl">— 第2四半期 —</div>
+        <div class="h">The quiet<br>rebellion.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 17 —</div>
+    <div class="nm">Japanese minimalism</div>
+    <div class="desc">A tea-ceremony pamphlet.</div>
+    <div class="meta">Light · Noto Serif · vermillion</div>
+  </a>
+
+  <a class="pack-card" href="maximalist-startup/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-maximalist">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: #0361F0; text-transform: uppercase;">— Q2 · 2026 —</div>
+        <div class="h">Bad slides<br>kill <span class="em">good ideas.</span></div>
+      </div>
+    </div>
+    <div class="ix">— Pack 18 —</div>
+    <div class="nm">Maximalist startup</div>
+    <div class="desc">Stripe / Linear / Vercel marketing.</div>
+    <div class="meta">Light · Bricolage · #0361F0</div>
+  </a>
+
+  <a class="pack-card" href="cartographer-atlas/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-atlas">
+        <div class="lbl">— Volume VIII · MMXXVI —</div>
+        <div class="h">Q.2 ⁕ Halcyon &amp; Co.</div>
+        <div style="font-style: italic; font-size: 12px; margin-top: auto; color: #8B5A3C;">A quarterly atlas.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 19 —</div>
+    <div class="nm">Cartographer's atlas</div>
+    <div class="desc">A 1920s railway-society atlas.</div>
+    <div class="meta">Light · Cinzel + Garamond · sepia</div>
+  </a>
+
+  <a class="pack-card" href="construction-blueprint/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-blueprint">
+        <div class="lbl">— Drawing No. 0421 —</div>
+        <div class="h">Halcyon Q2 / scale 1:24</div>
+        <div style="font-family: 'Inconsolata', monospace; font-size: 9px; opacity: 0.7; margin-top: auto;">CHECKED · 14.05.26</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 20 —</div>
+    <div class="nm">Construction blueprint</div>
+    <div class="desc">A draughtsman's blueprint on a light table.</div>
+    <div class="meta">Dark blue · hand-drawn · revision red</div>
+  </a>
+
+  <a class="pack-card" href="sushi-counter-omakase/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-omakase">
+        <div class="lbl">— Q2 · COURSE 04 —</div>
+        <div class="h">A quiet rebellion of measured growth.</div>
+        <div style="font-size: 11px; font-style: italic; color: #8B7355; margin-top: auto;">— halcyon</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 21 —</div>
+    <div class="nm">Sushi-counter omakase</div>
+    <div class="desc">A single-sheet menu, eight seats.</div>
+    <div class="meta">Light · Söhne Schmal · matcha</div>
+  </a>
+
+  <a class="pack-card" href="mid-century-playful/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-midcentury">
+        <div class="lbl">— Q2 · the warm one —</div>
+        <div class="h">A quiet rebellion.</div>
+        <div style="display: flex; gap: 4px; margin-top: auto;"><span style="width: 12px; height: 12px; background: #C9602B; border-radius: 50%;"></span><span style="width: 12px; height: 12px; background: #1A4D3A; border-radius: 50%;"></span><span style="width: 12px; height: 12px; background: #C9A352; border-radius: 50%;"></span></div>
+      </div>
+    </div>
+    <div class="ix">— Pack 22 —</div>
+    <div class="nm">Mid-century playful</div>
+    <div class="desc">A Charley Harper poster.</div>
+    <div class="meta">Cream · flat shapes · saturated four-colour</div>
+  </a>
+
+  <a class="pack-card" href="rolling-paper-minimal/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-rolling">
+        <div class="dot"></div>
+        <div class="h">A quiet<br>rebellion.</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 23 —</div>
+    <div class="nm">Rolling-paper minimal</div>
+    <div class="desc">A sheet of A4 with one mark.</div>
+    <div class="meta">Pure white · single sans · single accent</div>
+  </a>
+
+  <a class="pack-card" href="soviet-poster/index.html">
+    <div class="preview">
+      <span class="badge ok">stable</span>
+      <div class="demo p-soviet">
+        <div style="position: relative; z-index: 2; font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: #B22B16;">— PROCLAMATION 02 —</div>
+        <div class="h">Q.2!<br>HALCYON</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 24 —</div>
+    <div class="nm">Soviet poster</div>
+    <div class="desc">A 1925 Rodchenko constructivist poster.</div>
+    <div class="meta">Cream · diagonals · red + black</div>
+  </a>
+
+  <a class="pack-card" href="workshop-manual/index.html">
+    <div class="preview">
+      <span class="badge beta">beta</span>
+      <div class="demo p-workshop">
+        <div class="lbl">— FIG. 04.21 · CHAPTER 02 —</div>
+        <div class="h">Halcyon Q2: a service manual.</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #B85C24; margin-top: auto;">PART # HAL-2026-Q2</div>
+      </div>
+    </div>
+    <div class="ix">— Pack 25 —</div>
+    <div class="nm">Workshop manual</div>
+    <div class="desc">The Haynes manual for a 1972 BMW.</div>
+    <div class="meta">Cream · Roboto Slab · iron orange</div>
+  </a>
+
+</main>
+
+</body>
+</html>

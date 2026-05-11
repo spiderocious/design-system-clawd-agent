@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 23 · Rolling-paper minimal</title>
+<link rel="stylesheet" href="../_pack.css">
+<style>
+  .rp { background: #FFFFFF; color: #14110D; font-family: 'Inter', sans-serif; padding: 80px 96px; height: 100%; display: flex; flex-direction: column; }
+  .rp .dot { width: 10px; height: 10px; border-radius: 50%; background: #0361F0; }
+  .rp h2 { font-family: 'Inter', sans-serif; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; margin: 0; color: #14110D; }
+  .rp .em { color: #0361F0; }
+
+  .rp.cover { justify-content: end; }
+  .rp.cover h2 { font-size: 28px; max-width: 14ch; }
+  .rp.cover .meta { margin-top: 24px; font-size: 16px; color: #14110D; }
+
+  .rp.agenda { justify-content: start; }
+  .rp.agenda h2 { font-size: 28px; margin: 64px 0 32px; }
+  .rp.agenda ol { padding: 0; list-style: none; counter-reset: ag; }
+  .rp.agenda ol li { counter-increment: ag; padding: 16px 0; font-size: 16px; display: grid; grid-template-columns: 36px 1fr; gap: 16px; align-items: baseline; border-bottom: 1px solid #E3E7EE; }
+  .rp.agenda ol li::before { content: counter(ag, decimal-leading-zero); font-size: 16px; color: #0361F0; }
+
+  .rp.section { justify-content: center; align-items: start; }
+  .rp.section h2 { font-size: 28px; max-width: 14ch; }
+
+  .rp.headline h2 { font-size: 28px; max-width: 28ch; margin-top: 80px; }
+  .rp.headline .body { font-size: 16px; line-height: 1.6; max-width: 64ch; margin-top: 48px; color: #14110D; }
+
+  .rp.bigstat { justify-content: end; }
+  .rp.bigstat .row { display: flex; flex-direction: column; gap: 48px; max-width: 36ch; }
+  .rp.bigstat .item { font-size: 16px; }
+  .rp.bigstat .item .stat { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+  .rp.bigstat .item .stat.em { color: #0361F0; }
+  .rp.bigstat .item .lbl { font-size: 14px; color: #14110D; margin-top: 6px; }
+
+  .rp.twocol h2 { font-size: 28px; margin: 64px 0 48px; max-width: 28ch; }
+  .rp.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .rp.twocol .cols h3 { font-size: 16px; font-weight: 600; margin: 0 0 24px; letter-spacing: -0.012em; }
+  .rp.twocol .cols ul { font-size: 16px; line-height: 2; padding-left: 0; list-style: none; margin: 0; }
+  .rp.twocol .cols ul li { padding-left: 24px; position: relative; }
+  .rp.twocol .cols ul li::before { content: ""; position: absolute; left: 0; top: 14px; width: 12px; height: 1px; background: #14110D; }
+
+  .rp.threecol h2 { font-size: 28px; margin: 64px 0 48px; max-width: 28ch; }
+  .rp.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 64px; }
+  .rp.threecol .cols .nm { font-size: 14px; color: #0361F0; }
+  .rp.threecol .cols h3 { font-size: 16px; font-weight: 600; margin: 16px 0 16px; letter-spacing: -0.012em; }
+  .rp.threecol .cols p { font-size: 16px; line-height: 1.6; margin: 0; }
+
+  .rp.imgled { padding: 0; flex-direction: row; align-items: stretch; }
+  .rp.imgled .img { flex: 1; background: #fff; border-right: 1px solid #14110D; display: flex; align-items: center; justify-content: center; padding: 48px; }
+  .rp.imgled .img .dot { width: 80px; height: 80px; border-radius: 50%; background: #0361F0; }
+  .rp.imgled .copy { flex: 0 0 50%; padding: 80px 64px; display: flex; flex-direction: column; justify-content: center; }
+  .rp.imgled .copy h2 { font-size: 28px; max-width: 22ch; margin-top: 24px; }
+
+  .rp.quote { justify-content: center; padding: 80px 96px; }
+  .rp.quote .q { font-size: 28px; font-weight: 600; line-height: 1.4; max-width: 36ch; }
+  .rp.quote .attr { font-size: 16px; color: #14110D; margin-top: 48px; }
+
+  .rp.timeline h2 { font-size: 28px; margin: 64px 0 48px; max-width: 28ch; }
+  .rp.timeline .axis { display: flex; flex-direction: column; gap: 24px; }
+  .rp.timeline .step { display: grid; grid-template-columns: 100px 1fr; gap: 32px; padding-bottom: 24px; border-bottom: 1px solid #E3E7EE; }
+  .rp.timeline .step .wk { font-size: 16px; color: #0361F0; }
+  .rp.timeline .step h4 { font-size: 16px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.012em; }
+  .rp.timeline .step p { font-size: 16px; line-height: 1.6; color: #14110D; margin: 0; }
+
+  .rp.team h2 { font-size: 28px; margin: 64px 0 48px; max-width: 28ch; }
+  .rp.team .grid { display: flex; flex-direction: column; gap: 16px; max-width: 56ch; }
+  .rp.team .person { display: grid; grid-template-columns: 1fr 200px; gap: 16px; padding: 16px 0; border-bottom: 1px solid #E3E7EE; }
+  .rp.team .person h4 { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.012em; }
+  .rp.team .person p { font-size: 16px; color: #14110D; margin: 4px 0 0; }
+  .rp.team .person .role { font-size: 14px; color: #0361F0; text-align: right; padding-top: 4px; }
+
+  .rp.coda { justify-content: end; }
+  .rp.coda h2 { font-size: 28px; }
+  .rp.coda .meta { font-size: 16px; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">23</span><span class="nm">Rolling-paper minimal</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 23 · Whitespace</div>
+    <h1>A sheet of A4 with one mark.</h1>
+    <p>Pure white, edge to edge. One sans family, two weights, two sizes — nothing more. Whitespace separates everything; alignment is the only grid. Single accent used ≤ 2 places per page.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · personal sites, manifestos</div>
+    <div><strong>Type</strong> · Inter (16, 28)</div>
+    <div><strong>Accent</strong> · One blue mark · #0361F0</div>
+    <div><strong>Density</strong> · maximum spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="rp cover">
+    <span class="dot"></span>
+    <h2 style="margin-top: 24px;">Halcyon Q2 review.</h2>
+    <div class="meta">14 May 2026 — for the board.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="rp agenda">
+    <span class="dot"></span>
+    <h2>Agenda.</h2>
+    <ol>
+      <li><span></span><span>Where we are</span></li>
+      <li><span></span><span>The honest part</span></li>
+      <li><span></span><span>What we're cutting</span></li>
+      <li><span></span><span>Roadmap &amp; risks</span></li>
+      <li><span></span><span>Asks of the board</span></li>
+    </ol>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="rp section">
+    <span class="dot"></span>
+    <h2 style="margin-top: 32px;">Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="rp headline">
+    <span class="dot"></span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that. Revenue is up 42% without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying no.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="rp bigstat">
+    <span class="dot"></span>
+    <div class="row" style="margin-top: 64px;">
+      <div class="item"><div class="stat em">$4.2M</div><div class="lbl">ARR.</div></div>
+      <div class="item"><div class="stat">+42%</div><div class="lbl">QoQ revenue.</div></div>
+      <div class="item"><div class="stat">9.1</div><div class="lbl">Customer NPS.</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="rp twocol">
+    <span class="dot"></span>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div><h3>Beat plan.</h3><ul><li>Revenue +42%</li><li>NPS 9.1</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="em">Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="rp threecol">
+    <span class="dot"></span>
+    <h2>Three sunsets.</h2>
+    <div class="cols">
+      <div><span class="nm">— 01.</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed for the web product.</p></div>
+      <div><span class="nm">— 02.</span><h3>Partner portal.</h3><p>Three signs in eighteen months.</p></div>
+      <div><span class="nm">— 03.</span><h3>Second brand.</h3><p>Cannibalised. Consolidating.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="rp imgled">
+    <div class="img"><span class="dot"></span></div>
+    <div class="copy">
+      <span class="dot"></span>
+      <h2>The room.</h2>
+      <p style="font-size: 16px; color: #14110D; margin-top: 16px;">Halcyon HQ. Sixteen people. Small on purpose.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="rp quote">
+    <span class="dot"></span>
+    <div class="q" style="margin-top: 48px;">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— Ben Horowitz</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="rp timeline">
+    <span class="dot"></span>
+    <h2>Onboarding redesign — 6 weeks.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">Week 1–2</span><div><h4>Customer interviews.</h4><p>Twelve calls. Synthesise.</p></div></div>
+      <div class="step"><span class="wk">Week 2–3</span><div><h4>Prototype.</h4><p>Two competing flows.</p></div></div>
+      <div class="step"><span class="wk">Week 4–5</span><div><h4>Build.</h4><p>Two engineers. Beta.</p></div></div>
+      <div class="step"><span class="wk">Week 6</span><div><h4>Ship.</h4><p>100% rollout.</p></div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="rp team">
+    <span class="dot"></span>
+    <h2>Asks of the board.</h2>
+    <div class="grid">
+      <div class="person"><div><h4>Maya Olokun</h4><p>Promoted Q2.</p></div><span class="role">VP Product</span></div>
+      <div class="person"><div><h4>Head of CS</h4><p>Series A SaaS.</p></div><span class="role">Intro req</span></div>
+      <div class="person"><div><h4>Director GTM</h4><p>Devtools background.</p></div><span class="role">Intro req</span></div>
+      <div class="person"><div><h4>Series A timing</h4><p>Q4 vs Q1.</p></div><span class="role">Decision</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="rp coda">
+    <span class="dot"></span>
+    <h2 style="margin-top: 24px;">Thank you.</h2>
+    <div class="meta">halcyon.co/q2</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 23 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

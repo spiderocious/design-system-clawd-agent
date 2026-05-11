@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 09 · Editorial photographic</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  .ph { background: #FBFAF7; color: #14110D; font-family: 'Source Serif 4', serif; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .ph .by { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E665B; }
+  .ph h2 { font-family: 'Source Serif 4', serif; font-weight: 500; line-height: 1.0; letter-spacing: -0.02em; margin: 14px 0 0; }
+  .ph .ital { font-style: italic; }
+
+  /* Big bleed photo */
+  .ph .photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .ph .photo.warm { background: linear-gradient(135deg, #C9602B 0%, #6E2F0F 50%, #14110D 100%); }
+  .ph .photo.green { background: linear-gradient(135deg, #6F8060 0%, #14110D 100%); }
+  .ph .photo.cool { background: linear-gradient(180deg, #4A6B89 0%, #14110D 100%); }
+  .ph .photo.gold { background: linear-gradient(135deg, #C9B27A 0%, #6E665B 100%); }
+  .ph .photo.dark { background: linear-gradient(180deg, #2C2A26 0%, #14110D 100%); }
+
+  .ph .vignette { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 60%); }
+
+  .ph .copy { position: relative; z-index: 2; }
+
+  .ph.cover { padding: 56px 72px; justify-content: end; color: #fff; }
+  .ph.cover h2 { font-size: 96px; max-width: 14ch; }
+  .ph.cover .meta { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 17px; margin-top: 16px; opacity: 0.9; }
+
+  .ph.agenda { padding: 56px 80px; }
+  .ph.agenda h2 { font-size: 56px; margin: 14px 0 28px; }
+  .ph.agenda ol { font-size: 22px; line-height: 1.6; padding-left: 24px; max-width: 60ch; }
+  .ph.agenda ol li { margin-bottom: 4px; }
+  .ph.agenda ol li .meta { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.16em; color: #6E665B; text-transform: uppercase; margin-left: 10px; }
+
+  .ph.section { justify-content: center; align-items: center; padding: 64px; color: #fff; }
+  .ph.section h2 { font-size: 96px; max-width: 12ch; text-align: center; }
+
+  .ph.headline { padding: 56px 80px; max-width: 60ch; }
+  .ph.headline h2 { font-size: 64px; max-width: 18ch; }
+  .ph.headline .body { font-size: 17px; line-height: 1.6; margin-top: 22px; color: #3C3833; }
+
+  .ph.bigstat { padding: 56px 80px; justify-content: center; }
+  .ph.bigstat h2 { font-size: 36px; margin: 8px 0 28px; }
+  .ph.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .ph.bigstat .stat { font-family: 'Source Serif 4', serif; font-size: 88px; font-weight: 500; letter-spacing: -0.025em; line-height: 0.95; font-style: italic; }
+  .ph.bigstat .lbl { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #6E665B; margin-top: 8px; }
+
+  .ph.twocol { padding: 56px 80px; }
+  .ph.twocol h2 { font-size: 40px; margin: 12px 0 22px; }
+  .ph.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .ph.twocol .cols h3 { font-size: 22px; font-weight: 500; margin: 0 0 12px; letter-spacing: -0.012em; }
+  .ph.twocol .cols ul { font-size: 15px; line-height: 1.7; padding-left: 18px; margin: 0; color: #3C3833; }
+
+  .ph.threecol { padding: 56px 80px; }
+  .ph.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ph.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .ph.threecol .cols .nm { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.22em; color: #C9602B; text-transform: uppercase; }
+  .ph.threecol .cols h3 { font-size: 22px; font-weight: 500; margin: 6px 0; letter-spacing: -0.012em; }
+  .ph.threecol .cols p { font-size: 14px; line-height: 1.6; color: #3C3833; margin: 0; }
+
+  .ph.imgled { color: #fff; padding: 56px 72px; justify-content: end; }
+  .ph.imgled h2 { font-size: 56px; max-width: 18ch; }
+  .ph.imgled .by { color: rgba(255,255,255,0.7); }
+  .ph.imgled p { margin-top: 14px; max-width: 50ch; font-style: italic; font-size: 18px; line-height: 1.5; }
+
+  .ph.quote { padding: 64px 96px; justify-content: center; align-items: start; }
+  .ph.quote .q { font-style: italic; font-size: 56px; font-weight: 400; line-height: 1.15; max-width: 22ch; }
+  .ph.quote .attr { font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.22em; color: #6E665B; text-transform: uppercase; margin-top: 28px; }
+
+  .ph.timeline { padding: 56px 80px; }
+  .ph.timeline h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ph.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .ph.timeline .step .wk { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; color: #C9602B; text-transform: uppercase; }
+  .ph.timeline .step h4 { font-size: 19px; font-weight: 500; margin: 6px 0; letter-spacing: -0.012em; }
+  .ph.timeline .step p { font-size: 13px; line-height: 1.55; color: #3C3833; margin: 0; }
+
+  .ph.team { padding: 56px 80px; }
+  .ph.team h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ph.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .ph.team .person .img { aspect-ratio: 3/4; background-size: cover; background-position: center; border-radius: 4px; }
+  .ph.team .person h4 { font-size: 18px; font-weight: 500; margin: 12px 0 2px; }
+  .ph.team .person .role { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.16em; color: #C9602B; text-transform: uppercase; }
+  .ph.team .person p { font-size: 13px; line-height: 1.5; color: #6E665B; margin: 6px 0 0; font-style: italic; }
+
+  .ph.coda { padding: 56px 72px; justify-content: end; color: #fff; }
+  .ph.coda h2 { font-size: 96px; }
+  .ph.coda .meta { font-style: italic; font-size: 18px; margin-top: 22px; opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">09</span><span class="nm">Editorial photographic</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 09 · Magazine</div>
+    <h1>A glossy travel <span class="ital">magazine</span>.</h1>
+    <p>Large hero photography bleeding to edges. Off-white interior. Display serif paired with grotesque sans. Image parallax, gentle ken-burns.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · travel, real estate, hospitality</div>
+    <div><strong>Type</strong> · Source Serif 4 · Inter</div>
+    <div><strong>Accent</strong> · Photography colour</div>
+    <div><strong>Density</strong> · spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="ph cover"><div class="photo warm"></div><div class="vignette"></div><div class="copy"><div class="by">— Volume VIII · Spring 2026 —</div><h2>Halcyon, in <span class="ital">spring.</span></h2><div class="meta">A quarterly review · 14 May 2026</div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="ph agenda"><div class="copy"><div class="by">— What's inside —</div><h2>The agenda.</h2><ol><li>Where we are <span class="meta">3 min</span></li><li>The honest part <span class="meta">5 min</span></li><li>What we're cutting <span class="meta">4 min</span></li><li>Roadmap &amp; risks <span class="meta">3 min</span></li><li>Asks of the board <span class="meta">3 min</span></li></ol></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="ph section"><div class="photo green"></div><div class="vignette"></div><div class="copy"><div class="by">— Section one —</div><h2>Where we are.</h2></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="ph headline"><div class="copy"><div class="by">— Quarterly · Q2 2026 —</div><h2>The quiet rebellion of <span class="ital">measured</span> growth.</h2><div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying no.</div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="ph bigstat"><div class="copy"><div class="by">— Three numbers —</div><h2>What Q2 looks like.</h2><div class="row"><div><div class="stat">$4.2<span style="font-style: normal;">M</span></div><div class="lbl">— ARR</div></div><div><div class="stat">+42<span style="font-style: normal;">%</span></div><div class="lbl">— QoQ revenue</div></div><div><div class="stat">9.1</div><div class="lbl">— Customer NPS</div></div></div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="ph twocol"><div class="copy"><div class="by">— The honest part —</div><h2>Beat plan / missed plan.</h2><div class="cols"><div><h3>Where we beat plan.</h3><ul><li>Revenue +42%</li><li>NPS 9.1</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div><div><h3 style="color: #B42318;">Where we missed.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div></div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="ph threecol"><div class="copy"><div class="by">— What we're cutting —</div><h2>Three sunsets.</h2><div class="cols"><div><span class="nm">— Project 01 —</span><h3>Mobile rebuild.</h3><p>Reclaiming two engineers for the web product, where 92% of revenue lives.</p></div><div><span class="nm">— Project 02 —</span><h3>Partner portal.</h3><p>Three signs in eighteen months. Going 1:1 instead.</p></div><div><span class="nm">— Project 03 —</span><h3>The second brand.</h3><p>Cannibalised the first. Consolidating under Halcyon only.</p></div></div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="ph imgled"><div class="photo gold"></div><div class="vignette"></div><div class="copy"><div class="by">— A note from the team —</div><h2>The room where the work happens.</h2><p>Halcyon HQ, photographed the morning we hit ARR target.</p></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="ph quote"><div class="copy"><div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div><div class="attr">— Ben Horowitz · "What you do is who you are"</div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="ph timeline"><div class="copy"><div class="by">— The fix —</div><h2>Onboarding redesign · six-week ship.</h2><div class="axis"><div class="step"><span class="wk">— Week 1–2 —</span><h4>Customer interviews.</h4><p>Twelve calls. Synthesise patterns.</p></div><div class="step"><span class="wk">— Week 2–3 —</span><h4>Prototype.</h4><p>Two competing flows.</p></div><div class="step"><span class="wk">— Week 4–5 —</span><h4>Build.</h4><p>Two engineers. Closed beta.</p></div><div class="step"><span class="wk">— Week 6 —</span><h4>Ship.</h4><p>100% rollout. Target 80%.</p></div></div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="ph team"><div class="copy"><div class="by">— Asks of the board —</div><h2>Roster &amp; intros.</h2><div class="grid"><div class="person"><div class="img" style="background: linear-gradient(135deg, #C9B27A, #6E665B);"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div><div class="person"><div class="img" style="background: linear-gradient(135deg, #6F8060, #14110D);"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div><div class="person"><div class="img" style="background: linear-gradient(135deg, #C9602B, #6E2F0F);"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools background.</p></div><div class="person"><div class="img" style="background: linear-gradient(135deg, #4A6B89, #14110D);"></div><h4>Series A timing</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div></div></div></div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="ph coda"><div class="photo dark"></div><div class="vignette"></div><div class="copy"><h2>Thank <span class="ital">you.</span></h2><div class="meta">halcyon.co/q2 — questions on the record.</div></div></div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 09 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

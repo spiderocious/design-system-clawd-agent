@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · pricing</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  html, body { margin: 0; min-height: 100vh; }
+  body { background: var(--paper); color: var(--ink); }
+
+  /* Top nav (matches landing) */
+  .nav {
+    position: sticky; top: 0; z-index: 30;
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 18px 40px;
+    background: rgba(247,248,251,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--hair);
+  }
+  .brand { font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: inline-flex; align-items: baseline; gap: 6px; }
+  .brand .dot { color: var(--accent-600); font-size: 28px; line-height: 0; }
+  .brand .pron { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); margin-left: 4px; }
+  .nav-center {
+    display: flex; gap: 4px; background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 999px; padding: 4px;
+  }
+  .nav-center a { font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-decoration: none; padding: 6px 14px; border-radius: 999px; font-weight: 500; }
+  .nav-center a.on { background: var(--ink); color: var(--paper); }
+  .nav-right { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+
+  /* Hero */
+  .hero {
+    max-width: 1240px; margin: 0 auto;
+    padding: 96px 40px 32px;
+  }
+  .hero .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(64px, 9vw, 144px);
+    letter-spacing: -0.04em; line-height: 0.92;
+    margin: 0 0 24px;
+    max-width: 14ch;
+  }
+  .hero h1 .em { color: var(--accent-600); }
+  .hero h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+  .hero p {
+    font-family: var(--serif); font-style: italic; font-size: 22px;
+    color: var(--ink-3); line-height: 1.45; max-width: 60ch; margin: 0;
+  }
+
+  .billing {
+    margin: 40px 0 0;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .toggle {
+    display: inline-flex; gap: 0;
+    background: var(--paper-deep); border: 1px solid var(--hair);
+    border-radius: 999px; padding: 4px;
+  }
+  .toggle button {
+    height: 32px; padding: 0 16px;
+    background: transparent; border: 0; cursor: pointer;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--ink-2); border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .toggle button.on { background: var(--ink); color: var(--paper); }
+  .toggle .save {
+    background: var(--accent-100); color: var(--accent-800);
+    padding: 1px 7px; border-radius: 999px; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .billing .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Plans grid */
+  .plans {
+    max-width: 1240px; margin: 56px auto 0;
+    padding: 0 40px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .plan {
+    padding: 36px 28px 32px;
+    border-right: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 18px;
+    position: relative;
+  }
+  .plan:last-child { border-right: 0; }
+  .plan.feat {
+    background: var(--ink); color: var(--paper);
+    border-right-color: var(--ink);
+  }
+  .plan.feat + .plan { border-left: 0; }
+  .plan.feat .lbl, .plan.feat .price-row .unit, .plan.feat .feat-h, .plan.feat .for { color: rgba(255,255,255,0.65); }
+  .plan.feat .price { color: var(--paper); }
+  .plan.feat .price-em { color: var(--accent-400); }
+  .plan.feat .feat-list li { color: rgba(255,255,255,0.85); }
+  .plan.feat .feat-list li::before { color: var(--accent-400); }
+  .plan.feat .ribbon {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--accent-600); color: #fff;
+    padding: 4px 10px; border-radius: 999px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+  }
+
+  .plan .lbl {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .plan .nm {
+    font-family: var(--display); font-size: 32px; font-weight: 700;
+    letter-spacing: -0.025em; margin: 4px 0 -4px; line-height: 1;
+  }
+  .plan .for {
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink-3); line-height: 1.4;
+  }
+
+  .price-row {
+    display: flex; align-items: baseline; gap: 6px;
+    margin-top: 6px;
+  }
+  .plan .price {
+    font-family: var(--display); font-size: 48px; font-weight: 800;
+    letter-spacing: -0.04em; line-height: 1; color: var(--ink);
+  }
+  .plan .price-em { color: var(--accent-600); }
+  .plan .unit {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  .plan .cta {
+    margin-top: 4px;
+  }
+  .plan.feat .btn-secondary {
+    background: rgba(255,255,255,0.06); color: var(--paper);
+    border-color: rgba(255,255,255,0.18);
+  }
+  .plan.feat .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+
+  .feat-h {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding-top: 14px; border-top: 1px solid var(--hair);
+    margin-top: 8px;
+  }
+  .plan.feat .feat-h { border-top-color: rgba(255,255,255,0.10); }
+
+  ul.feat-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.5;
+  }
+  ul.feat-list li {
+    display: grid; grid-template-columns: 16px 1fr; gap: 8px; align-items: start;
+  }
+  ul.feat-list li::before {
+    content: "✓"; color: var(--accent-600); font-weight: 700;
+  }
+  ul.feat-list li.no::before { content: "—"; color: var(--ink-4); font-weight: 400; }
+  ul.feat-list li.no { color: var(--ink-4); }
+
+  /* Comparison band */
+  .compare-strap {
+    text-align: center;
+    padding: 96px 40px 40px;
+  }
+  .compare-strap h2 {
+    font-family: var(--display); font-weight: 700;
+    font-size: 40px; letter-spacing: -0.025em; margin: 0;
+  }
+  .compare-strap h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+  .compare-strap p {
+    font-family: var(--serif); font-style: italic; font-size: 17px;
+    color: var(--ink-3); margin: 12px auto 0; max-width: 50ch;
+  }
+
+  table.compare {
+    max-width: 1080px; margin: 24px auto 0;
+    width: calc(100% - 80px);
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.compare th, table.compare td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--hair);
+  }
+  table.compare th {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    border-bottom: 1px solid var(--ink);
+  }
+  table.compare th.feat { background: var(--ink); color: var(--paper); border-radius: 6px 6px 0 0; }
+  table.compare td.center { text-align: center; }
+  table.compare td .check { color: var(--accent-600); font-weight: 700; font-size: 16px; }
+  table.compare td .dash { color: var(--ink-4); }
+  table.compare tr.section td {
+    background: var(--paper-deep);
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+
+  /* FAQ */
+  .faq {
+    max-width: 880px; margin: 96px auto 0;
+    padding: 0 40px;
+  }
+  .faq h2 {
+    font-family: var(--display); font-weight: 700; font-size: 40px;
+    letter-spacing: -0.025em; margin: 0 0 24px;
+  }
+  .faq .item {
+    border-top: 1px solid var(--hair);
+    padding: 20px 0;
+  }
+  .faq .item:last-child { border-bottom: 1px solid var(--hair); }
+  .faq .item h3 {
+    font-family: var(--display); font-weight: 600; font-size: 20px;
+    letter-spacing: -0.018em; margin: 0 0 8px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .faq .item h3 .num {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    letter-spacing: 0.04em; font-weight: 500;
+  }
+  .faq .item p {
+    font-size: 14px; color: var(--ink-2); line-height: 1.6;
+    margin: 0; max-width: 64ch;
+  }
+
+  /* Outro CTA */
+  .outro {
+    margin-top: 96px; padding: 96px 40px;
+    text-align: center;
+    background: var(--paper-deep);
+    border-top: 1px solid var(--hair);
+  }
+  .outro h2 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(48px, 8vw, 96px);
+    letter-spacing: -0.04em; line-height: 0.92;
+    margin: 0; max-width: 16ch; margin-left: auto; margin-right: auto;
+  }
+  .outro h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+  .outro h2 .em { color: var(--accent-600); }
+  .outro .cta-row { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="brand">Irisi<span class="dot">.</span><span class="pron">/Hi-ri-z/</span></span>
+  <div class="nav-center">
+    <a href="#">Generate</a>
+    <a href="#">Library</a>
+    <a href="#">Showcase</a>
+    <a href="#" class="on">Pricing</a>
+    <a href="#">Docs</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn btn-secondary btn-sm" href="#">Sign in</a>
+    <a class="btn btn-accent btn-sm" href="#">Get started — free</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="ix">— Pricing</div>
+  <h1>Free to start.<br><span class="ital">Honest</span> as you <span class="em">grow.</span></h1>
+  <p>One number, one feature list, zero "contact-us" tiers until your team is genuinely large. Cancel any time, of course.</p>
+
+  <div class="billing">
+    <div class="toggle">
+      <button>Monthly</button>
+      <button class="on">Annual <span class="save">-20%</span></button>
+    </div>
+    <span class="meta">USD · taxes calculated at checkout</span>
+  </div>
+</section>
+
+<section class="plans">
+
+  <article class="plan">
+    <span class="lbl">— 01</span>
+    <h3 class="nm">Free</h3>
+    <p class="for">For students, side projects, and a first deck or two.</p>
+    <div class="price-row">
+      <span class="price">$0</span>
+      <span class="unit">/ forever</span>
+    </div>
+    <a class="btn btn-secondary cta" href="#">Start free →</a>
+
+    <div class="feat-h">— What's in</div>
+    <ul class="feat-list">
+      <li>3 decks per month</li>
+      <li>All 25 slide stances</li>
+      <li>Export to PDF</li>
+      <li>Watermarked .pptx export</li>
+      <li class="no">Custom brand</li>
+      <li class="no">Real-time collaboration</li>
+    </ul>
+  </article>
+
+  <article class="plan feat">
+    <span class="ribbon">Most popular</span>
+    <span class="lbl">— 02</span>
+    <h3 class="nm">Pro</h3>
+    <p class="for">For founders, consultants, and anyone who pitches for a living.</p>
+    <div class="price-row">
+      <span class="price"><span class="price-em">$16</span></span>
+      <span class="unit">/ mo · billed annually</span>
+    </div>
+    <a class="btn btn-accent cta" href="#">Start 14-day trial →</a>
+
+    <div class="feat-h">— Everything in Free, plus</div>
+    <ul class="feat-list">
+      <li>Unlimited decks</li>
+      <li>No watermark on exports</li>
+      <li>Custom brand &amp; logo</li>
+      <li>Custom typeface uploads</li>
+      <li>Brand-locked stance overrides</li>
+      <li>Real-time collaboration · 3 seats</li>
+      <li>Priority generation</li>
+    </ul>
+  </article>
+
+  <article class="plan">
+    <span class="lbl">— 03</span>
+    <h3 class="nm">Team</h3>
+    <p class="for">For agencies and product teams shipping decks every week.</p>
+    <div class="price-row">
+      <span class="price">$48</span>
+      <span class="unit">/ mo · per editor</span>
+    </div>
+    <a class="btn btn-secondary cta" href="#">Add your team →</a>
+
+    <div class="feat-h">— Everything in Pro, plus</div>
+    <ul class="feat-list">
+      <li>Unlimited editors &amp; viewers</li>
+      <li>Shared brand library</li>
+      <li>Custom slide templates</li>
+      <li>Single sign-on (SAML)</li>
+      <li>Audit log &amp; permissions</li>
+      <li>Comment threads &amp; review</li>
+      <li>Slack &amp; Notion integrations</li>
+    </ul>
+  </article>
+
+  <article class="plan">
+    <span class="lbl">— 04</span>
+    <h3 class="nm">Studio</h3>
+    <p class="for">Agencies, AI tools and platforms embedding the library.</p>
+    <div class="price-row">
+      <span class="price">Custom</span>
+    </div>
+    <a class="btn btn-secondary cta" href="#">Talk to founders →</a>
+
+    <div class="feat-h">— Everything in Team, plus</div>
+    <ul class="feat-list">
+      <li>Self-hosted slide rendering</li>
+      <li>White-label library</li>
+      <li>Volume API access</li>
+      <li>Per-stance custom packs</li>
+      <li>Dedicated solutions engineer</li>
+      <li>SOC 2, HIPAA on request</li>
+      <li>Pay-per-deck billing option</li>
+    </ul>
+  </article>
+
+</section>
+
+<section class="compare-strap">
+  <h2>Or if you'd rather see <span class="ital">everything</span> in one table.</h2>
+  <p>The fine grain — features, limits, and what's coming next.</p>
+
+  <table class="compare">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Free</th>
+        <th class="feat">Pro</th>
+        <th>Team</th>
+        <th>Studio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section"><td colspan="5">— Generation</td></tr>
+      <tr><td>Decks per month</td><td class="center">3</td><td class="center">Unlimited</td><td class="center">Unlimited</td><td class="center">Unlimited</td></tr>
+      <tr><td>Slide stances</td><td class="center">All 25</td><td class="center">All 25</td><td class="center">All 25 + custom</td><td class="center">All 25 + bespoke</td></tr>
+      <tr><td>Layouts per stance</td><td class="center">12</td><td class="center">12</td><td class="center">12 + custom</td><td class="center">Unlimited</td></tr>
+      <tr><td>Generation queue</td><td class="center">Standard</td><td class="center">Priority</td><td class="center">Priority</td><td class="center">Dedicated</td></tr>
+
+      <tr class="section"><td colspan="5">— Brand</td></tr>
+      <tr><td>Brand colours</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>Custom typefaces</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>Shared brand library</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+
+      <tr class="section"><td colspan="5">— Collaboration</td></tr>
+      <tr><td>Editor seats</td><td class="center">1</td><td class="center">3</td><td class="center">Unlimited</td><td class="center">Unlimited</td></tr>
+      <tr><td>Real-time co-editing</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>Comment threads</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+
+      <tr class="section"><td colspan="5">— Export &amp; integration</td></tr>
+      <tr><td>PDF</td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>.pptx (no watermark)</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>API access</td><td class="center"><span class="dash">—</span></td><td class="center">100 req/mo</td><td class="center">10k req/mo</td><td class="center">Unlimited</td></tr>
+      <tr><td>Self-hosted render</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td></tr>
+
+      <tr class="section"><td colspan="5">— Compliance</td></tr>
+      <tr><td>Audit log</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>SAML SSO</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td><td class="center"><span class="check">✓</span></td></tr>
+      <tr><td>SOC 2 / HIPAA</td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="dash">—</span></td><td class="center"><span class="check">✓</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="faq">
+  <h2>Questions, plainly answered.</h2>
+
+  <div class="item">
+    <h3><span class="num">01</span> Is the React library really open-source?</h3>
+    <p>Yes. The slide-rendering primitives, all 25 packs, and the Code Connect templates are MIT-licensed. The hosted app (generation, real-time, brand library, exports) is the commercial product.</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">02</span> Can I use it with my own AI provider?</h3>
+    <p>On Studio, yes — bring your own keys for OpenAI, Anthropic, or self-hosted models. The function-calling schema is published per layout so any tool-calling LLM can drive Irisi directly.</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">03</span> What happens if I cancel?</h3>
+    <p>Your decks stay accessible read-only forever. Exports continue to work. You drop back to Free at the next billing date — no data loss, no hostage-taking.</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">04</span> Are students really free, or "free with limits"?</h3>
+    <p>Genuinely free. We expanded the Free tier to 10 decks per month for verified students &amp; teachers — write to <code>edu@irisi.app</code>.</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">05</span> Can I see a custom stance built for my brand?</h3>
+    <p>On Studio, our team co-designs a 26th stance with you — same depth as the catalogue, your worldview. Typical engagement is six weeks.</p>
+  </div>
+</section>
+
+<section class="outro">
+  <h2>Make the deck.<br><span class="ital em">Make</span> the room <span class="em">listen.</span></h2>
+  <div class="cta-row">
+    <a class="btn btn-accent btn-xl" href="#">Get started — free →</a>
+    <a class="btn btn-secondary btn-xl" href="#">Talk to founders</a>
+  </div>
+</section>
+
+</body>
+</html>

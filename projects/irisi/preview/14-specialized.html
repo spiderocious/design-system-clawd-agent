@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · specialized inputs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Voice prompt */
+  .voice {
+    background: linear-gradient(180deg, var(--accent-50), var(--sheet));
+    border: 1px solid var(--accent-200); border-radius: 16px;
+    padding: 24px;
+    display: grid; grid-template-columns: 64px 1fr auto;
+    gap: 18px; align-items: center;
+  }
+  .voice .mic {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--accent-600); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 0 0 0 rgba(3,97,240,0.45);
+    animation: mic-pulse 1.6s ease-out infinite;
+  }
+  @keyframes mic-pulse { 0%{box-shadow:0 0 0 0 rgba(3,97,240,0.45);} 100%{box-shadow:0 0 0 16px rgba(3,97,240,0);} }
+  .voice .body { font-family: var(--sans); font-size: 14px; color: var(--ink); line-height: 1.55; }
+  .voice .body strong { color: var(--accent-800); display: block; margin-bottom: 4px; }
+  .voice .waveform {
+    height: 36px; display: flex; align-items: end; gap: 2px; margin-top: 10px;
+  }
+  .voice .waveform span {
+    width: 3px; background: var(--accent-600); border-radius: 2px;
+    animation: wave 1s ease-in-out infinite alternate;
+  }
+  @keyframes wave { from { height: 10%; } to { height: 90%; } }
+  .voice .timer {
+    font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 600;
+    background: rgba(255,255,255,0.6); padding: 6px 12px; border-radius: 8px;
+    border: 1px solid var(--accent-200);
+  }
+
+  /* Logo dropzone */
+  .logo-drop {
+    border: 1.5px dashed var(--ink-5); border-radius: 12px;
+    padding: 32px; background: var(--paper);
+    text-align: center;
+  }
+  .logo-drop.over { border-color: var(--accent-600); background: var(--accent-50); }
+  .logo-drop .glyph {
+    width: 56px; height: 56px; margin: 0 auto 12px;
+    border-radius: 12px; background: var(--paper-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px; color: var(--ink-3);
+  }
+  .logo-drop h4 { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.018em; margin: 0 0 4px; }
+  .logo-drop p { font-size: 13px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+  .logo-drop .formats {
+    display: inline-flex; gap: 6px; margin-top: 12px;
+  }
+  .logo-drop .formats .pill { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; }
+
+  /* Color picker */
+  .color-picker {
+    display: grid; grid-template-columns: 1fr 200px; gap: 18px;
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 20px;
+  }
+  .color-picker .area {
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(to right, #fff, #0361F0), linear-gradient(to top, #000, transparent);
+    background-blend-mode: multiply;
+    border-radius: 8px;
+    position: relative;
+  }
+  .color-picker .area .picker-dot {
+    position: absolute; top: 25%; left: 70%;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid #fff; box-shadow: 0 0 0 1px #000;
+  }
+  .color-picker .controls { display: flex; flex-direction: column; gap: 10px; }
+  .color-picker .hue {
+    height: 14px; border-radius: 999px;
+    background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+    position: relative;
+  }
+  .color-picker .hue::after {
+    content: ""; position: absolute; top: -3px; left: 67%;
+    width: 6px; height: 20px; border-radius: 999px;
+    background: #fff; box-shadow: 0 0 0 1.5px var(--ink);
+  }
+  .color-picker .preview {
+    height: 56px; border-radius: 8px; background: var(--accent-600);
+    border: 1px solid var(--hair);
+  }
+  .color-picker .vals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; font-size: 12px; }
+  .color-picker .vals input { font-family: var(--mono); font-size: 11px; padding: 4px 6px; height: 28px; border-radius: 6px; }
+
+  /* Reference upload */
+  .ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .ref-thumb {
+    aspect-ratio: 16 / 10;
+    background: var(--paper-deep); border-radius: 8px; border: 1px solid var(--hair);
+    position: relative; overflow: hidden;
+  }
+  .ref-thumb .x {
+    position: absolute; top: 6px; right: 6px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(15,17,21,0.7); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; cursor: pointer;
+  }
+  .ref-thumb .pil {
+    position: absolute; bottom: 6px; left: 6px;
+    background: rgba(15,17,21,0.7); color: #fff;
+    font-family: var(--mono); font-size: 9px;
+    padding: 2px 6px; border-radius: 4px; letter-spacing: 0.04em;
+  }
+  .ref-thumb.add {
+    border: 1.5px dashed var(--ink-5);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3); font-family: var(--mono); font-size: 11px; cursor: pointer;
+    background: transparent;
+  }
+
+  /* PIN */
+  .pin-row { display: flex; gap: 8px; }
+  .pin-cell {
+    width: 48px; height: 60px; border-radius: 10px;
+    background: var(--sheet); border: 1px solid var(--hair);
+    text-align: center;
+    font-family: var(--mono); font-size: 22px; font-weight: 600;
+    outline: 0;
+  }
+  .pin-cell:focus { border-color: var(--accent-600); box-shadow: 0 0 0 3px rgba(3,97,240,0.18); }
+  .pin-cell.filled { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 14 —</span>
+    <h1 class="ttl">Specialized inputs</h1>
+    <span class="meta">Primitives · the hard inputs the product actually needs</span>
+  </div>
+
+  <!-- Voice -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Voice prompt</span>
+      <h3 class="nm">Speak the brief.</h3>
+      <span class="why">Most decks start as a thought; let users talk it out.</span>
+    </div>
+
+    <div class="voice">
+      <span class="mic">●</span>
+      <div class="body">
+        <strong>Listening · transcribing in real time</strong>
+        I want a Q2 board update for Halcyon, focused on growth, churn, and what we're cutting next quarter…
+        <div class="waveform">
+          <span style="height: 30%; animation-delay: 0.1s;"></span>
+          <span style="height: 60%; animation-delay: 0.2s;"></span>
+          <span style="height: 80%; animation-delay: 0.05s;"></span>
+          <span style="height: 40%; animation-delay: 0.3s;"></span>
+          <span style="height: 70%; animation-delay: 0.15s;"></span>
+          <span style="height: 90%; animation-delay: 0.25s;"></span>
+          <span style="height: 50%; animation-delay: 0.0s;"></span>
+          <span style="height: 35%; animation-delay: 0.4s;"></span>
+          <span style="height: 65%; animation-delay: 0.2s;"></span>
+          <span style="height: 85%; animation-delay: 0.1s;"></span>
+          <span style="height: 45%; animation-delay: 0.3s;"></span>
+          <span style="height: 75%; animation-delay: 0.05s;"></span>
+          <span style="height: 55%; animation-delay: 0.35s;"></span>
+          <span style="height: 25%; animation-delay: 0.15s;"></span>
+          <span style="height: 95%; animation-delay: 0.25s;"></span>
+        </div>
+      </div>
+      <span class="timer">0:14</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Logo dropzone -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Logo</span>
+        <h3 class="nm">Drop a mark.</h3>
+      </div>
+      <div class="logo-drop">
+        <span class="glyph">⤓</span>
+        <h4>Drop your logo, or click to browse</h4>
+        <p>SVG preferred. We'll detect light &amp; dark variants automatically.</p>
+        <div class="formats">
+          <span class="pill">SVG</span>
+          <span class="pill">PNG</span>
+          <span class="pill">PDF</span>
+          <span class="pill">JPG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reference upload -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— References</span>
+        <h3 class="nm">Style references.</h3>
+        <span class="why">Drop a screenshot to bias the stance.</span>
+      </div>
+      <p style="font-size: 13px; color: var(--ink-3); margin: 0 0 6px;">3 of 8 used · drag to reorder</p>
+      <div class="ref-grid">
+        <div class="ref-thumb" style="background: linear-gradient(135deg, #FBFAF7 0% 60%, #14110D 60% 100%);">
+          <span class="x">×</span>
+          <span class="pil">cover-1.png · 240KB</span>
+        </div>
+        <div class="ref-thumb" style="background: linear-gradient(180deg, #1C1A18 0% 50%, #C9B27A 50% 100%);">
+          <span class="x">×</span>
+          <span class="pil">deck-3.jpg · 1.2MB</span>
+        </div>
+        <div class="ref-thumb" style="background: linear-gradient(45deg, #F4EAD9 0% 40%, #FF4691 40% 70%, #00513D 70% 100%); mix-blend-mode: normal;">
+          <span class="x">×</span>
+          <span class="pil">poster.jpg · 540KB</span>
+        </div>
+        <div class="ref-thumb add">＋ Add</div>
+      </div>
+    </div>
+
+    <!-- Color picker -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Brand colour</span>
+        <h3 class="nm">Custom picker.</h3>
+      </div>
+      <div class="color-picker">
+        <div class="area"><span class="picker-dot"></span></div>
+        <div class="controls">
+          <div class="preview"></div>
+          <div class="hue"></div>
+          <div class="vals">
+            <input class="field" placeholder="H" value="216">
+            <input class="field" placeholder="S" value="98">
+            <input class="field" placeholder="L" value="48">
+            <input class="field" placeholder="A" value="100">
+          </div>
+          <input class="field tabular" value="#0361F0" style="font-family: var(--mono); font-weight: 500;">
+        </div>
+      </div>
+    </div>
+
+    <!-- PIN / 2FA -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Verification</span>
+        <h3 class="nm">PIN / 2FA code.</h3>
+      </div>
+      <p style="font-size: 13px; color: var(--ink-3); margin: 0 0 14px;">We sent a 6-digit code to <strong style="color: var(--ink); font-weight: 600;">founders@halcyon.co</strong></p>
+      <div class="pin-row">
+        <input class="pin-cell filled" value="2">
+        <input class="pin-cell filled" value="6">
+        <input class="pin-cell filled" value="4">
+        <input class="pin-cell" value="">
+        <input class="pin-cell" value="">
+        <input class="pin-cell" value="">
+      </div>
+      <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin-top: 14px;">— Code expires in 8:42. Didn't arrive? <a style="color: var(--accent-700);">Resend</a>.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

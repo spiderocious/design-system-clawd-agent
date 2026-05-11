@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · type</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .fam {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 14px; padding: 32px 36px;
+    margin-bottom: 24px;
+  }
+  .fam .head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--hair);
+  }
+  .fam .head .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .fam .head .nm {
+    font-family: var(--display); font-weight: 700; font-size: 22px;
+    letter-spacing: -0.018em; margin: 0;
+  }
+  .fam .head .role {
+    margin-left: auto;
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink-3);
+  }
+
+  .specimen {
+    line-height: 1; letter-spacing: -0.04em;
+    margin: 0 0 20px;
+  }
+  .display-spec { font-family: var(--display); font-weight: 800; font-size: 144px; }
+  .serif-spec { font-family: var(--serif); font-size: 96px; font-weight: 400; }
+  .sans-spec { font-family: var(--sans); font-size: 96px; font-weight: 700; letter-spacing: -0.025em; }
+  .mono-spec { font-family: var(--mono); font-size: 80px; font-weight: 500; letter-spacing: -0.02em; }
+
+  .scale {
+    display: grid; grid-template-columns: 80px 1fr; gap: 24px;
+    align-items: baseline;
+    padding: 8px 0; border-top: 1px solid var(--hair-soft);
+  }
+  .scale:first-of-type { border-top: 0; }
+  .scale .lbl {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); letter-spacing: 0.04em;
+  }
+  .scale .ex { color: var(--ink); }
+
+  .roles {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 16px; align-items: baseline; margin-top: 14px;
+    padding-top: 14px; border-top: 1px solid var(--hair-soft);
+  }
+  .roles .role-key {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Combined specimen */
+  .pair {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 14px; padding: 48px 56px;
+    margin-bottom: 24px;
+  }
+  .pair .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .pair h2 {
+    font-family: var(--display); font-weight: 700; font-size: 64px;
+    letter-spacing: -0.035em; line-height: 0.95;
+    margin: 0 0 22px;
+  }
+  .pair h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+  .pair p {
+    font-family: var(--sans); font-size: 17px; line-height: 1.6;
+    color: var(--ink-2); max-width: 64ch; margin: 0 0 14px;
+  }
+  .pair .meta {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    letter-spacing: 0.04em; margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid var(--hair);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 02 —</span>
+    <h1 class="ttl">Type</h1>
+    <span class="meta">Foundation · Three families with deliberate roles</span>
+  </div>
+
+  <!-- Composed paragraph proving the families coexist -->
+  <div class="pair">
+    <div class="ix">— A composed page</div>
+    <h2>Type does the <span class="ital">heavy</span> lifting.</h2>
+    <p>Bricolage Grotesque carries the impact — display weights at 144 pixels feel like a printed magazine cover, not a website. Inter handles every chrome surface — button labels, list rows, settings copy. JetBrains Mono is reserved for record numbers, codes, hex values, and AI prompts, where the <code>tnum</code> feature gives every digit equal width.</p>
+    <p>The serif (Instrument / Newsreader) appears <em>only</em> in italic — a deliberate restraint. It marks asides, kickers, and the occasional pull quote. Not a body face. Not a substitute for sans.</p>
+    <div class="meta">3 families · 2 weights typical · tracking ladder applied</div>
+  </div>
+
+  <!-- Display -->
+  <div class="fam">
+    <div class="head">
+      <span class="ix">— 01 · Display</span>
+      <h3 class="nm">Bricolage Grotesque</h3>
+      <span class="role">"the impact" — landing, slide titles, big stats</span>
+    </div>
+    <div class="display-spec">Aa</div>
+
+    <div class="scale"><span class="lbl">Mega · 144</span><span class="ex" style="font-family: var(--display); font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.9;">Bad slides</span></div>
+    <div class="scale"><span class="lbl">Display · 64</span><span class="ex" style="font-family: var(--display); font-size: 56px; font-weight: 700; letter-spacing: -0.03em;">The deck Irisi has in mind</span></div>
+    <div class="scale"><span class="lbl">H1 · 36</span><span class="ex" style="font-family: var(--display); font-size: 36px; font-weight: 700; letter-spacing: -0.025em;">Generate slides</span></div>
+    <div class="scale"><span class="lbl">H2 · 28</span><span class="ex" style="font-family: var(--display); font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">What's new</span></div>
+    <div class="scale"><span class="lbl">H3 · 22</span><span class="ex" style="font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: -0.018em;">Editor settings</span></div>
+
+    <div class="roles">
+      <span class="role-key">tracking</span>
+      <span style="font-family: var(--mono); color: var(--ink-2); font-size: 13px;">−0.04em (mega) · −0.025em (display) · −0.02em (h1–h3)</span>
+    </div>
+    <div class="roles">
+      <span class="role-key">weights</span>
+      <span style="font-family: var(--sans); color: var(--ink-2); font-size: 13px;">700 (display) · 800 (mega) · variable axis available</span>
+    </div>
+  </div>
+
+  <!-- Sans -->
+  <div class="fam">
+    <div class="head">
+      <span class="ix">— 02 · Chrome</span>
+      <h3 class="nm">Inter</h3>
+      <span class="role">"the chrome" — body, controls, labels, tooltips</span>
+    </div>
+    <div class="sans-spec">Aa</div>
+
+    <div class="scale"><span class="lbl">Body · 14</span><span class="ex" style="font-family: var(--sans); font-size: 14px; line-height: 1.55;">Default body. Most copy in the chrome lives here. We keep it tight at 1.55 line-height for dense settings views, opening to 1.65 in long-form like this docs page.</span></div>
+    <div class="scale"><span class="lbl">Lede · 17</span><span class="ex" style="font-family: var(--sans); font-size: 17px; line-height: 1.6;">Lede paragraphs use a slightly larger size with looser leading.</span></div>
+    <div class="scale"><span class="lbl">Label · 12</span><span class="ex" style="font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink-2);">Form label · 12px / 500</span></div>
+    <div class="scale"><span class="lbl">Caption · 11</span><span class="ex" style="font-family: var(--sans); font-size: 11px; color: var(--ink-3);">Caption / footnote · 11px / 400 / ink-3</span></div>
+  </div>
+
+  <!-- Serif (italic only) -->
+  <div class="fam">
+    <div class="head">
+      <span class="ix">— 03 · Aside</span>
+      <h3 class="nm">Instrument Serif <span style="font-style: italic; font-weight: 400; color: var(--ink-3); margin-left: 4px;">— italic only</span></h3>
+      <span class="role">"the aside" — placeholders, ledes, asides, pronunciation</span>
+    </div>
+    <div class="serif-spec" style="font-style: italic;">Aa</div>
+
+    <div class="scale"><span class="lbl">Lede · 22 it</span><span class="ex" style="font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.45; color: var(--ink-3);">Type the deck you want to make.</span></div>
+    <div class="scale"><span class="lbl">Inline · 14 it</span><span class="ex" style="font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3);">— measured, board-report convention</span></div>
+    <div class="scale"><span class="lbl">Pron · 13 it</span><span class="ex" style="font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3);">/Hi-ri-z/</span></div>
+  </div>
+
+  <!-- Mono -->
+  <div class="fam">
+    <div class="head">
+      <span class="ix">— 04 · Record</span>
+      <h3 class="nm">JetBrains Mono</h3>
+      <span class="role">"the record" — codes, IDs, prompts, hex, key-bindings</span>
+    </div>
+    <div class="mono-spec">Aa01</div>
+
+    <div class="scale"><span class="lbl">Code · 13</span><span class="ex" style="font-family: var(--mono); font-size: 13px; color: var(--ink);">npm install @irisi/slides</span></div>
+    <div class="scale"><span class="lbl">Hex · 12</span><span class="ex" style="font-family: var(--mono); font-size: 12px; color: var(--ink);">#0361F0 · rgb(3 97 240)</span></div>
+    <div class="scale"><span class="lbl">Overline · 11</span><span class="ex" style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3);">— Pack 02 · Editorial broadsheet</span></div>
+    <div class="scale"><span class="lbl">Tabular · 24</span><span class="ex" style="font-family: var(--mono); font-size: 24px; color: var(--ink); font-feature-settings: 'tnum' 1, 'lnum' 1; font-weight: 500;">$4,200,000.00</span></div>
+  </div>
+
+</div>
+
+</body>
+</html>

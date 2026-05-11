@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · navigation</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  /* Top nav */
+  .topnav-mock { background: rgba(247,248,251,0.92); backdrop-filter: blur(14px); border: 1px solid var(--hair); border-radius: 14px; padding: 14px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+  .topnav-mock .brand { font-family: var(--display); font-size: 18px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: inline-flex; align-items: baseline; gap: 6px; }
+  .topnav-mock .brand .dot { color: var(--accent-600); font-size: 22px; }
+  .topnav-mock .center { display: flex; gap: 4px; background: var(--sheet); border: 1px solid var(--hair); border-radius: 999px; padding: 4px; }
+  .topnav-mock .center a { font-family: var(--sans); font-size: 13px; color: var(--ink-2); padding: 6px 14px; border-radius: 999px; text-decoration: none; font-weight: 500; }
+  .topnav-mock .center a.on { background: var(--ink); color: var(--paper); }
+  .topnav-mock .right { display: flex; gap: 10px; align-items: center; justify-content: end; }
+
+  /* Sidebar nav */
+  .sidebar-mock { width: 240px; background: var(--paper); border: 1px solid var(--hair); border-radius: 14px; padding: 18px; }
+  .sidebar-mock .group { margin-bottom: 18px; }
+  .sidebar-mock .group .h { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+  .sidebar-mock a { display: flex; align-items: center; gap: 10px; padding: 6px 10px; margin-left: -10px; font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-decoration: none; border-radius: 6px; }
+  .sidebar-mock a:hover { background: var(--paper-deep); color: var(--ink); }
+  .sidebar-mock a.on { background: var(--accent-50); color: var(--accent-800); font-weight: 600; box-shadow: inset 2px 0 0 var(--accent-600); }
+  .sidebar-mock a .glyph { width: 14px; color: var(--ink-4); }
+  .sidebar-mock a.on .glyph { color: var(--accent-600); }
+  .sidebar-mock a .ct { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--ink-4); }
+
+  /* Command palette */
+  .cmdk {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px;
+    overflow: hidden; max-width: 560px; box-shadow: var(--shade-3);
+  }
+  .cmdk .input { padding: 16px 20px; border-bottom: 1px solid var(--hair); display: flex; align-items: center; gap: 10px; }
+  .cmdk .input span { color: var(--ink-4); font-size: 16px; }
+  .cmdk .input input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 16px; font-family: var(--sans); color: var(--ink); }
+  .cmdk .group { padding: 8px 0; }
+  .cmdk .group .h { padding: 6px 20px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .cmdk .row { display: grid; grid-template-columns: 24px 1fr auto auto; gap: 10px; padding: 8px 20px; align-items: center; cursor: pointer; }
+  .cmdk .row:hover, .cmdk .row.on { background: var(--paper-deep); }
+  .cmdk .row.on { box-shadow: inset 2px 0 0 var(--accent-600); }
+  .cmdk .row .glyph { color: var(--ink-3); font-size: 14px; }
+  .cmdk .row .nm { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+  .cmdk .row .ix { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .cmdk .foot { display: flex; gap: 14px; padding: 10px 20px; background: var(--paper-deep); font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; align-items: center; border-top: 1px solid var(--hair); }
+  .cmdk .foot .gap { flex: 1; }
+
+  /* Drawer */
+  .drawer-mock {
+    background: var(--sheet); border-left: 1px solid var(--hair); border-radius: 14px 0 0 14px;
+    width: 360px;
+    box-shadow: var(--shade-3);
+    overflow: hidden;
+    display: inline-flex; flex-direction: column;
+  }
+  .drawer-mock .top { padding: 16px 20px; border-bottom: 1px solid var(--hair); display: flex; align-items: center; justify-content: space-between; }
+  .drawer-mock .top h3 { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.018em; margin: 0; }
+  .drawer-mock .top button { background: transparent; border: 0; cursor: pointer; color: var(--ink-3); font-size: 16px; }
+  .drawer-mock .body { padding: 18px 20px; }
+  .drawer-mock .body p { font-size: 13px; color: var(--ink-3); margin: 0 0 14px; line-height: 1.5; }
+
+  /* Crumb trail */
+  .crumb-mock { display: flex; gap: 8px; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em; padding: 14px 18px; background: var(--paper); border: 1px solid var(--hair); border-radius: 10px; }
+  .crumb-mock a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; }
+  .crumb-mock a:hover { color: var(--ink); border-color: var(--ink); }
+  .crumb-mock .sep { color: var(--ink-5); }
+  .crumb-mock .cur { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 29 —</span>
+    <h1 class="ttl">Navigation · shell · ⌘K</h1>
+    <span class="meta">Data &amp; state · how the user moves through Irisi</span>
+  </div>
+
+  <!-- Top nav -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Top nav</span>
+      <h3 class="nm">The pill bar.</h3>
+      <span class="why">Used on landing, pricing, marketing pages.</span>
+    </div>
+    <div class="topnav-mock">
+      <div><span class="brand">Irisi<span class="dot">.</span></span></div>
+      <div class="center">
+        <a href="#" class="on">Generate</a>
+        <a href="#">Library</a>
+        <a href="#">Showcase</a>
+        <a href="#">Pricing</a>
+        <a href="#">Docs</a>
+      </div>
+      <div class="right">
+        <span class="kbd">⌘ K</span>
+        <button class="btn btn-secondary btn-sm">Sign in</button>
+        <button class="btn btn-accent btn-sm">Get started — free</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 240px 1fr; gap: 24px;">
+
+    <!-- Sidebar -->
+    <div class="scene" style="padding: 0; background: transparent; border: 0;">
+      <p style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin: 0 0 14px;">— Sidebar (workspace)</p>
+      <div class="sidebar-mock">
+        <div class="group">
+          <div class="h">— Workspace</div>
+          <a href="#" class="on"><span class="glyph">▤</span> Decks <span class="ct">142</span></a>
+          <a href="#"><span class="glyph">★</span> Favourites</a>
+          <a href="#"><span class="glyph">⌫</span> Trash</a>
+        </div>
+        <div class="group">
+          <div class="h">— Library</div>
+          <a href="#"><span class="glyph">◐</span> Slide packs <span class="ct">25</span></a>
+          <a href="#"><span class="glyph">★</span> Brand library</a>
+          <a href="#"><span class="glyph">⌥</span> Custom layouts</a>
+        </div>
+        <div class="group">
+          <div class="h">— Workspace</div>
+          <a href="#"><span class="glyph">⊕</span> New brand</a>
+          <a href="#"><span class="glyph">⚙</span> Settings</a>
+          <a href="#"><span class="glyph">●</span> Members <span class="ct">8</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: command palette + drawer -->
+    <div>
+      <!-- Command palette -->
+      <div class="scene">
+        <div class="h">
+          <span class="ix">— Command palette</span>
+          <h3 class="nm">⌘ K to start anything.</h3>
+        </div>
+        <div class="cmdk">
+          <div class="input">
+            <span>⌕</span>
+            <input value="board update" placeholder="Search decks, packs, commands…">
+            <span class="kbd">esc</span>
+          </div>
+          <div class="group">
+            <div class="h">— Decks</div>
+            <div class="row on">
+              <span class="glyph">▤</span>
+              <span class="nm">Q2 Board Update — Halcyon &amp; Co.</span>
+              <span class="ix">12 slides</span>
+              <span class="kbd">↵</span>
+            </div>
+            <div class="row">
+              <span class="glyph">▤</span>
+              <span class="nm">Q1 Board Update — Halcyon &amp; Co.</span>
+              <span class="ix">archived</span>
+              <span class="kbd"></span>
+            </div>
+          </div>
+          <div class="group">
+            <div class="h">— Actions</div>
+            <div class="row">
+              <span class="glyph">⊕</span>
+              <span class="nm">Generate a new board update</span>
+              <span class="ix">action</span>
+              <span class="kbd">⌘N</span>
+            </div>
+            <div class="row">
+              <span class="glyph">◐</span>
+              <span class="nm">Switch slide pack…</span>
+              <span class="ix">action</span>
+              <span class="kbd">⌘⇧S</span>
+            </div>
+          </div>
+          <div class="foot">
+            <span><span class="kbd">↑↓</span> navigate</span>
+            <span><span class="kbd">↵</span> select</span>
+            <span><span class="kbd">⌘.</span> commands</span>
+            <span class="gap"></span>
+            <span>0.4 sec</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crumb -->
+      <div class="scene">
+        <div class="h">
+          <span class="ix">— Crumb</span>
+          <h3 class="nm">Where you are, in mono.</h3>
+        </div>
+        <div class="crumb-mock">
+          <a href="#">Workspace</a>
+          <span class="sep">/</span>
+          <a href="#">Decks</a>
+          <span class="sep">/</span>
+          <a href="#">Q2 Board Update</a>
+          <span class="sep">/</span>
+          <span class="cur">Slide 03 — Headline</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Drawer</span>
+      <h3 class="nm">Right-side context, on demand.</h3>
+    </div>
+    <div style="display: flex; justify-content: end; padding: 24px; background: var(--paper); border-radius: 12px; min-height: 320px;">
+      <div class="drawer-mock">
+        <div class="top">
+          <h3>Comments · slide 03</h3>
+          <button>×</button>
+        </div>
+        <div class="body">
+          <div style="display: grid; grid-template-columns: 28px 1fr; gap: 10px; margin-bottom: 14px;">
+            <span class="avatar avatar-sm" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+            <div>
+              <div style="font-family: var(--sans); font-size: 13px;"><strong style="font-weight: 600;">Maya</strong> · 2 min ago</div>
+              <p style="margin-top: 4px;">Can we name the three churned logos here? Board will ask.</p>
+              <button class="btn btn-ghost btn-sm" style="margin-top: 4px; padding: 0;">Reply</button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 28px 1fr; gap: 10px;">
+            <span class="avatar avatar-sm">FA</span>
+            <div>
+              <div style="font-family: var(--sans); font-size: 13px;"><strong style="font-weight: 600;">Feranmi</strong> · 1 min ago</div>
+              <p style="margin-top: 4px;">Yep. Will add — anonymised by VP-Eng quote, full names in appendix.</p>
+              <button class="btn btn-ghost btn-sm" style="margin-top: 4px; padding: 0;">Reply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

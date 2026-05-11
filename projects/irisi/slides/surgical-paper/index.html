@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 01 · Surgical paper</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  .sp { background: #F4EFE6; color: #181613; font-family: 'Inter', sans-serif; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; }
+  .sp .stamp { display: flex; align-items: baseline; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid #181613; }
+  .sp .stamp .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.04em; }
+  .sp .stamp .ttl { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.012em; flex: 1; }
+  .sp .stamp .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; }
+  .sp .head { font-family: 'Newsreader', serif; font-weight: 500; line-height: 1.0; letter-spacing: -0.025em; margin: 22px 0 0; }
+  .sp .head .ital { font-style: italic; }
+
+  .sp.cover { padding: 64px 72px; justify-content: end; }
+  .sp.cover .head { font-size: 88px; max-width: 12ch; }
+  .sp.cover .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 32px; padding-top: 14px; border-top: 1px solid #181613; }
+
+  .sp.agenda .head { font-size: 48px; margin: 24px 0 28px; }
+  .sp.agenda ol { font-family: 'Newsreader', serif; font-size: 22px; line-height: 1.5; padding-left: 24px; margin: 0; }
+  .sp.agenda ol li { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #D9D0BB; }
+
+  .sp.section { justify-content: center; align-items: center; }
+  .sp.section .lbl { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #16A34A; letter-spacing: 0.22em; text-transform: uppercase; }
+  .sp.section .head { font-size: 72px; max-width: 14ch; margin-top: 14px; text-align: center; }
+
+  .sp.headline .head { font-size: 64px; max-width: 18ch; }
+  .sp.headline .by { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E665B; letter-spacing: 0.06em; margin-top: 16px; padding-top: 12px; border-top: 1px solid #D9D0BB; }
+  .sp.headline .body { column-count: 2; column-gap: 32px; font-size: 16px; line-height: 1.55; color: #3C3833; max-width: 760px; margin-top: 18px; }
+  .sp.headline .body p { margin: 0 0 12px; }
+
+  .sp.bigstat { justify-content: center; }
+  .sp.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; padding: 32px 0; }
+  .sp.bigstat .stat { font-family: 'JetBrains Mono', monospace; font-size: 80px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; font-feature-settings: "tnum" 1; color: #16A34A; }
+  .sp.bigstat .lbl { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 6px; }
+
+  .sp.twocol .head { font-size: 40px; margin: 18px 0 18px; }
+  .sp.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-top: 14px; border-top: 1px solid #181613; flex: 1; }
+  .sp.twocol .cols h3 { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 500; margin: 0 0 12px; }
+  .sp.twocol .cols ul { font-size: 15px; line-height: 1.7; padding-left: 18px; margin: 0; }
+
+  .sp.threecol .head { font-size: 36px; margin: 14px 0 18px; }
+  .sp.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 14px; border-top: 1px solid #181613; }
+  .sp.threecol .cols h3 { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 500; margin: 8px 0 6px; }
+  .sp.threecol .cols .nm { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #16A34A; letter-spacing: 0.18em; text-transform: uppercase; }
+  .sp.threecol .cols p { font-size: 14px; line-height: 1.55; color: #3C3833; margin: 0; }
+
+  .sp.imgled { padding: 0; flex-direction: row; }
+  .sp.imgled .img { flex: 1; background: linear-gradient(135deg, #6E665B 0%, #181613 100%); position: relative; }
+  .sp.imgled .img::after { content: "Halcyon HQ · May 2026"; position: absolute; bottom: 14px; left: 18px; color: #F4EFE6; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; }
+  .sp.imgled .copy { flex: 0 0 42%; padding: 56px 56px; display: flex; flex-direction: column; justify-content: end; }
+  .sp.imgled .copy .head { font-size: 44px; max-width: 14ch; margin-top: 12px; }
+
+  .sp.quote { justify-content: center; padding: 64px 96px; }
+  .sp.quote .q { font-family: 'Newsreader', serif; font-style: italic; font-size: 52px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; max-width: 22ch; }
+  .sp.quote .attr { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E665B; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 24px; }
+
+  .sp.timeline .head { font-size: 36px; margin: 14px 0 20px; }
+  .sp.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 14px; border-top: 1px solid #181613; }
+  .sp.timeline .step .wk { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #16A34A; letter-spacing: 0.16em; text-transform: uppercase; }
+  .sp.timeline .step h4 { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 500; margin: 6px 0 6px; }
+  .sp.timeline .step p { font-size: 13px; line-height: 1.5; color: #3C3833; margin: 0; }
+
+  .sp.team .head { font-size: 36px; margin: 12px 0 18px; }
+  .sp.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 14px; border-top: 1px solid #181613; }
+  .sp.team .person .img { aspect-ratio: 3/4; background: linear-gradient(135deg, #C9B27A 0%, #6E665B 100%); border: 1px solid #181613; }
+  .sp.team .person h4 { font-family: 'Newsreader', serif; font-size: 17px; font-weight: 500; margin: 8px 0 2px; }
+  .sp.team .person .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #16A34A; letter-spacing: 0.16em; text-transform: uppercase; }
+  .sp.team .person p { font-size: 12px; line-height: 1.5; color: #6E665B; margin: 6px 0 0; }
+
+  .sp.coda { justify-content: end; }
+  .sp.coda .head { font-size: 96px; }
+  .sp.coda .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">01</span><span class="nm">Surgical paper</span></div>
+  <div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div>
+</header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 01 · Clinical</div>
+    <h1>A printed clinical chart on a desk.</h1>
+    <p>Bone-paper canvas, warm ink, apothecary green as the only accent. Hairlines instead of shadows. Serif for thinking, mono for record. Critical-red reserved for life-threatening only.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · clinical, legal, government</div>
+    <div><strong>Type</strong> · Newsreader · Inter · JetBrains Mono</div>
+    <div><strong>Accent</strong> · Apothecary green · #16A34A</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span><span class="desc">Bone paper, warm ink</span></div>
+    <div class="slide"><div class="sp cover">
+      <div class="stamp"><span class="num">CHART No. 0421</span><span class="ttl">Halcyon &amp; Co.</span><span class="meta">St. Catherine's · vol VIII</span></div>
+      <h2 class="head">Q2 board <span class="ital">update.</span></h2>
+      <div class="meta">Issued · 14 May 2026 · founders' edition</div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span><span class="desc">Numbered, hairline rules between</span></div>
+    <div class="slide"><div class="sp agenda">
+      <div class="stamp"><span class="num">02 / 12</span><span class="ttl">Order of business</span><span class="meta">est. 18 min</span></div>
+      <h2 class="head">Today's <span class="ital">agenda.</span></h2>
+      <ol>
+        <li>Where we are <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px;">3 min</span></li>
+        <li>The honest part <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px;">5 min</span></li>
+        <li>What we're cutting <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px;">4 min</span></li>
+        <li>Roadmap &amp; risks <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px;">3 min</span></li>
+        <li>Asks of the board <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px;">3 min</span></li>
+      </ol>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">03</span><span class="nm">Section divider</span><span class="desc">Centered, with green tag</span></div>
+    <div class="slide"><div class="sp section">
+      <div class="lbl">— Section I · where we are —</div>
+      <h2 class="head">The quiet rebellion of <span class="ital">measured</span> growth.</h2>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span><span class="desc">Chart-style header + two-col body</span></div>
+    <div class="slide"><div class="sp headline">
+      <div class="stamp"><span class="num">04 / 12</span><span class="ttl">Where we are</span><span class="meta">Q2 · 2026</span></div>
+      <h2 class="head">The quiet rebellion of <span class="ital">measured</span> growth.</h2>
+      <div class="by">Dictated by · the founders · 14 May 2026 · 09:42</div>
+      <div class="body">
+        <p>Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the go-to-market team.</p>
+        <p>The reason isn't strategy. It's the unglamorous work of saying no, on time, every quarter, to the dozen things we could have done but chose not to.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span><span class="desc">Tabular mono · vital readouts</span></div>
+    <div class="slide"><div class="sp bigstat">
+      <div class="stamp"><span class="num">05 / 12</span><span class="ttl">Vitals</span><span class="meta">trailing six months</span></div>
+      <div class="row">
+        <div><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+        <div><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+        <div><div class="stat">9.1</div><div class="lbl">— NPS · n=184</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span><span class="desc">Beat / missed</span></div>
+    <div class="slide"><div class="sp twocol">
+      <div class="stamp"><span class="num">06 / 12</span><span class="ttl">The honest part</span><span class="meta">findings</span></div>
+      <h2 class="head">Where we beat plan, where we missed.</h2>
+      <div class="cols">
+        <div><h3>Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Product velocity 1.4×</li><li>Headcount efficiency held</li></ul></div>
+        <div><h3 style="color: #B42318;">Missed plan.</h3><ul><li>Enterprise churn 3 logos</li><li>Time-to-hire 67 d (target 45)</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span><span class="desc">Three sunsets</span></div>
+    <div class="slide"><div class="sp threecol">
+      <div class="stamp"><span class="num">07 / 12</span><span class="ttl">What we're cutting</span><span class="meta">three projects</span></div>
+      <h2 class="head">Sunsets.</h2>
+      <div class="cols">
+        <div><span class="nm">— 01 · mobile rebuild</span><h3>Reclaim two engineers.</h3><p>Web is 92% of revenue. We'll meet mobile users at the web's edge.</p></div>
+        <div><span class="nm">— 02 · partner portal</span><h3>Three signs in 18 months.</h3><p>Below the bar. We'll handle integrations 1:1 until the next attempt.</p></div>
+        <div><span class="nm">— 03 · second brand</span><h3>Cannibalised the first.</h3><p>Lesson learned. Consolidating audiences under Halcyon only.</p></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span><span class="desc">Photo + caption · clinical idiom</span></div>
+    <div class="slide"><div class="sp imgled">
+      <div class="img"></div>
+      <div class="copy">
+        <div class="stamp" style="border: 0; padding: 0; margin-bottom: 8px;"><span class="num">08 / 12</span><span class="ttl">A note from the team</span></div>
+        <h2 class="head">The room where the work <span class="ital">happens.</span></h2>
+        <p style="font-size: 14px; color: #6E665B; margin-top: 12px;">Halcyon HQ, fourth floor. Photographed the morning we hit ARR target.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">09</span><span class="nm">Pull-quote</span><span class="desc">Italic serif · dictated</span></div>
+    <div class="slide"><div class="sp quote">
+      <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+      <div class="attr">— Ben Horowitz · "What you do is who you are"</div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span><span class="desc">Four weeks · clinical pace</span></div>
+    <div class="slide"><div class="sp timeline">
+      <div class="stamp"><span class="num">10 / 12</span><span class="ttl">Treatment plan</span><span class="meta">six-week ship</span></div>
+      <h2 class="head">Onboarding redesign.</h2>
+      <div class="axis">
+        <div class="step"><span class="wk">Week 1–2</span><h4>Customer interviews</h4><p>Twelve calls. Synthesise patterns, not anecdotes.</p></div>
+        <div class="step"><span class="wk">Week 2–3</span><h4>Prototype</h4><p>Two competing flows. Pick by week's end.</p></div>
+        <div class="step"><span class="wk">Week 4–5</span><h4>Build</h4><p>Two engineers, full-time. Beta with five customers.</p></div>
+        <div class="step"><span class="wk">Week 6</span><h4>Ship · measure</h4><p>100% rollout Friday. Target lifts to 80%.</p></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">11</span><span class="nm">Team</span><span class="desc">Roster, four-up</span></div>
+    <div class="slide"><div class="sp team">
+      <div class="stamp"><span class="num">11 / 12</span><span class="ttl">Asks of the board</span><span class="meta">three intros, one decision</span></div>
+      <h2 class="head">Roster.</h2>
+      <div class="grid">
+        <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+        <div class="person"><div class="img" style="background: linear-gradient(135deg, #6E665B, #181613);"></div><h4>Head of CS</h4><span class="role">— intro req</span><p>Series A SaaS, three-person team.</p></div>
+        <div class="person"><div class="img" style="background: linear-gradient(135deg, #B42318, #181613);"></div><h4>Director GTM</h4><span class="role">— intro req</span><p>Developer-tools background.</p></div>
+        <div class="person"><div class="img" style="background: linear-gradient(135deg, #C9B27A, #6E665B);"></div><h4>Series A timing</h4><span class="role">— decision</span><p>Q4 vs Q1 — Friday.</p></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span><span class="desc">Discharge note</span></div>
+    <div class="slide"><div class="sp coda">
+      <div class="stamp"><span class="num">12 / 12</span><span class="ttl">End of chart</span><span class="meta">discharge notes</span></div>
+      <h2 class="head">Thank <span class="ital">you.</span></h2>
+      <div class="meta">— Questions on the record · halcyon.co/q2</div>
+    </div></div>
+  </div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 01 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

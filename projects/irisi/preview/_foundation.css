@@ -1,0 +1,447 @@
+/* ============================================================
+   IRISI — maximalist-startup foundation
+   Pronounced "Hi-ri-z."
+
+   Stance: maximalist startup, warm-confident.
+   Frame: a confident director — type does the heavy lifting,
+   one accent does real work, slides themselves are the show.
+
+   Palette: warm cream paper, ink-near-black, burnt amber accent.
+   Type:    Bricolage Grotesque display (impact), Inter (chrome),
+            JetBrains Mono (record / code).
+   Chrome:  spacious. Hairlines for structure, the rare warm
+            shadow for elevated surfaces. Light + dark from day one.
+
+   The product is one stance. Slides themselves carry many stances —
+   that's the library, not the chrome.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  /* ---------- Paper & ink (cool-neutral, premium-tech) ----------
+     A near-white canvas with a faint cool undertone, ink-near-black
+     leaning slate. Reads "modern SaaS tech with taste" — not editorial,
+     not generic. Pairs with signal blue without warm-cool tension. */
+  --paper:        #F7F8FB;   /* near-white, faint cool tint */
+  --paper-deep:   #EEF1F6;   /* recessed surface */
+  --sheet:        #FFFFFF;   /* a clean sheet inside (Apple-clean) */
+  --sheet-edge:   #E3E7EE;   /* the edge of a sheet */
+  --ink:          #0F1115;   /* near-black, cool-leaning */
+  --ink-2:        #2A2E36;   /* body */
+  --ink-3:        #5C6473;   /* secondary */
+  --ink-4:        #8F97A6;   /* tertiary */
+  --ink-5:        #C8CED9;   /* quietest */
+  --hair:         #E3E7EE;   /* hairline */
+  --hair-soft:    #ECEFF5;
+  --rule:         #0F1115;
+
+  /* ---------- Signal blue (the single accent) ----------
+     Deep, electric, confident. Not Bootstrap navy, not Tailwind 600 —
+     a saturated signal blue that pairs with warm cream paper to make
+     the chrome feel premium, not corporate. */
+  --accent-50:   #ECF2FF;
+  --accent-100:  #D6E3FF;
+  --accent-200:  #ADC6FF;
+  --accent-300:  #7CA3FF;
+  --accent-400:  #4880FE;
+  --accent-500:  #1E63F7;
+  --accent-600:  #0361F0;   /* the brand — primary action */
+  --accent-700:  #0249C2;   /* primary action hover */
+  --accent-800:  #053A98;
+  --accent-900:  #062765;
+
+  /* Legacy aliases — keep amber names mapped to accent so existing
+     templates don't break while we transition. */
+  --amber-50:   var(--accent-50);
+  --amber-100:  var(--accent-100);
+  --amber-200:  var(--accent-200);
+  --amber-300:  var(--accent-300);
+  --amber-400:  var(--accent-400);
+  --amber-500:  var(--accent-500);
+  --amber-600:  var(--accent-600);
+  --amber-700:  var(--accent-700);
+  --amber-800:  var(--accent-800);
+  --amber-900:  var(--accent-900);
+
+  /* ---------- State ---------- */
+  --crit:        #B42318;
+  --crit-bg:     #FEF3F2;
+  --crit-edge:   #F2B5AF;
+
+  --warn:        #B25E09;
+  --warn-bg:     #FDF6E3;
+  --warn-edge:   #E8D9A1;
+
+  --ok:          #15803D;
+  --ok-bg:       #F0FDF4;
+  --ok-edge:     #BBF7D0;
+
+  --info:        #1D4E89;
+  --info-bg:     #EEF4FB;
+  --info-edge:   #BFD4EA;
+
+  /* ---------- Type ---------- */
+  --display: 'Bricolage Grotesque', 'Inter Display', system-ui, sans-serif;
+  --serif:   'Instrument Serif', 'Newsreader', Georgia, serif;
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Tracking */
+  --track-mega:     -0.04em;     /* 96px+ */
+  --track-display:  -0.025em;
+  --track-h:        -0.015em;
+  --track-body:      0;
+  --track-label:     0.005em;
+  --track-overline:  0.16em;
+  --track-mono:      0;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:    2px;
+  --r-soft:     8px;
+  --r-card:     12px;
+  --r-lg:       16px;
+  --r-xl:       24px;
+  --r-pill:     9999px;
+
+  --gutter:     32px;
+
+  /* Elevation — used sparingly. Maximalist allows it; never gratuitous. */
+  --line-1:   0 0 0 1px var(--hair);
+  --shade-1:  0 1px 2px rgba(15,17,21,0.04);
+  --shade-2:  0 4px 14px rgba(15,17,21,0.06);
+  --shade-3:  0 16px 40px rgba(15,17,21,0.10);
+  --shade-accent: 0 8px 28px rgba(3,97,240,0.22);
+  --shade-amber: 0 8px 28px rgba(3,97,240,0.22); /* alias */
+
+  /* Motion */
+  --ease-out:   cubic-bezier(0.18, 0.8, 0.34, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark mode — explicit because the user said "build with dark and light in mind." */
+[data-theme="dark"] {
+  --paper:        #0B0D12;
+  --paper-deep:   #07080C;
+  --sheet:        #14171E;
+  --sheet-edge:   #232732;
+  --ink:          #F7F8FB;
+  --ink-2:        #E3E7EE;
+  --ink-3:        #8F97A6;
+  --ink-4:        #5C6473;
+  --ink-5:        #2A2E36;
+  --hair:         #232732;
+  --hair-soft:    #1A1D24;
+  --rule:         #F7F8FB;
+
+  --accent-600: #4880FE;     /* primary lifts in dark */
+  --accent-700: #7CA3FF;
+  --amber-600:  var(--accent-600);
+  --amber-700:  var(--accent-700);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "kern", "calt";
+}
+
+/* ----- Type primitives (used inline, no class soup) ----- */
+.display  { font-family: var(--display); font-weight: 700; letter-spacing: var(--track-display); line-height: 0.95; }
+.mega     { font-family: var(--display); font-weight: 800; letter-spacing: var(--track-mega); line-height: 0.88; }
+.serif    { font-family: var(--serif); }
+.serif-it { font-family: var(--serif); font-style: italic; }
+.sans     { font-family: var(--sans); }
+.mono     { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; letter-spacing: var(--track-mono); }
+.tabular  { font-variant-numeric: tabular-nums; }
+.overline {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Page header — every specimen gets a stamp ----- */
+.stamp {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 22px; margin-bottom: 40px;
+  border-bottom: 1px solid var(--ink);
+}
+.stamp .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.stamp .ttl {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: var(--track-display);
+  flex: 1;
+  line-height: 1;
+}
+.stamp .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ----- Page wrapper ----- */
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 64px 72px 96px;
+}
+.page-tight { max-width: 1100px; padding: 56px 64px 96px; }
+
+/* ----- Sheet (card primitive) ----- */
+.sheet-card {
+  background: var(--sheet);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+}
+.sheet-tight { padding: 16px 20px; }
+.sheet-md    { padding: 24px 28px; }
+.sheet-lg    { padding: 32px 40px; }
+
+/* ----- Section breaks ----- */
+.break {
+  margin: 64px 0 28px;
+  display: flex; align-items: center; gap: 16px;
+}
+.break::before { content: ""; height: 1px; background: var(--hair); width: 32px; flex-shrink: 0; }
+.break::after  { content: ""; height: 1px; background: var(--hair); flex: 1; }
+.break .lbl {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   BUTTONS — confident, warm, real shadow on the primary.
+   Maximalist permits the press-and-lift. We use it.
+   ============================================================ */
+.btn {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+  transition: transform 120ms var(--ease-out), background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  user-select: none;
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(3,97,240,0.32);
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  box-shadow: var(--shade-1);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shade-2); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-accent, .btn-amber {
+  background: var(--accent-600);
+  color: #fff;
+  border-color: var(--accent-600);
+  box-shadow: var(--shade-accent);
+}
+.btn-accent:hover, .btn-amber:hover { background: var(--accent-700); border-color: var(--accent-700); transform: translateY(-1px); }
+.btn-accent:active, .btn-amber:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: var(--sheet);
+  border-color: var(--hair);
+  color: var(--ink);
+}
+.btn-secondary:hover { border-color: var(--ink-3); background: var(--paper-deep); }
+
+.btn-ghost {
+  color: var(--ink-2);
+}
+.btn-ghost:hover { background: var(--paper-deep); color: var(--ink); }
+
+.btn-danger {
+  background: var(--crit);
+  color: #fff;
+  border-color: var(--crit);
+}
+.btn-danger:hover { filter: brightness(0.92); }
+
+.btn-sm { height: 32px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+.btn-lg { height: 48px; padding: 0 22px; font-size: 15px; border-radius: 12px; }
+.btn-xl { height: 56px; padding: 0 28px; font-size: 16px; border-radius: 14px; font-weight: 600; }
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.field {
+  font-family: var(--sans);
+  font-size: 14px;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--sheet);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: var(--track-body);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.field::placeholder { color: var(--ink-4); }
+.field:hover { border-color: var(--ink-4); }
+.field:focus {
+  border-color: var(--accent-600);
+  box-shadow: 0 0 0 3px rgba(3,97,240,0.18);
+}
+.field-lg { height: 48px; font-size: 15px; border-radius: 12px; padding: 0 16px; }
+
+textarea.field {
+  height: auto;
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+label.lbl {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+  letter-spacing: var(--track-label);
+}
+
+/* ============================================================
+   PILLS, CHIPS, BADGES
+   ============================================================ */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 22px; padding: 0 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hair);
+  background: var(--sheet);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: var(--track-label);
+  white-space: nowrap;
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill-accent, .pill-amber { color: var(--accent-700); border-color: var(--accent-200); background: var(--accent-50); }
+.pill-ok    { color: var(--ok); border-color: var(--ok-edge); background: var(--ok-bg); }
+.pill-warn  { color: var(--warn); border-color: var(--warn-edge); background: var(--warn-bg); }
+.pill-crit  { color: var(--crit); border-color: var(--crit-edge); background: var(--crit-bg); }
+.pill-info  { color: var(--info); border-color: var(--info-edge); background: var(--info-bg); }
+.pill-ink   { color: var(--paper); border-color: var(--ink); background: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+  padding: 3px 8px; border-radius: 6px; background: var(--paper-deep);
+}
+
+.kbd {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--sheet);
+  border: 1px solid var(--hair);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--ink-2);
+}
+
+/* ============================================================
+   AVATAR — initials, no random colors
+   ============================================================ */
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-deep);
+  color: var(--ink-2);
+  font-family: var(--sans); font-weight: 600; font-size: 12px;
+  flex-shrink: 0;
+  user-select: none;
+  border: 1px solid var(--hair);
+}
+.avatar-sm { width: 22px; height: 22px; font-size: 9px; }
+.avatar-lg { width: 48px; height: 48px; font-size: 16px; }
+.avatar-xl { width: 64px; height: 64px; font-size: 20px; }
+
+/* ============================================================
+   SCAFFOLDING UTILITIES
+   ============================================================ */
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.split { display: grid; gap: 16px; }
+.split-2 { grid-template-columns: 1fr 1fr; }
+.split-3 { grid-template-columns: repeat(3, 1fr); }
+.split-4 { grid-template-columns: repeat(4, 1fr); }
+
+hr.hair { border: 0; border-top: 1px solid var(--hair); margin: 0; }
+hr.hair-soft { border: 0; border-top: 1px solid var(--hair-soft); margin: 0; }
+
+/* The amber underline — used on the landing for emphasis, sparingly */
+.under-accent, .under-amber {
+  background-image: linear-gradient(to top, var(--accent-300) 0, var(--accent-300) 6px, transparent 6px);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 0 2px;
+}
+
+::selection { background: var(--accent-200); color: var(--ink); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--ink-5); border-radius: 6px; border: 2px solid var(--paper); }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+/* ============================================================
+   SLIDE PRIMITIVES — the canvas frame for slide previews
+   Used when displaying a slide thumb/preview anywhere in the
+   product. The slide INSIDE carries its own stance; this is
+   just the holder.
+   ============================================================ */
+.slide-frame {
+  aspect-ratio: 16 / 9;
+  background: #fff;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shade-1);
+}
+.slide-frame.elevated { box-shadow: var(--shade-2); }
+.slide-frame iframe { width: 100%; height: 100%; border: 0; display: block; pointer-events: none; }

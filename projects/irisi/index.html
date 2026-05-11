@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Irisi — maximalist startup</title>
+<link rel="stylesheet" href="preview/_foundation.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--paper); }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: 100vh;
+    column-gap: 0;
+  }
+
+  /* ---- Left index ---- */
+  .toc {
+    background: var(--paper);
+    border-right: 1px solid var(--hair);
+    padding: 28px 24px 20px;
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .ttl-row {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .ttl {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0;
+    color: var(--ink);
+  }
+  .ttl .dot { color: var(--amber-600); }
+  .pron {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-3);
+    font-size: 13px;
+  }
+  .vol {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); margin-top: 8px;
+  }
+  .meta {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    margin-top: 24px; padding-top: 16px;
+    border-top: 1px solid var(--hair);
+    line-height: 1.7;
+    text-transform: uppercase; letter-spacing: 0.16em;
+  }
+
+  .toc-search { margin: 22px 0 8px; }
+  .toc-search input {
+    width: 100%;
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    height: 34px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    padding: 0 12px;
+  }
+  .toc-search input:focus { border-color: var(--amber-600); box-shadow: 0 0 0 3px rgba(197,108,10,0.18); }
+  .toc-search input::placeholder { color: var(--ink-4); }
+
+  .nav { flex: 1; padding: 0; margin: 0; list-style: none; }
+
+  .group { margin-top: 22px; }
+  .group:first-child { margin-top: 8px; }
+  .group-h {
+    display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  .group-h .n { color: var(--ink); }
+  .group-h .l { flex: 1; height: 1px; background: var(--hair); }
+
+  .item {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 6px 8px;
+    margin: 0 -8px;
+    border-radius: 6px;
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .item .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: transparent; border: 1px solid var(--ink-4);
+    flex-shrink: 0; transform: translateY(-3px);
+  }
+  .item:hover { color: var(--ink); background: var(--paper-deep); }
+  .item.on { color: var(--ink); font-weight: 600; background: var(--paper-deep); }
+  .item.on .dot { background: var(--amber-600); border-color: var(--amber-600); }
+
+  /* ---- Stage ---- */
+  .stage {
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: var(--paper);
+  }
+
+  .head {
+    flex-shrink: 0;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--hair);
+    display: flex; align-items: baseline; gap: 16px;
+    background: var(--paper);
+  }
+  .crumb {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+  .crumb .cur { color: var(--ink); }
+  .head .gap { flex: 1; }
+  .head a {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em; text-decoration: none;
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .head a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .frame {
+    flex: 1;
+    min-height: 0;
+    background: var(--paper-deep);
+  }
+  .frame iframe {
+    width: 100%; height: 100%; border: 0; display: block;
+    background: var(--paper);
+  }
+
+  /* Welcome panel rendered in-place when no specimen is loaded */
+  .welcome {
+    height: 100%; overflow: auto; padding: 72px 88px;
+    background: var(--paper);
+  }
+  .welcome h1 {
+    font-family: var(--display);
+    font-size: 96px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    margin: 0 0 24px;
+    max-width: 12ch;
+  }
+  .welcome h1 .em { color: var(--amber-600); }
+  .welcome .lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-3);
+    line-height: 1.45;
+    max-width: 60ch;
+    margin: 0 0 56px;
+  }
+  .welcome .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 920px;
+  }
+  .welcome .card {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    padding: 22px 24px;
+  }
+  .welcome .card .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--amber-700);
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .welcome .card h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 600;
+    letter-spacing: -0.015em; margin: 8px 0 6px;
+  }
+  .welcome .card p {
+    font-size: 13px; color: var(--ink-3); line-height: 1.55; margin: 0;
+  }
+  .welcome .footer {
+    margin-top: 64px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="toc">
+    <div class="ttl-row">
+      <h1 class="ttl">Irisi<span class="dot">.</span></h1>
+      <span class="pron">/Hi-ri-z/</span>
+    </div>
+    <div class="vol">Slide-generation app · vol. 1 · maximalist-startup</div>
+
+    <div class="toc-search">
+      <input id="filter" placeholder="Search specimens, slide packs…" autocomplete="off">
+    </div>
+
+    <nav id="nav" class="nav"></nav>
+
+    <div class="meta">
+      Product · v 0.1<br>
+      Library · 25 stances
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="head">
+      <div class="crumb" id="crumb">
+        <span>Welcome</span>
+      </div>
+      <div class="gap"></div>
+      <a href="../../index.html">← Studio</a>
+      <a href="README.md" target="_blank">Readme</a>
+      <a id="popout" href="#" target="_blank">Open ↗</a>
+    </div>
+    <div class="frame">
+      <iframe id="preview" title="Irisi specimen"></iframe>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const PARTS = [
+    { id: "I", title: "Foundation", items: [
+        { name: "Welcome",                   file: "" },
+        { name: "Palette",                   file: "preview/01-palette.html" },
+        { name: "Type",                      file: "preview/02-type.html" },
+        { name: "Spacing & geometry",        file: "preview/03-geometry.html" },
+        { name: "Motion",                    file: "preview/04-motion.html" },
+    ]},
+    { id: "II", title: "Primitives", items: [
+        { name: "Buttons",                   file: "preview/10-buttons.html" },
+        { name: "Inputs · prompt & brand",   file: "preview/11-inputs.html" },
+        { name: "Selection",                 file: "preview/12-selection.html" },
+        { name: "Date & time",               file: "preview/13-datetime.html" },
+        { name: "Specialized inputs",        file: "preview/14-specialized.html" },
+    ]},
+    { id: "III", title: "Data & state", items: [
+        { name: "Tables · decks worklist",   file: "preview/20-tables.html" },
+        { name: "Slide thumb specimen",      file: "preview/21-slide-thumb.html" },
+        { name: "Generation timeline",       file: "preview/22-timeline.html" },
+        { name: "Charts",                    file: "preview/23-charts.html" },
+        { name: "Progress",                  file: "preview/24-progress.html" },
+        { name: "Skeletons & empty",         file: "preview/25-skeletons-empty.html" },
+        { name: "Avatars · pills · status",  file: "preview/26-avatars-pills.html" },
+        { name: "Cards",                     file: "preview/27-cards.html" },
+        { name: "Tooltips · hovercards",     file: "preview/28-tooltips.html" },
+        { name: "Navigation · shell · ⌘K",   file: "preview/29-navigation.html" },
+    ]},
+    { id: "IV", title: "Surfaces", items: [
+        { name: "Prompt landing",            file: "preview/30-landing.html" },
+        { name: "Question stage",            file: "preview/31-question-stage.html" },
+        { name: "Highlights canvas",         file: "preview/32-highlights.html" },
+        { name: "Slide editor",              file: "preview/33-editor.html" },
+        { name: "Present mode",              file: "preview/34-present.html" },
+        { name: "Brand wizard",              file: "preview/35-brand.html" },
+        { name: "Library docs",              file: "preview/36-library-docs.html" },
+        { name: "Pricing",                   file: "preview/37-pricing.html" },
+    ]},
+    { id: "V", title: "Overlays & system", items: [
+        { name: "Modals",                    file: "preview/40-modals.html" },
+        { name: "Toasts · banners · alerts", file: "preview/41-feedback.html" },
+        { name: "Cross-record patterns",     file: "preview/42-cross.html" },
+        { name: "Iconography",               file: "preview/43-icons.html" },
+    ]},
+    { id: "VI", title: "Slide library — 25 packs", items: [
+        { name: "Library index",             file: "slides/index.html" },
+        { name: "1 · Surgical paper",        file: "slides/surgical-paper/index.html" },
+        { name: "2 · Editorial broadsheet",  file: "slides/editorial-broadsheet/index.html" },
+        { name: "3 · Swiss instrument",      file: "slides/swiss-instrument/index.html" },
+        { name: "4 · Brutalist dossier",     file: "slides/brutalist-dossier/index.html" },
+        { name: "5 · Glassmorphic studio",   file: "slides/glassmorphic-studio/index.html" },
+        { name: "6 · Industrial telemetry",  file: "slides/industrial-telemetry/index.html" },
+        { name: "7 · Soft Scandinavian",     file: "slides/soft-scandinavian/index.html" },
+        { name: "8 · Retro terminal",        file: "slides/retro-terminal/index.html" },
+        { name: "9 · Editorial photographic",file: "slides/editorial-photographic/index.html" },
+        { name: "10 · Transit board",        file: "slides/transit-board/index.html" },
+        { name: "11 · Notebook grid",        file: "slides/notebook-grid/index.html" },
+        { name: "12 · Showroom mono",        file: "slides/showroom-mono/index.html" },
+        { name: "13 · Risograph print",      file: "slides/risograph-print/index.html" },
+        { name: "14 · Graph paper",          file: "slides/graph-paper/index.html" },
+        { name: "15 · Liquid material",      file: "slides/liquid-material/index.html" },
+        { name: "16 · Bauhaus poster",       file: "slides/bauhaus-poster/index.html" },
+        { name: "17 · Japanese minimalism",  file: "slides/japanese-minimalism/index.html" },
+        { name: "18 · Maximalist startup",   file: "slides/maximalist-startup/index.html" },
+        { name: "19 · Cartographer's atlas", file: "slides/cartographer-atlas/index.html" },
+        { name: "20 · Construction blueprint",file:"slides/construction-blueprint/index.html" },
+        { name: "21 · Sushi-counter omakase",file: "slides/sushi-counter-omakase/index.html" },
+        { name: "22 · Mid-century playful",  file: "slides/mid-century-playful/index.html" },
+        { name: "23 · Rolling-paper minimal",file: "slides/rolling-paper-minimal/index.html" },
+        { name: "24 · Soviet poster",        file: "slides/soviet-poster/index.html" },
+        { name: "25 · Workshop manual",      file: "slides/workshop-manual/index.html" },
+    ]},
+  ];
+
+  const WELCOME = `
+    <div class="welcome">
+      <h1>Bad slides<br/>kill <span class="em">good ideas.</span></h1>
+      <p class="lede">Irisi is a slide-generation app powered by its own React component library. The product is one stance — confident, warm, spacious. The library underneath is 25 stances — every slide pack speaks in its own voice.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="ix">Part I–V</div>
+          <h3>The product</h3>
+          <p>Foundation, primitives, the prompt landing, the editor, the library docs, the brand wizard. Maximalist-startup applied with discipline — warm cream, burnt amber, type doing the heavy lifting.</p>
+        </div>
+        <div class="card">
+          <div class="ix">Part VI</div>
+          <h3>The slide library</h3>
+          <p>Every stance from the catalogue, built into a slide pack. Twelve layouts each — title, agenda, big-stat, two-column, image-led, quote, comparison, timeline, team, conclusion. The AI picks the pack; the React library renders it.</p>
+        </div>
+        <div class="card">
+          <div class="ix">Open</div>
+          <h3>Where to start</h3>
+          <p>Open the <strong>Prompt landing</strong> first — it's the front door. Then the <strong>Editor</strong>, then dip into a slide pack like <strong>Editorial broadsheet</strong> or <strong>Swiss instrument</strong> to see the library's range.</p>
+        </div>
+      </div>
+      <div class="footer">Irisi · est. 2026 · use the search above to filter</div>
+    </div>
+  `;
+
+  const nav = document.getElementById('nav');
+  const filter = document.getElementById('filter');
+  const iframe = document.getElementById('preview');
+  const crumb = document.getElementById('crumb');
+  const popout = document.getElementById('popout');
+
+  let currentFile = null;
+
+  function render(query = "") {
+    nav.innerHTML = "";
+    const q = query.trim().toLowerCase();
+    PARTS.forEach(part => {
+      const items = part.items.filter(it => !q || it.name.toLowerCase().includes(q));
+      if (!items.length) return;
+      const g = document.createElement('div');
+      g.className = 'group';
+      g.innerHTML = `<div class="group-h"><span class="n">${part.id}</span><span>${part.title}</span><span class="l"></span></div>`;
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.className = 'item' + (it.file === currentFile ? ' on' : '');
+        a.innerHTML = `<span class="dot"></span><span>${it.name}</span>`;
+        a.addEventListener('click', e => { e.preventDefault(); load(it, part); });
+        g.appendChild(a);
+      });
+      nav.appendChild(g);
+    });
+  }
+
+  function load(item, part) {
+    currentFile = item.file;
+    if (item.file) {
+      iframe.src = item.file;
+      popout.href = item.file;
+      popout.style.opacity = '1';
+      popout.style.pointerEvents = 'auto';
+    } else {
+      iframe.removeAttribute('src');
+      iframe.srcdoc = WELCOME;
+      popout.href = '#';
+      popout.style.opacity = '0.4';
+      popout.style.pointerEvents = 'none';
+    }
+    crumb.innerHTML = `<span>Part ${part.id} · ${part.title}</span><span style="margin:0 8px;color:var(--ink-4)">/</span><span class="cur">${item.name}</span>`;
+    [...document.querySelectorAll('.item')].forEach(el => el.classList.toggle('on', false));
+    [...document.querySelectorAll('.item')].forEach(el => {
+      if (el.querySelector('span:last-child')?.textContent.trim() === item.name) el.classList.add('on');
+    });
+    if (item.file) location.hash = encodeURIComponent(item.file);
+    else location.hash = '';
+  }
+
+  filter.addEventListener('input', e => render(e.target.value));
+  filter.addEventListener('keydown', e => {
+    const items = [...document.querySelectorAll('.item')];
+    const idx = items.findIndex(a => a.classList.contains('on'));
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[Math.min(idx+1, items.length-1)]?.click(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); items[Math.max(idx-1, 0)]?.click(); }
+    else if (e.key === 'Enter') { items.find(a => a.classList.contains('on'))?.click(); }
+    else if (e.key === 'Escape') { filter.value = ''; render(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== filter) {
+      e.preventDefault(); filter.focus();
+    }
+  });
+
+  // Boot
+  const hash = decodeURIComponent(location.hash.slice(1));
+  let booted = false;
+  if (hash) {
+    PARTS.forEach(p => p.items.forEach(it => {
+      if (it.file === hash) { render(); load(it, p); booted = true; }
+    }));
+  }
+  if (!booted) { render(); load(PARTS[0].items[0], PARTS[0]); }
+</script>
+
+</body>
+</html>

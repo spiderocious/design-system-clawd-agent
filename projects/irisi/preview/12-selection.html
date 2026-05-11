@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · selection</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  /* Checkbox */
+  .check {
+    width: 20px; height: 20px; border: 1.5px solid var(--ink-4);
+    border-radius: 5px; cursor: pointer; background: var(--sheet);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .check.on { background: var(--accent-600); border-color: var(--accent-600); color: #fff; }
+  .check.on::before { content: "✓"; font-weight: 700; font-size: 12px; }
+  .check.partial { background: var(--accent-600); border-color: var(--accent-600); color: #fff; }
+  .check.partial::before { content: ""; width: 10px; height: 2px; background: #fff; border-radius: 1px; }
+
+  /* Radio */
+  .radio {
+    width: 20px; height: 20px; border: 1.5px solid var(--ink-4);
+    border-radius: 50%; cursor: pointer; background: var(--sheet);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .radio.on { border-color: var(--accent-600); }
+  .radio.on::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-600); }
+
+  /* Switch */
+  .switch {
+    width: 38px; height: 22px; border-radius: 999px;
+    background: var(--ink-5); cursor: pointer; position: relative;
+    transition: background 120ms ease;
+  }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; box-shadow: var(--shade-1);
+    transition: left 120ms var(--ease-out);
+  }
+  .switch.on { background: var(--accent-600); }
+  .switch.on::after { left: 18px; }
+
+  .opt-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .opt-row .l { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+  .opt-row .l small { display: block; font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 12px; margin-top: 2px; }
+  .opt-row.disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Stance picker (combobox style) */
+  .stance-cb {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 4px; max-width: 480px;
+    box-shadow: var(--shade-2);
+  }
+  .stance-cb .search {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .stance-cb .search input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 14px; }
+  .stance-cb .row {
+    display: grid; grid-template-columns: 24px 56px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 10px 12px; cursor: pointer;
+    border-radius: 8px;
+  }
+  .stance-cb .row:hover { background: var(--paper-deep); }
+  .stance-cb .row.on { background: var(--accent-50); }
+  .stance-cb .row .ix { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .stance-cb .row .swatch { width: 56px; aspect-ratio: 16/10; border-radius: 4px; border: 1px solid var(--hair); }
+  .stance-cb .row .nm { font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: -0.015em; }
+  .stance-cb .row .desc { font-family: var(--serif); font-style: italic; font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+  .stance-cb .row .check { width: 16px; height: 16px; border-radius: 4px; }
+
+  /* Chip group */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip-pick {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--ink-2);
+    cursor: pointer;
+  }
+  .chip-pick:hover { color: var(--ink); border-color: var(--ink-3); }
+  .chip-pick.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip-pick .glyph { color: var(--ink-4); }
+  .chip-pick.on .glyph { color: var(--accent-400); }
+
+  /* Layout picker (visual radios) */
+  .layout-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .layout-pick {
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 10px; cursor: pointer; position: relative;
+  }
+  .layout-pick:hover { border-color: var(--ink-3); }
+  .layout-pick.on { border: 2px solid var(--accent-600); padding: 9px; box-shadow: 0 0 0 4px rgba(3,97,240,0.10); }
+  .layout-pick .pic { aspect-ratio: 16 / 10; background: #FBFAF7; border: 1px solid var(--hair); border-radius: 4px; padding: 8px; }
+  .layout-pick .pic .h { height: 4px; background: #14110D; border-radius: 2px; width: 70%; }
+  .layout-pick .pic .b { height: 2px; background: #D9D0BB; margin-top: 3px; border-radius: 999px; }
+  .layout-pick .nm { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.06em; margin-top: 6px; }
+  .layout-pick.on .nm { color: var(--accent-700); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 12 —</span>
+    <h1 class="ttl">Selection</h1>
+    <span class="meta">Primitives · pick one, pick many, toggle on</span>
+  </div>
+
+  <!-- Stance combobox: the most distinctive selection in the product -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Signature</span>
+      <h3 class="nm">The stance picker.</h3>
+      <span class="why">A combobox of 25 worldviews. The hardest selection in the product.</span>
+    </div>
+
+    <div class="stance-cb">
+      <div class="search">
+        <span style="color: var(--ink-4);">⌕</span>
+        <input value="editor" placeholder="Search 25 stances by name, vibe, exemplar…">
+        <span class="kbd">esc</span>
+      </div>
+
+      <div class="row">
+        <span class="ix">02</span>
+        <div class="swatch" style="background: linear-gradient(135deg, #FBFAF7 0% 50%, #14110D 50% 100%); position: relative;"></div>
+        <div>
+          <div class="nm">Editorial broadsheet</div>
+          <div class="desc">Bloomberg-meets-NYT. Bylines, rules, two-column. For board, research, analysis.</div>
+        </div>
+        <span class="check on"></span>
+      </div>
+
+      <div class="row on">
+        <span class="ix">03</span>
+        <div class="swatch" style="background: #FFFFFF; border: 1px solid var(--ink); position: relative;">
+          <div style="position:absolute;top:6px;left:6px;width:6px;height:1px;background:#000"></div>
+          <div style="position:absolute;top:14px;left:6px;width:14px;height:2px;background:#FF6A00"></div>
+        </div>
+        <div>
+          <div class="nm">Swiss instrument</div>
+          <div class="desc">Braun calculator energy. Pure white, single accent, generous whitespace.</div>
+        </div>
+        <span class="check"></span>
+      </div>
+
+      <div class="row">
+        <span class="ix">12</span>
+        <div class="swatch" style="background: #1C1A18;">
+          <div style="position:absolute;top:8px;left:8px;width:14px;height:1px;background:#C9B27A"></div>
+        </div>
+        <div>
+          <div class="nm">Showroom mono</div>
+          <div class="desc">Luxury watch boutique. Champagne accent, didone display.</div>
+        </div>
+        <span class="check"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkboxes / radios / switches scene -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Settings</span>
+      <h3 class="nm">Toggles &amp; ticks.</h3>
+      <span class="why">In the workspace settings drawer.</span>
+    </div>
+
+    <div class="split split-3" style="gap: 32px;">
+      <div>
+        <div class="overline" style="margin-bottom: 8px;">— Generation</div>
+        <div class="opt-row"><span class="check on"></span><span class="l">Auto-pick the stance<small>Irisi chooses based on your brief</small></span></div>
+        <div class="opt-row"><span class="check on"></span><span class="l">Use my brand by default<small>Skip the brand wizard for new decks</small></span></div>
+        <div class="opt-row"><span class="check"></span><span class="l">Show speaker notes draft<small>Generate notes alongside slides</small></span></div>
+        <div class="opt-row disabled"><span class="check partial"></span><span class="l">Preview generated thumbnails<small>Pro feature</small></span></div>
+      </div>
+
+      <div>
+        <div class="overline" style="margin-bottom: 8px;">— Default length</div>
+        <div class="opt-row"><span class="radio"></span><span class="l">Short<small>5–7 slides · 5 min</small></span></div>
+        <div class="opt-row"><span class="radio on"></span><span class="l">Standard<small>10–12 slides · 18 min</small></span></div>
+        <div class="opt-row"><span class="radio"></span><span class="l">Long<small>20+ slides · 45 min+</small></span></div>
+      </div>
+
+      <div>
+        <div class="overline" style="margin-bottom: 8px;">— Notifications</div>
+        <div class="opt-row"><span class="switch on"></span><span class="l">Generation finished</span></div>
+        <div class="opt-row"><span class="switch on"></span><span class="l">Comments &amp; mentions</span></div>
+        <div class="opt-row"><span class="switch"></span><span class="l">Marketing emails</span></div>
+        <div class="opt-row"><span class="switch on"></span><span class="l">Weekly usage digest</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tone chips & layout picker -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Pickers</span>
+      <h3 class="nm">Chips &amp; visual options.</h3>
+      <span class="why">Tone, length, layout — selection without sliders.</span>
+    </div>
+
+    <div class="overline" style="margin-bottom: 10px;">— Tone (multi-select)</div>
+    <div class="chips" style="margin-bottom: 24px;">
+      <button class="chip-pick on"><span class="glyph">●</span> Measured</button>
+      <button class="chip-pick on"><span class="glyph">↑</span> Confident</button>
+      <button class="chip-pick"><span class="glyph">◎</span> Honest about risk</button>
+      <button class="chip-pick"><span class="glyph">✦</span> Visionary</button>
+      <button class="chip-pick"><span class="glyph">▣</span> Clinical</button>
+      <button class="chip-pick"><span class="glyph">♥</span> Warm</button>
+    </div>
+
+    <div class="overline" style="margin-bottom: 10px;">— Layout (single-select)</div>
+    <div class="layout-grid">
+      <div class="layout-pick">
+        <div class="pic" style="display: flex; flex-direction: column; justify-content: end;">
+          <div class="h" style="width: 80%; height: 6px;"></div>
+          <div style="font-family: var(--mono); font-size: 7px; color: #B42318; margin-top: 4px; letter-spacing: 0.18em">— Q2 2026 —</div>
+        </div>
+        <div class="nm">Cover</div>
+      </div>
+      <div class="layout-pick on">
+        <div class="pic">
+          <div class="h" style="height: 4px;"></div>
+          <div class="b" style="margin-top: 6px"></div>
+          <div class="b" style="width: 60%"></div>
+          <div class="b"></div>
+        </div>
+        <div class="nm">Editorial</div>
+      </div>
+      <div class="layout-pick">
+        <div class="pic" style="display: flex; align-items: center; justify-content: center;">
+          <div style="font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -0.04em; color: var(--accent-600);">$4.2M</div>
+        </div>
+        <div class="nm">Big stat</div>
+      </div>
+      <div class="layout-pick">
+        <div class="pic" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+          <div><div class="h" style="height: 2px"></div><div class="b" style="margin-top: 3px"></div><div class="b" style="margin-top: 2px; width: 60%"></div></div>
+          <div><div class="h" style="height: 2px; background: #B42318"></div><div class="b" style="margin-top: 3px"></div><div class="b" style="margin-top: 2px; width: 60%"></div></div>
+        </div>
+        <div class="nm">Two-column</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · present mode</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  html, body { margin: 0; height: 100vh; overflow: hidden; }
+  body { background: #07080C; color: #F7F8FB; font-family: var(--sans); }
+
+  .stage {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  /* ===== Top mini-bar (auto-hides — shown here) ===== */
+  .mini-top {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px;
+    background: rgba(7,8,12,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .mini-top .brand {
+    font-family: var(--display); font-size: 16px; font-weight: 800;
+    letter-spacing: -0.03em; color: #F7F8FB;
+    display: inline-flex; align-items: baseline; gap: 6px;
+  }
+  .mini-top .brand .dot { color: var(--accent-400); }
+  .mini-top .doc {
+    font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.65);
+  }
+  .mini-top .gap { flex: 1; }
+  .mini-top .live {
+    display: inline-flex; gap: 6px; align-items: center;
+    font-family: var(--mono); font-size: 11px; color: #C8CED9; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .mini-top .live::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: #4ADE80; box-shadow: 0 0 0 0 rgba(74,222,128,0.45);
+    animation: pulse-live 1.6s ease-out infinite;
+  }
+  @keyframes pulse-live { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.45); } 100% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } }
+  .mini-top .ic-btn {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 8px; color: #F7F8FB;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px;
+  }
+  .mini-top .ic-btn:hover { background: rgba(255,255,255,0.10); }
+  .mini-top .pop {
+    height: 32px; padding: 0 12px;
+    background: var(--accent-600); color: #fff; border: 0;
+    border-radius: 8px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+  }
+
+  /* ===== Slide arena ===== */
+  .arena {
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px 64px;
+    position: relative;
+  }
+
+  /* The slide — rendered in the editorial broadsheet stance for continuity */
+  .slide {
+    width: min(100%, 1280px);
+    aspect-ratio: 16 / 9;
+    background: #FBFAF7;
+    color: #14110D;
+    border-radius: 4px;
+    padding: 88px 112px 76px;
+    font-family: 'Source Serif 4', 'Newsreader', Georgia, serif;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+    position: relative;
+  }
+  .slide .kicker {
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #B42318;
+  }
+  .slide h1 {
+    font-family: 'Source Serif 4', 'Newsreader', Georgia, serif;
+    font-size: 92px; font-weight: 500;
+    line-height: 1.0; letter-spacing: -0.02em;
+    margin: 18px 0 24px;
+    max-width: 18ch;
+  }
+  .slide h1 .ital { font-style: italic; }
+  .slide hr.rule { border: 0; border-top: 1px solid #14110D; margin: 26px 0 22px; }
+  .slide .by {
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    color: #6E665B; letter-spacing: 0.06em;
+  }
+  .slide .body {
+    column-count: 2; column-gap: 36px;
+    font-size: 17px; line-height: 1.55; color: #3C3833;
+    margin-top: 22px;
+    max-width: 880px;
+  }
+  .slide .body p { margin: 0 0 12px; }
+  .slide .footer {
+    position: absolute; bottom: 32px; left: 112px; right: 112px;
+    display: flex; justify-content: space-between;
+    font-family: 'Inter', sans-serif; font-size: 11px; color: #6E665B;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border-top: 1px solid #D9D0BB; padding-top: 14px;
+  }
+
+  /* Speaker overlays — visible when 'show notes' is on */
+  .notes-overlay {
+    position: absolute; right: 28px; bottom: 28px;
+    width: 360px; max-height: 280px; overflow: auto;
+    background: rgba(15,17,21,0.92); color: #F7F8FB;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-family: var(--sans); font-size: 13px; line-height: 1.55;
+    box-shadow: var(--shade-3);
+  }
+  .notes-overlay .h {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-300);
+    margin-bottom: 8px;
+  }
+  .notes-overlay p { margin: 0 0 8px; color: rgba(255,255,255,0.85); }
+  .notes-overlay .timer {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    display: flex; gap: 10px; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.7);
+  }
+  .notes-overlay .timer strong { color: var(--accent-300); }
+
+  /* nav arrows — large, peripheral */
+  .nav-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 20px;
+  }
+  .nav-arrow:hover { background: rgba(255,255,255,0.12); }
+  .nav-arrow.prev { left: 14px; }
+  .nav-arrow.next { right: 14px; }
+
+  /* ===== Bottom rail ===== */
+  .mini-bot {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 24px;
+    padding: 16px 24px;
+    background: rgba(7,8,12,0.85);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .mini-bot .position {
+    display: inline-flex; gap: 12px; align-items: baseline;
+  }
+  .mini-bot .position .now {
+    font-family: var(--display); font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .mini-bot .position .of {
+    font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.55);
+    letter-spacing: 0.04em;
+  }
+
+  /* Slide thumbs strip */
+  .strip {
+    display: flex; gap: 6px; overflow-x: auto;
+    padding: 4px 0;
+    scrollbar-width: none;
+  }
+  .strip::-webkit-scrollbar { display: none; }
+  .mini-thumb {
+    flex-shrink: 0;
+    width: 64px; aspect-ratio: 16/9;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 4px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.55);
+    letter-spacing: 0.04em;
+    transition: transform 120ms var(--ease-out);
+  }
+  .mini-thumb:hover { transform: translateY(-2px); }
+  .mini-thumb.on {
+    background: var(--accent-600); color: #fff; border-color: var(--accent-600);
+  }
+  .mini-thumb.viewed { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+
+  .mini-bot .right {
+    display: flex; gap: 8px; align-items: center; justify-content: end;
+  }
+  .mini-bot .right .timer {
+    font-family: var(--mono); font-size: 13px; color: #F7F8FB;
+    font-weight: 500; letter-spacing: 0.04em;
+    background: rgba(255,255,255,0.06);
+    padding: 6px 12px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .mini-bot .right .timer .red { color: #F87171; }
+
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="mini-top">
+    <span class="brand">Irisi<span class="dot">.</span></span>
+    <span class="doc">Q2 Board Update — Halcyon &amp; Co.</span>
+    <span class="gap"></span>
+    <span class="live">Presenting · room 14 viewers</span>
+    <button class="ic-btn" title="Show notes">✎</button>
+    <button class="ic-btn" title="Pointer">◉</button>
+    <button class="ic-btn" title="Mute">⊘</button>
+    <button class="pop" title="Open in new window">Pop out ↗</button>
+    <button class="ic-btn" title="Exit (esc)">✕</button>
+  </header>
+
+  <main class="arena">
+    <button class="nav-arrow prev" title="Previous slide">‹</button>
+
+    <div class="slide">
+      <div class="kicker">— Quarterly · Q2 2026 —</div>
+      <h1>The quiet rebellion of <span class="ital">measured</span> growth.</h1>
+      <hr class="rule">
+      <div class="by">By the founders · 12 min read · Halcyon &amp; Co.</div>
+      <div class="body">
+        <p>Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the go-to-market team.</p>
+        <p>The reason isn't strategy. It's the unglamorous work of saying no, on time, every quarter, to the dozen things we could have done but chose not to. What follows is the math behind that decision.</p>
+      </div>
+      <div class="footer">
+        <span>03 / 12 — The honest part</span>
+        <span>Halcyon &amp; Co. — internal · do not redistribute</span>
+      </div>
+
+      <!-- Speaker notes overlay (presenter view) -->
+      <div class="notes-overlay">
+        <div class="h">— Speaker notes</div>
+        <p><strong>Open with the headline.</strong> Don't apologise for it. Pause for a beat, let it land.</p>
+        <p>Anchor the +42% to the GTM-team-size number — that's the reframe nobody else has done.</p>
+        <p>If asked about Q1 dip: <em>"That was the renegotiated enterprise deal — see slide 5."</em></p>
+        <div class="timer">
+          <span>This slide · <strong>1:42</strong></span>
+          <span>Total · 8:14 / 18:00</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-arrow next" title="Next slide">›</button>
+  </main>
+
+  <footer class="mini-bot">
+    <div class="position">
+      <span class="now">03</span>
+      <span class="of">of 12 · The honest part</span>
+    </div>
+
+    <div class="strip">
+      <span class="mini-thumb viewed">01</span>
+      <span class="mini-thumb viewed">02</span>
+      <span class="mini-thumb on">03</span>
+      <span class="mini-thumb">04</span>
+      <span class="mini-thumb">05</span>
+      <span class="mini-thumb">06</span>
+      <span class="mini-thumb">07</span>
+      <span class="mini-thumb">08</span>
+      <span class="mini-thumb">09</span>
+      <span class="mini-thumb">10</span>
+      <span class="mini-thumb">11</span>
+      <span class="mini-thumb">12</span>
+    </div>
+
+    <div class="right">
+      <span class="timer">8:14 <span class="red">/ 18:00</span></span>
+      <span class="kbd" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85)">→</span>
+      <span class="kbd" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85)">B</span>
+      <span class="kbd" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85)">esc</span>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

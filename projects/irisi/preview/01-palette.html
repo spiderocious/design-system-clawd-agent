@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · palette</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 8px; overflow: hidden; }
+  .sw { aspect-ratio: 4 / 5; background: #fff; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+  .sw .ix { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .sw .hex { font-family: var(--mono); font-size: 11px; color: var(--ink); font-weight: 500; }
+  .sw.dark .ix, .sw.dark .hex { color: rgba(255,255,255,0.85); }
+  .sw.dark .ix { color: rgba(255,255,255,0.6); }
+  .ramp-h { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin: 24px 0 10px; display: flex; align-items: baseline; gap: 12px; }
+  .ramp-h .desc { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; letter-spacing: 0; text-transform: none; }
+
+  /* Hero — the proof */
+  .proof {
+    background: var(--ink); color: var(--paper);
+    padding: 48px 56px; border-radius: 14px;
+    margin-bottom: 32px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end;
+  }
+  .proof h2 {
+    font-family: var(--display); font-weight: 800; font-size: 56px;
+    letter-spacing: -0.035em; line-height: 0.95;
+    margin: 0; max-width: 16ch;
+  }
+  .proof h2 .em { color: var(--accent-400); }
+  .proof .legend {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    font-family: var(--mono); font-size: 12px;
+    color: rgba(255,255,255,0.85); letter-spacing: 0.04em;
+  }
+  .proof .legend .row { display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: center; }
+  .proof .legend .row .sw { width: 14px; height: 14px; border-radius: 3px; padding: 0; }
+  .state-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-top: 32px;
+  }
+  .state-card {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .state-card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .state-card .top .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .state-card .top .nm { font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: -0.015em; }
+  .state-card p { font-size: 12px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 01 —</span>
+    <h1 class="ttl">Palette</h1>
+    <span class="meta">Foundation · Irisi v 0.1</span>
+  </div>
+
+  <!-- Proof -->
+  <div class="proof">
+    <h2>Cool paper, near-black ink, <span class="em">signal blue</span> doing the only chromatic work.</h2>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background: var(--paper)"></span><span>paper · #F7F8FB</span></div>
+      <div class="row"><span class="sw" style="background: var(--ink)"></span><span>ink · #0F1115</span></div>
+      <div class="row"><span class="sw" style="background: var(--accent-600)"></span><span>signal · #0361F0</span></div>
+    </div>
+  </div>
+
+  <!-- Paper & ink ramp -->
+  <div class="ramp-h">— Paper &amp; ink <span class="desc">— the surface and the writing on it</span></div>
+  <div class="grid" style="grid-template-columns: repeat(10, 1fr)">
+    <div class="sw" style="background: var(--paper)"><span class="ix">paper</span><span class="hex">#F7F8FB</span></div>
+    <div class="sw" style="background: var(--paper-deep)"><span class="ix">paper-deep</span><span class="hex">#EEF1F6</span></div>
+    <div class="sw" style="background: #fff; border-right: 1px dashed var(--hair)"><span class="ix">sheet</span><span class="hex">#FFFFFF</span></div>
+    <div class="sw" style="background: var(--hair)"><span class="ix">hair</span><span class="hex">#E3E7EE</span></div>
+    <div class="sw" style="background: var(--ink-5)"><span class="ix">ink-5</span><span class="hex">#C8CED9</span></div>
+    <div class="sw" style="background: var(--ink-4); color: #fff"><span class="ix" style="color:rgba(255,255,255,0.7)">ink-4</span><span class="hex" style="color:#fff">#8F97A6</span></div>
+    <div class="sw dark" style="background: var(--ink-3)"><span class="ix">ink-3</span><span class="hex">#5C6473</span></div>
+    <div class="sw dark" style="background: var(--ink-2)"><span class="ix">ink-2</span><span class="hex">#2A2E36</span></div>
+    <div class="sw dark" style="background: var(--ink)"><span class="ix">ink</span><span class="hex">#0F1115</span></div>
+    <div class="sw dark" style="background: #000"><span class="ix">true-black</span><span class="hex">#000000</span></div>
+  </div>
+
+  <!-- Accent ramp -->
+  <div class="ramp-h">— Signal blue <span class="desc">— the single accent · interactive, brand, focus</span></div>
+  <div class="grid">
+    <div class="sw" style="background: var(--accent-50)"><span class="ix">50</span><span class="hex">#ECF2FF</span></div>
+    <div class="sw" style="background: var(--accent-100)"><span class="ix">100</span><span class="hex">#D6E3FF</span></div>
+    <div class="sw" style="background: var(--accent-200)"><span class="ix">200</span><span class="hex">#ADC6FF</span></div>
+    <div class="sw" style="background: var(--accent-300)"><span class="ix">300</span><span class="hex">#7CA3FF</span></div>
+    <div class="sw dark" style="background: var(--accent-400)"><span class="ix">400</span><span class="hex">#4880FE</span></div>
+    <div class="sw dark" style="background: var(--accent-500)"><span class="ix">500</span><span class="hex">#1E63F7</span></div>
+    <div class="sw dark" style="background: var(--accent-600)"><span class="ix">600 · brand</span><span class="hex">#0361F0</span></div>
+    <div class="sw dark" style="background: var(--accent-700)"><span class="ix">700 · hover</span><span class="hex">#0249C2</span></div>
+    <div class="sw dark" style="background: var(--accent-800)"><span class="ix">800</span><span class="hex">#053A98</span></div>
+    <div class="sw dark" style="background: var(--accent-900)"><span class="ix">900</span><span class="hex">#062765</span></div>
+    <div class="sw" style="background: #fff; border: 1px dashed var(--hair)"><span class="ix">on-paper</span><span class="hex" style="color:var(--ink-4)">white</span></div>
+  </div>
+
+  <!-- State -->
+  <div class="ramp-h">— State <span class="desc">— used sparingly, paired with text — colour alone never carries meaning</span></div>
+
+  <div class="state-grid">
+    <div class="state-card">
+      <div class="top"><span class="dot" style="background: var(--ok)"></span><span class="nm">OK</span></div>
+      <p>Healthy generation, saved, exported. Never used as decoration.</p>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <span class="pill pill-ok"><span class="dot"></span> Saved</span>
+        <span class="pill pill-ok"><span class="dot"></span> Exported</span>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="top"><span class="dot" style="background: var(--warn)"></span><span class="nm">Warning</span></div>
+      <p>Brand drift detected, slide overflowing, near rate-limit. Fixable.</p>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <span class="pill pill-warn"><span class="dot"></span> Overflow</span>
+        <span class="pill pill-warn"><span class="dot"></span> Quota 90%</span>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="top"><span class="dot" style="background: var(--crit)"></span><span class="nm">Critical</span></div>
+      <p>Reserved for the irreversible — delete deck, revoke share, lose unsaved work.</p>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <span class="pill pill-crit"><span class="dot"></span> Delete deck</span>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="top"><span class="dot" style="background: var(--accent-600)"></span><span class="nm">Signal</span></div>
+      <p>The product accent. Marks "interactive, AI-suggested, brand."</p>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <span class="pill pill-accent"><span class="dot"></span> AI suggestion</span>
+        <span class="pill pill-accent"><span class="dot"></span> Brand</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">— A note on red</span></div>
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 17px; max-width: 60ch; line-height: 1.5;">
+    Critical-red is reserved for genuinely irreversible moments — deleting a deck, revoking a share link, losing unsaved work. Warnings use amber. This discipline lets red <em>retain its meaning</em> when the moment matters.
+  </p>
+
+</div>
+
+</body>
+</html>

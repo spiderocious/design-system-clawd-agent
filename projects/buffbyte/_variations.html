@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BuffByte · variations</title>
+<link rel="stylesheet" href="preview/_foundation.css" />
+<style>
+  body { padding: 48px 40px; }
+  .page-head {
+    max-width: 1320px;
+    margin: 0 auto 32px;
+  }
+  .page-head h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    margin: 0 0 6px;
+  }
+  .page-head p {
+    color: var(--ink-3);
+    max-width: 720px;
+    font-size: 14px;
+    margin: 0;
+  }
+  .grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .col {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .col-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .col-head .letter {
+    font-size: 38px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .col-head .title { font-size: 14px; font-weight: 500; }
+  .col-head .caption {
+    color: var(--ink-3);
+    font-size: 12.5px;
+    margin-top: 2px;
+    line-height: 1.45;
+  }
+  .col-head .head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .block .label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--track-overline);
+  }
+  .block .label-row .tag {
+    flex: 1; height: 1px; background: var(--hair);
+  }
+
+  /* Button row */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* Input groups */
+  .input-group { display: flex; flex-direction: column; gap: 14px; }
+
+  /* List row (a "trending topic") */
+  .list-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--hair);
+  }
+  .list-row:first-child { border-top: 0; }
+  .list-row .idx { font-size: 12px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+  .list-row .name { font-weight: 500; font-size: 14px; }
+  .list-row .meta { color: var(--ink-3); font-size: 12px; }
+  .list-row .num {
+    font-size: 14px; font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .list-row .delta-up { color: var(--good); font-size: 12px; font-weight: 500; }
+  .list-row .delta-flat { color: var(--ink-3); font-size: 12px; }
+
+  /* Score card (the analysis preview — signature card) */
+  .score-card {
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    background: var(--paper);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .score-card .head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    justify-content: space-between;
+  }
+  .score-card .title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .score-card .sub {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+  .score-card .quote {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    border-left: 2px solid var(--ink);
+    padding: 2px 0 2px 12px;
+  }
+  .score-card .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .score-card .stat .v {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .score-card .stat .l {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--track-overline);
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+
+  /* ======== Variation overrides ======== */
+  /* A — Coach Classic (moss accent, 8px geometry, mid-scale) */
+  .va {
+    --accent: var(--moss-500);
+    --accent-deep: var(--moss-700);
+    --accent-bg: var(--moss-50);
+    --accent-edge: var(--moss-200);
+    --r-card-v: 8px;
+    --r-soft-v: 6px;
+  }
+
+  /* B — Tighter Editorial (oxblood-ink monochrome, 2px sharp, scale punch) */
+  .vb {
+    --accent: #2A2825;      /* near-ink accent — the accent IS ink */
+    --accent-deep: #0F0E0D;
+    --accent-bg: var(--paper-deep);
+    --accent-edge: var(--ink);
+    --r-card-v: 2px;
+    --r-soft-v: 2px;
+  }
+  .vb .score-card { border-color: var(--ink); }
+  .vb .score-card .quote { border-color: var(--ink); }
+  .vb .col-head .letter { font-feature-settings: "ss01" 1; }
+
+  /* C — Notebook Soft (clay/terracotta semantic, 12px round, generous) */
+  .vc {
+    --accent: #B66A4A;      /* terracotta — earthy, not orange */
+    --accent-deep: #8C4D33;
+    --accent-bg: #F9EFE8;
+    --accent-edge: #E9CFBF;
+    --r-card-v: 12px;
+    --r-soft-v: 10px;
+  }
+  .vc .score-card { background: var(--paper-deep); }
+
+  /* applied via class-level vars */
+  .col .btn-primary { background: var(--ink); }
+  .col .btn-secondary { border-color: var(--hair); }
+  .col .input { border-radius: var(--r-soft-v); }
+  .col .btn { border-radius: var(--r-soft-v); }
+  .col .pill { border-radius: var(--r-pill); }
+  .col .score-card { border-radius: var(--r-card-v); }
+  .col .bar > i { background: var(--accent); }
+  .col .pill-good { background: var(--accent-bg); color: var(--accent-deep); border-color: var(--accent-edge); }
+
+  /* Bottom call-to-action */
+  .pick {
+    max-width: 1320px;
+    margin: 40px auto 0;
+    padding: 24px 28px;
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    background: var(--sheet);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .pick p { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 680px; line-height: 1.5; }
+  .pick strong { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>BuffByte · variations</h1>
+  <p>Three reads on the <em>Warm-coach</em> stance for BuffByte. All three share the canvas, the ink, the type, and the coach voice — they differ in <strong>accent shade</strong>, <strong>corner geometry</strong>, and <strong>scale</strong>. Same DNA, three temperatures.</p>
+</header>
+
+<div class="grid">
+
+  <!-- ============================ A ============================ -->
+  <section class="col va">
+    <header class="col-head">
+      <span class="letter">A</span>
+      <div class="head-text">
+        <span class="title">Coach classic — moss</span>
+        <span class="caption">The reference reading: warm canvas, moss-green as the single positive accent, 8 px corners, restrained scale. Closest to “friend leaving notes in pencil.”</span>
+      </div>
+    </header>
+
+    <div class="block">
+      <div class="label-row"><span>Buttons</span><span class="tag"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-primary">Analyze content
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 12h14M14 6l6 6-6 6"/></svg>
+        </button>
+        <button class="btn btn-secondary">Save draft</button>
+        <button class="btn btn-ghost">Cancel</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-danger">Delete analysis</button>
+        <span class="pill pill-good">Strong hook</span>
+        <span class="pill pill-warn">Tighten middle</span>
+        <span class="pill">Twitter</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Inputs</span><span class="tag"></span></div>
+      <div class="input-group">
+        <div>
+          <label class="label">Script title</label>
+          <input class="input" placeholder="Striking the balance between shipping new features…" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="label">Platform</label>
+            <div class="input" style="display:flex;align-items:center;justify-content:space-between;color:var(--ink);">
+              <span>Twitter</span>
+              <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-3);"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div>
+            <label class="label">Length</label>
+            <input class="input t-num" value="251" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Trending list</span><span class="tag"></span></div>
+      <div>
+        <div class="list-row">
+          <span class="idx">01</span>
+          <div>
+            <div class="name">#HildaBaci</div>
+            <div class="meta">Trending for days · jollof_rice · guinness_world_record</div>
+          </div>
+          <span class="num">58.0K</span>
+          <span class="delta-up">↑ 87%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">02</span>
+          <div>
+            <div class="name">#JollofRice</div>
+            <div class="meta">Trending · nigerian_food</div>
+          </div>
+          <span class="num">42.0K</span>
+          <span class="delta-up">↑ 84%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">03</span>
+          <div>
+            <div class="name">#Tottenham</div>
+            <div class="meta">Football · premier_league</div>
+          </div>
+          <span class="num">35.0K</span>
+          <span class="delta-flat">— 74%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Signature card · Analysis preview</span><span class="tag"></span></div>
+      <div class="score-card">
+        <div class="head">
+          <div>
+            <div class="title">Recipe testing video, draft 3</div>
+            <div class="sub">251 characters · TikTok + Instagram · analysed 4 min ago</div>
+          </div>
+          <span class="pill pill-good">Ready to publish</span>
+        </div>
+        <p class="quote">Your hook lands in the first six words. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">89<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Success rate</div></div>
+          <div class="stat"><div class="v">76<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Hook strength</div></div>
+          <div class="stat"><div class="v">0.78</div><div class="l">Sentiment</div></div>
+        </div>
+        <div>
+          <div class="bar good" style="margin-bottom:8px;"><i style="width:89%"></i></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);letter-spacing:var(--track-overline);text-transform:uppercase;">
+            <span>Score</span><span class="t-num">89 / 100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================ B ============================ -->
+  <section class="col vb">
+    <header class="col-head">
+      <span class="letter">B</span>
+      <div class="head-text">
+        <span class="title">Editorial — ink-only</span>
+        <span class="caption">Strictest read. Ink is the accent. 2 px sharp corners. Heavier rule weights. Closest to an editor’s typed-and-stapled memo — most disciplined, most pro.</span>
+      </div>
+    </header>
+
+    <div class="block">
+      <div class="label-row"><span>Buttons</span><span class="tag"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-primary">Analyze content
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 12h14M14 6l6 6-6 6"/></svg>
+        </button>
+        <button class="btn btn-secondary">Save draft</button>
+        <button class="btn btn-ghost">Cancel</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-danger">Delete analysis</button>
+        <span class="pill pill-ink">Strong hook</span>
+        <span class="pill pill-warn">Tighten middle</span>
+        <span class="pill">Twitter</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Inputs</span><span class="tag"></span></div>
+      <div class="input-group">
+        <div>
+          <label class="label">Script title</label>
+          <input class="input" placeholder="Striking the balance between shipping new features…" style="border-radius:2px;" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="label">Platform</label>
+            <div class="input" style="display:flex;align-items:center;justify-content:space-between;color:var(--ink);border-radius:2px;">
+              <span>Twitter</span>
+              <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-3);"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div>
+            <label class="label">Length</label>
+            <input class="input t-num" value="251" style="border-radius:2px;" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Trending list</span><span class="tag"></span></div>
+      <div>
+        <div class="list-row">
+          <span class="idx">01</span>
+          <div>
+            <div class="name">#HildaBaci</div>
+            <div class="meta">Trending for days · jollof_rice · guinness_world_record</div>
+          </div>
+          <span class="num">58.0K</span>
+          <span class="delta-up" style="color:var(--ink);">↑ 87%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">02</span>
+          <div>
+            <div class="name">#JollofRice</div>
+            <div class="meta">Trending · nigerian_food</div>
+          </div>
+          <span class="num">42.0K</span>
+          <span class="delta-up" style="color:var(--ink);">↑ 84%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">03</span>
+          <div>
+            <div class="name">#Tottenham</div>
+            <div class="meta">Football · premier_league</div>
+          </div>
+          <span class="num">35.0K</span>
+          <span class="delta-flat">— 74%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Signature card · Analysis preview</span><span class="tag"></span></div>
+      <div class="score-card" style="border-radius:2px;">
+        <div class="head">
+          <div>
+            <div class="title">Recipe testing video, draft 3</div>
+            <div class="sub">251 characters · TikTok + Instagram · analysed 4 min ago</div>
+          </div>
+          <span class="pill pill-ink">Ready to publish</span>
+        </div>
+        <p class="quote">Your hook lands in the first six words. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">89<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Success rate</div></div>
+          <div class="stat"><div class="v">76<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Hook strength</div></div>
+          <div class="stat"><div class="v">0.78</div><div class="l">Sentiment</div></div>
+        </div>
+        <div>
+          <div class="bar" style="margin-bottom:8px;height:3px;"><i style="width:89%;background:var(--ink);"></i></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);letter-spacing:var(--track-overline);text-transform:uppercase;">
+            <span>Score</span><span class="t-num">89 / 100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================ C ============================ -->
+  <section class="col vc">
+    <header class="col-head">
+      <span class="letter">C</span>
+      <div class="head-text">
+        <span class="title">Notebook — terracotta</span>
+        <span class="caption">Softest read. 12 px rounded corners, slightly recessed cards, terracotta as the positive accent (think pencil-on-craft-paper). Warmest, most consumer-friendly.</span>
+      </div>
+    </header>
+
+    <div class="block">
+      <div class="label-row"><span>Buttons</span><span class="tag"></span></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" style="border-radius:10px;">Analyze content
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 12h14M14 6l6 6-6 6"/></svg>
+        </button>
+        <button class="btn btn-secondary" style="border-radius:10px;">Save draft</button>
+        <button class="btn btn-ghost" style="border-radius:10px;">Cancel</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-danger" style="border-radius:10px;">Delete analysis</button>
+        <span class="pill" style="background:var(--accent-bg);color:var(--accent-deep);border-color:var(--accent-edge);">Strong hook</span>
+        <span class="pill pill-warn">Tighten middle</span>
+        <span class="pill">Twitter</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Inputs</span><span class="tag"></span></div>
+      <div class="input-group">
+        <div>
+          <label class="label">Script title</label>
+          <input class="input" placeholder="Striking the balance between shipping new features…" style="border-radius:10px;" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="label">Platform</label>
+            <div class="input" style="display:flex;align-items:center;justify-content:space-between;color:var(--ink);border-radius:10px;">
+              <span>Twitter</span>
+              <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-3);"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div>
+            <label class="label">Length</label>
+            <input class="input t-num" value="251" style="border-radius:10px;" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Trending list</span><span class="tag"></span></div>
+      <div>
+        <div class="list-row">
+          <span class="idx">01</span>
+          <div>
+            <div class="name">#HildaBaci</div>
+            <div class="meta">Trending for days · jollof_rice · guinness_world_record</div>
+          </div>
+          <span class="num">58.0K</span>
+          <span class="delta-up" style="color:var(--accent-deep);">↑ 87%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">02</span>
+          <div>
+            <div class="name">#JollofRice</div>
+            <div class="meta">Trending · nigerian_food</div>
+          </div>
+          <span class="num">42.0K</span>
+          <span class="delta-up" style="color:var(--accent-deep);">↑ 84%</span>
+        </div>
+        <div class="list-row">
+          <span class="idx">03</span>
+          <div>
+            <div class="name">#Tottenham</div>
+            <div class="meta">Football · premier_league</div>
+          </div>
+          <span class="num">35.0K</span>
+          <span class="delta-flat">— 74%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label-row"><span>Signature card · Analysis preview</span><span class="tag"></span></div>
+      <div class="score-card" style="border-radius:12px;">
+        <div class="head">
+          <div>
+            <div class="title">Recipe testing video, draft 3</div>
+            <div class="sub">251 characters · TikTok + Instagram · analysed 4 min ago</div>
+          </div>
+          <span class="pill" style="background:var(--accent-bg);color:var(--accent-deep);border-color:var(--accent-edge);">Ready to publish</span>
+        </div>
+        <p class="quote">Your hook lands in the first six words. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">89<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Success rate</div></div>
+          <div class="stat"><div class="v">76<span style="font-size:13px;color:var(--ink-3);">%</span></div><div class="l">Hook strength</div></div>
+          <div class="stat"><div class="v">0.78</div><div class="l">Sentiment</div></div>
+        </div>
+        <div>
+          <div class="bar" style="margin-bottom:8px;"><i style="width:89%;background:var(--accent);"></i></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);letter-spacing:var(--track-overline);text-transform:uppercase;">
+            <span>Score</span><span class="t-num">89 / 100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="pick">
+  <p>All three are <strong>Warm coach</strong>. <strong>A</strong> commits hardest to the metaphor — moss-as-accent, mid-radius. <strong>B</strong> is the most disciplined — ink-as-accent, sharp 2 px, no chromatic relief. <strong>C</strong> softens — terracotta accent, 12 px rounding, more “notebook,” less “memo.” Pick one. You can also say “A but with B's geometry” or similar — I'll fold it in.</p>
+</div>
+
+</body>
+</html>

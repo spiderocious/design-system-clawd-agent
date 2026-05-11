@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · tables</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 0; margin-bottom: 24px; overflow: hidden; }
+
+  .table-bar { display: flex; align-items: center; gap: 10px; padding: 16px 24px; border-bottom: 1px solid var(--hair); }
+  .table-bar h3 { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .table-bar .ct { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .table-bar .gap { flex: 1; }
+
+  .filter-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 999px; font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+  .filter-pill .x { color: var(--ink-4); cursor: pointer; }
+
+  table.t {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.t th, table.t td { padding: 10px 24px; text-align: left; border-bottom: 1px solid var(--hair-soft); }
+  table.t th {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    border-bottom: 1px solid var(--ink); background: var(--paper);
+    cursor: pointer; user-select: none;
+  }
+  table.t th .arrow { color: var(--ink); margin-left: 4px; }
+  table.t td.thumb-c { width: 80px; }
+  table.t .thumb {
+    width: 64px; aspect-ratio: 16/10;
+    background: #FBFAF7; border-radius: 4px; border: 1px solid var(--hair);
+    overflow: hidden; padding: 5px 7px;
+    color: #14110D;
+  }
+  table.t .thumb .h { height: 3px; background: #14110D; border-radius: 2px; width: 70%; }
+  table.t .thumb .b { height: 1px; background: #D9D0BB; margin-top: 3px; }
+  table.t .nm { font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: -0.012em; }
+  table.t .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  table.t tr.selected { background: var(--accent-50); }
+  table.t tr:hover { background: var(--paper-deep); }
+  table.t .ck { width: 16px; height: 16px; border: 1.5px solid var(--ink-4); border-radius: 4px; cursor: pointer; }
+  table.t .ck.on { background: var(--accent-600); border-color: var(--accent-600); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+  table.t .ck.on::before { content: "✓"; font-size: 11px; font-weight: 700; }
+  table.t td.tabular { font-family: var(--mono); }
+
+  /* Selection bar */
+  .sel-bar {
+    position: sticky; bottom: 16px;
+    margin: -50px auto 24px; max-width: 720px;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 14px 10px 18px;
+    border-radius: 999px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: var(--shade-3);
+    z-index: 10;
+  }
+  .sel-bar .ct { font-family: var(--sans); font-size: 13px; font-weight: 500; }
+  .sel-bar .gap { flex: 1; }
+  .sel-bar button { background: rgba(255,255,255,0.12); color: #fff; border: 0; border-radius: 999px; padding: 6px 14px; font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer; }
+  .sel-bar button:hover { background: rgba(255,255,255,0.20); }
+  .sel-bar button.danger { background: var(--crit); }
+
+  /* Density toggles */
+  .density-seg { display: inline-flex; gap: 0; background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 8px; padding: 2px; }
+  .density-seg button { padding: 4px 8px; border: 0; background: transparent; cursor: pointer; font-size: 11px; font-weight: 500; color: var(--ink-3); border-radius: 6px; font-family: var(--sans); }
+  .density-seg button.on { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 20 —</span>
+    <h1 class="ttl">Tables</h1>
+    <span class="meta">Data &amp; state · the deck worklist</span>
+  </div>
+
+  <div class="scene">
+    <div class="table-bar">
+      <h3>Your decks</h3>
+      <span class="ct">142 total</span>
+      <span class="filter-pill">stance: editorial <span class="x">×</span></span>
+      <span class="filter-pill">edited: this week <span class="x">×</span></span>
+      <span class="gap"></span>
+      <div class="density-seg">
+        <button>Compact</button>
+        <button class="on">Cozy</button>
+        <button>Airy</button>
+      </div>
+      <button class="btn btn-secondary btn-sm">+ Filter</button>
+      <button class="btn btn-accent btn-sm">＋ New deck</button>
+    </div>
+
+    <table class="t">
+      <thead>
+        <tr>
+          <th style="width: 36px;"><span class="ck partial" style="background: var(--accent-600); border-color: var(--accent-600);"></span></th>
+          <th>Deck<span class="arrow">↓</span></th>
+          <th class="thumb-c"></th>
+          <th>Pack</th>
+          <th>Slides</th>
+          <th>Owner</th>
+          <th>Edited</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="selected">
+          <td><span class="ck on"></span></td>
+          <td><div class="nm">Q2 Board Update — Halcyon</div><div class="sub">15 min · investors only</div></td>
+          <td><div class="thumb"><div class="h"></div><div class="b"></div><div class="b" style="width:60%"></div></div></td>
+          <td>Editorial broadsheet</td>
+          <td class="tabular">12</td>
+          <td>Feranmi</td>
+          <td class="tabular">12 sec ago</td>
+          <td><span class="pill pill-accent"><span class="dot"></span> Generating</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr class="selected">
+          <td><span class="ck on"></span></td>
+          <td><div class="nm">Series A Pitch — Forma Labs</div><div class="sub">demo deck for Sequoia partner</div></td>
+          <td><div class="thumb"><div class="h" style="background:#FF6A00"></div><div class="b"></div><div class="b" style="width:80%"></div></div></td>
+          <td>Editorial broadsheet</td>
+          <td class="tabular">18</td>
+          <td>Maya</td>
+          <td class="tabular">2 hr ago</td>
+          <td><span class="pill"><span class="dot"></span> Draft</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><span class="ck"></span></td>
+          <td><div class="nm">Q1 Retrospective — internal</div><div class="sub">all-hands recap</div></td>
+          <td><div class="thumb" style="background: #FFFFFF;"><div class="h" style="background: #000"></div><div class="b" style="background: #ccc"></div></div></td>
+          <td>Swiss instrument</td>
+          <td class="tabular">9</td>
+          <td>Feranmi</td>
+          <td class="tabular">3 days ago</td>
+          <td><span class="pill pill-ok"><span class="dot"></span> Shared</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><span class="ck"></span></td>
+          <td><div class="nm">Brand Refresh Proposal</div><div class="sub">for the design team</div></td>
+          <td><div class="thumb" style="background:#1C1A18"><div style="height:1px;background:#C9B27A;width:60%;margin-top:14px"></div></div></td>
+          <td>Showroom mono</td>
+          <td class="tabular">14</td>
+          <td>James</td>
+          <td class="tabular">5 days ago</td>
+          <td><span class="pill pill-ok"><span class="dot"></span> Exported</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><span class="ck"></span></td>
+          <td><div class="nm">Photosynthesis 101</div><div class="sub">9th-grade biology</div></td>
+          <td><div class="thumb" style="background:#F4EAD9"><div class="h" style="background:#00513D"></div><div class="b" style="width:80%"></div></div></td>
+          <td>Risograph print</td>
+          <td class="tabular">22</td>
+          <td>Feranmi</td>
+          <td class="tabular">1 week ago</td>
+          <td><span class="pill"><span class="dot"></span> Archived</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><span class="ck"></span></td>
+          <td><div class="nm">Wedding announcement</div><div class="sub">family + close friends</div></td>
+          <td><div class="thumb" style="background:#F7F5F0"><div class="h" style="background:#2C2A26;width:50%"></div><div class="b" style="width:90%"></div></div></td>
+          <td>Soft Scandinavian</td>
+          <td class="tabular">6</td>
+          <td>Feranmi</td>
+          <td class="tabular">2 weeks ago</td>
+          <td><span class="pill pill-warn"><span class="dot"></span> Needs review</span></td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bulk selection bar -->
+  <div class="sel-bar">
+    <span class="ct">2 decks selected</span>
+    <span class="gap"></span>
+    <button>Move to folder</button>
+    <button>Export</button>
+    <button>Duplicate</button>
+    <button>Share</button>
+    <button class="danger">Delete</button>
+    <span class="kbd" style="background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.85);">esc</span>
+  </div>
+
+</div>
+
+</body>
+</html>

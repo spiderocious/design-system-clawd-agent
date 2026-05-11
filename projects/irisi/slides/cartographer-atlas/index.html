@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 19 · Cartographer's atlas</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  .ca { background: #F4EAD0; color: #3E2A14; font-family: 'Cormorant Garamond', 'Source Serif 4', serif; padding: 64px 88px; height: 100%; display: flex; flex-direction: column; position: relative; }
+  .ca::before { content: ""; position: absolute; inset: 24px; border: 1px solid #8B5A3C; pointer-events: none; opacity: 0.4; }
+  .ca::after { content: ""; position: absolute; inset: 32px; border: 1px solid #8B5A3C; pointer-events: none; opacity: 0.2; }
+  .ca > * { position: relative; z-index: 2; }
+  .ca .lbl { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.32em; color: #8B5A3C; text-transform: uppercase; }
+  .ca h2 { font-family: 'Cinzel', serif; font-weight: 500; line-height: 1.05; letter-spacing: 0.02em; margin: 18px 0 0; text-transform: uppercase; }
+  .ca .claret { color: #8B2C36; }
+  .ca .ital { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+  .ca.cover { justify-content: center; align-items: center; text-align: center; }
+  .ca.cover h2 { font-size: 72px; max-width: 14ch; }
+  .ca.cover .meta { font-style: italic; font-size: 17px; color: #8B5A3C; margin-top: 22px; padding-top: 14px; border-top: 1px solid #8B5A3C; max-width: 50ch; }
+  .ca.cover .ornament { font-family: 'Cinzel', serif; font-size: 22px; color: #8B5A3C; margin-top: 14px; }
+
+  .ca.agenda h2 { font-size: 48px; margin: 14px 0 28px; }
+  .ca.agenda ol { font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.7; padding-left: 24px; }
+  .ca.agenda ol li { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dotted #8B5A3C; }
+  .ca.agenda ol li .meta { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.16em; color: #8B5A3C; text-transform: uppercase; margin-left: 12px; }
+
+  .ca.section { justify-content: center; align-items: center; text-align: center; }
+  .ca.section h2 { font-size: 80px; max-width: 12ch; }
+  .ca.section .ornament { font-family: 'Cinzel', serif; font-size: 36px; color: #8B5A3C; margin-bottom: 18px; }
+
+  .ca.headline h2 { font-size: 52px; max-width: 18ch; }
+  .ca.headline .body { font-family: 'Cormorant Garamond', serif; font-size: 18px; line-height: 1.6; max-width: 60ch; margin-top: 22px; }
+  .ca.headline .dropcap::first-letter { font-family: 'Cinzel', serif; font-size: 52px; float: left; line-height: 0.9; padding: 4px 6px 0 0; color: #8B2C36; }
+
+  .ca.bigstat { justify-content: center; }
+  .ca.bigstat h2 { font-size: 36px; margin: 14px 0 28px; }
+  .ca.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 32px 0; border-top: 1px solid #8B5A3C; border-bottom: 1px solid #8B5A3C; }
+  .ca.bigstat .stat { font-family: 'Cinzel', serif; font-size: 56px; font-weight: 500; letter-spacing: 0.02em; line-height: 1; color: #8B2C36; }
+  .ca.bigstat .lbl { margin-top: 10px; }
+
+  .ca.twocol h2 { font-size: 40px; margin: 12px 0 24px; }
+  .ca.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding-top: 14px; border-top: 1px solid #8B5A3C; }
+  .ca.twocol .cols h3 { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 500; margin: 0 0 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ca.twocol .cols ul { font-size: 16px; line-height: 1.7; padding-left: 18px; margin: 0; }
+
+  .ca.threecol h2 { font-size: 40px; margin: 12px 0 24px; }
+  .ca.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 14px; border-top: 1px solid #8B5A3C; }
+  .ca.threecol .cols .nm { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.32em; color: #8B5A3C; text-transform: uppercase; }
+  .ca.threecol .cols h3 { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 500; margin: 8px 0 6px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ca.threecol .cols p { font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.65; margin: 0; }
+
+  .ca.imgled { padding: 0; flex-direction: row; }
+  .ca.imgled::before, .ca.imgled::after { display: none; }
+  .ca.imgled .img { flex: 1; background: #F4EAD0; padding: 48px; display: flex; align-items: center; justify-content: center; border-right: 1px solid #8B5A3C; }
+  .ca.imgled .img svg { width: 100%; max-width: 360px; }
+  .ca.imgled .copy { flex: 0 0 42%; padding: 56px; display: flex; flex-direction: column; justify-content: end; background: #F4EAD0; }
+  .ca.imgled .copy h2 { font-size: 40px; max-width: 14ch; }
+
+  .ca.quote { justify-content: center; padding: 64px 96px; align-items: center; text-align: center; }
+  .ca.quote .ornament { font-family: 'Cinzel', serif; font-size: 28px; color: #8B5A3C; margin-bottom: 22px; }
+  .ca.quote .q { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 44px; font-weight: 400; line-height: 1.2; max-width: 22ch; }
+  .ca.quote .attr { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.32em; color: #8B5A3C; text-transform: uppercase; margin-top: 32px; }
+
+  .ca.timeline h2 { font-size: 40px; margin: 12px 0 24px; }
+  .ca.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 14px; border-top: 1px solid #8B5A3C; }
+  .ca.timeline .step .wk { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.32em; color: #8B2C36; text-transform: uppercase; }
+  .ca.timeline .step h4 { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 500; margin: 8px 0; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ca.timeline .step p { font-family: 'Cormorant Garamond', serif; font-size: 14px; line-height: 1.65; margin: 0; }
+
+  .ca.team h2 { font-size: 40px; margin: 12px 0 24px; }
+  .ca.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; padding-top: 14px; border-top: 1px solid #8B5A3C; }
+  .ca.team .person .img { aspect-ratio: 3/4; background: linear-gradient(135deg, #C9A87A 0%, #6E4F2A 100%); border: 1px solid #8B5A3C; }
+  .ca.team .person h4 { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 500; margin: 12px 0 4px; letter-spacing: 0.06em; }
+  .ca.team .person .role { font-family: 'Cinzel', serif; font-size: 10px; color: #8B2C36; letter-spacing: 0.32em; text-transform: uppercase; }
+  .ca.team .person p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; line-height: 1.6; margin: 8px 0 0; }
+
+  .ca.coda { justify-content: center; align-items: center; text-align: center; }
+  .ca.coda .ornament { font-family: 'Cinzel', serif; font-size: 32px; color: #8B5A3C; margin-bottom: 18px; }
+  .ca.coda h2 { font-size: 88px; }
+  .ca.coda .meta { font-style: italic; font-size: 18px; color: #8B5A3C; margin-top: 22px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">19</span><span class="nm">Cartographer's atlas</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 19 · Period</div>
+    <h1>A 1920s railway-society atlas.</h1>
+    <p>Cream paper, sepia inks, faint topographic contour. Trajan/Cinzel for headings, Garamond for body. Period-correct, formal voice.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · travel, museums, archives, genealogy</div>
+    <div><strong>Type</strong> · Cinzel · Cormorant Garamond</div>
+    <div><strong>Accent</strong> · Sepia + claret</div>
+    <div><strong>Density</strong> · spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="ca cover">
+    <span class="lbl">— Volume VIII · MMXXVI —</span>
+    <div class="ornament">⁕ ❦ ⁕</div>
+    <h2>Halcyon &amp; Co.</h2>
+    <h2 style="font-size: 36px; margin-top: 8px;" class="claret">— Q.2 — A Quarterly Atlas</h2>
+    <div class="meta">A measured account of the second quarter of two thousand and twenty-six, presented unto the board on the fourteenth of May.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="ca agenda">
+    <span class="lbl">— Index of Contents —</span>
+    <h2>Of Interest.</h2>
+    <ol>
+      <li>Where we are <span class="meta">III min</span></li>
+      <li>The honest part <span class="meta">V min</span></li>
+      <li>What we're cutting <span class="meta">IV min</span></li>
+      <li>Roadmap &amp; risks <span class="meta">III min</span></li>
+      <li>Asks of the board <span class="meta">III min</span></li>
+    </ol>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="ca section">
+    <div class="ornament">— I —</div>
+    <span class="lbl">— Section the first —</span>
+    <h2 style="margin-top: 14px;">Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="ca headline">
+    <span class="lbl">— Q.II · MMXXVI —</span>
+    <h2>The Quiet Rebellion of Measured Growth.</h2>
+    <div class="body dropcap">Most companies confuse motion for progress. We have spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason is not strategy; it is the discipline of restraint.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="ca bigstat">
+    <span class="lbl">— A measured account —</span>
+    <h2>Three figures.</h2>
+    <div class="row">
+      <div><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div><div class="stat">+42%</div><div class="lbl">— Q.o.Q growth</div></div>
+      <div><div class="stat">9.1</div><div class="lbl">— Customer NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="ca twocol">
+    <span class="lbl">— The honest part —</span>
+    <h2>Of triumphs &amp; defeats.</h2>
+    <div class="cols">
+      <div><h3>Where we beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="claret">Where we missed.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="ca threecol">
+    <span class="lbl">— What we're cutting —</span>
+    <h2>Three sunsets.</h2>
+    <div class="cols">
+      <div><span class="nm">— I —</span><h3>Mobile rebuild</h3><p>Two engineers reclaimed for the web product, where ninety-two percent of revenue lives.</p></div>
+      <div><span class="nm">— II —</span><h3>Partner portal</h3><p>Three signs in eighteen months. Going one-to-one instead.</p></div>
+      <div><span class="nm">— III —</span><h3>Second brand</h3><p>Cannibalised. Consolidating under Halcyon.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="ca imgled">
+    <div class="img">
+      <svg viewBox="0 0 400 300" style="width: 100%;">
+        <ellipse cx="200" cy="150" rx="160" ry="120" fill="none" stroke="#8B5A3C" stroke-width="1" opacity="0.4"/>
+        <ellipse cx="200" cy="150" rx="120" ry="90" fill="none" stroke="#8B5A3C" stroke-width="1" opacity="0.5"/>
+        <ellipse cx="200" cy="150" rx="80" ry="60" fill="none" stroke="#8B5A3C" stroke-width="1" opacity="0.6"/>
+        <ellipse cx="200" cy="150" rx="40" ry="30" fill="#8B2C36" opacity="0.4"/>
+        <text x="200" y="155" text-anchor="middle" font-family="Cinzel" font-size="14" letter-spacing="0.2em" fill="#3E2A14">HALCYON HQ</text>
+        <text x="200" y="280" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="13" fill="#8B5A3C">— Plate IV · The territory of work —</text>
+      </svg>
+    </div>
+    <div class="copy">
+      <span class="lbl">— Plate IV —</span>
+      <h2>The territory of <span class="ital">work.</span></h2>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="ca quote">
+    <div class="ornament">⁕</div>
+    <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— B. Horowitz, esq.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="ca timeline">
+    <span class="lbl">— Schedule of works · six weeks —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— Wk I–II —</span><h4>Interviews</h4><p>Twelve calls. Synthesise patterns.</p></div>
+      <div class="step"><span class="wk">— Wk II–III —</span><h4>Prototype</h4><p>Two competing flows.</p></div>
+      <div class="step"><span class="wk">— Wk IV–V —</span><h4>Build</h4><p>Two engineers. Closed beta.</p></div>
+      <div class="step"><span class="wk">— Wk VI —</span><h4>Ship</h4><p>One hundred per cent rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="ca team">
+    <span class="lbl">— Asks of the board —</span>
+    <h2>The roster.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A timing</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="ca coda">
+    <div class="ornament">⁕ ❦ ⁕</div>
+    <h2>Thank You.</h2>
+    <div class="meta">— Questions, on the record · halcyon.co/q2 —</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 19 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

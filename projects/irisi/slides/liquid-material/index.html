@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 15 · Liquid material</title>
+<link rel="stylesheet" href="../_pack.css">
+<style>
+  .lq { background: linear-gradient(180deg, #4880FE 0%, #1E63F7 50%, #062765 100%); color: #fff; font-family: -apple-system, 'SF Pro', 'Inter', sans-serif; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .lq::before { content: ""; position: absolute; top: 10%; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: rgba(255,255,255,0.15); filter: blur(60px); }
+  .lq::after { content: ""; position: absolute; bottom: 0; left: -50px; width: 300px; height: 300px; border-radius: 50%; background: rgba(180,200,255,0.20); filter: blur(80px); }
+  .lq > * { position: relative; z-index: 2; }
+  .lq h2 { font-family: -apple-system, 'SF Pro Display', 'Inter', sans-serif; font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; margin: 14px 0 0; }
+  .lq .lbl { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7; }
+  .lq .glass { background: rgba(255,255,255,0.10); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.20); border-radius: 28px; }
+
+  .lq.cover { justify-content: end; }
+  .lq.cover h2 { font-size: 96px; max-width: 14ch; }
+  .lq.cover .meta { display: flex; gap: 18px; margin-top: 24px; font-size: 13px; opacity: 0.8; }
+
+  .lq.agenda h2 { font-size: 48px; margin: 14px 0 24px; }
+  .lq.agenda .glass { padding: 18px 24px; }
+  .lq.agenda .item { display: grid; grid-template-columns: 60px 1fr auto; gap: 14px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.15); font-size: 17px; font-weight: 500; }
+  .lq.agenda .item:first-child { border-top: 0; }
+  .lq.agenda .item .ix { opacity: 0.6; }
+  .lq.agenda .item .meta { font-size: 12px; opacity: 0.6; }
+
+  .lq.section { justify-content: center; align-items: center; }
+  .lq.section h2 { font-size: 96px; max-width: 12ch; text-align: center; }
+
+  .lq.headline h2 { font-size: 56px; max-width: 18ch; }
+  .lq.headline .body { font-size: 16px; line-height: 1.6; max-width: 60ch; margin-top: 22px; opacity: 0.92; }
+
+  .lq.bigstat { justify-content: center; }
+  .lq.bigstat h2 { font-size: 28px; margin: 14px 0 28px; }
+  .lq.bigstat .glass { padding: 32px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .lq.bigstat .stat { font-size: 76px; font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; }
+  .lq.bigstat .lbl { margin-top: 8px; font-size: 11px; }
+
+  .lq.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .lq.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .lq.twocol .glass { padding: 24px 28px; }
+  .lq.twocol .glass h3 { font-size: 18px; font-weight: 600; margin: 0 0 12px; }
+  .lq.twocol .glass ul { font-size: 14px; line-height: 1.7; padding-left: 18px; margin: 0; opacity: 0.92; }
+
+  .lq.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .lq.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .lq.threecol .glass { padding: 22px; }
+  .lq.threecol .glass .nm { font-size: 11px; letter-spacing: 0.18em; opacity: 0.7; text-transform: uppercase; }
+  .lq.threecol .glass h3 { font-size: 20px; font-weight: 600; margin: 8px 0 6px; letter-spacing: -0.018em; }
+  .lq.threecol .glass p { font-size: 13px; line-height: 1.6; margin: 0; opacity: 0.92; }
+
+  .lq.imgled { padding: 0; flex-direction: row; }
+  .lq.imgled::before, .lq.imgled::after { display: none; }
+  .lq.imgled .img { flex: 1; background: linear-gradient(135deg, #FF6BCB, #4880FE); position: relative; }
+  .lq.imgled .copy { flex: 0 0 44%; padding: 56px; display: flex; flex-direction: column; justify-content: end; background: linear-gradient(135deg, #1E63F7, #062765); }
+  .lq.imgled .copy h2 { font-size: 44px; max-width: 14ch; margin-top: 14px; }
+
+  .lq.quote { justify-content: center; padding: 64px 96px; }
+  .lq.quote .glass { padding: 48px 56px; }
+  .lq.quote .q { font-size: 44px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; max-width: 22ch; }
+  .lq.quote .attr { font-size: 12px; letter-spacing: 0.22em; opacity: 0.7; margin-top: 24px; }
+
+  .lq.timeline h2 { font-size: 32px; margin: 12px 0 22px; }
+  .lq.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .lq.timeline .step { padding: 18px; }
+  .lq.timeline .step .wk { font-size: 11px; letter-spacing: 0.18em; opacity: 0.7; text-transform: uppercase; }
+  .lq.timeline .step h4 { font-size: 17px; font-weight: 600; margin: 8px 0 6px; }
+  .lq.timeline .step p { font-size: 12px; line-height: 1.5; margin: 0; opacity: 0.85; }
+
+  .lq.team h2 { font-size: 32px; margin: 12px 0 22px; }
+  .lq.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .lq.team .person { padding: 18px; }
+  .lq.team .person .img { aspect-ratio: 1/1; background: linear-gradient(135deg, #FF6BCB, #062765); border-radius: 16px; }
+  .lq.team .person h4 { font-size: 15px; font-weight: 600; margin: 12px 0 2px; }
+  .lq.team .person .role { font-size: 10px; letter-spacing: 0.18em; opacity: 0.7; text-transform: uppercase; }
+  .lq.team .person p { font-size: 11px; line-height: 1.5; margin: 6px 0 0; opacity: 0.85; }
+
+  .lq.coda { justify-content: end; align-items: center; text-align: center; }
+  .lq.coda h2 { font-size: 120px; }
+  .lq.coda .meta { font-size: 13px; letter-spacing: 0.22em; opacity: 0.8; margin-top: 18px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">15</span><span class="nm">Liquid material</span></div><div class="meta"><span>12 layouts · beta</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 15 · Apple-native</div>
+    <h1>Apple's "liquid glass" era.</h1>
+    <p>Glassy, translucent, refractive. Spring-physics motion, continuous-curve corners, depth via blur not shadow. SF Pro with optical-size variation.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · premium consumer SaaS, Apple-native</div>
+    <div><strong>Type</strong> · SF Pro Display</div>
+    <div><strong>Accent</strong> · Adaptive vibrant</div>
+    <div><strong>Density</strong> · spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="lq cover">
+    <span class="lbl">— Quarterly · Q2 · 2026 —</span>
+    <h2>Halcyon.</h2>
+    <div class="meta"><span>14 May 2026</span><span>· Q2 board update</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="lq agenda">
+    <span class="lbl">— What's inside —</span>
+    <h2>Agenda.</h2>
+    <div class="glass">
+      <div class="item"><span class="ix">01</span><span>Where we are</span><span class="meta">3 min</span></div>
+      <div class="item"><span class="ix">02</span><span>The honest part</span><span class="meta">5 min</span></div>
+      <div class="item"><span class="ix">03</span><span>What we're cutting</span><span class="meta">4 min</span></div>
+      <div class="item"><span class="ix">04</span><span>Roadmap &amp; risks</span><span class="meta">3 min</span></div>
+      <div class="item"><span class="ix">05</span><span>Asks of the board</span><span class="meta">3 min</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="lq section">
+    <span class="lbl">— Section one —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="lq headline">
+    <span class="lbl">— Quarterly · Q2 2026 —</span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that — revenue is up forty-two percent without a single new hire on the GTM team.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="lq bigstat">
+    <span class="lbl">— Q2 results —</span>
+    <h2>In numbers.</h2>
+    <div class="glass">
+      <div><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+      <div><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="lq twocol">
+    <span class="lbl">— The honest part —</span>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div class="glass"><h3>Where we beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div class="glass"><h3 style="color: #FF6BCB;">Where we missed.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="lq threecol">
+    <span class="lbl">— What we're cutting —</span>
+    <h2>Three sunsets.</h2>
+    <div class="cols">
+      <div class="glass"><span class="nm">— 01 —</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed for the web product, where 92% of revenue lives.</p></div>
+      <div class="glass"><span class="nm">— 02 —</span><h3>Partner portal.</h3><p>Three signs in eighteen months. Going 1:1 instead.</p></div>
+      <div class="glass"><span class="nm">— 03 —</span><h3>Second brand.</h3><p>Cannibalised. Consolidating under Halcyon.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="lq imgled">
+    <div class="img"></div>
+    <div class="copy">
+      <span class="lbl">— A note from the team —</span>
+      <h2>The room where the work happens.</h2>
+      <p style="font-size: 14px; opacity: 0.85; margin-top: 14px; line-height: 1.5;">Halcyon HQ. Sixteen people, small on purpose.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="lq quote">
+    <div class="glass">
+      <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+      <div class="attr">— Ben Horowitz</div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="lq timeline">
+    <span class="lbl">— The fix · 6-week ship —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step glass"><span class="wk">— Wk 1–2 —</span><h4>Interviews</h4><p>12 calls.</p></div>
+      <div class="step glass"><span class="wk">— Wk 2–3 —</span><h4>Prototype</h4><p>2 flows.</p></div>
+      <div class="step glass"><span class="wk">— Wk 4–5 —</span><h4>Build</h4><p>2 eng. Beta.</p></div>
+      <div class="step glass"><span class="wk">— Wk 6 —</span><h4>Ship</h4><p>100%.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="lq team">
+    <span class="lbl">— Asks of the board —</span>
+    <h2>Roster &amp; intros.</h2>
+    <div class="grid">
+      <div class="person glass"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person glass"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person glass"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools bg.</p></div>
+      <div class="person glass"><div class="img"></div><h4>Series A</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="lq coda">
+    <h2>Thank you.</h2>
+    <div class="meta">— halcyon.co/q2 —</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 15 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

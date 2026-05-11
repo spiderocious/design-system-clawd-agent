@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · avatars & pills</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+
+  .row-spec { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--hair-soft); }
+  .row-spec:first-of-type { border-top: 0; }
+  .row-spec .l { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; min-width: 100px; }
+
+  .av-stack { display: flex; }
+  .av-stack .avatar { margin-left: -6px; box-shadow: 0 0 0 2px var(--sheet); }
+  .av-stack .avatar:first-child { margin-left: 0; }
+
+  .role-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .role-card {
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 14px;
+  }
+  .role-card .top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .role-card .nm { font-family: var(--sans); font-weight: 600; font-size: 14px; }
+  .role-card .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+
+  /* Status pill recipes */
+  .recipes { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 26 —</span>
+    <h1 class="ttl">Avatars · pills · status</h1>
+    <span class="meta">Data &amp; state · who, what, where</span>
+  </div>
+
+  <!-- Avatars -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Avatars</span>
+      <h3 class="nm">Round for users, square for AI.</h3>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— Sizes</span>
+      <span class="avatar avatar-sm">FA</span>
+      <span class="avatar">FA</span>
+      <span class="avatar avatar-lg">FA</span>
+      <span class="avatar avatar-xl">FA</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— With image</span>
+      <span class="avatar avatar-lg" style="background: linear-gradient(135deg, #4880FE, #062765); color: #fff;">FA</span>
+      <span class="avatar avatar-lg" style="background: linear-gradient(135deg, #C9B27A, #1C1A18); color: #fff;">JK</span>
+      <span class="avatar avatar-lg" style="background: linear-gradient(135deg, #FF4691, #00513D); color: #fff;">MO</span>
+      <span class="avatar avatar-lg" style="background: var(--paper-deep); color: var(--ink-2);">+ 4</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— Stack</span>
+      <div class="av-stack">
+        <span class="avatar">FA</span>
+        <span class="avatar" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+        <span class="avatar" style="background: #FDE5C9; color: #7A410B;">JK</span>
+        <span class="avatar" style="background: var(--paper-deep); color: var(--ink-3); font-size: 10px;">+ 4</span>
+      </div>
+      <span class="serif" style="font-style: italic; color: var(--ink-3); font-size: 14px;">— 7 collaborators on this deck</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— AI / system</span>
+      <span class="avatar avatar-sm" style="border-radius: 6px; background: var(--accent-600); color: #fff; font-family: var(--mono); font-size: 9px;">IRI</span>
+      <span class="avatar" style="border-radius: 8px; background: var(--accent-600); color: #fff; font-family: var(--mono); font-size: 11px;">IRI</span>
+      <span class="avatar avatar-lg" style="border-radius: 12px; background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 13px;">SYS</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— With status</span>
+      <div style="position: relative; display: inline-block;">
+        <span class="avatar avatar-lg">FA</span>
+        <span style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--ok); border: 2px solid var(--sheet);"></span>
+      </div>
+      <div style="position: relative; display: inline-block;">
+        <span class="avatar avatar-lg" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+        <span style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--warn); border: 2px solid var(--sheet);"></span>
+      </div>
+      <div style="position: relative; display: inline-block;">
+        <span class="avatar avatar-lg" style="background: #FDE5C9; color: #7A410B;">JK</span>
+        <span style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--ink-4); border: 2px solid var(--sheet);"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roles -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Roles</span>
+      <h3 class="nm">Who's on the deck.</h3>
+    </div>
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="top"><span class="avatar">FA</span><div><div class="nm">Feranmi</div><div class="role">Owner</div></div></div>
+        <div style="font-size: 12px; color: var(--ink-3);">Created the deck · can do anything</div>
+      </div>
+      <div class="role-card">
+        <div class="top"><span class="avatar" style="background: var(--accent-100); color: var(--accent-800);">MO</span><div><div class="nm">Maya</div><div class="role">Editor</div></div></div>
+        <div style="font-size: 12px; color: var(--ink-3);">Can edit slides, write notes, comment</div>
+      </div>
+      <div class="role-card">
+        <div class="top"><span class="avatar" style="background: #FDE5C9; color: #7A410B;">JK</span><div><div class="nm">James</div><div class="role">Commenter</div></div></div>
+        <div style="font-size: 12px; color: var(--ink-3);">Comment-only · cannot edit slides</div>
+      </div>
+      <div class="role-card">
+        <div class="top"><span class="avatar" style="background: var(--paper-deep);">+4</span><div><div class="nm">Board</div><div class="role">Viewers</div></div></div>
+        <div style="font-size: 12px; color: var(--ink-3);">View-only · expires in 14 days</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pills -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Pills</span>
+      <h3 class="nm">Status &amp; meta.</h3>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— Generation</span>
+      <span class="pill pill-accent"><span class="dot"></span> Generating</span>
+      <span class="pill pill-ok"><span class="dot"></span> Saved</span>
+      <span class="pill pill-ok"><span class="dot"></span> Exported</span>
+      <span class="pill"><span class="dot"></span> Draft</span>
+      <span class="pill"><span class="dot"></span> Archived</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— Sharing</span>
+      <span class="pill pill-info"><span class="dot"></span> Shared with board</span>
+      <span class="pill pill-warn"><span class="dot"></span> Link expires in 14 d</span>
+      <span class="pill"><span class="dot"></span> Private</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— Pack</span>
+      <span class="pill"><span class="dot" style="background: var(--ink);"></span> Editorial broadsheet</span>
+      <span class="pill"><span class="dot" style="background: #FF6A00;"></span> Swiss instrument</span>
+      <span class="pill"><span class="dot" style="background: #C9B27A;"></span> Showroom mono</span>
+      <span class="pill"><span class="dot" style="background: #00513D;"></span> Risograph print</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— System</span>
+      <span class="pill pill-crit"><span class="dot"></span> 3 errors</span>
+      <span class="pill pill-warn"><span class="dot"></span> 90% of quota</span>
+      <span class="pill pill-ink"><span class="dot" style="background: var(--accent-400);"></span> Beta</span>
+      <span class="pill"><span class="dot"></span> Custom</span>
+    </div>
+
+    <div class="row-spec">
+      <span class="l">— With number</span>
+      <span class="pill" style="height: 24px; padding: 0 8px;"><span style="font-family: var(--mono); font-weight: 700;">12</span><span style="color: var(--ink-3);">slides</span></span>
+      <span class="pill" style="height: 24px; padding: 0 8px;"><span style="font-family: var(--mono); font-weight: 700; color: var(--accent-700);">$ 4.2 M</span><span style="color: var(--ink-3);">ARR</span></span>
+      <span class="pill" style="height: 24px; padding: 0 8px;"><span style="font-family: var(--mono); font-weight: 700; color: var(--ok);">+ 42 %</span><span style="color: var(--ink-3);">QoQ</span></span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

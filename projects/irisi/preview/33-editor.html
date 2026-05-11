@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · slide editor</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  html, body { margin: 0; height: 100vh; overflow: hidden; }
+  body { background: var(--paper-deep); color: var(--ink); }
+
+  .ide {
+    display: grid;
+    grid-template-rows: 56px 1fr 36px;
+    height: 100vh;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 18px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--hair);
+  }
+  .tb-left { display: flex; align-items: center; gap: 14px; }
+  .tb-brand {
+    font-family: var(--display); font-size: 18px; font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1;
+  }
+  .tb-brand .dot { color: var(--accent-600); }
+  .tb-sep { width: 1px; height: 18px; background: var(--hair); }
+  .tb-doc {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500; color: var(--ink);
+  }
+  .tb-doc .saved {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .tb-doc .saved .ok { color: var(--ok); }
+
+  .tb-center {
+    display: flex; gap: 4px;
+    background: var(--paper-deep); border-radius: 999px; padding: 4px;
+    border: 1px solid var(--hair);
+  }
+  .tb-center button {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    color: var(--ink-2); background: transparent; border: 0; cursor: pointer;
+    padding: 5px 12px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .tb-center button.on { background: var(--ink); color: var(--paper); }
+  .tb-center button .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-4); }
+  .tb-center button.on .dot { background: var(--accent-400); }
+
+  .tb-right {
+    display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  }
+  .tb-avatars { display: flex; }
+  .tb-avatars .avatar { margin-left: -6px; box-shadow: 0 0 0 2px var(--paper); }
+
+  /* ===== Main split ===== */
+  .main {
+    display: grid;
+    grid-template-columns: 220px 1fr 340px;
+    min-height: 0;
+  }
+
+  /* ----- LEFT: slide rail ----- */
+  .rail {
+    background: var(--paper);
+    border-right: 1px solid var(--hair);
+    overflow: auto;
+    padding: 14px 12px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 0 4px 12px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .rail-head .h {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .rail-head .ct {
+    font-family: var(--mono); font-size: 11px; color: var(--ink);
+    font-weight: 600;
+  }
+  .rail-list { display: flex; flex-direction: column; gap: 8px; padding: 6px 0; }
+
+  .thumb {
+    display: grid; grid-template-columns: 18px 1fr; gap: 6px;
+    align-items: center;
+    cursor: pointer; padding: 2px;
+    border-radius: 8px;
+    position: relative;
+  }
+  .thumb .num {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-4);
+    text-align: right; padding-right: 2px;
+  }
+  .thumb .pic {
+    aspect-ratio: 16 / 9;
+    background: #fff;
+    border: 1px solid var(--hair);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shade-1);
+  }
+  .thumb.on .pic { border: 2px solid var(--accent-600); box-shadow: 0 0 0 3px rgba(3,97,240,0.15); }
+  .thumb.on .num { color: var(--accent-700); font-weight: 600; }
+  .thumb:hover:not(.on) .pic { border-color: var(--ink-4); }
+
+  /* Mini-slide content for the rail (SVG-style ascii frames) */
+  .pic .mini {
+    position: absolute; inset: 0;
+    padding: 6px 8px;
+    font-family: var(--display);
+  }
+  .pic .mini .h { height: 4px; background: var(--ink); border-radius: 2px; width: 70%; }
+  .pic .mini .h.short { width: 40%; }
+  .pic .mini .h.amber { background: var(--accent-600); }
+  .pic .mini .b { height: 2px; background: var(--ink-5); border-radius: 999px; margin-top: 4px; }
+  .pic .mini .num-big { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.04em; line-height: 1; }
+  .pic .mini .ttl-tiny { font-size: 6px; color: var(--ink-3); margin-top: 4px; letter-spacing: 0.04em; }
+
+  .rail-add {
+    margin-top: 10px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    border: 1px dashed var(--ink-5);
+    border-radius: 8px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    cursor: pointer;
+  }
+  .rail-add:hover { color: var(--ink); border-color: var(--ink-3); background: var(--paper-deep); }
+
+  /* ----- CENTER: canvas ----- */
+  .canvas-area {
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: var(--paper-deep);
+    overflow: hidden;
+  }
+  .canvas-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--paper);
+  }
+  .canvas-bar .group {
+    display: inline-flex; gap: 2px;
+    background: var(--paper-deep); border: 1px solid var(--hair);
+    border-radius: 8px; padding: 2px;
+  }
+  .canvas-bar .tool {
+    width: 30px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px; cursor: pointer;
+    color: var(--ink-2); font-size: 13px;
+  }
+  .canvas-bar .tool:hover { background: var(--paper); color: var(--ink); }
+  .canvas-bar .tool.on { background: var(--ink); color: var(--paper); }
+  .canvas-bar .gap { flex: 1; }
+  .canvas-bar .stance-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 10px 5px 12px;
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink);
+    cursor: pointer;
+  }
+  .stance-pill .swatch { width: 12px; height: 12px; border-radius: 3px; }
+  .stance-pill .ix { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+  .canvas-bar .zoom {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  }
+  .canvas-bar .zoom button {
+    width: 22px; height: 22px; border-radius: 4px;
+    border: 0; background: transparent; cursor: pointer; color: var(--ink-2);
+  }
+  .canvas-bar .zoom button:hover { background: var(--paper-deep); color: var(--ink); }
+
+  .stage {
+    flex: 1; min-height: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 36px 56px;
+    background:
+      radial-gradient(circle at 1px 1px, var(--ink-5) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--paper-deep);
+    overflow: auto;
+  }
+
+  /* The slide canvas (16:9, ~960×540 zoomed) */
+  .slide {
+    width: min(100%, 960px);
+    aspect-ratio: 16 / 9;
+    background: #FBFAF7;
+    border-radius: 4px;
+    box-shadow: var(--shade-3), 0 0 0 1px rgba(20,17,13,0.08);
+    position: relative;
+    overflow: hidden;
+    /* This slide is rendered in the "Editorial broadsheet" stance to show
+       the editor handling a non-product stance correctly. */
+    color: #14110D;
+    padding: 56px 72px 48px;
+    font-family: 'Source Serif 4', 'Newsreader', Georgia, serif;
+  }
+  .slide .kicker {
+    font-family: 'Inter', sans-serif; font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #B42318;
+  }
+  .slide .head {
+    font-family: 'Source Serif 4', 'Newsreader', Georgia, serif;
+    font-size: 64px;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 14px 0 22px;
+    max-width: 18ch;
+    font-weight: 500;
+  }
+  .slide .head .ital { font-style: italic; }
+  .slide hr.rule { border: 0; border-top: 1px solid #14110D; margin: 22px 0 18px; }
+  .slide .by {
+    font-family: 'Inter', sans-serif; font-size: 12px;
+    color: #6E665B; letter-spacing: 0.06em;
+  }
+  .slide .body {
+    column-count: 2; column-gap: 28px;
+    font-size: 14px; line-height: 1.55; color: #3C3833;
+    margin-top: 18px;
+    max-width: 700px;
+  }
+  .slide .body p { margin: 0 0 10px; }
+  .slide .footnote {
+    position: absolute; bottom: 22px; left: 72px; right: 72px;
+    display: flex; justify-content: space-between;
+    font-family: 'Inter', sans-serif; font-size: 10px; color: #6E665B;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border-top: 1px solid #D9D0BB; padding-top: 10px;
+  }
+
+  /* Selected element handles (showing the canvas is interactive) */
+  .selection {
+    position: absolute;
+    border: 1.5px solid var(--accent-600);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .selection .h {
+    position: absolute; width: 8px; height: 8px;
+    background: #fff; border: 1.5px solid var(--accent-600); border-radius: 1px;
+  }
+  .selection .h.tl { top: -5px; left: -5px; }
+  .selection .h.tr { top: -5px; right: -5px; }
+  .selection .h.bl { bottom: -5px; left: -5px; }
+  .selection .h.br { bottom: -5px; right: -5px; }
+  .selection .label {
+    position: absolute; top: -22px; left: 0;
+    background: var(--accent-600); color: #fff;
+    font-family: var(--mono); font-size: 9px;
+    padding: 3px 6px; border-radius: 3px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ----- RIGHT: properties / AI assist ----- */
+  .props {
+    background: var(--paper);
+    border-left: 1px solid var(--hair);
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .props .tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--hair);
+  }
+  .props .tabs button {
+    padding: 12px 0;
+    background: transparent; border: 0;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    color: var(--ink-3); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .props .tabs button.on { color: var(--ink); border-bottom-color: var(--accent-600); }
+
+  .props-body { padding: 18px 18px 24px; flex: 1; }
+
+  .prop-grp {
+    margin-bottom: 22px;
+  }
+  .prop-grp .lbl {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .prop-row {
+    display: grid; grid-template-columns: 88px 1fr; align-items: center; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .prop-row label {
+    font-size: 12px; color: var(--ink-3);
+  }
+  .prop-row .field { height: 32px; padding: 0 10px; font-size: 12px; border-radius: 6px; }
+  .prop-row select.field { background: var(--sheet); }
+
+  .colors { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .swatch {
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.08);
+    cursor: pointer;
+  }
+  .swatch.on { box-shadow: 0 0 0 2px var(--accent-600); border-color: transparent; }
+
+  .layouts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .layout {
+    aspect-ratio: 16 / 10;
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .layout:hover { border-color: var(--ink-3); }
+  .layout.on { border: 2px solid var(--accent-600); box-shadow: 0 0 0 3px rgba(3,97,240,0.15); }
+  .layout .ln { height: 3px; background: var(--ink-5); border-radius: 999px; }
+  .layout .nm {
+    position: absolute; top: 4px; right: 6px;
+    font-family: var(--mono); font-size: 8px; color: var(--ink-4);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* AI assist column variant */
+  .ai-card {
+    background: linear-gradient(180deg, var(--accent-50), var(--sheet));
+    border: 1px solid var(--accent-200);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .ai-card .h {
+    font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--accent-800);
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .ai-card .h .glyph {
+    width: 16px; height: 16px; border-radius: 4px;
+    background: var(--accent-600); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800;
+  }
+  .ai-card p {
+    font-size: 12px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5;
+  }
+  .ai-card .actions { display: flex; gap: 6px; }
+  .ai-card .actions button {
+    height: 26px; padding: 0 10px;
+    border-radius: 6px; border: 1px solid var(--hair);
+    background: var(--sheet); cursor: pointer;
+    font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--ink-2);
+  }
+  .ai-card .actions button.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ===== Status bar ===== */
+  .status {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 18px;
+    background: var(--paper);
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+  .status .gap { flex: 1; }
+  .status .ok { color: var(--ok); }
+  .status .live {
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .status .live::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 0 rgba(21,128,61,0.45);
+    animation: stat-pulse 1.6s ease-out infinite;
+  }
+  @keyframes stat-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(21,128,61,0.45); }
+    100% { box-shadow: 0 0 0 8px rgba(21,128,61,0); }
+  }
+
+  /* SVG helpers */
+  .ic { width: 14px; height: 14px; stroke-width: 1.6; stroke: currentColor; fill: none; }
+</style>
+</head>
+<body>
+
+<div class="ide">
+
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <div class="tb-left">
+      <span class="tb-brand">Irisi<span class="dot">.</span></span>
+      <span class="tb-sep"></span>
+      <div class="tb-doc">
+        <span>Q2 Board Update — Halcyon &amp; Co.</span>
+        <span class="saved">· <span class="ok">●</span> saved 12s ago</span>
+      </div>
+    </div>
+    <div class="tb-center">
+      <button><span class="dot"></span> Outline</button>
+      <button class="on"><span class="dot"></span> Design</button>
+      <button><span class="dot"></span> Preview</button>
+    </div>
+    <div class="tb-right">
+      <div class="tb-avatars">
+        <span class="avatar avatar-sm" title="You">FA</span>
+        <span class="avatar avatar-sm" style="background: var(--accent-100); color: var(--accent-800)" title="Maya">MO</span>
+        <span class="avatar avatar-sm" style="background: #FDE5C9; color: #7A410B" title="James">JK</span>
+      </div>
+      <button class="btn btn-secondary btn-sm">Share</button>
+      <button class="btn btn-accent btn-sm">Present →</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+
+    <!-- LEFT: slide rail -->
+    <aside class="rail">
+      <div class="rail-head">
+        <span class="h">Slides</span>
+        <span class="ct">12</span>
+      </div>
+      <div class="rail-list" id="rail-list">
+
+        <div class="thumb"><span class="num">01</span><div class="pic"><div class="mini"><div style="font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:-0.03em;line-height:1;color:#14110D;margin-bottom:4px">Q2 Board<br>Update</div><div class="ttl-tiny" style="color:#B42318;letter-spacing:0.16em">— Halcyon · 2026 —</div></div></div></div>
+
+        <div class="thumb"><span class="num">02</span><div class="pic"><div class="mini"><div class="ttl-tiny">Agenda</div><div class="b" style="margin-top:8px"></div><div class="b"></div><div class="b" style="width:60%"></div><div class="b"></div></div></div></div>
+
+        <div class="thumb on"><span class="num">03</span><div class="pic"><div class="mini" style="padding:5px 7px"><div style="font-family:'Source Serif 4',serif;font-size:9px;font-weight:500;letter-spacing:-0.02em;line-height:1.05;color:#14110D">The quiet rebellion of measured growth</div><div style="height:0.5px;background:#14110D;margin:4px 0"></div><div style="font-size:5px;color:#6E665B">By the founders · Q2</div></div></div></div>
+
+        <div class="thumb"><span class="num">04</span><div class="pic"><div class="mini"><div class="num-big" style="color:var(--accent-600)">$4.2M</div><div class="ttl-tiny">ARR · +42% QoQ</div><div class="b amber" style="margin-top:6px;background:var(--accent-300);width:80%"></div></div></div></div>
+
+        <div class="thumb"><span class="num">05</span><div class="pic"><div class="mini"><div class="h"></div><div class="b" style="margin-top:6px"></div><div class="b" style="width:80%"></div><div class="b" style="width:50%"></div></div></div></div>
+
+        <div class="thumb"><span class="num">06</span><div class="pic"><div class="mini" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px 8px"><div><div style="height:2px;background:#14110D;width:60%"></div><div class="b" style="margin-top:3px"></div><div class="b" style="margin-top:2px;width:70%"></div></div><div><div style="height:2px;background:var(--accent-600);width:60%"></div><div class="b" style="margin-top:3px"></div><div class="b" style="margin-top:2px;width:60%"></div></div></div></div></div>
+
+        <div class="thumb"><span class="num">07</span><div class="pic"><div class="mini"><div class="ttl-tiny">Growth · trailing 6 mo</div><svg viewBox="0 0 100 30" style="width:100%;height:24px;margin-top:6px"><polyline points="0,24 16,20 32,18 48,12 64,14 80,8 100,4" fill="none" stroke="#14110D" stroke-width="1"/><circle cx="100" cy="4" r="2" fill="var(--accent-600)"/></svg></div></div></div>
+
+        <div class="thumb"><span class="num">08</span><div class="pic"><div class="mini"><div class="h short" style="background:var(--accent-600)"></div><div class="b" style="margin-top:6px"></div><div class="b" style="width:70%"></div><div class="b" style="width:80%"></div></div></div></div>
+
+        <div class="thumb"><span class="num">09</span><div class="pic"><div class="mini" style="padding:5px 6px"><div style="font-family:'Source Serif 4',serif;font-style:italic;font-size:7px;line-height:1.4;color:#3C3833">"You can't grow your way out of a culture problem — you can only design your way out."</div><div style="font-size:5px;color:#6E665B;margin-top:5px;letter-spacing:0.06em">— BEN HOROWITZ</div></div></div></div>
+
+        <div class="thumb"><span class="num">10</span><div class="pic"><div class="mini"><div class="ttl-tiny">Roadmap</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:6px"><div style="height:8px;background:var(--accent-600);border-radius:1px"></div><div style="height:8px;background:var(--accent-300);border-radius:1px"></div><div style="height:8px;background:var(--ink-5);border-radius:1px"></div><div style="height:8px;background:var(--ink-5);border-radius:1px"></div></div></div></div></div>
+
+        <div class="thumb"><span class="num">11</span><div class="pic"><div class="mini"><div class="ttl-tiny">Team</div><div style="display:flex;gap:3px;margin-top:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ink)"></span><span style="width:10px;height:10px;border-radius:50%;background:var(--ink-3)"></span><span style="width:10px;height:10px;border-radius:50%;background:var(--ink-4)"></span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-600)"></span></div></div></div></div>
+
+        <div class="thumb"><span class="num">12</span><div class="pic"><div class="mini" style="padding:7px 8px"><div style="font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:-0.03em;line-height:0.95">Thank<br>you.</div><div class="ttl-tiny" style="margin-top:6px;color:var(--accent-700)">halcyon.co/q2</div></div></div></div>
+
+      </div>
+
+      <div class="rail-add">
+        <span style="font-size: 14px;">＋</span>
+        <span>Add slide</span>
+      </div>
+    </aside>
+
+    <!-- CENTER: canvas -->
+    <section class="canvas-area">
+
+      <div class="canvas-bar">
+        <div class="group">
+          <button class="tool" title="Select">▭</button>
+          <button class="tool on" title="Move">✥</button>
+        </div>
+        <div class="group">
+          <button class="tool" title="Text">T</button>
+          <button class="tool" title="Image">▣</button>
+          <button class="tool" title="Shape">◯</button>
+          <button class="tool" title="Chart">▤</button>
+        </div>
+
+        <span class="gap"></span>
+
+        <button class="stance-pill" title="Switch slide stance">
+          <span class="swatch" style="background: linear-gradient(135deg, #FBFAF7 0 50%, #14110D 50% 100%);"></span>
+          <span class="ix">PACK 02 ·</span>
+          <span>Editorial broadsheet</span>
+          <span style="color: var(--ink-4)">▾</span>
+        </button>
+
+        <span class="zoom">
+          <button>−</button>
+          <span>100 %</span>
+          <button>+</button>
+        </span>
+      </div>
+
+      <div class="stage">
+        <div class="slide" id="slide">
+          <div class="kicker">— Quarterly · Q2 2026 —</div>
+          <h1 class="head">The quiet rebellion of <span class="ital">measured</span> growth.</h1>
+          <hr class="rule">
+          <div class="by">By the founders · 12 min read · Halcyon &amp; Co.</div>
+          <div class="body">
+            <p>Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the go-to-market team.</p>
+            <p>The reason isn't strategy. It's the unglamorous work of saying no, on time, every quarter, to the dozen things we could have done but chose not to. What follows is the math behind that decision.</p>
+          </div>
+          <div class="footnote">
+            <span>03 / 12</span>
+            <span>Halcyon &amp; Co. — internal · do not redistribute</span>
+          </div>
+
+          <!-- Selection handles, demonstrating the editor is interactive -->
+          <div class="selection" style="top: 92px; left: 72px; width: 700px; height: 132px;">
+            <div class="label">H1 · Editorial · Display Serif</div>
+            <div class="h tl"></div><div class="h tr"></div><div class="h bl"></div><div class="h br"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: properties -->
+    <aside class="props">
+      <div class="tabs">
+        <button class="on">Element</button>
+        <button>Layout</button>
+        <button>AI</button>
+      </div>
+      <div class="props-body">
+
+        <!-- AI prompt card -->
+        <div class="ai-card">
+          <div class="h"><span class="glyph">✦</span> Irisi suggests</div>
+          <p>Headline runs long for an editorial layout. Want me to tighten it to <em>"The quiet rebellion of measured growth"</em>?</p>
+          <div class="actions">
+            <button class="primary">Apply</button>
+            <button>Try another</button>
+            <button>Dismiss</button>
+          </div>
+        </div>
+
+        <div class="prop-grp">
+          <div class="lbl">— Text</div>
+          <div class="prop-row">
+            <label>Family</label>
+            <select class="field">
+              <option>Source Serif 4</option>
+              <option>Newsreader</option>
+              <option>Inter</option>
+              <option>Bricolage Grotesque</option>
+            </select>
+          </div>
+          <div class="prop-row">
+            <label>Weight</label>
+            <select class="field">
+              <option>Regular 400</option>
+              <option selected>Medium 500</option>
+              <option>Semibold 600</option>
+            </select>
+          </div>
+          <div class="prop-row">
+            <label>Size</label>
+            <input class="field tabular" type="text" value="64 px">
+          </div>
+          <div class="prop-row">
+            <label>Tracking</label>
+            <input class="field tabular" type="text" value="-0.02 em">
+          </div>
+        </div>
+
+        <div class="prop-grp">
+          <div class="lbl">— Color</div>
+          <div class="colors">
+            <div class="swatch on" style="background: #14110D"></div>
+            <div class="swatch" style="background: #6E665B"></div>
+            <div class="swatch" style="background: #B42318"></div>
+            <div class="swatch" style="background: #0361F0"></div>
+            <div class="swatch" style="background: #15803D"></div>
+            <div class="swatch" style="background: #B25E09"></div>
+            <div class="swatch" style="background: #FBFAF7; border-color: var(--hair)"></div>
+          </div>
+        </div>
+
+        <div class="prop-grp">
+          <div class="lbl">— Layout</div>
+          <div class="layouts">
+            <div class="layout">
+              <span class="nm">Title</span>
+              <div class="ln" style="width: 70%; height: 5px; margin-top: auto"></div>
+              <div class="ln" style="width: 40%"></div>
+            </div>
+            <div class="layout on">
+              <span class="nm">Editorial</span>
+              <div class="ln" style="height: 5px; margin-top: 4px"></div>
+              <div class="ln" style="width: 60%; height: 1px; background: var(--ink); margin: 6px 0"></div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                <div><div class="ln"></div><div class="ln" style="margin-top:2px"></div><div class="ln" style="margin-top:2px;width:80%"></div></div>
+                <div><div class="ln"></div><div class="ln" style="margin-top:2px"></div><div class="ln" style="margin-top:2px;width:60%"></div></div>
+              </div>
+            </div>
+            <div class="layout">
+              <span class="nm">Big stat</span>
+              <div style="font-family:var(--display);font-size:14px;font-weight:800;color:var(--ink);margin-top:8px;letter-spacing:-0.03em">$4.2M</div>
+              <div class="ln" style="width: 50%"></div>
+            </div>
+            <div class="layout">
+              <span class="nm">Image</span>
+              <div style="background: var(--ink-5); border-radius: 4px; flex: 1;"></div>
+              <div class="ln" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-grp">
+          <div class="lbl">— Position</div>
+          <div class="prop-row">
+            <label>X</label>
+            <input class="field tabular" type="text" value="72 px">
+          </div>
+          <div class="prop-row">
+            <label>Y</label>
+            <input class="field tabular" type="text" value="92 px">
+          </div>
+          <div class="prop-row">
+            <label>W</label>
+            <input class="field tabular" type="text" value="700 px">
+          </div>
+          <div class="prop-row">
+            <label>H</label>
+            <input class="field tabular" type="text" value="132 px">
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ===== STATUS ===== -->
+  <footer class="status">
+    <span class="live">Connected · last sync 12s ago</span>
+    <span>·</span>
+    <span>Slide 03 of 12</span>
+    <span>·</span>
+    <span>Pack: Editorial broadsheet</span>
+    <span class="gap"></span>
+    <span>16 : 9 · 1920 × 1080</span>
+    <span>·</span>
+    <span class="ok">●</span><span>Auto-save on</span>
+    <span>·</span>
+    <span><span class="kbd" style="background:var(--paper-deep);border-color:var(--hair)">⌘ K</span> for command palette</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

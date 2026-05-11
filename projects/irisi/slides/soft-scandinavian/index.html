@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 07 · Soft Scandinavian</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Tiempos+Headline:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  .ss { background: #F7F5F0; color: #2C2A26; font-family: 'Inter', sans-serif; padding: 64px 80px; height: 100%; display: flex; flex-direction: column; }
+  .ss .by { font-size: 11px; color: #908779; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ss h2 { font-family: 'Source Serif 4', 'Tiempos Headline', serif; font-weight: 500; line-height: 1.1; letter-spacing: -0.012em; margin: 14px 0 0; color: #2C2A26; }
+  .ss .sage { color: #6F8060; }
+  .ss .blush { color: #C97561; }
+  .ss .mustard { color: #C9A352; }
+  .ss .tag { display: inline-block; padding: 4px 12px; background: #D4C5A9; color: #2C2A26; font-size: 11px; letter-spacing: 0.06em; border-radius: 999px; font-family: 'Inter', sans-serif; }
+
+  .ss.cover { justify-content: end; }
+  .ss.cover h2 { font-size: 80px; max-width: 14ch; }
+  .ss.cover .meta { display: flex; gap: 16px; align-items: center; margin-top: 24px; font-size: 13px; color: #56524B; font-family: 'Source Serif 4', serif; font-style: italic; }
+
+  .ss.agenda h2 { font-size: 56px; margin: 14px 0 28px; }
+  .ss.agenda ol { font-family: 'Source Serif 4', serif; font-size: 22px; line-height: 1.7; padding: 0 0 0 24px; margin: 0; }
+  .ss.agenda ol li { margin-bottom: 4px; }
+  .ss.agenda ol li .meta { font-family: 'Inter', sans-serif; font-style: normal; font-size: 12px; color: #908779; letter-spacing: 0.06em; margin-left: 10px; }
+
+  .ss.section { justify-content: center; align-items: center; }
+  .ss.section h2 { font-size: 88px; max-width: 12ch; text-align: center; }
+
+  .ss.headline h2 { font-size: 56px; max-width: 18ch; }
+  .ss.headline .body { font-family: 'Source Serif 4', serif; font-size: 17px; line-height: 1.6; max-width: 60ch; margin-top: 22px; color: #56524B; }
+
+  .ss.bigstat { justify-content: center; }
+  .ss.bigstat h2 { font-size: 36px; margin: 8px 0 32px; }
+  .ss.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .ss.bigstat .stat { font-family: 'Source Serif 4', serif; font-size: 80px; font-weight: 500; letter-spacing: -0.03em; line-height: 0.95; color: #6F8060; }
+  .ss.bigstat .lbl { font-size: 12px; color: #908779; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 8px; }
+
+  .ss.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ss.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .ss.twocol .cols h3 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; margin: 0 0 12px; color: #2C2A26; letter-spacing: -0.012em; }
+  .ss.twocol .cols ul { font-family: 'Source Serif 4', serif; font-size: 15px; line-height: 1.7; padding-left: 18px; margin: 0; color: #56524B; }
+
+  .ss.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ss.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .ss.threecol .cols .nm { font-size: 11px; color: #6F8060; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ss.threecol .cols h3 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; margin: 8px 0 6px; letter-spacing: -0.012em; }
+  .ss.threecol .cols p { font-family: 'Source Serif 4', serif; font-size: 14px; line-height: 1.6; color: #56524B; margin: 0; }
+
+  .ss.imgled { padding: 0; flex-direction: row; }
+  .ss.imgled .img { flex: 1; background: linear-gradient(135deg, #D4C5A9 0%, #6F8060 100%); }
+  .ss.imgled .copy { flex: 0 0 44%; padding: 56px; display: flex; flex-direction: column; justify-content: end; }
+  .ss.imgled .copy h2 { font-size: 44px; max-width: 14ch; margin-top: 14px; }
+
+  .ss.quote { justify-content: center; padding: 56px 96px; }
+  .ss.quote .q { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 48px; font-weight: 400; line-height: 1.2; max-width: 22ch; }
+  .ss.quote .attr { font-size: 12px; color: #908779; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 28px; }
+
+  .ss.timeline h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ss.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .ss.timeline .step .wk { font-size: 11px; color: #6F8060; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ss.timeline .step h4 { font-family: 'Source Serif 4', serif; font-size: 19px; font-weight: 500; margin: 8px 0 6px; }
+  .ss.timeline .step p { font-family: 'Source Serif 4', serif; font-size: 13px; line-height: 1.55; color: #56524B; margin: 0; }
+
+  .ss.team h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ss.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .ss.team .person .img { aspect-ratio: 3/4; background: linear-gradient(135deg, #D4C5A9, #908779); border-radius: 6px; }
+  .ss.team .person h4 { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 500; margin: 12px 0 2px; }
+  .ss.team .person .role { font-size: 11px; color: #6F8060; letter-spacing: 0.16em; text-transform: uppercase; }
+  .ss.team .person p { font-family: 'Source Serif 4', serif; font-size: 13px; line-height: 1.5; color: #56524B; margin: 6px 0 0; }
+
+  .ss.coda { justify-content: end; align-items: end; flex-direction: column; }
+  .ss.coda h2 { align-self: start; font-size: 96px; }
+  .ss.coda .meta { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 18px; color: #908779; margin-top: 22px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">07</span><span class="nm">Soft Scandinavian</span></div>
+  <div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div>
+</header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 07 · Quiet</div>
+    <h1>A Nordic apartment in <span class="ital">winter</span> light.</h1>
+    <p>Off-white paper, sage and dusk-blue accents, slow ease-in-out motion. Generous radii, gentle fades. First-person, observational voice.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · wellness, journaling, finance-for-creatives</div>
+    <div><strong>Type</strong> · Source Serif 4 · Inter</div>
+    <div><strong>Accent</strong> · Sage · #6F8060</div>
+    <div><strong>Density</strong> · spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="ss cover">
+    <span class="by">— A note from the team —</span>
+    <h2>Halcyon, in the second quarter.</h2>
+    <div class="meta"><span class="tag">Spring 2026</span><span>14 May · for the board</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="ss agenda">
+    <span class="by">— What's inside —</span>
+    <h2>The agenda.</h2>
+    <ol>
+      <li>Where we are <span class="meta">— 3 min</span></li>
+      <li>The honest part <span class="meta">— 5 min</span></li>
+      <li>What we're cutting <span class="meta">— 4 min</span></li>
+      <li>Roadmap &amp; risks <span class="meta">— 3 min</span></li>
+      <li>Asks of the board <span class="meta">— 3 min</span></li>
+    </ol>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="ss section">
+    <span class="by">— Section one —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="ss headline">
+    <span class="by">— Quarterly · Q2 2026 —</span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">
+      Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying no.
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="ss bigstat">
+    <span class="by">— Q2 in numbers —</span>
+    <h2>Three numbers we're proud of.</h2>
+    <div class="row">
+      <div><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+      <div><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="ss twocol">
+    <span class="by">— The honest part —</span>
+    <h2>Where we beat plan, where we missed.</h2>
+    <div class="cols">
+      <div><h3 class="sage">Where we beat plan.</h3><ul><li>Revenue +42%</li><li>NPS 9.1</li><li>Product velocity 1.4×</li><li>Headcount efficiency held</li></ul></div>
+      <div><h3 class="blush">Where we missed.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="ss threecol">
+    <span class="by">— What we're cutting —</span>
+    <h2>Three quiet sunsets.</h2>
+    <div class="cols">
+      <div><span class="nm">— First —</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed for the web product, where 92% of revenue lives.</p></div>
+      <div><span class="nm">— Second —</span><h3>Partner portal.</h3><p>Three signs in eighteen months. We'll handle integrations 1:1 instead.</p></div>
+      <div><span class="nm">— Third —</span><h3>The second brand.</h3><p>Cannibalised the first. Consolidating under Halcyon only.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="ss imgled">
+    <div class="img"></div>
+    <div class="copy">
+      <span class="by">— A note from the team —</span>
+      <h2>The room where the work happens.</h2>
+      <p style="font-family: 'Source Serif 4', serif; font-size: 14px; color: #56524B; margin-top: 14px; line-height: 1.5;">Halcyon HQ. Sixteen people. Small, on purpose.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="ss quote">
+    <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— Ben Horowitz</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="ss timeline">
+    <span class="by">— The fix —</span>
+    <h2>Onboarding redesign · gentle six-week ship.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— Wk 1–2 —</span><h4>Customer interviews.</h4><p>Twelve calls. Synthesise patterns.</p></div>
+      <div class="step"><span class="wk">— Wk 2–3 —</span><h4>Prototype.</h4><p>Two competing flows. Pick by EOW.</p></div>
+      <div class="step"><span class="wk">— Wk 4–5 —</span><h4>Build.</h4><p>Two engineers. Closed beta.</p></div>
+      <div class="step"><span class="wk">— Wk 6 —</span><h4>Ship.</h4><p>100% rollout. Target 80%.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="ss team">
+    <span class="by">— Asks of the board —</span>
+    <h2>Three intros, one decision.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A timing</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="ss coda">
+    <h2>Thank you.</h2>
+    <div class="meta">— with care, the founders · halcyon.co</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 07 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · slide thumb</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  /* Sizes */
+  .sizes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .size-pen { display: flex; flex-direction: column; align-items: start; gap: 10px; }
+  .size-pen .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+
+  .slide-frame {
+    aspect-ratio: 16 / 9;
+    background: #FBFAF7; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--hair); box-shadow: var(--shade-1);
+    color: #14110D; padding: 14px 18px;
+    display: flex; flex-direction: column;
+    width: 100%;
+  }
+  .slide-frame.elevated { box-shadow: var(--shade-3); }
+  .slide-frame.selected { border: 2px solid var(--accent-600); padding: 13px 17px; box-shadow: 0 0 0 4px rgba(3,97,240,0.10); }
+
+  .slide-frame .kicker {
+    font-family: 'Inter', sans-serif; font-size: 8px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #B42318;
+  }
+  .slide-frame .head {
+    font-family: 'Source Serif 4', serif; font-weight: 500;
+    line-height: 1.04; letter-spacing: -0.02em;
+    margin: 4px 0 6px; max-width: 14ch;
+  }
+  .slide-frame.xs .head { font-size: 11px; }
+  .slide-frame.sm .head { font-size: 16px; }
+  .slide-frame.md .head { font-size: 22px; }
+  .slide-frame.lg .head { font-size: 30px; }
+  .slide-frame hr { border: 0; border-top: 1px solid #14110D; margin: 4px 0; }
+  .slide-frame .by { font-family: 'Inter', sans-serif; font-size: 8px; color: #6E665B; letter-spacing: 0.06em; }
+  .slide-frame.lg .by { font-size: 11px; }
+  .slide-frame .body { font-size: 8px; color: #3C3833; line-height: 1.5; margin-top: auto; column-count: 2; column-gap: 10px; }
+  .slide-frame.lg .body { font-size: 11px; column-gap: 18px; }
+  .slide-frame .footer {
+    margin-top: auto; padding-top: 4px; border-top: 1px solid #D9D0BB;
+    display: flex; justify-content: space-between;
+    font-family: 'Inter', sans-serif; font-size: 7px; color: #6E665B;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .slide-frame.lg .footer { font-size: 10px; padding-top: 10px; }
+
+  /* Hover state mockup */
+  .hover-state {
+    position: relative; cursor: pointer;
+    width: 100%;
+  }
+  .hover-state:hover .slide-frame { transform: translateY(-3px); box-shadow: var(--shade-3); transition: 200ms; }
+  .hover-state .controls {
+    position: absolute; top: 8px; right: 8px;
+    display: flex; gap: 4px; opacity: 0;
+    transition: opacity 100ms;
+  }
+  .hover-state:hover .controls { opacity: 1; }
+  .hover-state .controls button {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: rgba(255,255,255,0.92); border: 1px solid var(--hair);
+    color: var(--ink-2); font-size: 12px; cursor: pointer;
+  }
+
+  /* Stance variants — to show the thumb adapts */
+  .stance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 21 —</span>
+    <h1 class="ttl">Slide thumb specimen</h1>
+    <span class="meta">Data &amp; state · the signature data display</span>
+  </div>
+
+  <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 17px; max-width: 60ch; margin: 0 0 32px;">
+    The slide thumb is the most-used data object in the product — it appears in the rail, the gallery, the editor, the present-mode strip, the brand wizard preview. It must work at four sizes and adapt to whichever stance the slide carries.
+  </p>
+
+  <!-- Sizes -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Sizes</span>
+      <h3 class="nm">Four sizes, one shape.</h3>
+      <span class="why">All 16:9. The shadow scales with the size.</span>
+    </div>
+    <div class="sizes">
+      <div class="size-pen">
+        <div class="slide-frame xs">
+          <div class="kicker">— Q2 ·</div>
+          <div class="head">Quiet rebellion</div>
+        </div>
+        <div class="meta">XS · 64 px wide · in rail</div>
+      </div>
+      <div class="size-pen">
+        <div class="slide-frame sm" style="max-width: 200px;">
+          <div class="kicker">— Quarterly · Q2 —</div>
+          <div class="head">The quiet rebellion of measured growth</div>
+          <hr>
+          <div class="by">By the founders</div>
+        </div>
+        <div class="meta">SM · 200 px · gallery cards</div>
+      </div>
+      <div class="size-pen">
+        <div class="slide-frame md elevated" style="max-width: 320px;">
+          <div class="kicker">— Quarterly · Q2 2026 —</div>
+          <div class="head">The quiet rebellion of measured growth</div>
+          <hr>
+          <div class="by">By the founders · 12 min read</div>
+          <div class="body">
+            <p style="margin: 0 0 4px;">Most companies confuse motion for progress.</p>
+            <p style="margin: 0;">The reason isn't strategy. It's discipline.</p>
+          </div>
+        </div>
+        <div class="meta">MD · 320 px · brand preview</div>
+      </div>
+      <div class="size-pen">
+        <div class="slide-frame lg elevated" style="max-width: 480px;">
+          <div class="kicker">— Quarterly · Q2 2026 —</div>
+          <div class="head">The quiet rebellion of <em>measured</em> growth.</div>
+          <hr>
+          <div class="by">By the founders · 12 min read · Halcyon &amp; Co.</div>
+          <div class="body">
+            <p style="margin: 0 0 6px;">Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree.</p>
+          </div>
+          <div class="footer"><span>03 / 12</span><span>Halcyon &amp; Co.</span></div>
+        </div>
+        <div class="meta">LG · 480 px · landing showcase</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- States -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— States</span>
+      <h3 class="nm">In the rail, at hover, when selected.</h3>
+    </div>
+    <div class="sizes" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="size-pen">
+        <div class="slide-frame sm" style="max-width: 220px;"><div class="kicker">— Q2 —</div><div class="head">Quiet rebellion</div></div>
+        <div class="meta">Default</div>
+      </div>
+      <div class="size-pen">
+        <div class="hover-state" style="max-width: 220px;">
+          <div class="slide-frame sm"><div class="kicker">— Q2 —</div><div class="head">Quiet rebellion</div></div>
+          <div class="controls">
+            <button>✎</button>
+            <button>⎘</button>
+            <button>⌫</button>
+          </div>
+        </div>
+        <div class="meta">Hover · controls reveal</div>
+      </div>
+      <div class="size-pen">
+        <div class="slide-frame sm selected" style="max-width: 220px;"><div class="kicker">— Q2 —</div><div class="head">Quiet rebellion</div></div>
+        <div class="meta">Selected · accent ring</div>
+      </div>
+      <div class="size-pen">
+        <div class="slide-frame sm" style="max-width: 220px; opacity: 0.6;">
+          <div class="kicker">— Q2 —</div><div class="head">Quiet rebellion</div>
+          <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em;">⊙ generating…</div>
+        </div>
+        <div class="meta">Generating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stance variants -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Stance adaptation</span>
+      <h3 class="nm">The thumb wears the slide's stance.</h3>
+      <span class="why">Same component, completely different output.</span>
+    </div>
+    <div class="stance-grid">
+      <!-- Editorial -->
+      <div class="size-pen">
+        <div class="slide-frame md elevated">
+          <div class="kicker">— Quarterly · Q2 —</div>
+          <div class="head">The quiet rebellion of measured growth</div>
+          <hr>
+          <div class="by">By the founders · 12 min</div>
+        </div>
+        <div class="meta">02 · Editorial broadsheet</div>
+      </div>
+      <!-- Swiss -->
+      <div class="size-pen">
+        <div class="slide-frame md elevated" style="background: #FFFFFF; padding: 18px 22px;">
+          <div style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.16em; color: #777;">0 1 / 2 4</div>
+          <div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin: 6px 0 14px; color: #000;">Quarterly results, in numbers.</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-top: 1px solid #000; padding-top: 12px;">
+            <div><div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: #FF6A00;">$4.2M</div><div style="font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #888;">ARR</div></div>
+            <div><div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.03em;">+42%</div><div style="font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #888;">QoQ</div></div>
+            <div><div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.03em;">9.1</div><div style="font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #888;">NPS</div></div>
+          </div>
+        </div>
+        <div class="meta">03 · Swiss instrument</div>
+      </div>
+      <!-- Showroom -->
+      <div class="size-pen">
+        <div class="slide-frame md elevated" style="background: #1C1A18; color: #F5EFE0; padding: 22px;">
+          <div style="font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.24em; color: #C9B27A; text-transform: uppercase;">Volume · 0 4</div>
+          <div style="font-family: 'Bodoni Moda', serif; font-size: 26px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; margin: 12px 0 6px; font-style: italic;">The art of <span style="color: #C9B27A;">inevitable</span> products.</div>
+          <div style="font-size: 9px; color: #A8A299; line-height: 1.5;">A study in restraint, taste, and the things you choose not to ship.</div>
+          <div style="width: 32px; height: 1px; background: #C9B27A; margin-top: 12px;"></div>
+        </div>
+        <div class="meta">12 · Showroom mono</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 08 · Retro terminal</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .rt { background: #0A1010; color: #33FF99; font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; padding: 48px 64px; height: 100%; display: flex; flex-direction: column; font-size: 14px; line-height: 1.6; }
+  .rt::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(51,255,153,0.04) 3px, rgba(51,255,153,0.04) 4px); pointer-events: none; }
+  .rt > * { position: relative; z-index: 2; }
+  .rt h2 { font-family: 'VT323', monospace; font-weight: 400; line-height: 1; margin: 0; color: #33FF99; }
+  .rt .blink::after { content: "█"; animation: blink 1s steps(2) infinite; margin-left: 4px; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .rt .amber { color: #FFB020; }
+  .rt .gray { opacity: 0.6; }
+  .rt .frame { border: 1px solid #33FF99; padding: 12px 14px; }
+  .rt .ascii-box { font-family: 'JetBrains Mono', monospace; white-space: pre; line-height: 1.2; }
+  .rt .top { display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px dashed #33FF99; font-size: 11px; }
+
+  .rt.cover h2 { font-size: 96px; margin: auto 0 0; }
+  .rt.cover .meta { margin-top: 14px; padding-top: 8px; border-top: 1px dashed #33FF99; font-size: 12px; }
+
+  .rt.agenda h2 { font-size: 56px; margin: 14px 0 18px; }
+  .rt.agenda .list .item { display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; padding: 6px 0; border-bottom: 1px dashed rgba(51,255,153,0.3); }
+
+  .rt.section { justify-content: center; align-items: center; }
+  .rt.section h2 { font-size: 80px; }
+
+  .rt.headline h2 { font-size: 56px; max-width: 18ch; }
+  .rt.headline .body { margin-top: 18px; max-width: 78ch; }
+
+  .rt.bigstat h2 { font-size: 32px; margin: 14px 0 22px; }
+  .rt.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 18px 0; border-top: 1px dashed #33FF99; border-bottom: 1px dashed #33FF99; }
+  .rt.bigstat .col { padding: 0 18px; border-right: 1px dashed #33FF99; }
+  .rt.bigstat .row .col:last-child { border-right: 0; }
+  .rt.bigstat .stat { font-family: 'VT323', monospace; font-size: 76px; line-height: 1; color: #fff; }
+  .rt.bigstat .lbl { font-size: 11px; opacity: 0.6; letter-spacing: 0.16em; }
+
+  .rt.twocol h2 { font-size: 36px; margin: 12px 0 18px; }
+  .rt.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-top: 12px; border-top: 1px dashed #33FF99; }
+  .rt.twocol .cols h3 { font-family: 'VT323', monospace; font-size: 26px; font-weight: 400; margin: 0 0 8px; color: #FFB020; }
+  .rt.twocol .cols ul { padding-left: 18px; margin: 0; }
+
+  .rt.threecol h2 { font-size: 32px; margin: 12px 0 18px; }
+  .rt.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-top: 12px; border-top: 1px dashed #33FF99; }
+  .rt.threecol .cols .nm { color: #FFB020; font-size: 11px; letter-spacing: 0.16em; }
+  .rt.threecol .cols h3 { font-family: 'VT323', monospace; font-size: 26px; font-weight: 400; margin: 4px 0; color: #fff; }
+  .rt.threecol .cols p { font-size: 12px; opacity: 0.8; margin: 0; }
+
+  .rt.imgled { padding: 0; flex-direction: row; }
+  .rt.imgled .img { flex: 1; background: #0A1010; position: relative; display: flex; align-items: center; justify-content: center; }
+  .rt.imgled .img pre { font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.0; color: #33FF99; opacity: 0.6; }
+  .rt.imgled .copy { flex: 0 0 42%; padding: 48px; display: flex; flex-direction: column; justify-content: end; }
+  .rt.imgled .copy h2 { font-size: 44px; }
+
+  .rt.quote { justify-content: center; padding: 48px 80px; }
+  .rt.quote .q { font-family: 'VT323', monospace; font-size: 48px; font-weight: 400; line-height: 1.2; max-width: 28ch; color: #fff; }
+  .rt.quote .q::before { content: "> "; color: #33FF99; }
+  .rt.quote .attr { margin-top: 24px; font-size: 11px; opacity: 0.6; letter-spacing: 0.16em; }
+
+  .rt.timeline h2 { font-size: 32px; margin: 12px 0 18px; }
+  .rt.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 12px; border-top: 1px dashed #33FF99; }
+  .rt.timeline .step { padding: 12px; border: 1px solid #33FF99; }
+  .rt.timeline .step .wk { color: #FFB020; font-size: 11px; letter-spacing: 0.16em; }
+  .rt.timeline .step h4 { font-family: 'VT323', monospace; font-size: 22px; font-weight: 400; margin: 6px 0; color: #fff; }
+  .rt.timeline .step p { font-size: 11px; margin: 0; opacity: 0.8; }
+
+  .rt.team h2 { font-size: 32px; margin: 12px 0 18px; }
+  .rt.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 12px; border-top: 1px dashed #33FF99; }
+  .rt.team .person { padding: 12px; border: 1px solid #33FF99; }
+  .rt.team .person .img { aspect-ratio: 1/1; background: #0A1010; border: 1px solid #33FF99; display: flex; align-items: center; justify-content: center; font-family: 'VT323', monospace; font-size: 32px; color: #33FF99; }
+  .rt.team .person h4 { font-family: 'VT323', monospace; font-size: 20px; font-weight: 400; margin: 8px 0 0; color: #fff; }
+  .rt.team .person .role { font-size: 10px; color: #FFB020; letter-spacing: 0.16em; }
+  .rt.team .person p { font-size: 11px; margin: 4px 0 0; opacity: 0.8; }
+
+  .rt.coda { justify-content: end; }
+  .rt.coda h2 { font-size: 96px; }
+  .rt.coda .meta { margin-top: 14px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">08</span><span class="nm">Retro terminal</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 08 · Hacker</div>
+    <h1>A green-screen <span class="ital">VT220</span> from 1985.</h1>
+    <p>Phosphor green on black, monospace everywhere, ASCII box-drawing as separators. Typewriter reveal, blinking cursor, all-caps system prompts.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · developer tools, indie hacker SaaS</div>
+    <div><strong>Type</strong> · JetBrains Mono · VT323</div>
+    <div><strong>Accent</strong> · Phosphor green · #33FF99</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="rt cover">
+    <div class="top"><span>halcyon@board:~$</span><span class="amber">CONNECTED</span></div>
+    <div style="margin-top: 24px;">$ ./run halcyon-q2-review<span class="blink"></span></div>
+    <h2>HALCYON Q2.</h2>
+    <div class="meta"><span class="gray">14 MAY 2026 · 09:42 UTC</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="rt agenda">
+    <div class="top"><span>02 / 12</span><span>$ ls agenda/</span></div>
+    <h2>AGENDA</h2>
+    <div class="list">
+      <div class="item"><span>[01]</span><span>WHERE WE ARE</span><span class="gray">3M</span></div>
+      <div class="item"><span>[02]</span><span>THE HONEST PART</span><span class="gray">5M</span></div>
+      <div class="item"><span>[03]</span><span>WHAT WE'RE CUTTING</span><span class="gray">4M</span></div>
+      <div class="item"><span>[04]</span><span>ROADMAP &amp; RISKS</span><span class="gray">3M</span></div>
+      <div class="item"><span>[05]</span><span>ASKS OF THE BOARD</span><span class="gray">3M</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="rt section">
+    <div class="ascii-box gray" style="font-size: 12px;">┌─────────────────────────┐<br>│      SECTION 01         │<br>└─────────────────────────┘</div>
+    <h2 style="margin-top: 24px;">WHERE WE ARE</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="rt headline">
+    <div class="top"><span>04 / 12</span><span>$ cat report.md</span></div>
+    <h2>QUIET REBELLION</h2>
+    <div class="body" style="margin-top: 22px;">> Most companies confuse motion for progress. We've spent three quarters undoing<br>&nbsp;&nbsp;that, and the numbers — finally — agree. Revenue is up 42% without a single<br>&nbsp;&nbsp;new hire on the GTM team.<br><br>> The reason isn't strategy. It's the unglamorous work of saying NO, on time,<br>&nbsp;&nbsp;every quarter.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="rt bigstat">
+    <div class="top"><span>05 / 12</span><span>$ stats --vitals</span></div>
+    <h2>VITALS</h2>
+    <div class="row">
+      <div class="col"><div class="stat">$4.2M</div><div class="lbl">// ARR</div></div>
+      <div class="col"><div class="stat">+42%</div><div class="lbl">// QoQ</div></div>
+      <div class="col"><div class="stat">9.1</div><div class="lbl">// NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="rt twocol">
+    <div class="top"><span>06 / 12</span><span>$ diff plan actual</span></div>
+    <h2>BEAT / MISSED</h2>
+    <div class="cols">
+      <div><h3>+++ BEAT</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 style="color: #FF4444;">--- MISSED</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67d</li><li>Onboarding 64%</li><li>Q2 partnerships 1/3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="rt threecol">
+    <div class="top"><span>07 / 12</span><span>$ rm -rf {mobile,partner,brand2}</span></div>
+    <h2>SUNSETS</h2>
+    <div class="cols">
+      <div><span class="nm">[01] PROC</span><h3>MOBILE</h3><p>Reclaim 2 engineers. Web is 92% of revenue.</p></div>
+      <div><span class="nm">[02] PROC</span><h3>PARTNER</h3><p>3 signs in 18 months. Below the bar.</p></div>
+      <div><span class="nm">[03] PROC</span><h3>BRAND-2</h3><p>Cannibalised. Consolidate.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="rt imgled">
+    <div class="img"><pre>  ╔══════════════════════╗
+  ║  HALCYON HQ · Q2     ║
+  ║                      ║
+  ║   ▓▓▓▓▓▓▓▓▓▓▓▓       ║
+  ║   ▓ 16 SUBJECTS ▓    ║
+  ║   ▓▓▓▓▓▓▓▓▓▓▓▓       ║
+  ║                      ║
+  ║   STATUS: OK         ║
+  ╚══════════════════════╝</pre></div>
+    <div class="copy">
+      <div class="top" style="border: 0; padding: 0;"><span>08 / 12</span></div>
+      <h2 style="margin-top: 14px;">THE TEAM</h2>
+      <p style="margin-top: 12px; font-size: 12px; opacity: 0.85;">> Sixteen people. Small, on purpose.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="rt quote">
+    <div class="q">You can't grow your way out of<br>a culture problem — you can only<br>design your way out.</div>
+    <div class="attr">// B. HOROWITZ · TRANSCRIPT 14.05.26</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="rt timeline">
+    <div class="top"><span>10 / 12</span><span>$ cat schedule.txt</span></div>
+    <h2>SCHEDULE</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">// WK 1-2</span><h4>INTERVIEWS</h4><p>12 subjects. Synthesise.</p></div>
+      <div class="step"><span class="wk">// WK 2-3</span><h4>PROTOTYPE</h4><p>Two flows. Pick by EOW.</p></div>
+      <div class="step"><span class="wk">// WK 4-5</span><h4>BUILD</h4><p>2 eng full-time.</p></div>
+      <div class="step"><span class="wk">// WK 6</span><h4>SHIP</h4><p>100% rollout. Target 80%.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="rt team">
+    <div class="top"><span>11 / 12</span><span>$ ls team/</span></div>
+    <h2>ROSTER</h2>
+    <div class="grid">
+      <div class="person"><div class="img">MO</div><h4>M. OLOKUN</h4><span class="role">// VP-PRODUCT</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img">??</div><h4>HEAD-CS</h4><span class="role">// INTRO-REQ</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img">??</div><h4>DIR-GTM</h4><span class="role">// INTRO-REQ</span><p>Devtools bg.</p></div>
+      <div class="person"><div class="img">!?</div><h4>SERIES-A</h4><span class="role">// DECISION</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="rt coda">
+    <div class="top"><span>12 / 12</span><span class="amber">EXIT 0</span></div>
+    <h2>THANKS.</h2>
+    <div class="meta">$ open halcyon.co/q2<span class="blink"></span></div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 08 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

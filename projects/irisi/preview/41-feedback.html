@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · feedback</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Toast */
+  .toast {
+    background: var(--ink); color: var(--paper);
+    padding: 14px 18px;
+    border-radius: 12px;
+    box-shadow: var(--shade-3);
+    display: flex; align-items: center; gap: 14px;
+    max-width: 480px;
+  }
+  .toast .icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.08); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .toast.ok .icon { background: rgba(34,197,94,0.20); color: #4ADE80; }
+  .toast.err .icon { background: rgba(180,35,24,0.30); color: #FCA5A5; }
+  .toast.info .icon { background: rgba(3,97,240,0.30); color: #ADC6FF; }
+  .toast .body { flex: 1; }
+  .toast .body strong { display: block; font-family: var(--sans); font-weight: 600; font-size: 13px; }
+  .toast .body p { font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.75); margin: 2px 0 0; line-height: 1.4; }
+  .toast button { background: rgba(255,255,255,0.10); border: 0; color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-family: var(--sans); font-weight: 500; }
+  .toast .x { background: transparent; padding: 4px 6px; color: rgba(255,255,255,0.6); }
+
+  /* Banner */
+  .banner {
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px;
+    border: 1px solid var(--hair);
+    border-left: 4px solid var(--accent-600);
+  }
+  .banner .icon { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .banner .body { flex: 1; }
+  .banner .body strong { display: block; font-family: var(--sans); font-weight: 600; font-size: 14px; }
+  .banner .body p { font-size: 13px; color: var(--ink-3); margin: 2px 0 0; line-height: 1.45; }
+  .banner.info { background: var(--accent-50); border-color: var(--accent-200); border-left-color: var(--accent-600); }
+  .banner.info .icon { background: var(--accent-600); color: #fff; }
+  .banner.warn { background: var(--warn-bg); border-color: var(--warn-edge); border-left-color: var(--warn); }
+  .banner.warn .icon { background: var(--warn); color: #fff; }
+  .banner.crit { background: var(--crit-bg); border-color: var(--crit-edge); border-left-color: var(--crit); }
+  .banner.crit .icon { background: var(--crit); color: #fff; }
+  .banner.ok { background: var(--ok-bg); border-color: var(--ok-edge); border-left-color: var(--ok); }
+  .banner.ok .icon { background: var(--ok); color: #fff; }
+  .banner .x { background: transparent; border: 0; cursor: pointer; color: var(--ink-3); padding: 4px; font-size: 14px; }
+
+  /* Undo strip */
+  .undo {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 14px 10px 18px;
+    border-radius: 999px;
+    box-shadow: var(--shade-3);
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+  }
+  .undo button { background: rgba(255,255,255,0.10); border: 0; color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 12px; cursor: pointer; font-weight: 500; }
+  .undo button.danger { background: var(--crit); }
+
+  /* Inline callout */
+  .callout {
+    background: var(--paper-deep); border-radius: 10px; padding: 16px 20px;
+    border-left: 3px solid var(--ink);
+    font-family: var(--serif); font-style: italic; font-size: 15px;
+    color: var(--ink-2); line-height: 1.5;
+  }
+
+  /* Optimistic indicator */
+  .optimistic {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent-700); letter-spacing: 0.04em;
+  }
+  .optimistic::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-600);
+    animation: pulse-opt 1.4s ease-out infinite;
+  }
+  @keyframes pulse-opt { 0% { box-shadow: 0 0 0 0 rgba(3,97,240,0.45); } 100% { box-shadow: 0 0 0 8px rgba(3,97,240,0); } }
+
+  /* Context menu */
+  .ctx {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 6px;
+    box-shadow: var(--shade-3);
+    min-width: 220px;
+  }
+  .ctx .item {
+    display: grid; grid-template-columns: 18px 1fr auto; gap: 10px; align-items: center;
+    padding: 6px 10px; border-radius: 6px; cursor: pointer;
+  }
+  .ctx .item:hover { background: var(--paper-deep); }
+  .ctx .item .glyph { color: var(--ink-3); font-size: 12px; }
+  .ctx .item .l { font-family: var(--sans); font-size: 13px; color: var(--ink); }
+  .ctx .item .kbd-c { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+  .ctx .item.danger:hover { background: var(--crit-bg); color: var(--crit); }
+  .ctx .item.danger:hover .l, .ctx .item.danger:hover .glyph { color: var(--crit); }
+  .ctx hr { border: 0; border-top: 1px solid var(--hair); margin: 6px 0; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 41 —</span>
+    <h1 class="ttl">Toasts · banners · feedback</h1>
+    <span class="meta">Overlays · system messages, in their proper place</span>
+  </div>
+
+  <!-- Toasts -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Toasts</span>
+      <h3 class="nm">Slide-in dark slips · 4 species.</h3>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; align-items: end;">
+      <div class="toast ok">
+        <span class="icon">✓</span>
+        <div class="body">
+          <strong>Deck saved</strong>
+          <p>12 slides · Halcyon &amp; Co.</p>
+        </div>
+        <button class="x">×</button>
+      </div>
+      <div class="toast info">
+        <span class="icon">✦</span>
+        <div class="body">
+          <strong>Irisi suggests tightening slide 3</strong>
+          <p>Headline runs long for editorial pack.</p>
+        </div>
+        <button>Apply</button>
+        <button class="x">×</button>
+      </div>
+      <div class="toast err">
+        <span class="icon">!</span>
+        <div class="body">
+          <strong>Generation interrupted</strong>
+          <p>Slide 8 returned incomplete. Tap to retry.</p>
+        </div>
+        <button>Retry</button>
+        <button class="x">×</button>
+      </div>
+      <div class="toast">
+        <span class="icon">⊕</span>
+        <div class="body">
+          <strong>Maya joined the deck</strong>
+          <p>Editor access · 2 sec ago</p>
+        </div>
+        <button class="x">×</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banners -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Banners</span>
+      <h3 class="nm">Page-rule strips, four states.</h3>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="banner info">
+        <span class="icon">i</span>
+        <div class="body">
+          <strong>Editorial broadsheet · Pack 02</strong>
+          <p>You're previewing this pack at full scale. Apply to use it as your default for new decks.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Apply pack</button>
+        <button class="x">×</button>
+      </div>
+      <div class="banner warn">
+        <span class="icon">⚠</span>
+        <div class="body">
+          <strong>Approaching storage limit</strong>
+          <p>You've used <strong>8.2 GB of 10 GB</strong>. Upgrade or archive old decks before generation slows.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Manage storage</button>
+        <button class="x">×</button>
+      </div>
+      <div class="banner crit">
+        <span class="icon">!</span>
+        <div class="body">
+          <strong>Brand colour failed contrast</strong>
+          <p><code>#FFE54A</code> on cream paper falls below WCAG AA. Irisi will substitute a darker variant in body copy.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Pick another</button>
+        <button class="x">×</button>
+      </div>
+      <div class="banner ok">
+        <span class="icon">✓</span>
+        <div class="body">
+          <strong>Brand verified</strong>
+          <p>SSO, custom typeface, and signal colour all pass — your brand is ready for every pack.</p>
+        </div>
+        <button class="x">×</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Undo + optimistic -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Undo</span>
+        <h3 class="nm">Action confirmed, undo offered.</h3>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 18px; align-items: start;">
+        <span class="undo">Slide 8 deleted <button>Undo · 4 s</button></span>
+        <span class="undo">Pack switched to Swiss instrument <button>Switch back</button></span>
+        <span class="undo">3 slides archived <button class="danger">Restore</button></span>
+      </div>
+    </div>
+
+    <!-- Optimistic + callout -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Optimistic + callout</span>
+        <h3 class="nm">In-line states.</h3>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span class="optimistic">Sending to halcyon-board@</span>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span class="optimistic">Generating slide 7…</span>
+        </div>
+        <div class="callout">
+          "When you're presenting, hit <strong style="font-style: normal; font-family: var(--sans); font-weight: 600;">B</strong> for a black-out, or <strong style="font-style: normal; font-family: var(--sans); font-weight: 600;">,</strong> to scrub through thumbs without leaving the slide."
+        </div>
+      </div>
+    </div>
+
+    <!-- Context menu -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Context menu</span>
+        <h3 class="nm">Right-click on a slide.</h3>
+      </div>
+      <div style="padding: 24px; background: var(--paper); border-radius: 12px;">
+        <div class="ctx">
+          <div class="item"><span class="glyph">✎</span><span class="l">Edit headline</span><span class="kbd-c">⏎</span></div>
+          <div class="item"><span class="glyph">⎘</span><span class="l">Duplicate slide</span><span class="kbd-c">⌘D</span></div>
+          <div class="item"><span class="glyph">↥</span><span class="l">Move up</span><span class="kbd-c">⌘↑</span></div>
+          <div class="item"><span class="glyph">↧</span><span class="l">Move down</span><span class="kbd-c">⌘↓</span></div>
+          <hr>
+          <div class="item"><span class="glyph">◐</span><span class="l">Switch this slide's layout…</span><span class="kbd-c">⇥</span></div>
+          <div class="item"><span class="glyph">✦</span><span class="l">Ask Irisi to rewrite</span><span class="kbd-c">⌘K</span></div>
+          <hr>
+          <div class="item danger"><span class="glyph">⌫</span><span class="l">Delete slide</span><span class="kbd-c">⌫</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generation in progress -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Generation strip</span>
+        <h3 class="nm">A subtle inline progress.</h3>
+      </div>
+      <div style="background: var(--paper); border-radius: 12px; padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-family: var(--sans); font-size: 13px; font-weight: 500;">Generating · slide 7 of 12</span>
+          <span class="optimistic">Live</span>
+        </div>
+        <div style="height: 4px; background: var(--paper-deep); border-radius: 2px; overflow: hidden;">
+          <div style="height: 100%; width: 58%; background: var(--accent-600); border-radius: 2px;"></div>
+        </div>
+        <p style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 8px 0 0; letter-spacing: 0.04em;">~ 3.8 sec remaining</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

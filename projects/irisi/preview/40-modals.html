@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · modals</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .stage {
+    background: rgba(15,17,21,0.5);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 320px;
+  }
+
+  .modal {
+    background: var(--sheet); border-radius: 16px;
+    box-shadow: var(--shade-3);
+    max-width: 480px; width: 100%;
+    overflow: hidden;
+  }
+  .modal .top {
+    padding: 22px 28px 16px;
+  }
+  .modal h3 { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0; }
+  .modal h3 .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.16em; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 600; }
+  .modal .body { padding: 0 28px 8px; }
+  .modal p { font-size: 14px; color: var(--ink-2); margin: 0 0 12px; line-height: 1.55; }
+  .modal p strong { color: var(--ink); font-weight: 600; }
+  .modal .foot {
+    padding: 18px 28px;
+    background: var(--paper);
+    border-top: 1px solid var(--hair);
+    display: flex; justify-content: end; gap: 8px; align-items: center;
+  }
+  .modal .foot .gap { flex: 1; }
+
+  .modal.critical { border-top: 4px solid var(--crit); }
+  .modal.critical h3 { color: var(--crit); }
+  .modal.critical .icon-row { display: flex; align-items: start; gap: 14px; padding-bottom: 12px; }
+  .modal.critical .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--crit-bg); border: 1px solid var(--crit-edge); color: var(--crit); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+
+  .typed-confirm {
+    background: var(--paper-deep); border-radius: 8px; padding: 12px 14px;
+    margin: 14px 0;
+    border: 1px solid var(--hair);
+  }
+  .typed-confirm p { font-size: 12px; color: var(--ink-3); margin: 0 0 8px; }
+  .typed-confirm code { background: var(--sheet); border: 1px solid var(--hair); padding: 2px 8px; border-radius: 4px; font-family: var(--mono); font-size: 12px; }
+
+  .checklist { margin: 12px 0; padding: 0; list-style: none; font-size: 13px; }
+  .checklist li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; padding: 6px 0; }
+  .checklist li::before { content: "•"; color: var(--crit); font-weight: 700; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Form modal preview */
+  .modal-form .row { display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center; padding: 6px 0; }
+  .modal-form .row .l { font-family: var(--sans); font-size: 12px; color: var(--ink-2); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 40 —</span>
+    <h1 class="ttl">Modals</h1>
+    <span class="meta">Overlays · confirm · form · CRITICAL · session</span>
+  </div>
+
+  <!-- 1. CONFIRM -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Confirm</span>
+      <h3 class="nm">Reversible confirmation.</h3>
+      <span class="why">Switch pack, change brand — undoable.</span>
+    </div>
+    <div class="stage">
+      <div class="modal">
+        <div class="top">
+          <h3>Switch slide pack?</h3>
+        </div>
+        <div class="body">
+          <p>Your custom edits to the title slide will be preserved. Other layouts will be re-typeset in <strong>Swiss instrument</strong>'s style. You can switch back any time.</p>
+        </div>
+        <div class="foot">
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-secondary">Compare both</button>
+          <button class="btn btn-accent">Switch pack</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- 2. FORM -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Form</span>
+        <h3 class="nm">Quick edit dialog.</h3>
+      </div>
+      <div class="stage" style="background: rgba(15,17,21,0.4);">
+        <div class="modal modal-form">
+          <div class="top"><h3>New brand</h3></div>
+          <div class="body">
+            <div class="row"><span class="l">Brand name</span><input class="field" value="Halcyon &amp; Co."></div>
+            <div class="row"><span class="l">Domain</span><input class="field" value="halcyon.co"></div>
+            <div class="row"><span class="l">Signal colour</span><input class="field tabular" value="#B42318"></div>
+            <div class="row"><span class="l">Display font</span><select class="field"><option>Source Serif 4</option></select></div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-accent">Create brand →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SESSION -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Session</span>
+        <h3 class="nm">You've been idle.</h3>
+      </div>
+      <div class="stage" style="background: rgba(15,17,21,0.4);">
+        <div class="modal">
+          <div class="top">
+            <h3><span class="ix">— Session</span>Still there?</h3>
+          </div>
+          <div class="body">
+            <p>For your security, we'll sign you out in <strong style="font-family: var(--mono);">2:14</strong> if there's no activity. Your work is auto-saved.</p>
+          </div>
+          <div class="foot">
+            <button class="btn btn-ghost">Sign out now</button>
+            <button class="btn btn-accent">I'm here</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 4. CRITICAL — the mandatory one -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Critical · mandatory</span>
+      <h3 class="nm">Delete deck.</h3>
+      <span class="why">The irreversible. Typed-confirm + named consequences.</span>
+    </div>
+    <div class="stage" style="background: rgba(15,17,21,0.7);">
+      <div class="modal critical">
+        <div class="top">
+          <div class="icon-row">
+            <span class="icon">!</span>
+            <div>
+              <h3>Permanently delete this deck?</h3>
+              <p style="font-size: 12px; color: var(--ink-3); margin: 4px 0 0;">This cannot be undone.</p>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <p>Deleting <strong>"Q2 Board Update — Halcyon &amp; Co."</strong> will:</p>
+          <ul class="checklist">
+            <li>Delete all 12 slides, including custom edits</li>
+            <li>Revoke 4 active share links (board members will lose access immediately)</li>
+            <li>Remove 28 comment threads and the activity log</li>
+            <li>Remove the 6 PDF and 2 .pptx exports stored against this deck</li>
+          </ul>
+
+          <div class="typed-confirm">
+            <p>Type <code>delete halcyon q2</code> to confirm:</p>
+            <input class="field tabular" value="delete halcyon q2">
+          </div>
+        </div>
+        <div class="foot">
+          <button class="btn btn-ghost">Cancel</button>
+          <span class="gap"></span>
+          <button class="btn btn-secondary">Archive instead</button>
+          <button class="btn btn-danger">Delete deck</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

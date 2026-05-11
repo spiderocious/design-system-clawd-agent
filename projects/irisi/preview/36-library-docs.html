@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · library docs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  html, body { margin: 0; min-height: 100vh; }
+  body { background: var(--paper); color: var(--ink); }
+
+  /* ===== Top ===== */
+  .top {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 24px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--hair);
+    background: rgba(247,248,251,0.92);
+    backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 30;
+  }
+  .brand { font-family: var(--display); font-size: 18px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: inline-flex; align-items: baseline; gap: 6px; }
+  .brand .dot { color: var(--accent-600); font-size: 22px; line-height: 0; }
+  .brand .pron { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-left: 4px; }
+
+  .crumb {
+    display: flex; gap: 8px; align-items: center;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+    justify-content: center;
+  }
+  .crumb a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; }
+  .crumb a:hover { color: var(--ink); border-color: var(--ink); }
+  .crumb .cur { color: var(--ink); font-weight: 600; }
+  .crumb .sep { color: var(--ink-5); }
+
+  .top-search {
+    display: flex; gap: 8px; align-items: center;
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 8px;
+    padding: 0 12px; height: 34px; width: 280px;
+    margin-left: auto;
+  }
+  .top-search input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 13px; }
+  .top-search .kbd { font-size: 10px; }
+
+  /* ===== Layout ===== */
+  .layout {
+    display: grid; grid-template-columns: 240px 1fr 240px;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* LEFT NAV */
+  .lnav {
+    border-right: 1px solid var(--hair);
+    padding: 24px 18px;
+    overflow: auto;
+    position: sticky; top: 60px;
+    align-self: start;
+    height: calc(100vh - 60px);
+  }
+  .lnav .group {
+    margin-bottom: 22px;
+  }
+  .lnav .group .h {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lnav .group .h::after { content: ""; flex: 1; height: 1px; background: var(--hair); }
+  .lnav a {
+    display: block; padding: 5px 10px; margin-left: -10px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    text-decoration: none; border-radius: 6px;
+    line-height: 1.4;
+  }
+  .lnav a:hover { background: var(--paper-deep); color: var(--ink); }
+  .lnav a.on {
+    background: var(--accent-50); color: var(--accent-800); font-weight: 600;
+    box-shadow: inset 2px 0 0 var(--accent-600);
+  }
+  .lnav .group .pack-row {
+    display: grid; grid-template-columns: 12px 1fr auto;
+    gap: 8px; align-items: center;
+  }
+  .lnav .pack-row .ix {
+    font-family: var(--mono); font-size: 9px; color: var(--ink-4);
+    text-align: right;
+  }
+  .lnav .pack-row .badge {
+    font-family: var(--mono); font-size: 9px;
+    color: var(--ok); padding: 0 5px; background: var(--ok-bg);
+    border: 1px solid var(--ok-edge); border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .lnav .pack-row .badge.beta { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-edge); }
+
+  /* CONTENT */
+  .content {
+    padding: 56px 64px 96px;
+    max-width: 880px; margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .content .pgmeta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+
+  .content h1 {
+    font-family: var(--display); font-size: 56px; font-weight: 700;
+    letter-spacing: -0.03em; line-height: 1.04;
+    margin: 12px 0 16px;
+  }
+  .content h1 .em { color: var(--accent-600); }
+  .content h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+
+  .content .lede {
+    font-family: var(--serif); font-style: italic; font-size: 19px;
+    color: var(--ink-3); line-height: 1.5; max-width: 60ch;
+    margin: 0 0 32px;
+  }
+
+  /* Heading rules */
+  .content h2 {
+    font-family: var(--display); font-size: 28px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin: 56px 0 14px;
+    padding-top: 24px; border-top: 1px solid var(--hair);
+  }
+  .content h2 .num {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    letter-spacing: 0.18em; vertical-align: middle; margin-right: 12px;
+  }
+
+  .content h3 {
+    font-family: var(--display); font-size: 19px; font-weight: 600;
+    letter-spacing: -0.015em; margin: 28px 0 10px;
+  }
+
+  .content p {
+    font-size: 15px; line-height: 1.65; color: var(--ink-2);
+    max-width: 64ch; margin: 0 0 14px;
+  }
+
+  /* Inline code */
+  code {
+    font-family: var(--mono); font-size: 0.92em;
+    background: var(--paper-deep); padding: 1px 6px;
+    border-radius: 4px; color: var(--ink);
+  }
+
+  /* Code block */
+  .codeblock {
+    margin: 18px 0 24px;
+    background: #0F1115; color: #E3E7EE;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shade-2);
+  }
+  .codeblock .cb-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.6);
+    letter-spacing: 0.04em;
+  }
+  .codeblock .cb-head .lang { color: var(--accent-300); font-weight: 600; }
+  .codeblock .cb-head .gap { flex: 1; }
+  .codeblock .cb-head button {
+    background: transparent; border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7); border-radius: 6px;
+    padding: 3px 8px; font-family: var(--mono); font-size: 10px; cursor: pointer;
+    letter-spacing: 0.06em;
+  }
+  .codeblock pre {
+    margin: 0; padding: 18px 18px;
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    overflow-x: auto;
+  }
+  .codeblock .tk-key { color: #B392F0; }
+  .codeblock .tk-tag { color: #79C0FF; }
+  .codeblock .tk-attr { color: #FFA657; }
+  .codeblock .tk-str { color: #A5D6FF; }
+  .codeblock .tk-comment { color: #6E7785; font-style: italic; }
+  .codeblock .tk-fn { color: #D2A8FF; }
+
+  /* Pack hero */
+  .pack-hero {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end;
+    margin: 28px 0 32px;
+    padding: 24px 28px;
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px;
+  }
+  .pack-hero .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .pack-hero h4 {
+    margin: 4px 0 8px;
+    font-family: var(--display); font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .pack-hero p {
+    margin: 0; font-size: 14px; color: var(--ink-3); line-height: 1.55; max-width: 50ch;
+  }
+  .pack-hero .meta {
+    display: flex; gap: 14px; margin-top: 14px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em;
+  }
+  .pack-hero .meta strong { color: var(--ink); }
+  .pack-hero .preview-card {
+    width: 280px; aspect-ratio: 16 / 10;
+    background: #FBFAF7; border-radius: 8px;
+    border: 1px solid var(--hair);
+    overflow: hidden; padding: 16px 20px;
+    color: #14110D; font-family: 'Source Serif 4', serif;
+    box-shadow: var(--shade-1);
+    position: relative;
+  }
+  .pack-hero .preview-card .kk { font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.22em; color: #B42318; text-transform: uppercase; }
+  .pack-hero .preview-card .h { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 500; line-height: 1.05; letter-spacing: -0.018em; margin: 6px 0 8px; max-width: 12ch; }
+  .pack-hero .preview-card hr { border: 0; border-top: 1px solid #14110D; margin: 6px 0; }
+  .pack-hero .preview-card .by { font-size: 8px; color: #6E665B; letter-spacing: 0.06em; font-family: 'Inter', sans-serif; }
+
+  /* Layout grid */
+  .layout-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    margin: 18px 0 24px;
+  }
+  .layout-card {
+    border: 1px solid var(--hair); border-radius: 12px;
+    background: var(--sheet);
+    padding: 14px;
+    cursor: pointer;
+    transition: border-color 120ms;
+  }
+  .layout-card:hover { border-color: var(--ink-3); }
+  .layout-card .pic {
+    aspect-ratio: 16 / 10;
+    background: #FBFAF7; border-radius: 6px; border: 1px solid var(--hair);
+    overflow: hidden; padding: 12px 14px; position: relative;
+    margin-bottom: 10px;
+  }
+  .layout-card .nm {
+    font-family: var(--display); font-weight: 600; font-size: 14px;
+    letter-spacing: -0.015em; margin: 0;
+  }
+  .layout-card .ct {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-4);
+    letter-spacing: 0.04em;
+  }
+  .layout-card .pic .h { height: 4px; background: #14110D; border-radius: 2px; width: 70%; }
+  .layout-card .pic .b { height: 2px; background: #D9D0BB; border-radius: 999px; margin-top: 4px; }
+
+  /* Prop table */
+  table.props {
+    width: 100%; border-collapse: collapse;
+    margin: 8px 0 18px;
+    font-size: 13px;
+  }
+  table.props th, table.props td {
+    text-align: left; padding: 10px 12px;
+    border-bottom: 1px solid var(--hair);
+  }
+  table.props th {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    border-bottom: 1px solid var(--ink);
+  }
+  table.props td.nm { font-family: var(--mono); color: var(--ink); }
+  table.props td.tp { font-family: var(--mono); color: var(--accent-700); }
+  table.props td.dsc { color: var(--ink-3); }
+  table.props td.req::after { content: " · req"; font-family: var(--mono); font-size: 10px; color: var(--crit); letter-spacing: 0.04em; }
+
+  /* RIGHT TOC */
+  .rnav {
+    padding: 56px 24px 24px;
+    border-left: 1px solid var(--hair);
+    position: sticky; top: 60px;
+    align-self: start;
+    height: calc(100vh - 60px);
+    overflow: auto;
+  }
+  .rnav .h {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .rnav a {
+    display: block;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    text-decoration: none; padding: 4px 0;
+    border-left: 2px solid transparent;
+    padding-left: 10px; margin-left: -2px;
+    line-height: 1.5;
+  }
+  .rnav a.on { color: var(--ink); border-left-color: var(--accent-600); font-weight: 600; }
+  .rnav a:hover { color: var(--ink); }
+
+  .rnav .actions {
+    margin-top: 32px; padding-top: 18px;
+    border-top: 1px solid var(--hair);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .rnav .actions a {
+    padding: 6px 8px; border: 1px solid var(--hair); border-radius: 6px;
+    font-size: 12px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px;
+  }
+  .rnav .actions a:hover { background: var(--paper-deep); color: var(--ink); border-color: var(--ink-3); }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="brand">Irisi<span class="dot">.</span><span class="pron">/Hi-ri-z/</span></span>
+  <nav class="crumb">
+    <a href="#">Library</a><span class="sep">/</span>
+    <a href="#">Slide packs</a><span class="sep">/</span>
+    <span class="cur">Editorial broadsheet</span>
+  </nav>
+  <div class="top-search">
+    <span style="color: var(--ink-4)">⌕</span>
+    <input placeholder="Search packs, layouts, props…">
+    <span class="kbd">⌘ K</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <aside class="lnav">
+    <div class="group">
+      <div class="h">Get started</div>
+      <a href="#">Installation</a>
+      <a href="#">Quickstart</a>
+      <a href="#">Tokens &amp; theming</a>
+      <a href="#">Brand integration</a>
+    </div>
+
+    <div class="group">
+      <div class="h">Slide packs</div>
+      <div class="pack-row"><span class="ix">01</span><a href="#">Surgical paper</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">02</span><a href="#" class="on">Editorial broadsheet</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">03</span><a href="#">Swiss instrument</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">04</span><a href="#">Brutalist dossier</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">05</span><a href="#">Glassmorphic studio</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">06</span><a href="#">Industrial telemetry</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">07</span><a href="#">Soft Scandinavian</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">08</span><a href="#">Retro terminal</a><span class="badge beta">beta</span></div>
+      <div class="pack-row"><span class="ix">09</span><a href="#">Editorial photographic</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">10</span><a href="#">Transit board</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">11</span><a href="#">Notebook grid</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">12</span><a href="#">Showroom mono</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">13</span><a href="#">Risograph print</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">14</span><a href="#">Graph paper</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">15</span><a href="#">Liquid material</a><span class="badge beta">beta</span></div>
+      <div class="pack-row"><span class="ix">16</span><a href="#">Bauhaus poster</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">17</span><a href="#">Japanese minimalism</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">18</span><a href="#">Maximalist startup</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">19</span><a href="#">Cartographer's atlas</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">20</span><a href="#">Construction blueprint</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">21</span><a href="#">Sushi-counter omakase</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">22</span><a href="#">Mid-century playful</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">23</span><a href="#">Rolling-paper minimal</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">24</span><a href="#">Soviet poster</a><span class="badge">stable</span></div>
+      <div class="pack-row"><span class="ix">25</span><a href="#">Workshop manual</a><span class="badge beta">beta</span></div>
+    </div>
+
+    <div class="group">
+      <div class="h">For agents</div>
+      <a href="#">JSON schema</a>
+      <a href="#">Function-call API</a>
+      <a href="#">Copy-paste prompts</a>
+      <a href="#">Open in Code Connect</a>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="pgmeta">— Pack 02 ·  v 1.4.2  ·  React 18+ &amp; framer-friendly</div>
+    <h1>Editorial <span class="em">broadsheet.</span> <span class="ital">Slides that read like a serious newspaper.</span></h1>
+    <p class="lede">A measured, byline-and-rule pack for board updates, research summaries, intelligence briefs, and any deck that wants to feel <em>edited</em> rather than <em>generated</em>. Twelve layouts, fully typeset.</p>
+
+    <div class="pack-hero">
+      <div>
+        <div class="ix">— Stance</div>
+        <h4>"What if a NYT analyst designed your deck?"</h4>
+        <p>Bylines, horizontal rules, kicker-coded sections, two-column body, restrained pull-quotes. One journalistic red used only on critical or breaking-news cues.</p>
+        <div class="meta">
+          <span><strong>Layouts:</strong> 12</span>
+          <span><strong>Fonts:</strong> Source Serif 4 · Inter</span>
+          <span><strong>Best for:</strong> board, research, analysis</span>
+        </div>
+      </div>
+      <div class="preview-card">
+        <div class="kk">— Quarterly · Q2 2026 —</div>
+        <div class="h">The quiet rebellion of measured growth.</div>
+        <hr>
+        <div class="by">By the founders · 12 min read</div>
+      </div>
+    </div>
+
+    <h2 id="install"><span class="num">01</span> Installation</h2>
+    <p>Add Irisi's slide library to your project. The library is provider-agnostic — bring your own React app, Next.js page, or render to HTML/PDF on the server.</p>
+
+    <div class="codeblock">
+      <div class="cb-head">
+        <span class="lang">terminal</span>
+        <span class="gap"></span>
+        <button>Copy</button>
+      </div>
+<pre><span class="tk-comment"># pick your package manager</span>
+npm install @irisi/slides @irisi/pack-editorial
+<span class="tk-comment"># or</span>
+pnpm add @irisi/slides @irisi/pack-editorial</pre>
+    </div>
+
+    <h2 id="quickstart"><span class="num">02</span> Quickstart</h2>
+    <p>Render an editorial-broadsheet headline slide with content. Each layout is a typed React component; props mirror what the AI fills in.</p>
+
+    <div class="codeblock">
+      <div class="cb-head">
+        <span class="lang">tsx</span>
+        <span>app/deck/page.tsx</span>
+        <span class="gap"></span>
+        <button>Copy</button>
+        <button>Open in editor →</button>
+      </div>
+<pre><span class="tk-key">import</span> { Headline } <span class="tk-key">from</span> <span class="tk-str">"@irisi/pack-editorial"</span>;
+
+<span class="tk-key">export default function</span> <span class="tk-fn">Page</span>() {
+  <span class="tk-key">return</span> (
+    &lt;<span class="tk-tag">Headline</span>
+      <span class="tk-attr">kicker</span>=<span class="tk-str">"— Quarterly · Q2 2026 —"</span>
+      <span class="tk-attr">title</span>=<span class="tk-str">"The quiet rebellion of measured growth"</span>
+      <span class="tk-attr">byline</span>=<span class="tk-str">"By the founders · 12 min read"</span>
+      <span class="tk-attr">paragraphs</span>={[
+        <span class="tk-str">"Most companies confuse motion for progress…"</span>,
+        <span class="tk-str">"The reason isn't strategy. It's discipline."</span>,
+      ]}
+      <span class="tk-attr">brand</span>={{ accent: <span class="tk-str">"#B42318"</span>, mark: <span class="tk-str">"H"</span> }}
+      <span class="tk-attr">page</span>={{ index: <span class="tk-str">3</span>, total: <span class="tk-str">12</span> }}
+    /&gt;
+  );
+}</pre>
+    </div>
+
+    <h2 id="layouts"><span class="num">03</span> Layouts in this pack</h2>
+    <p>Twelve typeset layouts, all sharing the editorial stance. Click any one to open its API.</p>
+
+    <div class="layout-grid">
+      <div class="layout-card">
+        <div class="pic" style="display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="font-family:'Source Serif 4',serif;font-size:18px;font-weight:500;letter-spacing:-0.02em;line-height:1.0;margin-bottom:6px">Q2 Board Update</div>
+          <div style="font-family:'Inter',sans-serif;font-size:7px;letter-spacing:0.16em;color:#B42318;text-transform:uppercase">Halcyon · 2026</div>
+        </div>
+        <div class="nm">Cover</div>
+        <div class="ct">&lt;Cover /&gt; · 4 props</div>
+      </div>
+
+      <div class="layout-card">
+        <div class="pic">
+          <div class="h"></div>
+          <div class="b" style="margin-top:6px"></div>
+          <div class="b" style="width:60%"></div>
+          <div class="b"></div>
+          <div class="b" style="width:80%"></div>
+        </div>
+        <div class="nm">Agenda</div>
+        <div class="ct">&lt;Agenda /&gt; · 3 props</div>
+      </div>
+
+      <div class="layout-card">
+        <div class="pic" style="display:flex;flex-direction:column">
+          <div style="font-family:'Inter',sans-serif;font-size:6px;letter-spacing:0.18em;color:#B42318;text-transform:uppercase">— Q2 2026 —</div>
+          <div style="font-family:'Source Serif 4',serif;font-size:13px;font-weight:500;letter-spacing:-0.018em;line-height:1.05;margin:4px 0">Headline runs across two lines.</div>
+          <hr style="border:0;border-top:0.5px solid #14110D;margin:4px 0">
+          <div class="b" style="width:60%"></div>
+        </div>
+        <div class="nm">Headline</div>
+        <div class="ct">&lt;Headline /&gt; · 6 props</div>
+      </div>
+
+      <div class="layout-card">
+        <div class="pic" style="display:flex;align-items:center;gap:8px">
+          <div style="font-family:'Source Serif 4',serif;font-size:24px;font-weight:500;letter-spacing:-0.03em;color:#14110D">$4.2M</div>
+          <div style="display:flex;flex-direction:column;gap:3px;flex:1">
+            <div style="height:1px;background:#14110D"></div>
+            <div class="b"></div><div class="b" style="width:60%"></div>
+          </div>
+        </div>
+        <div class="nm">Big stat</div>
+        <div class="ct">&lt;BigStat /&gt; · 4 props</div>
+      </div>
+
+      <div class="layout-card">
+        <div class="pic" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div><div class="h"></div><div class="b" style="margin-top:3px"></div><div class="b" style="margin-top:2px;width:80%"></div></div>
+          <div><div class="h" style="background:#B42318"></div><div class="b" style="margin-top:3px"></div><div class="b" style="margin-top:2px;width:60%"></div></div>
+        </div>
+        <div class="nm">Comparison</div>
+        <div class="ct">&lt;TwoColumn /&gt; · 5 props</div>
+      </div>
+
+      <div class="layout-card">
+        <div class="pic" style="display:flex;flex-direction:column;justify-content:center">
+          <div style="font-family:'Source Serif 4',serif;font-style:italic;font-size:11px;line-height:1.4;color:#14110D">"You can't grow your way out of a culture problem."</div>
+          <div style="font-family:'Inter',sans-serif;font-size:6px;letter-spacing:0.16em;color:#6E665B;margin-top:5px;text-transform:uppercase">— BEN HOROWITZ</div>
+        </div>
+        <div class="nm">Pull-quote</div>
+        <div class="ct">&lt;Quote /&gt; · 3 props</div>
+      </div>
+    </div>
+
+    <h2 id="api"><span class="num">04</span> The Headline component, in detail</h2>
+    <p>Props for <code>&lt;Headline&gt;</code> — the most-used layout in this pack. All props are optional except <code>title</code>; sensible defaults keep the typesetting consistent.</p>
+
+    <table class="props">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="nm req">title</td><td class="tp">string</td><td class="dsc">The display headline. Long titles wrap inside the editorial column; the layout will not truncate.</td></tr>
+        <tr><td class="nm">kicker</td><td class="tp">string</td><td class="dsc">The small uppercase byline above the title — typically issue, quarter, or section.</td></tr>
+        <tr><td class="nm">byline</td><td class="tp">string</td><td class="dsc">The reading-time / authorship line beneath the rule.</td></tr>
+        <tr><td class="nm">paragraphs</td><td class="tp">string[]</td><td class="dsc">Body copy. Two paragraphs maximum is recommended for legibility at projection size.</td></tr>
+        <tr><td class="nm">brand</td><td class="tp">BrandTokens</td><td class="dsc">Colour, mark, and typography overrides. Inherited from <code>&lt;DeckProvider&gt;</code> by default.</td></tr>
+        <tr><td class="nm">page</td><td class="tp">{index, total}</td><td class="dsc">For the footer's page-numbering. Auto-supplied by <code>&lt;Deck&gt;</code> when used as a child.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="agents"><span class="num">05</span> For AI agents</h2>
+    <p>Each layout publishes a JSON schema and a tool-call definition. Hand them to your function-calling LLM and it'll produce valid props directly.</p>
+
+    <div class="codeblock">
+      <div class="cb-head">
+        <span class="lang">json</span>
+        <span>headline.schema.json</span>
+        <span class="gap"></span>
+        <button>Copy</button>
+      </div>
+<pre>{
+  <span class="tk-attr">"name"</span>: <span class="tk-str">"editorial.Headline"</span>,
+  <span class="tk-attr">"description"</span>: <span class="tk-str">"A typeset editorial headline slide with kicker, title, byline, and two-column body."</span>,
+  <span class="tk-attr">"input_schema"</span>: {
+    <span class="tk-attr">"type"</span>: <span class="tk-str">"object"</span>,
+    <span class="tk-attr">"required"</span>: [<span class="tk-str">"title"</span>],
+    <span class="tk-attr">"properties"</span>: {
+      <span class="tk-attr">"title"</span>: { <span class="tk-attr">"type"</span>: <span class="tk-str">"string"</span>, <span class="tk-attr">"maxLength"</span>: <span class="tk-str">90</span> },
+      <span class="tk-attr">"kicker"</span>: { <span class="tk-attr">"type"</span>: <span class="tk-str">"string"</span>, <span class="tk-attr">"maxLength"</span>: <span class="tk-str">42</span> },
+      <span class="tk-attr">"paragraphs"</span>: {
+        <span class="tk-attr">"type"</span>: <span class="tk-str">"array"</span>, <span class="tk-attr">"items"</span>: { <span class="tk-attr">"type"</span>: <span class="tk-str">"string"</span> }, <span class="tk-attr">"maxItems"</span>: <span class="tk-str">2</span>
+      }
+    }
+  }
+}</pre>
+    </div>
+
+  </main>
+
+  <!-- RIGHT TOC -->
+  <aside class="rnav">
+    <div class="h">— On this page</div>
+    <a href="#install">Installation</a>
+    <a href="#quickstart">Quickstart</a>
+    <a href="#layouts" class="on">Layouts</a>
+    <a href="#api">Headline API</a>
+    <a href="#agents">For AI agents</a>
+
+    <div class="actions">
+      <a href="#"><span style="color:var(--accent-600)">↗</span> Open in Code Connect</a>
+      <a href="#"><span style="color:var(--accent-600)">↗</span> View on GitHub</a>
+      <a href="#"><span style="color:var(--accent-600)">⌘</span> Edit this page</a>
+      <a href="#" style="border-color: var(--accent-600); color: var(--accent-700)">⤓ Pack JSON · 12 layouts</a>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 17 · Japanese minimalism</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  .jp { background: #F5F0E5; color: #14110D; font-family: 'Source Serif 4', 'Noto Serif JP', serif; padding: 64px 96px; height: 100%; display: flex; flex-direction: column; line-height: 1.8; }
+  .jp .lbl { font-size: 11px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; }
+  .jp h2 { font-family: 'Source Serif 4', 'Noto Serif JP', serif; font-weight: 400; line-height: 1.4; letter-spacing: -0.01em; margin: 18px 0 0; }
+  .jp .vermillion { color: #B5573B; }
+  .jp .sumi { color: #14110D; }
+
+  .jp.cover { justify-content: end; padding-left: 48px; }
+  .jp.cover h2 { font-size: 56px; max-width: 12ch; line-height: 1.5; }
+  .jp.cover .meta { font-size: 12px; color: #6E665B; margin-top: 14px; font-style: italic; }
+
+  .jp.agenda h2 { font-size: 40px; margin: 14px 0 28px; }
+  .jp.agenda .list { font-size: 18px; line-height: 2; max-width: 50ch; }
+  .jp.agenda .list .item { display: grid; grid-template-columns: 60px 1fr auto; gap: 16px; padding: 8px 0; border-bottom: 1px solid #D4C9AE; }
+  .jp.agenda .list .item .ix { font-style: italic; color: #B5573B; font-size: 14px; }
+  .jp.agenda .list .item .meta { font-size: 12px; color: #6E665B; font-style: italic; }
+
+  .jp.section { justify-content: center; align-items: center; }
+  .jp.section h2 { font-size: 80px; max-width: 8ch; text-align: center; }
+
+  .jp.headline h2 { font-size: 44px; max-width: 18ch; line-height: 1.5; }
+  .jp.headline .body { font-size: 15px; line-height: 1.9; max-width: 56ch; margin-top: 22px; color: #3C3833; }
+
+  .jp.bigstat { justify-content: center; }
+  .jp.bigstat h2 { font-size: 28px; margin: 14px 0 32px; }
+  .jp.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; }
+  .jp.bigstat .stat { font-family: 'Source Serif 4', serif; font-size: 64px; font-weight: 400; letter-spacing: -0.02em; line-height: 1; color: #14110D; }
+  .jp.bigstat .stat.em { color: #B5573B; }
+  .jp.bigstat .lbl { margin-top: 10px; font-size: 11px; letter-spacing: 0.32em; }
+
+  .jp.twocol h2 { font-size: 36px; margin: 12px 0 28px; }
+  .jp.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .jp.twocol .cols h3 { font-size: 19px; font-weight: 500; margin: 0 0 12px; line-height: 1.4; }
+  .jp.twocol .cols ul { font-size: 14px; line-height: 1.9; padding-left: 18px; margin: 0; color: #3C3833; }
+
+  .jp.threecol h2 { font-size: 36px; margin: 12px 0 28px; }
+  .jp.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .jp.threecol .cols .nm { font-size: 11px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; }
+  .jp.threecol .cols h3 { font-size: 19px; font-weight: 500; margin: 6px 0; line-height: 1.4; }
+  .jp.threecol .cols p { font-size: 13px; line-height: 1.85; color: #3C3833; margin: 0; }
+
+  .jp.imgled { padding: 0; flex-direction: row; }
+  .jp.imgled .img { flex: 1; background: #F5F0E5; display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .jp.imgled .img .circle { width: 280px; height: 280px; border-radius: 50%; background: #B5573B; opacity: 0.85; }
+  .jp.imgled .copy { flex: 0 0 44%; padding: 64px 56px; display: flex; flex-direction: column; justify-content: end; background: #F5F0E5; }
+  .jp.imgled .copy h2 { font-size: 36px; max-width: 14ch; line-height: 1.4; margin-top: 16px; }
+
+  .jp.quote { justify-content: center; align-items: start; padding: 64px 96px; }
+  .jp.quote .q { font-style: italic; font-size: 36px; font-weight: 400; line-height: 1.5; max-width: 22ch; }
+  .jp.quote .attr { font-size: 11px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; margin-top: 32px; }
+
+  .jp.timeline h2 { font-size: 36px; margin: 12px 0 28px; }
+  .jp.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .jp.timeline .step .wk { font-size: 11px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; }
+  .jp.timeline .step h4 { font-size: 18px; font-weight: 500; margin: 6px 0; line-height: 1.4; }
+  .jp.timeline .step p { font-size: 13px; line-height: 1.8; color: #3C3833; margin: 0; }
+
+  .jp.team h2 { font-size: 36px; margin: 12px 0 28px; }
+  .jp.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .jp.team .person .img { aspect-ratio: 3/4; background: linear-gradient(135deg, #D4C9AE, #6E665B); }
+  .jp.team .person h4 { font-size: 16px; font-weight: 500; margin: 12px 0 4px; line-height: 1.4; }
+  .jp.team .person .role { font-size: 10px; letter-spacing: 0.32em; color: #B5573B; text-transform: uppercase; }
+  .jp.team .person p { font-size: 12px; line-height: 1.8; color: #6E665B; margin: 8px 0 0; font-style: italic; }
+
+  .jp.coda { justify-content: end; align-items: end; flex-direction: column; }
+  .jp.coda h2 { align-self: start; font-size: 88px; }
+  .jp.coda .meta { font-size: 12px; letter-spacing: 0.32em; color: #B5573B; margin-top: 22px; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">17</span><span class="nm">Japanese minimalism</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 17 · Quiet</div>
+    <h1>A tea-ceremony pamphlet.</h1>
+    <p>Washi paper texture, sumi-ink black, rust-orange and vermillion as accents. Generous line spacing, asymmetric layouts, single-line paragraphs.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · tea, ceramics, hospitality, hotels</div>
+    <div><strong>Type</strong> · Source Serif 4 · Noto Serif JP</div>
+    <div><strong>Accent</strong> · Vermillion · #B5573B</div>
+    <div><strong>Density</strong> · spacious</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="jp cover">
+    <span class="lbl">— 第二四半期 · Q2 —</span>
+    <h2>Halcyon, in spring.</h2>
+    <div class="meta">— a quarterly review · 14 May 2026 —</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="jp agenda">
+    <span class="lbl">— Order of events —</span>
+    <h2>Today's agenda.</h2>
+    <div class="list">
+      <div class="item"><span class="ix">i.</span><span>Where we are</span><span class="meta">3 min</span></div>
+      <div class="item"><span class="ix">ii.</span><span>The honest part</span><span class="meta">5 min</span></div>
+      <div class="item"><span class="ix">iii.</span><span>What we're cutting</span><span class="meta">4 min</span></div>
+      <div class="item"><span class="ix">iv.</span><span>Roadmap &amp; risks</span><span class="meta">3 min</span></div>
+      <div class="item"><span class="ix">v.</span><span>Asks of the board</span><span class="meta">3 min</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="jp section">
+    <span class="lbl">— 一 · the first —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="jp headline">
+    <span class="lbl">— Q2 · 2026 —</span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We have spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason is not strategy. It is the discipline of saying no.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="jp bigstat">
+    <span class="lbl">— Three readings —</span>
+    <h2>By the numbers.</h2>
+    <div class="row">
+      <div><div class="stat em">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+      <div><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="jp twocol">
+    <span class="lbl">— The honest part —</span>
+    <h2>Where we beat plan, where we missed.</h2>
+    <div class="cols">
+      <div><h3>Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="vermillion">Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="jp threecol">
+    <span class="lbl">— Three sunsets —</span>
+    <h2>What we are letting go.</h2>
+    <div class="cols">
+      <div><span class="nm">— I —</span><h3>The mobile rebuild.</h3><p>Two engineers reclaimed for the web product, where 92% of revenue lives.</p></div>
+      <div><span class="nm">— II —</span><h3>The partner portal.</h3><p>Three signs in eighteen months. Going one-to-one instead.</p></div>
+      <div><span class="nm">— III —</span><h3>The second brand.</h3><p>Cannibalised the first. Consolidating under Halcyon.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="jp imgled">
+    <div class="img"><div class="circle"></div></div>
+    <div class="copy">
+      <span class="lbl">— A photograph —</span>
+      <h2>The room where the work happens.</h2>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="jp quote">
+    <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— B. Horowitz</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="jp timeline">
+    <span class="lbl">— Six weeks —</span>
+    <h2>Onboarding, redesigned.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— Wk 1–2 —</span><h4>Interviews</h4><p>Twelve calls. Synthesise.</p></div>
+      <div class="step"><span class="wk">— Wk 2–3 —</span><h4>Prototype</h4><p>Two competing flows.</p></div>
+      <div class="step"><span class="wk">— Wk 4–5 —</span><h4>Build</h4><p>Two engineers. Beta.</p></div>
+      <div class="step"><span class="wk">— Wk 6 —</span><h4>Ship</h4><p>100% rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="jp team">
+    <span class="lbl">— The roster —</span>
+    <h2>Asks of the board.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A timing</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="jp coda">
+    <h2>Thank you.</h2>
+    <div class="meta">— halcyon.co / q2 —</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 17 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · thumb</title>
+<link rel="stylesheet" href="preview/_foundation.css">
+<style>
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body {
+    background: var(--paper);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .top {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    font-family: var(--display);
+    font-size: 20px; font-weight: 800; letter-spacing: -0.03em;
+    color: var(--ink); line-height: 1;
+  }
+  .brand .dot { color: var(--amber-600); }
+  .stamp {
+    font-family: var(--mono); font-size: 8px;
+    color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 0; margin: 0; border: 0;
+  }
+  .hero {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.86;
+    color: var(--ink);
+    font-size: 28px;
+    align-self: end;
+    margin: 0;
+  }
+  .hero .em { color: var(--amber-600); }
+  .row {
+    display: flex; gap: 6px; align-items: center; margin-top: 8px;
+  }
+  .pill-mini {
+    font-family: var(--mono); font-size: 7px;
+    background: var(--ink); color: var(--paper);
+    padding: 3px 6px; border-radius: 999px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .slim {
+    height: 4px; flex: 1;
+    background: linear-gradient(to right, var(--amber-600) 0%, var(--amber-600) 60%, var(--hair) 60%, var(--hair) 100%);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">Irisi<span class="dot">.</span></div>
+    <div class="stamp">/Hi-ri-z/ · v0.1</div>
+  </div>
+  <div>
+    <h1 class="hero">Bad slides<br>kill <span class="em">good ideas.</span></h1>
+    <div class="row">
+      <span class="pill-mini">25 packs</span>
+      <span class="slim"></span>
+      <span class="pill-mini" style="background: var(--amber-600); color:#fff;">⚡ AI</span>
+    </div>
+  </div>
+</body>
+</html>

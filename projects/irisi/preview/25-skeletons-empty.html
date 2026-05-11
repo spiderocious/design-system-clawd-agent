@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · skeletons & empty</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  /* Skeleton lines */
+  .skel-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--hair-soft); }
+  .skel-row:last-child { border-bottom: 0; }
+  .skel { background: linear-gradient(90deg, var(--paper-deep), var(--ink-5), var(--paper-deep)); background-size: 200% 100%; border-radius: 4px; animation: shimmer 1.4s ease-in-out infinite; height: 12px; }
+  .skel.thumb { width: 64px; aspect-ratio: 16/10; height: auto; border-radius: 4px; }
+  .skel.lg { height: 16px; }
+  .skel.short { width: 60%; }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+  /* Slide skeleton */
+  .slide-skel {
+    aspect-ratio: 16 / 9;
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 8px;
+    padding: 22px 28px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 48px 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .empty .glyph {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--paper-deep); color: var(--ink-3);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 8px;
+  }
+  .empty h3 { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .empty h3 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+  .empty p { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3); margin: 0; max-width: 36ch; line-height: 1.5; }
+  .empty .actions { display: flex; gap: 8px; margin-top: 8px; }
+
+  /* Error */
+  .error {
+    background: var(--crit-bg); border: 1px solid var(--crit-edge);
+    border-left: 4px solid var(--crit);
+    border-radius: 12px; padding: 20px 24px;
+    display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: start;
+  }
+  .error .glyph { width: 28px; height: 28px; border-radius: 8px; background: var(--crit); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .error h4 { font-family: var(--display); font-weight: 700; font-size: 16px; margin: 0 0 4px; color: var(--crit); }
+  .error p { font-size: 13px; color: var(--ink-2); margin: 0; line-height: 1.5; }
+  .error .actions { display: flex; gap: 8px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 25 —</span>
+    <h1 class="ttl">Skeletons &amp; empty</h1>
+    <span class="meta">Data &amp; state · loading, empty, error — the triad</span>
+  </div>
+
+  <!-- SKELETONS -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Loading</span>
+      <h3 class="nm">Skeletons that mirror layout.</h3>
+      <span class="why">Never spinners. The shape teaches what's coming.</span>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="overline" style="margin-bottom: 10px;">— Deck list (cozy)</div>
+        <div class="skel-row">
+          <div class="skel thumb"></div>
+          <div><div class="skel lg"></div><div class="skel short" style="margin-top: 6px;"></div></div>
+          <div class="skel" style="width: 50px;"></div>
+        </div>
+        <div class="skel-row">
+          <div class="skel thumb"></div>
+          <div><div class="skel lg"></div><div class="skel short" style="margin-top: 6px;"></div></div>
+          <div class="skel" style="width: 50px;"></div>
+        </div>
+        <div class="skel-row">
+          <div class="skel thumb"></div>
+          <div><div class="skel lg"></div><div class="skel short" style="margin-top: 6px;"></div></div>
+          <div class="skel" style="width: 50px;"></div>
+        </div>
+      </div>
+      <div>
+        <div class="overline" style="margin-bottom: 10px;">— Slide canvas</div>
+        <div class="slide-skel">
+          <div class="skel" style="width: 22%; height: 8px;"></div>
+          <div class="skel lg" style="width: 80%; margin-top: 4px; height: 24px;"></div>
+          <div class="skel" style="width: 60%; height: 1px; background: var(--ink); margin: 6px 0;"></div>
+          <div class="skel short" style="width: 40%; height: 8px;"></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px;">
+            <div><div class="skel"></div><div class="skel" style="margin-top: 6px;"></div><div class="skel short" style="margin-top: 6px;"></div></div>
+            <div><div class="skel"></div><div class="skel" style="margin-top: 6px;"></div><div class="skel short" style="margin-top: 6px;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Empty</span>
+      <h3 class="nm">Empty states that propose, not apologise.</h3>
+    </div>
+
+    <div class="grid-3">
+      <div class="empty" style="background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;">
+        <span class="glyph">＋</span>
+        <h3>Your <span class="ital">first</span> deck.</h3>
+        <p>Type the deck you want, or paste a brief. Irisi takes it from there.</p>
+        <div class="actions">
+          <button class="btn btn-accent btn-sm">Generate one →</button>
+        </div>
+      </div>
+
+      <div class="empty" style="background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;">
+        <span class="glyph">⌕</span>
+        <h3>Nothing matches <span class="ital">"riso wedding"</span>.</h3>
+        <p>Try fewer words, or browse the full library — 25 stances, ready to go.</p>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm">Clear search</button>
+          <button class="btn btn-ghost btn-sm">Browse library →</button>
+        </div>
+      </div>
+
+      <div class="empty" style="background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;">
+        <span class="glyph">⊘</span>
+        <h3>No comments <span class="ital">yet</span>.</h3>
+        <p>When teammates leave feedback, you'll see it here.</p>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm">Share for review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Error</span>
+      <h3 class="nm">Errors that explain &amp; offer the next step.</h3>
+    </div>
+
+    <div class="error" style="margin-bottom: 14px;">
+      <span class="glyph">!</span>
+      <div>
+        <h4>Generation interrupted</h4>
+        <p>The model returned an incomplete response on slide 8. Your previous slides are saved. You can retry from slide 8, or regenerate the whole deck.</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary btn-sm">Retry from slide 8</button>
+        <button class="btn btn-accent btn-sm">Regenerate</button>
+      </div>
+    </div>
+
+    <div class="error" style="background: var(--warn-bg); border-color: var(--warn-edge); border-left-color: var(--warn);">
+      <span class="glyph" style="background: var(--warn);">⚠</span>
+      <div>
+        <h4 style="color: var(--warn);">Brand colour low contrast</h4>
+        <p>Your accent <code>#FFE54A</code> may be hard to read on cream paper. Irisi will use a darker variant in body copy and keep the original for fills only.</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary btn-sm">Use anyway</button>
+        <button class="btn btn-ghost btn-sm">Pick another</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

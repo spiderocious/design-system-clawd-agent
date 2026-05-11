@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 04 · Brutalist dossier</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  .br { background: #E5E2DC; color: #000; font-family: 'IBM Plex Mono', monospace; padding: 48px 64px; height: 100%; display: flex; flex-direction: column; }
+  .br .stamp { display: flex; gap: 14px; padding-bottom: 12px; border-bottom: 4px solid #000; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .br .stamp .red { color: #B0270F; }
+  .br .stamp .gap { flex: 1; }
+  .br h2 { font-family: 'IBM Plex Mono', monospace; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; margin: 24px 0 0; text-transform: uppercase; }
+  .br .acid { background: #DBE82E; padding: 0 4px; }
+  .br .redact { background: #000; color: #000; user-select: none; }
+
+  .br.cover { justify-content: end; }
+  .br.cover h2 { font-size: 80px; max-width: 12ch; }
+  .br.cover .meta { margin-top: 28px; padding-top: 12px; border-top: 4px solid #000; display: grid; grid-template-columns: 1fr auto; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .br.cover .meta .red { background: #B0270F; color: #fff; padding: 4px 10px; }
+
+  .br.agenda h2 { font-size: 48px; margin: 14px 0 22px; }
+  .br.agenda .list { font-size: 16px; line-height: 1.8; }
+  .br.agenda .list .item { display: grid; grid-template-columns: 60px 1fr auto; gap: 14px; padding: 8px 0; border-top: 1px solid #000; text-transform: uppercase; }
+  .br.agenda .list .item .ix { font-weight: 700; }
+  .br.agenda .list .item .meta { font-size: 11px; letter-spacing: 0.04em; color: #555; }
+
+  .br.section { justify-content: center; align-items: start; padding: 48px 64px; }
+  .br.section .lbl { font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; background: #B0270F; color: #fff; padding: 6px 12px; }
+  .br.section h2 { font-size: 80px; margin-top: 22px; max-width: 14ch; }
+
+  .br.headline h2 { font-size: 44px; max-width: 22ch; }
+  .br.headline .by { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 20px; padding-top: 12px; border-top: 1px solid #000; color: #555; }
+  .br.headline .body { font-size: 14px; line-height: 1.7; max-width: 70ch; margin-top: 18px; }
+  .br.headline .body p { margin: 0 0 12px; }
+
+  .br.bigstat { justify-content: center; }
+  .br.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 28px 0; border-top: 4px solid #000; border-bottom: 4px solid #000; }
+  .br.bigstat .stat { font-family: 'IBM Plex Mono', monospace; font-size: 80px; font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; padding-right: 16px; border-right: 1px solid #000; }
+  .br.bigstat .row .col:last-child .stat { border-right: 0; }
+  .br.bigstat .stat.em { color: #B0270F; }
+  .br.bigstat .lbl { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 8px; color: #444; }
+
+  .br.twocol h2 { font-size: 32px; margin: 12px 0 18px; }
+  .br.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 14px; border-top: 4px solid #000; }
+  .br.twocol .cols h3 { font-size: 16px; font-weight: 700; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 6px; border-bottom: 1px solid #000; }
+  .br.twocol .cols .em { color: #B0270F; }
+  .br.twocol .cols ul { font-size: 13px; line-height: 1.7; padding-left: 20px; margin: 0; }
+
+  .br.threecol h2 { font-size: 32px; margin: 12px 0 18px; }
+  .br.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 14px; border-top: 4px solid #000; }
+  .br.threecol .cols .nm { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; padding: 3px 8px; background: #DBE82E; display: inline-block; }
+  .br.threecol .cols h3 { font-size: 18px; font-weight: 700; margin: 8px 0 6px; text-transform: uppercase; letter-spacing: -0.005em; }
+  .br.threecol .cols p { font-size: 12px; line-height: 1.6; color: #444; margin: 0; }
+
+  .br.imgled { padding: 0; flex-direction: row; }
+  .br.imgled .img { flex: 1; background: #000; position: relative; }
+  .br.imgled .img::before { content: "FILE 0421-A"; position: absolute; top: 14px; left: 14px; color: #fff; font-size: 10px; letter-spacing: 0.22em; }
+  .br.imgled .img::after { content: "DECLASSIFIED"; position: absolute; bottom: 14px; right: 14px; color: #DBE82E; font-size: 12px; letter-spacing: 0.22em; }
+  .br.imgled .copy { flex: 0 0 42%; padding: 48px 56px; display: flex; flex-direction: column; justify-content: end; }
+  .br.imgled .copy h2 { font-size: 36px; max-width: 14ch; margin-top: 12px; }
+
+  .br.quote { justify-content: center; padding: 48px 80px; }
+  .br.quote .q { font-size: 36px; font-weight: 700; line-height: 1.2; text-transform: uppercase; max-width: 26ch; }
+  .br.quote .q .acid { background: #DBE82E; padding: 0 6px; }
+  .br.quote .attr { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 24px; }
+
+  .br.timeline h2 { font-size: 32px; margin: 12px 0 18px; }
+  .br.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding-top: 14px; border-top: 4px solid #000; }
+  .br.timeline .step { padding: 12px; border: 1px solid #000; }
+  .br.timeline .step .wk { font-size: 11px; color: #B0270F; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+  .br.timeline .step h4 { font-size: 14px; font-weight: 700; margin: 6px 0 6px; text-transform: uppercase; }
+  .br.timeline .step p { font-size: 11px; line-height: 1.5; color: #444; margin: 0; }
+
+  .br.team h2 { font-size: 32px; margin: 12px 0 18px; }
+  .br.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 14px; border-top: 4px solid #000; }
+  .br.team .person .img { aspect-ratio: 1/1; background: #000; }
+  .br.team .person h4 { font-size: 14px; font-weight: 700; margin: 8px 0 2px; text-transform: uppercase; }
+  .br.team .person .role { font-size: 10px; color: #B0270F; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+  .br.team .person p { font-size: 11px; line-height: 1.5; color: #444; margin: 4px 0 0; }
+
+  .br.coda { justify-content: end; }
+  .br.coda h2 { font-size: 96px; }
+  .br.coda .meta { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 24px; padding-top: 12px; border-top: 4px solid #000; }
+</style>
+</head>
+<body>
+
+<header class="pack-head">
+  <span class="brand">Irisi<span class="dot">.</span></span>
+  <div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">04</span><span class="nm">Brutalist dossier</span></div>
+  <div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div>
+</header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 04 · Internal</div>
+    <h1>A security file, declassified.</h1>
+    <p>Concrete grey, redaction black, acid yellow as a hazard mark. Mono-only typography, abrupt cuts instead of transitions. Hard edges, exposed grid, time-stamped administrative voice.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · audit, security, internal admin</div>
+    <div><strong>Type</strong> · IBM Plex Mono</div>
+    <div><strong>Accent</strong> · Hazard yellow + redaction red</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span><span class="desc">File header, classification</span></div><div class="slide"><div class="br cover">
+    <div class="stamp"><span>FILE 0421-A</span><span class="gap"></span><span class="red">CLASSIFIED · INTERNAL</span></div>
+    <h2>Halcyon Q2.<br>Quarterly review.</h2>
+    <div class="meta"><span>Issued · 14 May 2026</span><span class="red">DO NOT DUPLICATE</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span><span class="desc">Numbered manifest</span></div><div class="slide"><div class="br agenda">
+    <div class="stamp"><span>02 / 12</span><span class="gap"></span><span>MANIFEST</span></div>
+    <h2>Order of operations.</h2>
+    <div class="list">
+      <div class="item"><span class="ix">[01]</span><span>WHERE WE ARE</span><span class="meta">3 MIN</span></div>
+      <div class="item"><span class="ix">[02]</span><span>THE HONEST PART</span><span class="meta">5 MIN</span></div>
+      <div class="item"><span class="ix">[03]</span><span>WHAT WE'RE CUTTING</span><span class="meta">4 MIN</span></div>
+      <div class="item"><span class="ix">[04]</span><span>ROADMAP &amp; RISKS</span><span class="meta">3 MIN</span></div>
+      <div class="item"><span class="ix">[05]</span><span>ASKS OF THE BOARD</span><span class="meta">3 MIN</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span><span class="desc">Red-tagged divider</span></div><div class="slide"><div class="br section">
+    <span class="lbl">— SECTION 01 —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span><span class="desc">Mono headline + body</span></div><div class="slide"><div class="br headline">
+    <div class="stamp"><span>04 / 12</span><span class="gap"></span><span>WHERE WE ARE</span></div>
+    <h2>Quiet rebellion of <span class="acid">measured growth.</span></h2>
+    <div class="by">— DICTATED · 14 MAY 2026 · 09:42 — TIMESTAMPED</div>
+    <div class="body">
+      <p>Most companies confuse motion for progress. We have spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team.</p>
+      <p>The reason is not strategy. It is the unglamorous work of saying no, on time, every quarter, to the dozen things we could have done but chose not to.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span><span class="desc">Shouted numbers</span></div><div class="slide"><div class="br bigstat">
+    <div class="stamp"><span>05 / 12</span><span class="gap"></span><span>READINGS · TRAILING 6 MO</span></div>
+    <h2 style="font-size: 28px; margin: 14px 0 28px;">Three numbers.</h2>
+    <div class="row">
+      <div class="col"><div class="stat em">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div class="col"><div class="stat">+42%</div><div class="lbl">— QoQ REV</div></div>
+      <div class="col"><div class="stat">9.1</div><div class="lbl">— NPS · n=184</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span><span class="desc">Beat / missed</span></div><div class="slide"><div class="br twocol">
+    <div class="stamp"><span>06 / 12</span><span class="gap"></span><span>FINDINGS</span></div>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div><h3>Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Product velocity 1.4×</li><li>Headcount efficiency held</li></ul></div>
+      <div><h3 class="em">Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67d (target 45)</li><li>Onboarding completion 64%</li><li>Q2 partnerships — 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span><span class="desc">Tagged sunsets</span></div><div class="slide"><div class="br threecol">
+    <div class="stamp"><span>07 / 12</span><span class="gap"></span><span>SUNSETS</span></div>
+    <h2>Projects sunsetting.</h2>
+    <div class="cols">
+      <div><span class="nm">[01] PROJECT</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed. Web is 92% of revenue.</p></div>
+      <div><span class="nm">[02] PROJECT</span><h3>Partner portal.</h3><p>Three signs in eighteen months. Below the bar.</p></div>
+      <div><span class="nm">[03] PROJECT</span><h3>Second brand.</h3><p>Cannibalised the first. Consolidating.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span><span class="desc">Black file image</span></div><div class="slide"><div class="br imgled">
+    <div class="img"></div>
+    <div class="copy">
+      <div class="stamp" style="border: 0; padding: 0;"><span>08 / 12</span><span class="gap"></span><span class="red">FIELD NOTE</span></div>
+      <h2>The room.</h2>
+      <p style="font-size: 12px; color: #444; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.04em;">Halcyon HQ. Sixteen subjects. Photographed at 09:00 the morning the threshold was crossed.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Pull-quote</span><span class="desc">Acid-highlighted</span></div><div class="slide"><div class="br quote">
+    <div class="q">"You can't grow your way out of a <span class="acid">culture problem</span> — you can only design your way out."</div>
+    <div class="attr">— B. HOROWITZ · TRANSCRIPT 14.05.26</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span><span class="desc">Boxed steps</span></div><div class="slide"><div class="br timeline">
+    <div class="stamp"><span>10 / 12</span><span class="gap"></span><span>OPERATION SCHEDULE</span></div>
+    <h2>Onboarding redesign — 6-week ship.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">WEEK 1–2</span><h4>Customer interviews.</h4><p>12 subjects. Synthesise patterns.</p></div>
+      <div class="step"><span class="wk">WEEK 2–3</span><h4>Prototype.</h4><p>Two competing flows. Pick by EOW.</p></div>
+      <div class="step"><span class="wk">WEEK 4–5</span><h4>Build.</h4><p>Two engineers full-time. Closed beta.</p></div>
+      <div class="step"><span class="wk">WEEK 6</span><h4>Ship · measure.</h4><p>100% rollout · target 80%.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span><span class="desc">Personnel file</span></div><div class="slide"><div class="br team">
+    <div class="stamp"><span>11 / 12</span><span class="gap"></span><span>PERSONNEL · ASKS</span></div>
+    <h2>Roster &amp; intros.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>M. Olokun</h4><span class="role">— VP PRODUCT</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>HEAD OF CS</h4><span class="role">— INTRO REQ</span><p>Series A SaaS, top of funnel.</p></div>
+      <div class="person"><div class="img"></div><h4>DIR. GTM</h4><span class="role">— INTRO REQ</span><p>Developer-tools background.</p></div>
+      <div class="person"><div class="img"></div><h4>SERIES A</h4><span class="role">— DECISION</span><p>Q4 vs Q1 — by Friday.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span><span class="desc">End-of-file stamp</span></div><div class="slide"><div class="br coda">
+    <div class="stamp"><span>12 / 12</span><span class="gap"></span><span class="red">END OF FILE</span></div>
+    <h2>End of file.</h2>
+    <div class="meta"><span>QUESTIONS · ON THE RECORD</span><span style="float: right;">HALCYON.CO/Q2</span></div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 04 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

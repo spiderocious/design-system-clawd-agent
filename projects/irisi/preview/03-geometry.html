@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · spacing & geometry</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px; padding: 28px 32px; }
+  .card .h { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .card .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 4px; }
+  .card .desc { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; line-height: 1.45; margin-bottom: 22px; }
+
+  /* Ruler */
+  .ruler { display: flex; align-items: end; gap: 0; height: 80px; padding: 0 4px; border-bottom: 1px solid var(--ink); }
+  .ruler .tick { flex: 1; height: 16px; border-left: 1px solid var(--ink-4); position: relative; }
+  .ruler .tick.major { height: 28px; border-left: 1px solid var(--ink-2); }
+  .ruler .tick .lbl { position: absolute; bottom: -22px; left: 0; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .ruler .blocks {
+    position: absolute; bottom: 30px; left: 0; right: 0;
+    display: flex; gap: 4px; padding: 0 4px;
+  }
+
+  /* Spacing tokens */
+  .space-row {
+    display: grid; grid-template-columns: 60px 1fr 60px;
+    gap: 16px; align-items: center;
+    padding: 8px 0; border-top: 1px solid var(--hair-soft);
+  }
+  .space-row:first-of-type { border-top: 0; }
+  .space-row .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .space-row .px { text-align: right; font-family: var(--mono); font-size: 11px; color: var(--ink); letter-spacing: 0.04em; }
+  .space-row .bar { background: var(--accent-200); height: 14px; border-radius: 4px; }
+  .space-row .bar.mark { background: var(--accent-600); }
+
+  /* Radii */
+  .rad-row {
+    display: grid; grid-template-columns: 60px 80px 1fr 60px;
+    gap: 16px; align-items: center;
+    padding: 10px 0; border-top: 1px solid var(--hair-soft);
+  }
+  .rad-row:first-of-type { border-top: 0; }
+  .rad-row .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .rad-row .swatch { width: 80px; height: 56px; background: var(--accent-100); border: 1px solid var(--accent-300); }
+  .rad-row .desc { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; line-height: 1.4; }
+  .rad-row .px { text-align: right; font-family: var(--mono); font-size: 11px; color: var(--ink); }
+
+  /* Density */
+  .density {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+  }
+  .density .pen {
+    background: var(--paper); border: 1px solid var(--hair);
+    border-radius: 10px; overflow: hidden;
+  }
+  .density .pen .top {
+    padding: 8px 14px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+  .density .pen .body { padding: 16px; }
+  .density .pen .row {
+    display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center;
+    border-bottom: 1px solid var(--hair-soft);
+  }
+  .density .pen .row:last-child { border-bottom: 0; }
+  .density .pen .av { width: 22px; height: 22px; border-radius: 50%; background: var(--ink-5); }
+  .density .pen .nm { font-family: var(--sans); color: var(--ink); }
+  .density .pen .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .density .pen.compact .row { padding: 4px 0; font-size: 12px; }
+  .density .pen.cozy .row { padding: 8px 0; font-size: 13px; }
+  .density .pen.airy .row { padding: 14px 0; font-size: 14px; }
+
+  /* Page proof — full width */
+  .proof {
+    margin-top: 32px;
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px;
+    padding: 36px 40px;
+  }
+  .proof .h { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 18px; }
+  .proof-grid {
+    display: grid; grid-template-columns: 64px 1fr 64px; gap: 32px;
+    border-left: 1px dashed var(--accent-300); border-right: 1px dashed var(--accent-300);
+    padding: 24px 0;
+  }
+  .proof-grid .gutter { background: var(--accent-50); }
+  .proof-grid .col {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px;
+  }
+  .proof-grid .col .c {
+    background: var(--accent-100); height: 80px; border-radius: 4px;
+    border: 1px solid var(--accent-200);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 03 —</span>
+    <h1 class="ttl">Spacing &amp; geometry</h1>
+    <span class="meta">Foundation · 4-px ruler · radii · density</span>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Ruler / spacing tokens -->
+    <div class="card">
+      <div class="h">— Spacing</div>
+      <h3 class="nm">A 4 · 8 · 12 · 16 ladder.</h3>
+      <p class="desc">Every measurement multiplies up from 4. The ladder mirrors what most chart and slide tools expect, so exports look consistent.</p>
+
+      <div class="space-row"><span class="lbl">space-1</span><div class="bar" style="width: 4px"></div><span class="px">4 px</span></div>
+      <div class="space-row"><span class="lbl">space-2</span><div class="bar" style="width: 8px"></div><span class="px">8 px</span></div>
+      <div class="space-row"><span class="lbl">space-3</span><div class="bar" style="width: 12px"></div><span class="px">12 px</span></div>
+      <div class="space-row"><span class="lbl">space-4</span><div class="bar mark" style="width: 16px"></div><span class="px">16 px</span></div>
+      <div class="space-row"><span class="lbl">space-5</span><div class="bar mark" style="width: 24px"></div><span class="px">24 px</span></div>
+      <div class="space-row"><span class="lbl">space-6</span><div class="bar mark" style="width: 32px"></div><span class="px">32 px</span></div>
+      <div class="space-row"><span class="lbl">space-7</span><div class="bar mark" style="width: 48px"></div><span class="px">48 px</span></div>
+      <div class="space-row"><span class="lbl">space-8</span><div class="bar mark" style="width: 64px"></div><span class="px">64 px</span></div>
+      <div class="space-row"><span class="lbl">gutter</span><div class="bar mark" style="width: 32px; background: var(--ink)"></div><span class="px">32 px</span></div>
+    </div>
+
+    <!-- Radii -->
+    <div class="card">
+      <div class="h">— Radii</div>
+      <h3 class="nm">Eight steps, generous on cards.</h3>
+      <p class="desc">Spacious — buttons sit at 8–14px, cards at 12–16px, hero plates at 24px. Sharp 2px is reserved for record-style elements.</p>
+
+      <div class="rad-row"><span class="lbl">r-sharp</span><div class="swatch" style="border-radius: 2px"></div><span class="desc">record-style, code blocks</span><span class="px">2</span></div>
+      <div class="rad-row"><span class="lbl">r-soft</span><div class="swatch" style="border-radius: 8px"></div><span class="desc">small buttons, pills, fields</span><span class="px">8</span></div>
+      <div class="rad-row"><span class="lbl">r-md</span><div class="swatch" style="border-radius: 10px"></div><span class="desc">primary buttons, inputs</span><span class="px">10</span></div>
+      <div class="rad-row"><span class="lbl">r-card</span><div class="swatch" style="border-radius: 12px"></div><span class="desc">small cards, list items</span><span class="px">12</span></div>
+      <div class="rad-row"><span class="lbl">r-lg</span><div class="swatch" style="border-radius: 16px"></div><span class="desc">surface cards, panels</span><span class="px">16</span></div>
+      <div class="rad-row"><span class="lbl">r-xl</span><div class="swatch" style="border-radius: 24px"></div><span class="desc">hero plates, prompt pad</span><span class="px">24</span></div>
+      <div class="rad-row"><span class="lbl">r-pill</span><div class="swatch" style="border-radius: 999px"></div><span class="desc">chips, pulse, status</span><span class="px">∞</span></div>
+    </div>
+  </div>
+
+  <!-- Density -->
+  <div class="card" style="margin-top: 24px;">
+    <div class="h">— Density</div>
+    <h3 class="nm">Three settings the user can pick.</h3>
+    <p class="desc">Spacious by default — the brief asks for it. Cozy and Compact exist for power users editing long decks; Airy is the default in the editor and on landing surfaces.</p>
+
+    <div class="density">
+      <div class="pen compact">
+        <div class="top"><span>compact</span><span>32 row</span></div>
+        <div class="body">
+          <div class="row"><span class="av"></span><span class="nm">Halcyon Q2</span><span class="meta">12s</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Brand wizard</span><span class="meta">2m</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Library docs</span><span class="meta">8m</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Pricing</span><span class="meta">15m</span></div>
+        </div>
+      </div>
+      <div class="pen cozy">
+        <div class="top"><span>cozy</span><span>40 row</span></div>
+        <div class="body">
+          <div class="row"><span class="av"></span><span class="nm">Halcyon Q2</span><span class="meta">12s</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Brand wizard</span><span class="meta">2m</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Library docs</span><span class="meta">8m</span></div>
+        </div>
+      </div>
+      <div class="pen airy">
+        <div class="top"><span>airy · default</span><span>56 row</span></div>
+        <div class="body">
+          <div class="row"><span class="av"></span><span class="nm">Halcyon Q2</span><span class="meta">12s</span></div>
+          <div class="row"><span class="av"></span><span class="nm">Brand wizard</span><span class="meta">2m</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid proof -->
+  <div class="proof">
+    <div class="h">— Page grid · 12 columns · 1240 px max</div>
+    <div class="proof-grid">
+      <div class="gutter"></div>
+      <div class="col">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+      </div>
+      <div class="gutter"></div>
+    </div>
+    <p style="margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em;">
+      Outer gutter 64 px · column gap 16 px · max 1240 px · breakpoints 720 / 960 / 1240
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

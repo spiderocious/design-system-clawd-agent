@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · progress</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Linear */
+  .lin { height: 6px; background: var(--paper-deep); border-radius: 3px; overflow: hidden; }
+  .lin .bar { height: 100%; background: var(--accent-600); border-radius: 3px; transition: width 200ms; }
+  .lin.indeterminate .bar {
+    width: 30%;
+    animation: indeter 1.4s ease-in-out infinite;
+  }
+  @keyframes indeter { 0% { transform: translateX(-100%); } 100% { transform: translateX(400%); } }
+
+  .lin-row { display: grid; grid-template-columns: 200px 1fr 60px; gap: 14px; align-items: center; padding: 10px 0; border-top: 1px solid var(--hair-soft); }
+  .lin-row:first-of-type { border-top: 0; }
+  .lin-row .l { font-family: var(--sans); font-size: 13px; }
+  .lin-row .pct { font-family: var(--mono); font-size: 12px; text-align: right; color: var(--ink); font-weight: 600; }
+
+  /* Stepper */
+  .stepper { display: flex; align-items: center; }
+  .stepper .step {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative;
+  }
+  .stepper .step::after { content: ""; position: absolute; top: 14px; left: 50%; right: -50%; height: 1px; background: var(--hair); z-index: -1; }
+  .stepper .step:last-child::after { display: none; }
+  .stepper .step.done::after { background: var(--ink); }
+  .stepper .step .circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--paper); border: 1px solid var(--ink-4);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink-3);
+  }
+  .stepper .step.done .circle { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stepper .step.on .circle { background: var(--accent-600); color: #fff; border-color: var(--accent-600); }
+  .stepper .step .l { font-family: var(--sans); font-size: 12px; color: var(--ink-3); font-weight: 500; text-align: center; }
+  .stepper .step.on .l, .stepper .step.done .l { color: var(--ink); }
+
+  /* Ring (circular) */
+  .ring-row { display: grid; grid-template-columns: 80px 1fr; gap: 18px; align-items: center; padding: 12px 0; border-top: 1px solid var(--hair-soft); }
+  .ring-row:first-of-type { border-top: 0; }
+  .ring-track { stroke: var(--paper-deep); stroke-width: 8; fill: none; }
+  .ring-arc { stroke: var(--accent-600); stroke-width: 8; fill: none; stroke-linecap: round; }
+  .ring-text { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.025em; fill: var(--ink); }
+
+  /* Quota gauge */
+  .quota {
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .quota .top { display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px; }
+  .quota .top .nm { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.018em; }
+  .quota .top .of { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-left: auto; }
+  .quota .top .of strong { color: var(--ink); }
+  .quota .breakdown { display: flex; height: 12px; gap: 2px; margin-top: 10px; border-radius: 4px; overflow: hidden; }
+  .quota .breakdown span { display: block; }
+  .quota .legend { display: flex; gap: 16px; margin-top: 10px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .quota .legend .key { display: inline-flex; align-items: center; gap: 6px; }
+  .quota .legend .key .sw { width: 10px; height: 10px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 24 —</span>
+    <h1 class="ttl">Progress</h1>
+    <span class="meta">Data &amp; state · linear, stepper, ring, gauge</span>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Linear -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Linear</span>
+        <h3 class="nm">Generation, in bars.</h3>
+      </div>
+      <div class="lin-row">
+        <span class="l">Reading brief</span>
+        <div class="lin"><div class="bar" style="width: 100%; background: var(--ok);"></div></div>
+        <span class="pct">100%</span>
+      </div>
+      <div class="lin-row">
+        <span class="l">Outlining</span>
+        <div class="lin"><div class="bar" style="width: 100%; background: var(--ok);"></div></div>
+        <span class="pct">100%</span>
+      </div>
+      <div class="lin-row">
+        <span class="l">Writing slide 7 of 12</span>
+        <div class="lin"><div class="bar" style="width: 58%;"></div></div>
+        <span class="pct">58%</span>
+      </div>
+      <div class="lin-row">
+        <span class="l">Typesetting</span>
+        <div class="lin indeterminate"><div class="bar"></div></div>
+        <span class="pct">—</span>
+      </div>
+      <div class="lin-row">
+        <span class="l">Speaker notes</span>
+        <div class="lin"><div class="bar" style="width: 0%;"></div></div>
+        <span class="pct">0%</span>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Stepper</span>
+        <h3 class="nm">The five-act flow.</h3>
+      </div>
+      <div class="stepper">
+        <div class="step done"><span class="circle">✓</span><span class="l">Brief</span></div>
+        <div class="step done"><span class="circle">✓</span><span class="l">Questions</span></div>
+        <div class="step on"><span class="circle">3</span><span class="l">Highlights</span></div>
+        <div class="step"><span class="circle">4</span><span class="l">Generate</span></div>
+        <div class="step"><span class="circle">5</span><span class="l">Edit</span></div>
+      </div>
+      <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin-top: 24px;">— Same idiom used in question stage, highlights, brand wizard, onboarding.</p>
+    </div>
+
+    <!-- Rings -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Rings</span>
+        <h3 class="nm">Per-task circular.</h3>
+      </div>
+      <div class="ring-row">
+        <svg viewBox="0 0 80 80" style="width: 80px;">
+          <circle class="ring-track" cx="40" cy="40" r="32"/>
+          <circle class="ring-arc" cx="40" cy="40" r="32" stroke-dasharray="201 201" transform="rotate(-90 40 40)"/>
+          <text x="40" y="46" text-anchor="middle" class="ring-text">100%</text>
+        </svg>
+        <div>
+          <div style="font-family: var(--display); font-weight: 600; font-size: 16px;">Generation complete</div>
+          <div style="font-size: 12px; color: var(--ink-3);">12 slides · 4.2 sec end-to-end</div>
+        </div>
+      </div>
+      <div class="ring-row">
+        <svg viewBox="0 0 80 80" style="width: 80px;">
+          <circle class="ring-track" cx="40" cy="40" r="32"/>
+          <circle class="ring-arc" cx="40" cy="40" r="32" stroke-dasharray="121 201" transform="rotate(-90 40 40)"/>
+          <text x="40" y="46" text-anchor="middle" class="ring-text">60%</text>
+        </svg>
+        <div>
+          <div style="font-family: var(--display); font-weight: 600; font-size: 16px;">Brand setup</div>
+          <div style="font-size: 12px; color: var(--ink-3);">3 of 5 sections complete</div>
+        </div>
+      </div>
+      <div class="ring-row">
+        <svg viewBox="0 0 80 80" style="width: 80px;">
+          <circle class="ring-track" cx="40" cy="40" r="32"/>
+          <circle class="ring-arc" cx="40" cy="40" r="32" stroke-dasharray="40 201" transform="rotate(-90 40 40)" stroke="var(--warn)"/>
+          <text x="40" y="46" text-anchor="middle" class="ring-text" style="fill: var(--warn);">20%</text>
+        </svg>
+        <div>
+          <div style="font-family: var(--display); font-weight: 600; font-size: 16px;">Storage</div>
+          <div style="font-size: 12px; color: var(--ink-3);">8.2 GB of 10 GB used · approaching limit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quota gauge -->
+    <div class="scene">
+      <div class="h">
+        <span class="ix">— Quota</span>
+        <h3 class="nm">Pro plan, this month.</h3>
+      </div>
+      <div class="quota">
+        <div class="top">
+          <span class="nm">Generations</span>
+          <span class="of"><strong>247</strong> of unlimited</span>
+        </div>
+        <div class="lin"><div class="bar" style="width: 24%;"></div></div>
+      </div>
+      <div class="quota" style="margin-top: 12px;">
+        <div class="top">
+          <span class="nm">API calls</span>
+          <span class="of"><strong>78</strong> / <strong>100</strong></span>
+        </div>
+        <div class="breakdown">
+          <span style="background: var(--accent-600); flex: 64;"></span>
+          <span style="background: var(--accent-300); flex: 14;"></span>
+          <span style="background: var(--paper-deep); flex: 22;"></span>
+        </div>
+        <div class="legend">
+          <span class="key"><span class="sw" style="background: var(--accent-600);"></span> Generation</span>
+          <span class="key"><span class="sw" style="background: var(--accent-300);"></span> Export</span>
+          <span class="key"><span class="sw" style="background: var(--paper-deep);"></span> Remaining</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

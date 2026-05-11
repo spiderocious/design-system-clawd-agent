@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 25 · Workshop manual</title>
+<link rel="stylesheet" href="../_pack.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  .wm { background: #F5EBD8; color: #14110D; font-family: 'Inter', sans-serif; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; }
+  .wm h2 { font-family: 'Roboto Slab', serif; font-weight: 600; line-height: 1.05; letter-spacing: -0.012em; margin: 14px 0 0; }
+  .wm .lbl { font-size: 11px; letter-spacing: 0.18em; color: #B85C24; text-transform: uppercase; font-weight: 700; }
+  .wm .iron { color: #B85C24; }
+  .wm .yellow { color: #E5A800; }
+  .wm .stamp { display: inline-block; padding: 4px 12px; border: 2px solid #B85C24; color: #B85C24; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+
+  .wm.cover { justify-content: end; }
+  .wm.cover h2 { font-size: 80px; max-width: 14ch; }
+  .wm.cover .meta { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; margin-top: 18px; padding-top: 14px; border-top: 4px solid #14110D; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; }
+
+  .wm.agenda h2 { font-size: 56px; margin: 14px 0 22px; }
+  .wm.agenda .list { font-size: 16px; }
+  .wm.agenda .list .item { display: grid; grid-template-columns: 90px 1fr auto; gap: 14px; padding: 12px 0; border-bottom: 2px solid #14110D; align-items: baseline; }
+  .wm.agenda .list .item .pn { font-family: 'JetBrains Mono', monospace; color: #B85C24; font-size: 11px; letter-spacing: 0.16em; font-weight: 700; }
+  .wm.agenda .list .item .nm { font-family: 'Roboto Slab', serif; font-weight: 600; font-size: 18px; }
+  .wm.agenda .list .item .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6E665B; letter-spacing: 0.04em; }
+
+  .wm.section { justify-content: center; align-items: center; }
+  .wm.section h2 { font-size: 88px; max-width: 14ch; text-align: center; }
+
+  .wm.headline h2 { font-size: 56px; max-width: 18ch; }
+  .wm.headline .body { font-size: 16px; line-height: 1.7; max-width: 64ch; margin-top: 22px; color: #2A2E36; }
+
+  .wm.bigstat { justify-content: center; }
+  .wm.bigstat h2 { font-size: 32px; margin: 14px 0 28px; }
+  .wm.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 28px 0; border-top: 4px solid #14110D; border-bottom: 4px solid #14110D; }
+  .wm.bigstat .col { padding: 0 24px; border-right: 1px solid #B85C24; }
+  .wm.bigstat .row .col:last-child { border-right: 0; }
+  .wm.bigstat .stat { font-family: 'Roboto Slab', serif; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; line-height: 0.95; color: #14110D; }
+  .wm.bigstat .stat.em { color: #B85C24; }
+  .wm.bigstat .lbl { margin-top: 8px; }
+
+  .wm.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .wm.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .wm.twocol .cols h3 { font-family: 'Roboto Slab', serif; font-size: 19px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.012em; }
+  .wm.twocol .cols ul { font-size: 14px; line-height: 1.7; padding-left: 18px; margin: 0; }
+
+  .wm.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .wm.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .wm.threecol .cols .nm { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; color: #B85C24; text-transform: uppercase; font-weight: 700; }
+  .wm.threecol .cols h3 { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 600; margin: 8px 0 6px; letter-spacing: -0.018em; }
+  .wm.threecol .cols p { font-size: 13px; line-height: 1.6; color: #3C3833; margin: 0; }
+
+  .wm.imgled { padding: 0; flex-direction: row; }
+  .wm.imgled .img { flex: 1; background: #F5EBD8; padding: 32px; display: flex; align-items: center; justify-content: center; border-right: 4px solid #14110D; }
+  .wm.imgled .img svg { width: 100%; max-width: 320px; }
+  .wm.imgled .copy { flex: 0 0 42%; padding: 56px; display: flex; flex-direction: column; justify-content: end; background: #F5EBD8; }
+  .wm.imgled .copy h2 { font-size: 40px; max-width: 14ch; }
+
+  .wm.quote { justify-content: center; padding: 64px 96px; }
+  .wm.quote .q { font-family: 'Roboto Slab', serif; font-style: italic; font-size: 44px; font-weight: 500; line-height: 1.2; max-width: 22ch; }
+  .wm.quote .attr { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; color: #B85C24; text-transform: uppercase; font-weight: 700; margin-top: 28px; }
+
+  .wm.timeline h2 { font-size: 36px; margin: 12px 0 22px; }
+  .wm.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .wm.timeline .step { padding: 14px; border: 2px solid #14110D; background: #FBF6E8; }
+  .wm.timeline .step .wk { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; color: #B85C24; text-transform: uppercase; font-weight: 700; }
+  .wm.timeline .step h4 { font-family: 'Roboto Slab', serif; font-size: 18px; font-weight: 600; margin: 6px 0 6px; letter-spacing: -0.012em; }
+  .wm.timeline .step p { font-size: 12px; line-height: 1.55; color: #3C3833; margin: 0; }
+
+  .wm.team h2 { font-size: 36px; margin: 12px 0 22px; }
+  .wm.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .wm.team .person { padding: 14px; border: 2px solid #14110D; background: #FBF6E8; }
+  .wm.team .person .img { aspect-ratio: 3/4; background: linear-gradient(135deg, #B85C24, #14110D); border: 1px solid #14110D; }
+  .wm.team .person h4 { font-family: 'Roboto Slab', serif; font-size: 16px; font-weight: 600; margin: 12px 0 2px; letter-spacing: -0.012em; }
+  .wm.team .person .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #B85C24; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+  .wm.team .person p { font-size: 12px; line-height: 1.5; color: #3C3833; margin: 6px 0 0; }
+
+  .wm.coda { justify-content: end; }
+  .wm.coda h2 { font-size: 96px; }
+  .wm.coda .meta { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; margin-top: 18px; padding-top: 14px; border-top: 4px solid #14110D; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">25</span><span class="nm">Workshop manual</span></div><div class="meta"><span>12 layouts · beta</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 25 · Procedural</div>
+    <h1>The Haynes manual for a 1972 BMW.</h1>
+    <p>Newsprint cream with pencil-grey overlays. Slab-serif headers, sans body, mono for part numbers. Exploded-view diagrams, numbered callouts, fix-it stamps. Instructional second-person.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · DIY, repair tools, hardware, learning-by-doing</div>
+    <div><strong>Type</strong> · Roboto Slab · Inter · JetBrains Mono</div>
+    <div><strong>Accent</strong> · Iron orange · #B85C24</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="wm cover">
+    <span class="lbl">— Service manual · Halcyon Q2 / 2026 —</span>
+    <h2>Halcyon Q2.<br>A service manual.</h2>
+    <div class="meta"><span>PART No. HAL-2026-Q2 · ED. A · 14.05.26</span><span class="stamp">CHECKED</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="wm agenda">
+    <span class="lbl">— Chapter index —</span>
+    <h2>Chapters in this manual.</h2>
+    <div class="list">
+      <div class="item"><span class="pn">CH 01</span><span class="nm">Where we are</span><span class="meta">3 MIN</span></div>
+      <div class="item"><span class="pn">CH 02</span><span class="nm">The honest part</span><span class="meta">5 MIN</span></div>
+      <div class="item"><span class="pn">CH 03</span><span class="nm">What we're cutting</span><span class="meta">4 MIN</span></div>
+      <div class="item"><span class="pn">CH 04</span><span class="nm">Roadmap &amp; risks</span><span class="meta">3 MIN</span></div>
+      <div class="item"><span class="pn">CH 05</span><span class="nm">Asks of the board</span><span class="meta">3 MIN</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="wm section">
+    <span class="lbl">— Chapter 01 —</span>
+    <h2>Where we are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="wm headline">
+    <span class="lbl">— Fig. 04.21 · Q2 2026 —</span>
+    <h2>The quiet rebellion of measured growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying no.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="wm bigstat">
+    <span class="lbl">— Fig. 05 · readings —</span>
+    <h2>Specifications.</h2>
+    <div class="row">
+      <div class="col"><div class="stat em">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div class="col"><div class="stat em">+42%</div><div class="lbl">— QoQ</div></div>
+      <div class="col"><div class="stat">9.1</div><div class="lbl">— NPS · n=184</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="wm twocol">
+    <span class="lbl">— Fig. 06 · diagnostic —</span>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div><h3>Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="iron">Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="wm threecol">
+    <span class="lbl">— Fig. 07 · decommissioning —</span>
+    <h2>Three sunsets.</h2>
+    <div class="cols">
+      <div><span class="nm">— Part 7A —</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed for the web product, where 92% of revenue lives.</p></div>
+      <div><span class="nm">— Part 7B —</span><h3>Partner portal.</h3><p>3 signs in 18 months. Going 1:1 instead.</p></div>
+      <div><span class="nm">— Part 7C —</span><h3>Second brand.</h3><p>Cannibalised. Consolidating under Halcyon.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="wm imgled">
+    <div class="img">
+      <svg viewBox="0 0 320 240">
+        <circle cx="160" cy="120" r="80" fill="none" stroke="#14110D" stroke-width="2"/>
+        <circle cx="160" cy="120" r="40" fill="none" stroke="#14110D" stroke-width="1.5"/>
+        <line x1="160" y1="40" x2="160" y2="0" stroke="#14110D" stroke-width="1"/>
+        <text x="160" y="-2" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#B85C24" font-weight="700">PRODUCT</text>
+        <line x1="240" y1="120" x2="320" y2="120" stroke="#14110D" stroke-width="1"/>
+        <text x="270" y="115" font-family="JetBrains Mono" font-size="10" fill="#B85C24" font-weight="700">— GTM</text>
+        <line x1="80" y1="120" x2="0" y2="120" stroke="#14110D" stroke-width="1"/>
+        <text x="0" y="115" font-family="JetBrains Mono" font-size="10" fill="#B85C24" font-weight="700">DESIGN —</text>
+        <line x1="160" y1="200" x2="160" y2="240" stroke="#14110D" stroke-width="1"/>
+        <text x="160" y="240" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#B85C24" font-weight="700">— OPS</text>
+      </svg>
+    </div>
+    <div class="copy">
+      <span class="lbl">— Fig. 08 · exploded view —</span>
+      <h2>The team. Sixteen parts.</h2>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="wm quote">
+    <div class="q">"You can't grow your way out of a culture problem — you can only design your way out."</div>
+    <div class="attr">— B. HOROWITZ · OPERATING NOTES</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="wm timeline">
+    <span class="lbl">— Service schedule · 6 weeks —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— WEEK 1–2 —</span><h4>Interviews</h4><p>12 calls. Synthesise patterns.</p></div>
+      <div class="step"><span class="wk">— WEEK 2–3 —</span><h4>Prototype</h4><p>2 flows. Pick by EOW.</p></div>
+      <div class="step"><span class="wk">— WEEK 4–5 —</span><h4>Build</h4><p>2 eng. Closed beta.</p></div>
+      <div class="step"><span class="wk">— WEEK 6 —</span><h4>Ship</h4><p>100% rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="wm team">
+    <span class="lbl">— Personnel · asks of the board —</span>
+    <h2>The roster.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>M. Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Director GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A timing</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="wm coda">
+    <h2>Thank you.</h2>
+    <div class="meta"><span>HALCYON.CO/Q2 · QUESTIONS, ON THE RECORD</span><span class="stamp">CHECKED</span></div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 25 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

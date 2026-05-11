@@ -1,0 +1,142 @@
+/* ============================================================
+   Slide-pack shared chrome.
+   Each pack file imports this then defines its own .pack-* tokens
+   to colour the slides inside. Layout is the same across packs:
+   12 slides stacked, full-bleed, 16:9 aspect, with a sticky pack
+   header so the user knows what they're looking at.
+   ============================================================ */
+
+@import url('../preview/_foundation.css');
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper-deep);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+}
+
+/* ===== Pack header (sticky) ===== */
+.pack-head {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(238,241,246,0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hair);
+  padding: 14px 28px;
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 24px; align-items: center;
+}
+.pack-head .brand {
+  font-family: var(--display); font-size: 16px; font-weight: 800;
+  letter-spacing: -0.025em; line-height: 1;
+  display: inline-flex; align-items: baseline; gap: 6px;
+}
+.pack-head .brand .dot { color: var(--accent-600); font-size: 20px; }
+.pack-head .crumb {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  display: flex; gap: 8px; align-items: center;
+}
+.pack-head .crumb .ix { color: var(--accent-700); font-weight: 700; }
+.pack-head .crumb .nm { color: var(--ink); font-weight: 600; }
+.pack-head .crumb .sep { color: var(--ink-5); }
+.pack-head .meta {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: 0.04em;
+  display: flex; gap: 12px; align-items: center;
+}
+.pack-head a {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.pack-head a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ===== Pack hero ===== */
+.pack-hero {
+  padding: 56px 56px 32px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 32px; align-items: end;
+  border-bottom: 1px solid var(--hair);
+  background: var(--paper);
+}
+.pack-hero .ix {
+  font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+  letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  margin-bottom: 10px;
+}
+.pack-hero h1 {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(48px, 7vw, 96px);
+  letter-spacing: -0.04em; line-height: 0.92;
+  margin: 0; max-width: 16ch;
+}
+.pack-hero h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-2); }
+.pack-hero p {
+  font-family: var(--serif); font-style: italic;
+  font-size: 18px; color: var(--ink-3);
+  line-height: 1.45; max-width: 56ch;
+  margin: 18px 0 0;
+}
+.pack-hero .meta {
+  display: flex; flex-direction: column; gap: 6px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: 0.04em; text-align: right;
+  min-width: 200px;
+}
+.pack-hero .meta div strong { color: var(--ink); font-weight: 600; }
+
+/* ===== Slide stack ===== */
+.slides {
+  padding: 32px 0 96px;
+}
+
+.slide-block {
+  max-width: 1280px; margin: 0 auto 32px;
+  padding: 0 56px;
+}
+.slide-block .slide-header {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 0 4px 12px;
+}
+.slide-block .slide-header .ix {
+  font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+  letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+}
+.slide-block .slide-header .nm {
+  font-family: var(--display); font-weight: 600; font-size: 16px;
+  letter-spacing: -0.015em; color: var(--ink);
+}
+.slide-block .slide-header .desc {
+  font-family: var(--serif); font-style: italic;
+  color: var(--ink-3); font-size: 14px;
+  margin-left: auto;
+}
+
+/* The slide canvas itself — every pack styles its own .slide */
+.slide {
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 16px 40px rgba(15,17,21,0.10), 0 0 0 1px rgba(15,17,21,0.06);
+}
+
+/* Footer at end of pack */
+.pack-foot {
+  text-align: center;
+  padding: 64px 56px 32px;
+  border-top: 1px solid var(--hair);
+  background: var(--paper);
+}
+.pack-foot p {
+  font-family: var(--serif); font-style: italic;
+  color: var(--ink-3); font-size: 16px; margin: 0;
+}
+.pack-foot a {
+  display: inline-block; margin-top: 16px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink);
+  letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+  border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+}

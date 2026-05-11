@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · iconography</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+
+  .icon-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px; }
+  .icon-card {
+    background: var(--paper); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 18px 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    text-align: center;
+  }
+  .icon-card .ic { width: 28px; height: 28px; color: var(--ink); }
+  .icon-card .nm { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; }
+
+  .size-row { display: flex; gap: 24px; align-items: end; padding: 18px 0; border-top: 1px solid var(--hair-soft); }
+  .size-row:first-of-type { border-top: 0; }
+  .size-row .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; min-width: 80px; }
+  .size-row svg { color: var(--ink); }
+
+  .filled-vs-line { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .vs-card { background: var(--paper); border: 1px solid var(--hair); border-radius: 12px; padding: 18px 22px; }
+  .vs-card h4 { font-family: var(--display); font-weight: 600; font-size: 14px; margin: 0 0 12px; letter-spacing: -0.012em; }
+  .vs-card .row { display: flex; gap: 14px; align-items: center; padding: 8px 0; border-top: 1px solid var(--hair-soft); }
+  .vs-card .row:first-of-type { border-top: 0; }
+  .vs-card .row svg { width: 20px; height: 20px; }
+  .vs-card .desc { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 43 —</span>
+    <h1 class="ttl">Iconography</h1>
+    <span class="meta">Overlays · domain glyphs in the UI grid</span>
+  </div>
+
+  <!-- Sizes -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Sizes</span>
+      <h3 class="nm">Five steps · 12 / 14 / 16 / 20 / 24.</h3>
+    </div>
+    <div class="size-row">
+      <span class="lbl">12 px</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+      <span class="lbl" style="min-width: 80px;">in pills, hints</span>
+    </div>
+    <div class="size-row">
+      <span class="lbl">14 px</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+      <span class="lbl" style="min-width: 80px;">inline w/ body 13</span>
+    </div>
+    <div class="size-row">
+      <span class="lbl">16 px</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+      <span class="lbl" style="min-width: 80px;">tooltips, chips</span>
+    </div>
+    <div class="size-row">
+      <span class="lbl">20 px</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+      <span class="lbl" style="min-width: 80px;">toolbar default</span>
+    </div>
+    <div class="size-row">
+      <span class="lbl">24 px</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+      <span class="lbl" style="min-width: 80px;">empty states, headers</span>
+    </div>
+  </div>
+
+  <!-- Domain icons -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Domain</span>
+      <h3 class="nm">Glyphs Irisi actually uses.</h3>
+    </div>
+    <div class="icon-grid">
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+        <span class="nm">slide</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="6" y="8" width="4" height="3"/><rect x="6" y="13" width="12" height="2"/><rect x="6" y="16" width="8" height="2"/></svg>
+        <span class="nm">deck</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span class="nm">timing</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12c0-5 4-9 9-9s9 4 9 9-4 9-9 9-9-4-9-9z"/><path d="M2 12h20M12 2c2.5 3 4 6 4 10s-1.5 7-4 10c-2.5-3-4-6-4-10s1.5-7 4-10z"/></svg>
+        <span class="nm">share</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span class="nm">pack</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        <span class="nm">user</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span class="nm">theme</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/><circle cx="12" cy="12" r="4"/></svg>
+        <span class="nm">brand</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="nm">approved</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 22 22 2 22 12 2"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>
+        <span class="nm">warn</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg>
+        <span class="nm">info</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+        <span class="nm">delete</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17l6-6 4 4 8-8"/><polyline points="14 7 21 7 21 14"/></svg>
+        <span class="nm">trend</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="14 2 14 8 20 8"/><path d="M20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8z"/></svg>
+        <span class="nm">export</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        <span class="nm">play</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+        <span class="nm">favourite</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="nm">search</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span class="nm">brand-key</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="nm">comment</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L1 21h22L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>
+        <span class="nm">alert</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h6m6 0h6"/><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+        <span class="nm">code</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span class="nm">arrow</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+        <span class="nm">verified</span>
+      </div>
+      <div class="icon-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="nm">settings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filled vs line -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Rule</span>
+      <h3 class="nm">Line by default. Filled on selection.</h3>
+    </div>
+    <div class="filled-vs-line">
+      <div class="vs-card">
+        <h4>Line · default</h4>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+          <span class="desc">Favourite (not yet)</span>
+        </div>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span class="desc">Search (idle)</span>
+        </div>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg>
+          <span class="desc">Info (passive)</span>
+        </div>
+      </div>
+      <div class="vs-card">
+        <h4>Filled · active</h4>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="var(--accent-600)" stroke="var(--accent-600)" stroke-width="1.5"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+          <span class="desc">Favourited</span>
+        </div>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="var(--ink)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="var(--ink)"/></svg>
+          <span class="desc">Search (active)</span>
+        </div>
+        <div class="row">
+          <svg viewBox="0 0 24 24" fill="var(--accent-600)" stroke="var(--accent-600)" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12" stroke="white"/><line x1="12" y1="16" x2="12" y2="16.01" stroke="white"/></svg>
+          <span class="desc">Info (Irisi suggestion)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

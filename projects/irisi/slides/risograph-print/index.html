@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 13 · Risograph print</title>
+<link rel="stylesheet" href="../_pack.css">
+<style>
+  .ri { background: #F4EAD9; color: #14110D; font-family: 'Inter', sans-serif; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .ri::before { content: ""; position: absolute; right: -80px; top: -80px; width: 320px; height: 320px; border-radius: 50%; background: #FF4691; mix-blend-mode: multiply; opacity: 0.85; }
+  .ri::after { content: ""; position: absolute; right: -40px; top: -60px; width: 320px; height: 320px; border-radius: 50%; background: #00513D; mix-blend-mode: multiply; opacity: 0.75; }
+  .ri > * { position: relative; z-index: 2; }
+  .ri h2 { font-family: 'Inter', sans-serif; font-weight: 800; line-height: 0.92; letter-spacing: -0.025em; margin: 14px 0 0; }
+  .ri .nm { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .ri .pink { color: #FF4691; }
+  .ri .green { color: #00513D; }
+
+  .ri.cover { justify-content: end; }
+  .ri.cover h2 { font-size: 88px; max-width: 10ch; }
+  .ri.cover .meta { display: flex; gap: 18px; align-items: center; margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  .ri.agenda h2 { font-size: 56px; margin: 14px 0 22px; max-width: 12ch; }
+  .ri.agenda .list { font-size: 18px; font-weight: 600; line-height: 1.6; }
+  .ri.agenda .list .item { display: grid; grid-template-columns: 60px 1fr auto; gap: 14px; padding: 8px 0; border-bottom: 2px solid #14110D; }
+
+  .ri.section { justify-content: center; align-items: center; }
+  .ri.section h2 { font-size: 96px; max-width: 10ch; text-align: center; }
+
+  .ri.headline h2 { font-size: 56px; max-width: 16ch; }
+  .ri.headline .body { font-size: 16px; line-height: 1.7; max-width: 60ch; margin-top: 22px; }
+
+  .ri.bigstat { justify-content: center; }
+  .ri.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 24px 0; border-top: 4px solid #14110D; border-bottom: 4px solid #14110D; }
+  .ri.bigstat .stat { font-size: 80px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: #FF4691; }
+  .ri.bigstat .stat.green { color: #00513D; }
+  .ri.bigstat .lbl { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 8px; }
+
+  .ri.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ri.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .ri.twocol .cols h3 { font-size: 22px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.012em; }
+  .ri.twocol .cols ul { font-size: 14px; line-height: 1.7; padding-left: 18px; margin: 0; }
+
+  .ri.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ri.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .ri.threecol .cols .nm { font-size: 11px; letter-spacing: 0.18em; padding: 3px 8px; background: #FF4691; color: #fff; display: inline-block; }
+  .ri.threecol .cols h3 { font-size: 24px; font-weight: 800; margin: 8px 0 6px; letter-spacing: -0.018em; }
+  .ri.threecol .cols p { font-size: 13px; line-height: 1.6; margin: 0; }
+
+  .ri.imgled { padding: 0; flex-direction: row; }
+  .ri.imgled::before, .ri.imgled::after { display: none; }
+  .ri.imgled .img { flex: 1; background: #F4EAD9; position: relative; overflow: hidden; }
+  .ri.imgled .img::before { content: ""; position: absolute; left: 30px; top: 30px; width: 200px; height: 200px; border-radius: 50%; background: #FF4691; mix-blend-mode: multiply; }
+  .ri.imgled .img::after { content: ""; position: absolute; left: 80px; top: 80px; width: 200px; height: 200px; border-radius: 50%; background: #00513D; mix-blend-mode: multiply; opacity: 0.8; }
+  .ri.imgled .copy { flex: 0 0 42%; padding: 56px; display: flex; flex-direction: column; justify-content: end; background: #F4EAD9; }
+  .ri.imgled .copy h2 { font-size: 44px; max-width: 12ch; margin-top: 14px; }
+
+  .ri.quote { justify-content: center; padding: 64px 96px; }
+  .ri.quote .q { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; max-width: 22ch; }
+  .ri.quote .q .pink { color: #FF4691; }
+  .ri.quote .attr { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 28px; color: #00513D; }
+
+  .ri.timeline h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ri.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ri.timeline .step { padding: 14px; border: 2px solid #14110D; }
+  .ri.timeline .step .wk { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF4691; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+  .ri.timeline .step h4 { font-size: 17px; font-weight: 800; margin: 6px 0 6px; }
+  .ri.timeline .step p { font-size: 12px; line-height: 1.5; margin: 0; }
+
+  .ri.team h2 { font-size: 36px; margin: 12px 0 22px; }
+  .ri.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .ri.team .person .img { aspect-ratio: 1/1; background: #FF4691; mix-blend-mode: multiply; border-radius: 50%; }
+  .ri.team .person:nth-child(2) .img { background: #00513D; }
+  .ri.team .person:nth-child(3) .img { background: #FFD600; }
+  .ri.team .person:nth-child(4) .img { background: #4880FE; }
+  .ri.team .person h4 { font-size: 16px; font-weight: 800; margin: 12px 0 2px; }
+  .ri.team .person .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #00513D; font-weight: 700; }
+  .ri.team .person p { font-size: 12px; line-height: 1.5; margin: 6px 0 0; }
+
+  .ri.coda { justify-content: end; align-items: end; flex-direction: column; }
+  .ri.coda h2 { align-self: start; font-size: 110px; }
+  .ri.coda .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 18px; color: #FF4691; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">13</span><span class="nm">Risograph print</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 13 · Indie</div>
+    <h1>A screenprinted indie zine.</h1>
+    <p>Newsprint cream, two flat spot colours that misregister where they overlap. Halftone dots, multiply blends, hand-set ornaments. Earnest-irreverent voice.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · community, music, events, indie</div>
+    <div><strong>Type</strong> · Inter (chunky)</div>
+    <div><strong>Accent</strong> · Pink + green spots</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="ri cover">
+    <span class="nm">— ISSUE 12 · SPRING 2026 —</span>
+    <h2>Make<br>good<br>NOISE.</h2>
+    <div class="meta"><span class="pink">● HALCYON</span><span>14.05.26</span></div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="ri agenda">
+    <span class="nm">— INSIDE —</span>
+    <h2>What's in this issue.</h2>
+    <div class="list">
+      <div class="item"><span>[01]</span><span>Where we are</span><span class="pink">3 MIN</span></div>
+      <div class="item"><span>[02]</span><span>The honest part</span><span class="pink">5 MIN</span></div>
+      <div class="item"><span>[03]</span><span>What we're cutting</span><span class="pink">4 MIN</span></div>
+      <div class="item"><span>[04]</span><span>Roadmap &amp; risks</span><span class="pink">3 MIN</span></div>
+      <div class="item"><span>[05]</span><span>Asks of the board</span><span class="pink">3 MIN</span></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="ri section">
+    <span class="nm">— SECTION 01 —</span>
+    <h2>Where<br>WE ARE.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="ri headline">
+    <span class="nm">— Q2 · 2026 —</span>
+    <h2>The quiet rebellion of <span class="pink">measured growth.</span></h2>
+    <div class="body">Most companies confuse motion for progress. We've spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason isn't strategy; it's the discipline of saying NO.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="ri bigstat">
+    <span class="nm">— THE NUMBERS —</span>
+    <h2 style="font-size: 32px; margin: 12px 0 22px;">Three big ones.</h2>
+    <div class="row">
+      <div><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div><div class="stat green">+42%</div><div class="lbl">— QoQ</div></div>
+      <div><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="ri twocol">
+    <span class="nm">— THE HONEST PART —</span>
+    <h2>Beat plan / missed plan.</h2>
+    <div class="cols">
+      <div><h3 class="green">▲ Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div><h3 class="pink">▼ Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="ri threecol">
+    <span class="nm">— SUNSETS —</span>
+    <h2>Three projects we're cutting.</h2>
+    <div class="cols">
+      <div><span class="nm">— PROJECT 01 —</span><h3>Mobile rebuild.</h3><p>Reclaim two engineers. Web is 92% of revenue.</p></div>
+      <div><span class="nm">— PROJECT 02 —</span><h3>Partner portal.</h3><p>Three signs in 18 months. Going 1:1 instead.</p></div>
+      <div><span class="nm">— PROJECT 03 —</span><h3>Second brand.</h3><p>Cannibalised. Consolidating under Halcyon.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="ri imgled">
+    <div class="img"></div>
+    <div class="copy">
+      <span class="nm">— A NOTE —</span>
+      <h2>The <span class="pink">team.</span></h2>
+      <p style="font-size: 13px; margin-top: 12px;">Sixteen people. Small on purpose. Photographed the morning we hit ARR target.</p>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="ri quote">
+    <div class="q">"You can't grow your way out of a <span class="pink">culture problem</span> — you can only design your way out."</div>
+    <div class="attr">— B. HOROWITZ</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="ri timeline">
+    <span class="nm">— SCHEDULE · 6 WK —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— WK 1–2 —</span><h4>Interviews.</h4><p>12 calls. Synthesise.</p></div>
+      <div class="step"><span class="wk">— WK 2–3 —</span><h4>Prototype.</h4><p>Two flows. Pick.</p></div>
+      <div class="step"><span class="wk">— WK 4–5 —</span><h4>Build.</h4><p>2 eng. Beta.</p></div>
+      <div class="step"><span class="wk">— WK 6 —</span><h4>SHIP.</h4><p>100% rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="ri team">
+    <span class="nm">— THE CREW —</span>
+    <h2>Who's on the cover.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>Maya Olokun</h4><span class="role">— VP PRODUCT</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head of CS</h4><span class="role">— INTRO REQ</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Dir. GTM</h4><span class="role">— INTRO REQ</span><p>Devtools background.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A</h4><span class="role">— DECISION</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="ri coda">
+    <h2>THANKS.</h2>
+    <div class="meta">— HALCYON.CO/Q2 ●</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 13 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

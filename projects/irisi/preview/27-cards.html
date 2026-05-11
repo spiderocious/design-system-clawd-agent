@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · cards</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+  .scene .h .why { margin-left: auto; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+  /* Deck card — the big one */
+  .deck-card {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 16px; overflow: hidden; cursor: pointer;
+    transition: transform 200ms var(--ease-out), box-shadow 200ms;
+  }
+  .deck-card:hover { transform: translateY(-3px); box-shadow: var(--shade-3); }
+  .deck-card .preview {
+    aspect-ratio: 16 / 10;
+    background: #FBFAF7; padding: 20px 24px;
+    color: #14110D;
+    display: flex; flex-direction: column;
+    border-bottom: 1px solid var(--hair);
+  }
+  .deck-card .preview .kicker { font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.22em; color: #B42318; text-transform: uppercase; }
+  .deck-card .preview .head { font-family: 'Source Serif 4', serif; font-size: 24px; line-height: 1.04; margin: 6px 0 10px; max-width: 14ch; font-weight: 500; letter-spacing: -0.02em; }
+  .deck-card .preview hr { border: 0; border-top: 1px solid #14110D; margin: 6px 0; }
+  .deck-card .preview .by { font-family: 'Inter', sans-serif; font-size: 9px; color: #6E665B; letter-spacing: 0.06em; }
+  .deck-card .body { padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .deck-card .body .nm { font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: -0.015em; }
+  .deck-card .body .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .deck-card .body .footer { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--hair-soft); }
+  .deck-card .body .footer .pill { height: 20px; }
+
+  /* Stat card */
+  .stat-card {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .stat-card .l { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .stat-card .v { font-family: var(--display); font-weight: 800; font-size: 36px; letter-spacing: -0.03em; line-height: 1; margin-top: 6px; }
+  .stat-card .v .em { color: var(--accent-600); }
+  .stat-card .delta { font-family: var(--mono); font-size: 11px; color: var(--ok); margin-top: 4px; }
+  .stat-card .delta.bad { color: var(--crit); }
+  .stat-card svg { margin-top: 10px; }
+
+  /* User profile card */
+  .profile-card {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 14px; padding: 22px 24px;
+  }
+  .profile-card .top { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .profile-card .nm { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.018em; }
+  .profile-card .role { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+  .profile-card .stats { display: flex; gap: 18px; padding-top: 14px; border-top: 1px solid var(--hair); }
+  .profile-card .stats .stat { display: flex; flex-direction: column; }
+  .profile-card .stats .stat .v { font-family: var(--mono); font-size: 16px; font-weight: 600; }
+  .profile-card .stats .stat .l { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+
+  /* Pack card */
+  .pack-card {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 14px; padding: 16px;
+    cursor: pointer; transition: 200ms;
+  }
+  .pack-card:hover { border-color: var(--ink-3); transform: translateY(-2px); }
+  .pack-card .swatch {
+    aspect-ratio: 16 / 10; border-radius: 6px;
+    margin-bottom: 12px;
+    border: 1px solid var(--hair);
+  }
+  .pack-card .ix { font-family: var(--mono); font-size: 10px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .pack-card .nm { font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: -0.015em; margin: 2px 0 4px; }
+  .pack-card .desc { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 27 —</span>
+    <h1 class="ttl">Cards</h1>
+    <span class="meta">Data &amp; state · the basic visual unit</span>
+  </div>
+
+  <!-- Deck cards -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Deck card</span>
+      <h3 class="nm">The signature card.</h3>
+      <span class="why">Used in the gallery, dashboards, recent decks.</span>
+    </div>
+
+    <div class="grid-3">
+      <div class="deck-card">
+        <div class="preview">
+          <div class="kicker">— Quarterly · Q2 2026 —</div>
+          <div class="head">The quiet rebellion of measured growth.</div>
+          <hr>
+          <div class="by">By the founders · 12 min read</div>
+        </div>
+        <div class="body">
+          <div class="nm">Q2 Board Update — Halcyon</div>
+          <div class="meta">12 slides · Editorial · 12 sec ago</div>
+          <div class="footer">
+            <div class="av-stack" style="display: flex;">
+              <span class="avatar avatar-sm">FA</span>
+              <span class="avatar avatar-sm" style="margin-left: -6px; background: var(--accent-100); color: var(--accent-800);">MO</span>
+            </div>
+            <span class="pill pill-accent" style="margin-left: auto;"><span class="dot"></span> Generating</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="deck-card">
+        <div class="preview" style="background: #FFFFFF; padding: 22px 26px;">
+          <div style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.16em; color: #777;">0 1 / 1 8</div>
+          <div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin: 8px 0 16px; color: #000;">Forma — Series A.</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid #000; padding-top: 12px;">
+            <div><div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: #FF6A00;">$ 2 M</div><div style="font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #888;">Round</div></div>
+            <div><div style="font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.03em;">$ 12 M</div><div style="font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #888;">Pre</div></div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="nm">Series A Pitch — Forma Labs</div>
+          <div class="meta">18 slides · Swiss instrument · 2 hr ago</div>
+          <div class="footer">
+            <div class="av-stack" style="display: flex;"><span class="avatar avatar-sm">FA</span></div>
+            <span class="pill" style="margin-left: auto;"><span class="dot"></span> Draft</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="deck-card">
+        <div class="preview" style="background: #1C1A18; color: #F5EFE0; padding: 22px 26px;">
+          <div style="font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.24em; color: #C9B27A; text-transform: uppercase;">Volume · 0 4</div>
+          <div style="font-family: 'Bodoni Moda', serif; font-size: 28px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; margin: 14px 0 6px; font-style: italic;">The art of <span style="color: #C9B27A;">inevitable</span> products.</div>
+          <div style="width: 32px; height: 1px; background: #C9B27A; margin-top: 10px;"></div>
+        </div>
+        <div class="body">
+          <div class="nm">Brand Refresh Proposal</div>
+          <div class="meta">14 slides · Showroom mono · 5 days ago</div>
+          <div class="footer">
+            <div class="av-stack" style="display: flex;"><span class="avatar avatar-sm" style="background: #FDE5C9; color: #7A410B;">JK</span></div>
+            <span class="pill pill-ok" style="margin-left: auto;"><span class="dot"></span> Exported</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Stat tile</span>
+      <h3 class="nm">Numbers, with story.</h3>
+    </div>
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="l">— Decks generated</div>
+        <div class="v"><span class="em">142</span></div>
+        <div class="delta">↑ 28 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="l">— Avg generation</div>
+        <div class="v">4.2<span style="font-size: 14px; color: var(--ink-3); font-weight: 500; margin-left: 4px;">sec</span></div>
+        <div class="delta">↓ 0.8 sec vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="l">— Active editors</div>
+        <div class="v">8 / <span style="color: var(--ink-3);">12</span></div>
+        <div class="delta">↑ 2 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="l">— Storage</div>
+        <div class="v">8.2<span style="font-size: 14px; color: var(--ink-3); font-weight: 500; margin-left: 4px;">GB</span></div>
+        <div class="delta bad">82% of 10 GB · approaching limit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile card -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Profile</span>
+      <h3 class="nm">Who's editing.</h3>
+    </div>
+    <div class="grid-3">
+      <div class="profile-card">
+        <div class="top">
+          <span class="avatar avatar-lg" style="background: linear-gradient(135deg, #4880FE, #062765); color: #fff;">FA</span>
+          <div>
+            <div class="nm">Feranmi Adeniji</div>
+            <div class="role">OWNER · halcyon.co</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--ink-3); margin: 0 0 12px; line-height: 1.5;">Founder &amp; CEO. Designs every deck.</p>
+        <div class="stats">
+          <div class="stat"><span class="v">42</span><span class="l">decks</span></div>
+          <div class="stat"><span class="v">9.1</span><span class="l">avg NPS</span></div>
+          <div class="stat"><span class="v">2y</span><span class="l">on Irisi</span></div>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="top">
+          <span class="avatar avatar-lg" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+          <div>
+            <div class="nm">Maya Olokun</div>
+            <div class="role">EDITOR · halcyon.co</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--ink-3); margin: 0 0 12px; line-height: 1.5;">VP Product. Reviews every board deck.</p>
+        <div class="stats">
+          <div class="stat"><span class="v">28</span><span class="l">decks</span></div>
+          <div class="stat"><span class="v">4.6</span><span class="l">avg cmnts</span></div>
+          <div class="stat"><span class="v">1y</span><span class="l">on Irisi</span></div>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="top">
+          <span class="avatar avatar-lg" style="background: #FDE5C9; color: #7A410B;">JK</span>
+          <div>
+            <div class="nm">James Karabo</div>
+            <div class="role">VIEWER · board · expires 14d</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--ink-3); margin: 0 0 12px; line-height: 1.5;">Board member, Series Seed lead.</p>
+        <div class="stats">
+          <div class="stat"><span class="v">14</span><span class="l">decks viewed</span></div>
+          <div class="stat"><span class="v">8</span><span class="l">comments</span></div>
+          <div class="stat"><span class="v">8mo</span><span class="l">on board</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pack cards -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Pack</span>
+      <h3 class="nm">A slide pack tile.</h3>
+    </div>
+    <div class="grid-4">
+      <div class="pack-card">
+        <div class="swatch" style="background: linear-gradient(135deg, #FBFAF7 0% 50%, #14110D 50% 100%);"></div>
+        <div class="ix">— Pack 02</div>
+        <div class="nm">Editorial broadsheet</div>
+        <div class="desc">"What if a NYT analyst designed your deck?"</div>
+      </div>
+      <div class="pack-card">
+        <div class="swatch" style="background: #FFFFFF; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center;">
+          <div style="width: 30%; height: 4px; background: #FF6A00;"></div>
+        </div>
+        <div class="ix">— Pack 03</div>
+        <div class="nm">Swiss instrument</div>
+        <div class="desc">Braun calculator energy. Tight. Disciplined.</div>
+      </div>
+      <div class="pack-card">
+        <div class="swatch" style="background: #1C1A18; display: flex; align-items: center; justify-content: center;">
+          <div style="font-family: 'Bodoni Moda', serif; font-style: italic; color: #C9B27A; font-size: 18px;">Aa</div>
+        </div>
+        <div class="ix">— Pack 12</div>
+        <div class="nm">Showroom mono</div>
+        <div class="desc">A luxury watch boutique under glass.</div>
+      </div>
+      <div class="pack-card">
+        <div class="swatch" style="background: #F4EAD9; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; border-radius: 50%; background: #FF4691; mix-blend-mode: multiply;"></div>
+          <div style="position: absolute; top: 0; right: 0; width: 60px; height: 60px; border-radius: 50%; background: #00513D; mix-blend-mode: multiply;"></div>
+        </div>
+        <div class="ix">— Pack 13</div>
+        <div class="nm">Risograph print</div>
+        <div class="desc">A screenprinted indie zine.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

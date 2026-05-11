@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · motion</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .card { background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px; padding: 28px 32px; }
+  .card .h { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .card .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 4px; }
+  .card .desc { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; line-height: 1.45; margin-bottom: 18px; }
+
+  .curve-row { display: grid; grid-template-columns: 200px 1fr 80px; gap: 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--hair-soft); }
+  .curve-row:first-of-type { border-top: 0; }
+  .curve-row .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .curve-row .lbl strong { color: var(--ink); display: block; font-weight: 600; font-size: 12px; margin-bottom: 2px; letter-spacing: 0; }
+  .curve-row .lbl em { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 12px; letter-spacing: 0; }
+  .curve-row .ms { text-align: right; font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .curve-row svg { width: 100%; height: 50px; overflow: visible; }
+  .curve-row svg .axis { stroke: var(--hair); stroke-width: 1; }
+  .curve-row svg .path { stroke: var(--accent-600); stroke-width: 2; fill: none; }
+
+  /* Live demos */
+  .demos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .demo {
+    background: var(--paper); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 18px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .demo .nm { font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+  .demo .canvas {
+    width: 100%; height: 120px;
+    background: var(--paper-deep); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .demo .ball {
+    width: 36px; height: 36px;
+    background: var(--accent-600);
+    border-radius: 50%;
+  }
+  .demo .lift {
+    width: 60%; height: 60%;
+    background: var(--ink); border-radius: 8px;
+    box-shadow: var(--shade-2);
+  }
+  .demo .ribbon {
+    width: 60%; height: 16px;
+    background: var(--accent-300); border-radius: 999px;
+  }
+
+  @keyframes slide-tap {
+    0%, 100% { transform: translateX(-80px); }
+    50% { transform: translateX(80px); }
+  }
+  @keyframes hover-lift {
+    0%, 100% { transform: translateY(0); box-shadow: var(--shade-1); }
+    50% { transform: translateY(-6px); box-shadow: var(--shade-3); }
+  }
+  @keyframes ribbon-fade {
+    0% { opacity: 0; transform: translateY(8px); }
+    50% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-8px); }
+  }
+
+  .demo.tap .ball { animation: slide-tap 1.6s var(--ease-out) infinite; }
+  .demo.lift .lift { animation: hover-lift 2.4s var(--ease-out) infinite; }
+  .demo.ribbon .ribbon { animation: ribbon-fade 2.4s ease-in-out infinite; }
+
+  .demo .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; }
+
+  /* Reduced motion */
+  .reduced {
+    margin-top: 24px;
+    padding: 24px 32px;
+    background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 12px;
+    display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  }
+  .reduced p { font-family: var(--serif); font-style: italic; color: var(--ink-3); margin: 0; line-height: 1.5; max-width: 60ch; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 04 —</span>
+    <h1 class="ttl">Motion</h1>
+    <span class="meta">Foundation · 3 curves · 4 durations · respect reduced-motion</span>
+  </div>
+
+  <!-- Curves & durations -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="h">— Curves</div>
+      <h3 class="nm">Three curves, never blended.</h3>
+      <p class="desc">One ease for almost everything. A spring for the rare press-and-pop. A linear for tickers and progress.</p>
+
+      <div class="curve-row">
+        <div class="lbl"><strong>ease-out</strong><em>cubic-bezier(0.18, 0.8, 0.34, 1)</em></div>
+        <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+          <line class="axis" x1="0" y1="50" x2="100" y2="50"/>
+          <line class="axis" x1="0" y1="0" x2="0" y2="50"/>
+          <path class="path" d="M 0 50 C 18 10 34 0 100 0"/>
+        </svg>
+        <div class="ms">default</div>
+      </div>
+      <div class="curve-row">
+        <div class="lbl"><strong>spring</strong><em>cubic-bezier(0.34, 1.56, 0.64, 1)</em></div>
+        <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+          <line class="axis" x1="0" y1="50" x2="100" y2="50"/>
+          <line class="axis" x1="0" y1="0" x2="0" y2="50"/>
+          <path class="path" d="M 0 50 C 34 78 64 −28 100 0"/>
+        </svg>
+        <div class="ms">rare</div>
+      </div>
+      <div class="curve-row">
+        <div class="lbl"><strong>linear</strong><em>linear / ticker</em></div>
+        <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+          <line class="axis" x1="0" y1="50" x2="100" y2="50"/>
+          <line class="axis" x1="0" y1="0" x2="0" y2="50"/>
+          <path class="path" d="M 0 50 L 100 0"/>
+        </svg>
+        <div class="ms">progress</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="h">— Durations</div>
+      <h3 class="nm">Four steps, no in-betweens.</h3>
+      <p class="desc">If you reach for 240ms, you actually want 200ms. The four steps are enough.</p>
+
+      <div class="curve-row" style="grid-template-columns: 200px 1fr 60px;">
+        <div class="lbl"><strong>tap</strong><em>colour, focus ring</em></div>
+        <div style="height: 8px; background: var(--accent-600); width: 12%; border-radius: 999px;"></div>
+        <div class="ms">100 ms</div>
+      </div>
+      <div class="curve-row" style="grid-template-columns: 200px 1fr 60px;">
+        <div class="lbl"><strong>quick</strong><em>hover lift, panel slide</em></div>
+        <div style="height: 8px; background: var(--accent-600); width: 22%; border-radius: 999px;"></div>
+        <div class="ms">200 ms</div>
+      </div>
+      <div class="curve-row" style="grid-template-columns: 200px 1fr 60px;">
+        <div class="lbl"><strong>page</strong><em>view change</em></div>
+        <div style="height: 8px; background: var(--accent-600); width: 35%; border-radius: 999px;"></div>
+        <div class="ms">320 ms</div>
+      </div>
+      <div class="curve-row" style="grid-template-columns: 200px 1fr 60px;">
+        <div class="lbl"><strong>scene</strong><em>generate &amp; reveal</em></div>
+        <div style="height: 8px; background: var(--accent-600); width: 60%; border-radius: 999px;"></div>
+        <div class="ms">560 ms</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live demos -->
+  <div class="card">
+    <div class="h">— Demos</div>
+    <h3 class="nm">Three named motions, in motion.</h3>
+    <p class="desc">Hover the canvas; play in the browser, never just specced.</p>
+
+    <div class="demos">
+      <div class="demo tap">
+        <div class="canvas"><div class="ball"></div></div>
+        <div class="nm">Tap glide</div>
+        <div class="meta">200 ms · ease-out · used on toggles, segmented controls</div>
+      </div>
+      <div class="demo lift">
+        <div class="canvas"><div class="lift"></div></div>
+        <div class="nm">Hover lift</div>
+        <div class="meta">200 ms · ease-out · primary buttons, deck cards</div>
+      </div>
+      <div class="demo ribbon">
+        <div class="canvas"><div class="ribbon"></div></div>
+        <div class="nm">Toast</div>
+        <div class="meta">320 ms in · 320 ms out · ease-out · feedback strips</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reduced">
+    <p><em>"prefers-reduced-motion: reduce"</em> — durations collapse to 1ms, the spring becomes a linear ease-out, parallax is removed entirely. Generation reveals become single-frame fades.</p>
+    <span class="pill pill-ok"><span class="dot"></span> Honoured throughout</span>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · buttons</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 16px; padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  .scene .h {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .scene .h .ix {
+    font-family: var(--mono); font-size: 11px; color: var(--accent-700);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .scene .h .nm {
+    font-family: var(--display); font-weight: 700; font-size: 22px;
+    letter-spacing: -0.018em; margin: 0;
+  }
+  .scene .h .why {
+    margin-left: auto;
+    font-family: var(--serif); font-style: italic; font-size: 14px;
+    color: var(--ink-3);
+  }
+
+  /* The prompt-pad scene */
+  .pad-scene {
+    background: var(--sheet); border-radius: 22px;
+    padding: 16px 16px 14px;
+    border: 1px solid var(--hair);
+    box-shadow: var(--shade-2);
+  }
+  .pad-scene textarea {
+    width: 100%; resize: none; border: 0; outline: 0; background: transparent;
+    font-family: var(--sans); font-size: 16px; line-height: 1.5;
+    color: var(--ink); padding: 8px;
+    min-height: 56px;
+  }
+  .pad-scene .tools {
+    display: flex; gap: 8px; align-items: center; padding-top: 6px; border-top: 1px solid var(--hair-soft);
+  }
+  .pad-scene .gap { flex: 1; }
+
+  /* List row scene */
+  .deck-row {
+    display: grid; grid-template-columns: 64px 1fr auto auto;
+    gap: 16px; align-items: center;
+    padding: 12px 16px;
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 12px;
+  }
+  .deck-row + .deck-row { margin-top: 6px; }
+  .deck-row .thumb {
+    width: 64px; aspect-ratio: 16/10;
+    background: #FBFAF7; border-radius: 4px; border: 1px solid var(--hair);
+    overflow: hidden; padding: 5px 7px;
+    color: #14110D;
+  }
+  .deck-row .thumb .h { height: 3px; background: #14110D; border-radius: 2px; width: 70%; }
+  .deck-row .thumb .b { height: 1px; background: #D9D0BB; margin-top: 3px; }
+  .deck-row .nm { font-family: var(--display); font-weight: 600; font-size: 14px; line-height: 1.1; letter-spacing: -0.015em; }
+  .deck-row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .deck-row .actions { display: flex; gap: 6px; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px;
+    background: var(--paper-deep); border-radius: 12px;
+    border: 1px solid var(--hair);
+  }
+  .toolbar .seg { display: inline-flex; gap: 0; }
+  .toolbar .gap { flex: 1; }
+  .toolbar .ic-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: transparent; border: 1px solid transparent;
+    color: var(--ink-2); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .toolbar .ic-btn:hover { background: var(--sheet); border-color: var(--hair); color: var(--ink); }
+  .toolbar .ic-btn.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Modal foot */
+  .modal-mock {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: 14px;
+    padding: 28px 32px 20px;
+    box-shadow: var(--shade-2);
+  }
+  .modal-mock h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 700;
+    letter-spacing: -0.018em; margin: 0 0 6px;
+  }
+  .modal-mock p { font-size: 14px; color: var(--ink-3); margin: 0 0 18px; line-height: 1.5; }
+  .modal-mock .foot {
+    display: flex; justify-content: end; gap: 8px;
+    padding-top: 16px; border-top: 1px solid var(--hair);
+  }
+
+  /* Hold-to-confirm */
+  .hold {
+    position: relative; overflow: hidden;
+    background: var(--crit); color: #fff;
+    border: 0; border-radius: 10px;
+    height: 44px; padding: 0 22px;
+    font-family: var(--sans); font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .hold .progress {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 65%;
+    background: rgba(255,255,255,0.20);
+  }
+  .hold .label { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; }
+  .hold .label .kbd { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.30); color: #fff; }
+
+  /* State grid (the only place we render a grid) */
+  .grid-states {
+    margin-top: 32px;
+    border-top: 1px solid var(--hair); padding-top: 24px;
+  }
+  .grid-states .h-row {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .states {
+    display: grid; grid-template-columns: 80px repeat(5, 1fr);
+    gap: 12px; align-items: center;
+  }
+  .states .lbl {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+  .states .head {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.18em; text-transform: uppercase; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">
+    <span class="num">— 10 —</span>
+    <h1 class="ttl">Buttons</h1>
+    <span class="meta">Primitives · scenes first · grid at the end</span>
+  </div>
+
+  <!-- SCENE 1: prompt pad -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Scene 01</span>
+      <h3 class="nm">In the prompt pad.</h3>
+      <span class="why">Where the primary lives — at the bottom of every meaningful surface.</span>
+    </div>
+
+    <div class="pad-scene">
+      <textarea>I want a Q2 board update. Investors. Measured tone.</textarea>
+      <div class="tools">
+        <button class="btn btn-secondary btn-sm">⊕ Brand</button>
+        <button class="btn btn-secondary btn-sm">◐ Stance</button>
+        <span class="gap"></span>
+        <span class="kbd">⌘ ⏎</span>
+        <button class="btn btn-accent">Generate <span style="font-weight: 700">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 2: list row -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Scene 02</span>
+      <h3 class="nm">Inside a deck row.</h3>
+      <span class="why">Quiet, ghost actions until you hover.</span>
+    </div>
+
+    <div class="deck-row">
+      <div class="thumb"><div class="h"></div><div class="b"></div><div class="b" style="width: 60%"></div></div>
+      <div>
+        <div class="nm">Q2 Board Update — Halcyon &amp; Co.</div>
+        <div class="meta">Edited 12s ago · 12 slides · Editorial broadsheet</div>
+      </div>
+      <span class="pill pill-accent"><span class="dot"></span> Generating</span>
+      <div class="actions">
+        <button class="btn btn-secondary btn-sm">Open</button>
+        <button class="btn btn-ghost btn-sm">⋯</button>
+      </div>
+    </div>
+
+    <div class="deck-row">
+      <div class="thumb"><div class="h"></div><div class="b"></div><div class="b" style="width: 80%"></div></div>
+      <div>
+        <div class="nm">Series A pitch — Forma Labs</div>
+        <div class="meta">Edited 2 days ago · 18 slides · Showroom mono</div>
+      </div>
+      <span class="pill"><span class="dot"></span> Draft</span>
+      <div class="actions">
+        <button class="btn btn-secondary btn-sm">Open</button>
+        <button class="btn btn-ghost btn-sm">⋯</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: toolbar -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Scene 03</span>
+      <h3 class="nm">In the editor toolbar.</h3>
+      <span class="why">Icon-only buttons in a segmented control.</span>
+    </div>
+
+    <div class="toolbar">
+      <div class="seg" style="background: var(--sheet); border: 1px solid var(--hair); border-radius: 8px; padding: 2px;">
+        <button class="ic-btn">▭</button>
+        <button class="ic-btn on">✥</button>
+      </div>
+      <div class="seg" style="background: var(--sheet); border: 1px solid var(--hair); border-radius: 8px; padding: 2px;">
+        <button class="ic-btn">T</button>
+        <button class="ic-btn">▣</button>
+        <button class="ic-btn">◯</button>
+        <button class="ic-btn">▤</button>
+      </div>
+      <span class="gap"></span>
+      <button class="btn btn-secondary btn-sm">Stance ▾</button>
+      <button class="btn btn-ghost btn-sm">100%</button>
+      <button class="btn btn-accent btn-sm">Present →</button>
+    </div>
+  </div>
+
+  <!-- SCENE 4: modal -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Scene 04</span>
+      <h3 class="nm">Modal footer.</h3>
+      <span class="why">Always: cancel left, confirm right. Confirm carries the signal.</span>
+    </div>
+
+    <div class="modal-mock" style="max-width: 480px;">
+      <h3>Switch slide pack?</h3>
+      <p>Your custom edits to the title slide will be preserved. Other layouts will be re-typeset in the new pack's style.</p>
+      <div class="foot">
+        <button class="btn btn-ghost">Cancel</button>
+        <button class="btn btn-secondary">Compare both</button>
+        <button class="btn btn-accent">Switch pack</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 5: irreversible -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Scene 05</span>
+      <h3 class="nm">The irreversible button.</h3>
+      <span class="why">Only one in the system — hold-to-confirm. Reserved for "delete deck."</span>
+    </div>
+
+    <div style="display: flex; gap: 14px; align-items: center;">
+      <button class="hold">
+        <span class="progress"></span>
+        <span class="label">⌫ Hold to delete deck <span class="kbd">2.0 s</span></span>
+      </button>
+      <span class="serif" style="font-style: italic; color: var(--ink-3);">— deletes 12 slides, all exports, share links revoked.</span>
+    </div>
+  </div>
+
+  <!-- State grid (small, at the end) -->
+  <div class="grid-states">
+    <div class="h-row">— State reference · only here, only small</div>
+    <div class="states">
+      <span class="lbl"></span>
+      <span class="head">default</span>
+      <span class="head">hover</span>
+      <span class="head">active</span>
+      <span class="head">disabled</span>
+      <span class="head">loading</span>
+
+      <span class="lbl">accent</span>
+      <button class="btn btn-accent btn-sm">Generate</button>
+      <button class="btn btn-accent btn-sm" style="background: var(--accent-700); border-color: var(--accent-700);">Generate</button>
+      <button class="btn btn-accent btn-sm" style="transform: translateY(1px); background: var(--accent-800); border-color: var(--accent-800);">Generate</button>
+      <button class="btn btn-accent btn-sm" disabled style="opacity: 0.4; cursor: not-allowed;">Generate</button>
+      <button class="btn btn-accent btn-sm">⊙ Generating…</button>
+
+      <span class="lbl">primary</span>
+      <button class="btn btn-primary btn-sm">Save</button>
+      <button class="btn btn-primary btn-sm" style="background: #2A2E36; border-color: #2A2E36;">Save</button>
+      <button class="btn btn-primary btn-sm" style="transform: translateY(1px);">Save</button>
+      <button class="btn btn-primary btn-sm" disabled style="opacity: 0.4; cursor: not-allowed;">Save</button>
+      <button class="btn btn-primary btn-sm">⊙ Saving…</button>
+
+      <span class="lbl">secondary</span>
+      <button class="btn btn-secondary btn-sm">Share</button>
+      <button class="btn btn-secondary btn-sm" style="border-color: var(--ink-3); background: var(--paper-deep);">Share</button>
+      <button class="btn btn-secondary btn-sm" style="transform: translateY(1px); background: var(--paper-deep);">Share</button>
+      <button class="btn btn-secondary btn-sm" disabled style="opacity: 0.4; cursor: not-allowed;">Share</button>
+      <button class="btn btn-secondary btn-sm">⊙ …</button>
+
+      <span class="lbl">ghost</span>
+      <button class="btn btn-ghost btn-sm">Cancel</button>
+      <button class="btn btn-ghost btn-sm" style="background: var(--paper-deep);">Cancel</button>
+      <button class="btn btn-ghost btn-sm" style="transform: translateY(1px);">Cancel</button>
+      <button class="btn btn-ghost btn-sm" disabled style="opacity: 0.4;">Cancel</button>
+      <button class="btn btn-ghost btn-sm">—</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

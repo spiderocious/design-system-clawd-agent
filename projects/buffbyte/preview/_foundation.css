@@ -1,0 +1,309 @@
+/* ============================================================
+   BUFFBYTE — Warm-coach foundation
+   One stance, applied everywhere.
+
+   Frame:   a literate friend leaving notes in pencil in the
+            margin of a paperback book.
+   Surface: warm paper canvas, graphite ink, hairlines.
+   Color:   B&W with semantic-only colour (moss / amber / oxblood).
+   Type:    Inter only — three weights, tabular figures for numbers.
+   Voice:   coach. Constructive, direct, second-person.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---------- Paper & ink ---------- */
+  --paper:        #FAF7F2;   /* warm canvas */
+  --paper-deep:   #F2EEE6;   /* recessed surface */
+  --paper-edge:   #ECE6DA;   /* the edge of a sheet */
+  --sheet:        #FFFDF8;   /* a single sheet on the desk */
+
+  --ink:          #1C1B19;   /* near-black, warm-graphite */
+  --ink-2:        #3A3835;   /* body */
+  --ink-3:        #6B6862;   /* secondary, captions */
+  --ink-4:        #9A968D;   /* tertiary, placeholders */
+  --ink-5:        #C7C2B6;   /* quietest, dividers if needed */
+
+  --hair:         #DDD7CB;   /* hairline */
+  --hair-soft:    #EAE4D6;   /* quieter divider */
+  --rule:         #1C1B19;   /* heavy rule for emphasis (rare) */
+
+  /* ---------- Moss — the single positive accent ---------- */
+  --moss-50:   #F2F5EF;
+  --moss-100:  #E2EADC;
+  --moss-200:  #C4D5B9;
+  --moss-300:  #9DB68E;
+  --moss-400:  #7E9C6F;
+  --moss-500:  #6A8F6A;   /* the working accent */
+  --moss-600:  #547157;
+  --moss-700:  #3F5743;
+  --moss-800:  #2C3D2F;
+
+  /* ---------- Semantic state (used sparingly, always with copy) ----------
+     Oxblood reserved for irreversible / critical-risk only.
+     Amber is mid-impact warning. Moss is positive. */
+  --warn:       #C28A2C;   /* amber */
+  --warn-bg:    #FBF4E5;
+  --warn-edge:  #E6D2A1;
+
+  --crit:       #A0413A;   /* oxblood, never bright red */
+  --crit-bg:    #F8ECEA;
+  --crit-edge:  #DDB8B3;
+
+  --good:       var(--moss-600);
+  --good-bg:    var(--moss-50);
+  --good-edge:  var(--moss-200);
+
+  /* ---------- Type ---------- */
+  --sans:   'Inter', system-ui, -apple-system, sans-serif;
+
+  /* tracking — actually used */
+  --track-display:  -0.028em;
+  --track-h:        -0.014em;
+  --track-body:      0;
+  --track-label:     0.008em;
+  --track-overline:  0.20em;
+
+  /* numerals — tabular, lining; Inter does this cleanly */
+  --num-feats: "tnum" 1, "lnum" 1;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:    2px;
+  --r-soft:     6px;
+  --r-card:     8px;
+  --r-pill:     9999px;
+
+  --gutter:     32px;       /* generous; this is a sparse system */
+  --gap:        24px;
+
+  /* hairlines, not shadows */
+  --line-1: 0 0 0 1px var(--hair);
+  --line-2: 0 0 0 1px var(--ink);
+  --shade-1: 0 1px 0 rgba(28,27,25,0.03);
+  --shade-pop: 0 8px 24px -8px rgba(28,27,25,0.10), 0 0 0 1px var(--hair);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: var(--num-feats);
+  text-rendering: optimizeLegibility;
+}
+
+/* ----- Type primitives ----- */
+.t-display {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 1.05;
+  letter-spacing: var(--track-display);
+  color: var(--ink);
+}
+.t-h1 {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: var(--track-h);
+}
+.t-h2 {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: var(--track-h);
+}
+.t-h3 {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: var(--track-label);
+}
+.t-body {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.t-caption {
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+.t-overline {
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: var(--track-overline);
+  color: var(--ink-3);
+}
+.t-num {
+  font-feature-settings: var(--num-feats);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.t-shout {
+  font-weight: 600;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ----- Buttons ----- */
+.btn {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--track-label);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--r-soft);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out;
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover { background: #0F0E0D; }
+.btn-secondary {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--hair);
+}
+.btn-secondary:hover { background: var(--paper-deep); border-color: var(--ink-4); }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+}
+.btn-ghost:hover { background: var(--paper-deep); color: var(--ink); }
+.btn-danger {
+  background: var(--crit);
+  color: var(--paper);
+}
+.btn-danger:hover { background: #863732; }
+
+/* ----- Inputs ----- */
+.input {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--sheet);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-soft);
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 160ms ease-out, background 160ms ease-out;
+  font-feature-settings: var(--num-feats);
+}
+.input::placeholder { color: var(--ink-4); }
+.input:hover { border-color: var(--ink-4); }
+.input:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: var(--paper);
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+
+/* ----- Pills ----- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  background: var(--paper-deep);
+  color: var(--ink-2);
+  border: 1px solid var(--hair);
+  white-space: nowrap;
+}
+.pill-good { background: var(--good-bg); color: var(--good); border-color: var(--good-edge); }
+.pill-warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-edge); }
+.pill-crit { background: var(--crit-bg); color: var(--crit); border-color: var(--crit-edge); }
+.pill-ink  { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ----- Hairlines / rules ----- */
+hr.hair {
+  border: 0;
+  height: 1px;
+  background: var(--hair);
+  margin: 0;
+}
+hr.rule {
+  border: 0;
+  height: 1px;
+  background: var(--ink);
+  margin: 0;
+}
+
+/* ----- Score bars ----- */
+.bar {
+  height: 4px;
+  background: var(--hair-soft);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.bar > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--ink);
+  border-radius: 999px;
+}
+.bar.good > i { background: var(--moss-500); }
+.bar.warn > i { background: var(--warn); }
+.bar.crit > i { background: var(--crit); }
+
+/* ----- Score ring (mono) ----- */
+.ring {
+  width: 88px;
+  height: 88px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ring svg { transform: rotate(-90deg); }
+.ring .track { stroke: var(--hair); }
+.ring .fill { stroke: var(--ink); transition: stroke-dashoffset 600ms ease-out; }
+.ring.good .fill { stroke: var(--moss-500); }
+.ring.warn .fill { stroke: var(--warn); }
+.ring.crit .fill { stroke: var(--crit); }
+.ring .v {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ----- Icon convention ----- */
+.icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+.icon-lg { width: 20px; height: 20px; stroke-width: 1.5; }

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pack 24 · Soviet poster</title>
+<link rel="stylesheet" href="../_pack.css">
+<style>
+  .sv { background: #F0DCC4; color: #14110D; font-family: 'Inter', sans-serif; padding: 56px 72px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .sv h2 { font-family: 'Inter', sans-serif; font-weight: 800; line-height: 0.88; letter-spacing: -0.025em; margin: 14px 0 0; text-transform: uppercase; }
+  .sv .lbl { font-size: 12px; letter-spacing: 0.22em; color: #B22B16; text-transform: uppercase; font-weight: 700; }
+  .sv .red { color: #B22B16; }
+  .sv .gold { color: #C9A352; }
+  .sv .diagonal { transform: rotate(-3deg); }
+
+  .sv.cover { justify-content: end; }
+  .sv.cover::before { content: ""; position: absolute; top: -50px; right: -50px; width: 280px; height: 280px; background: #B22B16; transform: rotate(15deg); }
+  .sv.cover::after { content: ""; position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; background: #14110D; }
+  .sv.cover h2 { font-size: 96px; max-width: 12ch; position: relative; z-index: 2; }
+  .sv.cover .meta { position: relative; z-index: 2; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; margin-top: 14px; padding-top: 14px; border-top: 4px solid #14110D; font-weight: 700; }
+
+  .sv.agenda h2 { font-size: 56px; margin: 14px 0 22px; }
+  .sv.agenda ol { padding: 0; list-style: none; counter-reset: ag; }
+  .sv.agenda ol li { counter-increment: ag; padding: 12px 0; border-bottom: 4px solid #14110D; display: grid; grid-template-columns: 80px 1fr auto; gap: 16px; align-items: baseline; font-size: 18px; font-weight: 800; text-transform: uppercase; }
+  .sv.agenda ol li::before { content: counter(ag); font-size: 36px; color: #B22B16; line-height: 1; font-weight: 800; }
+
+  .sv.section { justify-content: center; align-items: start; }
+  .sv.section::before { content: ""; position: absolute; top: 50%; right: -100px; width: 320px; height: 320px; background: #B22B16; transform: translateY(-50%) rotate(15deg); }
+  .sv.section h2 { font-size: 110px; max-width: 12ch; position: relative; z-index: 2; }
+
+  .sv.headline h2 { font-size: 64px; max-width: 16ch; }
+  .sv.headline .body { font-size: 16px; line-height: 1.6; max-width: 60ch; margin-top: 22px; font-weight: 500; }
+
+  .sv.bigstat { justify-content: center; }
+  .sv.bigstat h2 { font-size: 32px; margin: 14px 0 28px; }
+  .sv.bigstat .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .sv.bigstat .item { padding: 32px 24px; }
+  .sv.bigstat .item:nth-child(1) { background: #B22B16; color: #fff; }
+  .sv.bigstat .item:nth-child(2) { background: #14110D; color: #fff; }
+  .sv.bigstat .item:nth-child(3) { background: #C9A352; color: #14110D; }
+  .sv.bigstat .stat { font-size: 80px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; }
+  .sv.bigstat .lbl { color: inherit; opacity: 0.85; margin-top: 10px; font-weight: 700; }
+
+  .sv.twocol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .sv.twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding-top: 14px; border-top: 4px solid #14110D; }
+  .sv.twocol .col { padding: 24px 28px; }
+  .sv.twocol .col.beat { background: #14110D; color: #fff; }
+  .sv.twocol .col.miss { background: #B22B16; color: #fff; }
+  .sv.twocol .col h3 { font-size: 22px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.012em; text-transform: uppercase; color: #fff; }
+  .sv.twocol .col ul { font-size: 14px; line-height: 1.7; padding-left: 18px; margin: 0; font-weight: 500; }
+
+  .sv.threecol h2 { font-size: 36px; margin: 12px 0 22px; }
+  .sv.threecol .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .sv.threecol .col { padding: 24px 22px; background: #fff; border: 4px solid #14110D; }
+  .sv.threecol .col .nm { font-size: 11px; letter-spacing: 0.22em; color: #B22B16; text-transform: uppercase; font-weight: 800; }
+  .sv.threecol .col h3 { font-size: 22px; font-weight: 800; margin: 8px 0 8px; letter-spacing: -0.018em; text-transform: uppercase; }
+  .sv.threecol .col p { font-size: 13px; line-height: 1.6; color: #3C3833; margin: 0; font-weight: 500; }
+
+  .sv.imgled { padding: 0; flex-direction: row; }
+  .sv.imgled::before, .sv.imgled::after { display: none; }
+  .sv.imgled .img { flex: 1; background: #14110D; position: relative; overflow: hidden; }
+  .sv.imgled .img::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); width: 200px; height: 8px; background: #B22B16; }
+  .sv.imgled .img::after { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 12px solid #C9A352; border-radius: 50%; }
+  .sv.imgled .copy { flex: 0 0 42%; padding: 56px; display: flex; flex-direction: column; justify-content: end; background: #F0DCC4; }
+  .sv.imgled .copy h2 { font-size: 48px; max-width: 12ch; margin-top: 12px; }
+
+  .sv.quote { justify-content: center; padding: 64px 96px; }
+  .sv.quote .q { font-size: 48px; font-weight: 800; line-height: 1.0; letter-spacing: -0.02em; max-width: 22ch; text-transform: uppercase; }
+  .sv.quote .q .red { background: #B22B16; color: #F0DCC4; padding: 0 6px; }
+  .sv.quote .attr { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 800; margin-top: 28px; }
+
+  .sv.timeline h2 { font-size: 36px; margin: 12px 0 22px; }
+  .sv.timeline .axis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; padding-top: 14px; border-top: 4px solid #14110D; }
+  .sv.timeline .step { padding: 22px 18px; border-right: 4px solid #14110D; }
+  .sv.timeline .step:last-child { border-right: 0; }
+  .sv.timeline .step:nth-child(1) { background: #B22B16; color: #fff; }
+  .sv.timeline .step:nth-child(2) { background: #14110D; color: #fff; }
+  .sv.timeline .step:nth-child(3) { background: #C9A352; color: #14110D; }
+  .sv.timeline .step:nth-child(4) { background: #fff; color: #14110D; }
+  .sv.timeline .step .wk { font-size: 11px; letter-spacing: 0.22em; opacity: 0.85; text-transform: uppercase; font-weight: 800; }
+  .sv.timeline .step h4 { font-size: 19px; font-weight: 800; margin: 6px 0 6px; text-transform: uppercase; letter-spacing: -0.012em; }
+  .sv.timeline .step p { font-size: 12px; line-height: 1.5; opacity: 0.85; margin: 0; font-weight: 500; }
+
+  .sv.team h2 { font-size: 36px; margin: 12px 0 22px; }
+  .sv.team .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 14px; border-top: 4px solid #14110D; }
+  .sv.team .person .img { aspect-ratio: 1/1; background: #14110D; }
+  .sv.team .person:nth-child(2) .img { background: #B22B16; }
+  .sv.team .person:nth-child(3) .img { background: #C9A352; }
+  .sv.team .person:nth-child(4) .img { background: #14110D; }
+  .sv.team .person h4 { font-size: 16px; font-weight: 800; margin: 12px 0 2px; text-transform: uppercase; letter-spacing: -0.012em; }
+  .sv.team .person .role { font-size: 10px; color: #B22B16; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 800; }
+  .sv.team .person p { font-size: 12px; line-height: 1.5; margin: 6px 0 0; font-weight: 500; }
+
+  .sv.coda { justify-content: end; }
+  .sv.coda::before { content: ""; position: absolute; bottom: -80px; right: -80px; width: 320px; height: 320px; background: #B22B16; border-radius: 50%; }
+  .sv.coda h2 { font-size: 120px; position: relative; z-index: 2; max-width: 8ch; }
+  .sv.coda .meta { position: relative; z-index: 2; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 800; margin-top: 18px; padding-top: 14px; border-top: 4px solid #14110D; max-width: 50%; }
+</style>
+</head>
+<body>
+
+<header class="pack-head"><span class="brand">Irisi<span class="dot">.</span></span><div class="crumb"><a href="../index.html">Library</a><span class="sep">/</span><span class="ix">24</span><span class="nm">Soviet poster</span></div><div class="meta"><span>12 layouts</span><span>·</span><a href="../../index.html">← Project</a></div></header>
+
+<section class="pack-hero">
+  <div>
+    <div class="ix">— Pack 24 · Bold</div>
+    <h1>A 1925 constructivist poster.</h1>
+    <p>Cream + hammer-black + red, sometimes industrial gold. Bold geometric sans at extreme scales, diagonals and rotations, large numbers as design elements. Propaganda-cadence.</p>
+  </div>
+  <div class="meta">
+    <div><strong>Best for</strong> · bold consumer brands, music, sports</div>
+    <div><strong>Type</strong> · Inter (extreme scale)</div>
+    <div><strong>Accent</strong> · Red + black on cream</div>
+    <div><strong>Density</strong> · packed</div>
+  </div>
+</section>
+
+<section class="slides">
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">01</span><span class="nm">Cover</span></div><div class="slide"><div class="sv cover">
+    <span class="lbl">— Proclamation 02 / 24 —</span>
+    <h2>Halcyon!<br>Q.2 Review.</h2>
+    <div class="meta"><span class="red">14 · 05 · 2026</span> — For the comrades of the board</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">02</span><span class="nm">Agenda</span></div><div class="slide"><div class="sv agenda">
+    <span class="lbl">— Programme —</span>
+    <h2>Today's order.</h2>
+    <ol>
+      <li><span></span><span>Where we are</span><span class="red">3 MIN</span></li>
+      <li><span></span><span>The honest part</span><span class="red">5 MIN</span></li>
+      <li><span></span><span>What we're cutting</span><span class="red">4 MIN</span></li>
+      <li><span></span><span>Roadmap &amp; risks</span><span class="red">3 MIN</span></li>
+      <li><span></span><span>Asks of the board</span><span class="red">3 MIN</span></li>
+    </ol>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">03</span><span class="nm">Section</span></div><div class="slide"><div class="sv section">
+    <span class="lbl">— Section 01 —</span>
+    <h2>Where<br>we<br>are.</h2>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">04</span><span class="nm">Headline</span></div><div class="slide"><div class="sv headline">
+    <span class="lbl">— Q2 · 2026 · Manifesto —</span>
+    <h2>The quiet rebellion of <span class="red">measured</span> growth.</h2>
+    <div class="body">Most companies confuse motion for progress. We have spent three quarters undoing that, and the numbers — finally — agree. Revenue is up forty-two percent without a single new hire on the GTM team. The reason is not strategy; it is the discipline of saying NO.</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">05</span><span class="nm">Big stat</span></div><div class="slide"><div class="sv bigstat">
+    <span class="lbl">— Three numbers —</span>
+    <h2>Q2 in primaries.</h2>
+    <div class="row">
+      <div class="item"><div class="stat">$4.2M</div><div class="lbl">— ARR</div></div>
+      <div class="item"><div class="stat">+42%</div><div class="lbl">— QoQ</div></div>
+      <div class="item"><div class="stat">9.1</div><div class="lbl">— NPS</div></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">06</span><span class="nm">Two-column</span></div><div class="slide"><div class="sv twocol">
+    <span class="lbl">— Comparative —</span>
+    <h2>Beat / missed.</h2>
+    <div class="cols">
+      <div class="col beat"><h3>Beat plan.</h3><ul><li>Revenue +42% (target +20%)</li><li>NPS 9.1 (target 7.5)</li><li>Velocity 1.4×</li><li>HC efficiency held</li></ul></div>
+      <div class="col miss"><h3>Missed plan.</h3><ul><li>Enterprise churn — 3 logos</li><li>Time-to-hire 67 days</li><li>Onboarding completion 64%</li><li>Q2 partnerships 1 of 3</li></ul></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">07</span><span class="nm">Three-column</span></div><div class="slide"><div class="sv threecol">
+    <span class="lbl">— Sunsets —</span>
+    <h2>Three projects, ended.</h2>
+    <div class="cols">
+      <div class="col"><span class="nm">— I —</span><h3>Mobile rebuild.</h3><p>Two engineers reclaimed. Web is 92% of revenue.</p></div>
+      <div class="col"><span class="nm">— II —</span><h3>Partner portal.</h3><p>3 signs in 18 months. Going 1:1 instead.</p></div>
+      <div class="col"><span class="nm">— III —</span><h3>Second brand.</h3><p>Cannibalised. Consolidate.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">08</span><span class="nm">Image-led</span></div><div class="slide"><div class="sv imgled">
+    <div class="img"></div>
+    <div class="copy">
+      <span class="lbl">— Composition —</span>
+      <h2>The team.<br>Sixteen.</h2>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">09</span><span class="nm">Quote</span></div><div class="slide"><div class="sv quote">
+    <div class="q">"You can't grow your way out of a <span class="red">culture problem</span> — only design your way out."</div>
+    <div class="attr">— B. HOROWITZ</div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">10</span><span class="nm">Timeline</span></div><div class="slide"><div class="sv timeline">
+    <span class="lbl">— Six-week schedule —</span>
+    <h2>Onboarding redesign.</h2>
+    <div class="axis">
+      <div class="step"><span class="wk">— WK 1–2 —</span><h4>Interviews.</h4><p>12 calls. Synthesise.</p></div>
+      <div class="step"><span class="wk">— WK 2–3 —</span><h4>Prototype.</h4><p>2 flows. Pick.</p></div>
+      <div class="step"><span class="wk">— WK 4–5 —</span><h4>Build.</h4><p>2 eng. Beta.</p></div>
+      <div class="step"><span class="wk">— WK 6 —</span><h4>Ship!</h4><p>100% rollout.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">11</span><span class="nm">Team</span></div><div class="slide"><div class="sv team">
+    <span class="lbl">— Asks of the board —</span>
+    <h2>The roster.</h2>
+    <div class="grid">
+      <div class="person"><div class="img"></div><h4>M. Olokun</h4><span class="role">— VP Product</span><p>Promoted Q2.</p></div>
+      <div class="person"><div class="img"></div><h4>Head CS</h4><span class="role">— Intro req</span><p>Series A SaaS.</p></div>
+      <div class="person"><div class="img"></div><h4>Dir. GTM</h4><span class="role">— Intro req</span><p>Devtools.</p></div>
+      <div class="person"><div class="img"></div><h4>Series A</h4><span class="role">— Decision</span><p>Q4 vs Q1.</p></div>
+    </div>
+  </div></div></div>
+
+  <div class="slide-block"><div class="slide-header"><span class="ix">12</span><span class="nm">Coda</span></div><div class="slide"><div class="sv coda">
+    <h2>Forward!</h2>
+    <div class="meta">— halcyon.co/q2 — questions on the record —</div>
+  </div></div></div>
+
+</section>
+
+<footer class="pack-foot"><p>— End of pack 24 · 12 layouts —</p><a href="../index.html">← All slide packs</a></footer>
+
+</body>
+</html>

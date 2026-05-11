@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Irisi · tooltips & hovercards</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .scene { background: var(--sheet); border: 1px solid var(--hair); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; }
+  .scene .h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .scene .h .ix { font-family: var(--mono); font-size: 11px; color: var(--accent-700); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .scene .h .nm { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.018em; margin: 0; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Tooltip chip */
+  .tooltip-chip {
+    background: var(--ink); color: var(--paper);
+    padding: 6px 10px; border-radius: 6px;
+    font-family: var(--sans); font-size: 12px;
+    box-shadow: var(--shade-2);
+    display: inline-flex; align-items: center; gap: 6px;
+    position: relative;
+  }
+  .tooltip-chip::after {
+    content: ""; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%) rotate(45deg);
+    width: 8px; height: 8px; background: var(--ink);
+  }
+  .tooltip-chip .kbd { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.20); color: rgba(255,255,255,0.9); font-size: 10px; }
+
+  /* Popover */
+  .popover {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 16px 18px; min-width: 280px;
+    box-shadow: var(--shade-3);
+    position: relative;
+  }
+  .popover::before {
+    content: ""; position: absolute; top: -7px; left: 24px; transform: rotate(45deg);
+    width: 12px; height: 12px; background: var(--sheet);
+    border-top: 1px solid var(--hair); border-left: 1px solid var(--hair);
+  }
+  .popover h4 { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: -0.015em; margin: 0 0 6px; display: flex; gap: 8px; align-items: center; }
+  .popover h4 .ix { font-family: var(--mono); font-size: 10px; color: var(--accent-700); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+  .popover p { font-size: 13px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+  .popover .actions { display: flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--hair-soft); }
+
+  /* Hovercard — user */
+  .hc {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: 14px;
+    padding: 18px 20px; min-width: 260px;
+    box-shadow: var(--shade-3);
+  }
+  .hc .top { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  .hc .top .nm { font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: -0.015em; }
+  .hc .top .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .hc p { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; line-height: 1.5; }
+  .hc .meta { display: flex; gap: 14px; padding-top: 10px; border-top: 1px solid var(--hair-soft); font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .hc .meta strong { color: var(--ink); }
+
+  /* Hovercard — pack */
+  .hc-pack { min-width: 320px; padding: 14px; }
+  .hc-pack .swatch { aspect-ratio: 16 / 10; border-radius: 6px; margin-bottom: 12px; }
+  .hc-pack h4 { font-family: var(--display); font-weight: 700; font-size: 18px; margin: 0; letter-spacing: -0.018em; }
+  .hc-pack .ix { font-family: var(--mono); font-size: 10px; color: var(--accent-700); letter-spacing: 0.16em; }
+
+  /* Hovercard — slide */
+  .hc-slide { padding: 0; min-width: 280px; overflow: hidden; }
+  .hc-slide .preview { aspect-ratio: 16 / 10; background: #FBFAF7; padding: 14px 18px; color: #14110D; }
+  .hc-slide .preview .head { font-family: 'Source Serif 4', serif; font-size: 14px; line-height: 1.05; letter-spacing: -0.018em; max-width: 14ch; font-weight: 500; }
+  .hc-slide .meta { padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .hc-slide .meta .nm { font-family: var(--display); font-weight: 600; font-size: 13px; }
+  .hc-slide .meta .ct { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; margin-left: auto; }
+
+  .demo-row { display: flex; gap: 32px; align-items: center; padding: 24px; background: var(--paper); border-radius: 12px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stamp">
+    <span class="num">— 28 —</span>
+    <h1 class="ttl">Tooltips · hovercards</h1>
+    <span class="meta">Data &amp; state · explanations on demand</span>
+  </div>
+
+  <!-- Tooltip -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Tooltip chip</span>
+      <h3 class="nm">A short label, on hover.</h3>
+    </div>
+    <div class="demo-row">
+      <button class="btn btn-secondary btn-sm">Stance</button>
+      <span class="serif" style="font-style: italic; color: var(--ink-3);">→</span>
+      <span class="tooltip-chip" style="margin-top: 24px;">
+        Switch slide pack
+        <span class="kbd">⌘ ⇧ S</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Popover -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Popover</span>
+      <h3 class="nm">More than a tip — explain a concept.</h3>
+    </div>
+
+    <div class="demo-row" style="align-items: start;">
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--paper-deep); border-radius: 999px; font-family: var(--mono); font-size: 11px; color: var(--ink); letter-spacing: 0.04em;">
+        ✦ AI confidence: <strong style="color: var(--ok);">94%</strong>
+      </span>
+      <div class="popover">
+        <h4><span class="ix">— Why 94 % —</span></h4>
+        <p>Irisi is highly confident this layout fits your brief. Confidence drops when the brief is ambiguous, the brand is partial, or the requested length doesn't match the content density.</p>
+        <div class="actions">
+          <button class="btn btn-ghost btn-sm">Learn more →</button>
+          <button class="btn btn-secondary btn-sm">See alternatives</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hovercards -->
+  <div class="scene">
+    <div class="h">
+      <span class="ix">— Hovercards</span>
+      <h3 class="nm">Three species — user, pack, slide.</h3>
+    </div>
+
+    <div class="grid-2" style="gap: 32px;">
+      <div>
+        <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin: 0 0 14px;">— Hovering @maya in a comment</p>
+        <div class="hc">
+          <div class="top">
+            <span class="avatar avatar-lg" style="background: var(--accent-100); color: var(--accent-800);">MO</span>
+            <div>
+              <div class="nm">Maya Olokun</div>
+              <div class="role">EDITOR · halcyon.co</div>
+            </div>
+          </div>
+          <p>VP Product. Reviews every board deck. Online — answers in &lt; 5 min.</p>
+          <div class="meta">
+            <span><strong>28</strong> decks</span>
+            <span>·</span>
+            <span><strong>4.6 ★</strong> review</span>
+            <span>·</span>
+            <span><strong>1 yr</strong> on Irisi</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin: 0 0 14px;">— Hovering a stance pill</p>
+        <div class="hc hc-pack">
+          <div class="swatch" style="background: linear-gradient(135deg, #FBFAF7 0% 50%, #14110D 50% 100%);"></div>
+          <div class="ix">— Pack 02 —</div>
+          <h4>Editorial broadsheet</h4>
+          <p style="margin-top: 6px;">12 layouts · Source Serif 4 · best for board, research, analysis decks.</p>
+          <div class="actions" style="display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair-soft);">
+            <button class="btn btn-secondary btn-sm">Apply</button>
+            <button class="btn btn-ghost btn-sm">View 12 layouts →</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin: 0 0 14px;">— Hovering a slide thumbnail in the rail</p>
+        <div class="hc hc-slide">
+          <div class="preview">
+            <div style="font-family: 'Inter', sans-serif; font-size: 8px; letter-spacing: 0.22em; color: #B42318; text-transform: uppercase;">— Quarterly · Q2 —</div>
+            <div class="head" style="margin: 6px 0 8px;">The quiet rebellion of measured growth</div>
+            <hr style="border: 0; border-top: 1px solid #14110D; margin: 0;">
+          </div>
+          <div class="meta">
+            <span class="nm">03 · Headline</span>
+            <span class="ct">edited 38s ago</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="serif" style="font-style: italic; color: var(--ink-3); font-size: 13px; margin: 0 0 14px;">— Hovering a brand colour swatch</p>
+        <div class="hc">
+          <div class="top">
+            <span style="width: 56px; height: 56px; border-radius: 12px; background: #B42318; border: 1px solid var(--hair);"></span>
+            <div>
+              <div class="nm">halcyon-red</div>
+              <div class="role">SIGNAL · #B42318</div>
+            </div>
+          </div>
+          <p>Used as the kicker colour on every editorial layout, and on the irreversible-action button.</p>
+          <div class="meta">
+            <span>RGB <strong>180 35 24</strong></span>
+            <span>·</span>
+            <span>used on <strong>14</strong> slides</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
