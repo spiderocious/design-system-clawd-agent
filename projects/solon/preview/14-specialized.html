@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · specialized inputs</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  /* Naira input */
+  .ngn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+
+  /* PU code */
+  .pu-input { display: inline-flex; align-items: stretch; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--paper); height: 40px; overflow: hidden; }
+  .pu-input .seg { font-family: var(--mono); font-size: 14px; padding: 0 14px; display: inline-flex; align-items: center; border-right: 1px solid var(--hair); }
+  .pu-input .seg input { border: 0; background: transparent; font-family: var(--mono); font-size: 14px; outline: none; width: 70px; text-align: center; letter-spacing: 0.04em; }
+  .pu-input .seg:last-child { border-right: 0; }
+  .pu-input .seg .lbl { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-right: 8px; }
+
+  /* Issue tag picker */
+  .issue-pick {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 10px 12px;
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+  }
+  .issue-tag { background: var(--paper-2); border: 1px solid var(--hair-soft); padding: 4px 10px; border-radius: var(--r-card); font-family: var(--sans); font-size: 12px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+  .issue-tag.on { background: var(--forest-600); border-color: var(--forest-600); color: var(--paper); }
+  .issue-tag .x { font-family: var(--mono); font-size: 11px; opacity: 0.7; cursor: pointer; }
+
+  /* Severity slider */
+  .sev { display: flex; gap: 2px; }
+  .sev .seg { flex: 1; height: 32px; border: 1px solid var(--hair); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; color: var(--ink-3); cursor: pointer; }
+  .sev .seg:first-child { border-radius: var(--r-card) 0 0 var(--r-card); }
+  .sev .seg:last-child { border-radius: 0 var(--r-card) var(--r-card) 0; }
+  .sev .seg.on { background: var(--orange); border-color: var(--orange); color: var(--paper); font-weight: 600; }
+  .sev .seg.crit.on { background: var(--crit); border-color: var(--crit); }
+
+  /* OTP */
+  .otp { display: inline-flex; gap: 6px; }
+  .otp input {
+    width: 40px; height: 48px;
+    text-align: center; font-family: var(--mono); font-size: 22px;
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    background: var(--paper); outline: none;
+  }
+  .otp input:focus { border-color: var(--forest-600); box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.18); }
+
+  /* AI prompt input */
+  .ai-prompt {
+    border: 1px solid var(--ink); border-radius: var(--r-card);
+    background: var(--sheet); padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .ai-prompt .tag-row { display: flex; gap: 6px; align-items: center; }
+  .ai-prompt .pre { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--forest-700); }
+  .ai-prompt textarea {
+    width: 100%; border: 0; background: transparent;
+    font-family: var(--serif); font-size: 15px; line-height: 1.55;
+    resize: none; outline: none; min-height: 60px;
+    color: var(--ink);
+  }
+  .ai-prompt textarea::placeholder { color: var(--ink-3); font-style: italic; }
+  .ai-prompt .foot { display: flex; align-items: center; gap: 12px; padding-top: 10px; border-top: 1px solid var(--hair); }
+  .ai-prompt .foot .hint { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); flex: 1; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">14 / PRIMITIVES</div>
+    <div class="ttl">Specialized inputs</div>
+    <div class="sub">— Naira, polling-unit code, issues, severity, OTP, copilot.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Domain-specific inputs that earn their own shape. Each is a small instrument, not a generic field with a label slapped on it.
+  </p>
+
+  <div class="scene">
+    <div class="scene-h">Naira amount<span class="ttl">finance · expense capture</span></div>
+    <div class="ngn-row">
+      <div class="field">
+        <label class="f-label">Expense amount</label>
+        <div class="f-wrap">
+          <span class="f-prefix" style="font-size: 14px; padding: 0 14px;">₦</span>
+          <input class="f f-mono" value="2,450,000" />
+          <span class="f-prefix" style="background: transparent; border-right: 0; border-left: 1px solid var(--hair); color: var(--ink-3);">NGN</span>
+        </div>
+        <div class="hint" style="font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 4px;">2.4% of cumulative spend · within media sub-cap</div>
+      </div>
+      <div class="field">
+        <label class="f-label">Donor amount</label>
+        <div class="f-wrap">
+          <span class="f-prefix" style="font-size: 14px; padding: 0 14px;">₦</span>
+          <input class="f f-mono" value="5,000,000" />
+          <span class="f-prefix" style="background: var(--orange-soft); color: var(--orange); border-left: 1px solid var(--orange-edge);">⚑ HIGH RISK</span>
+        </div>
+        <div class="hint" style="font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--orange); margin-top: 4px;">Round-number cash at 100% of statutory individual cap. Donor screening required.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Polling-unit code<span class="ttl">three-segment, mono</span></div>
+    <div class="row" style="align-items: flex-start;">
+      <div class="field">
+        <label class="f-label">PU identifier</label>
+        <div class="pu-input">
+          <span class="seg"><span class="lbl">LGA</span><input value="008" /></span>
+          <span class="seg"><span class="lbl">WARD</span><input value="04" /></span>
+          <span class="seg"><span class="lbl">PU</span><input value="02" /></span>
+        </div>
+        <div class="hint" style="font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 4px;">Resolves to <span class="mono" style="font-style: normal; color: var(--ink);">St. Mary's Primary, Onitsha North, ward 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Issue tags<span class="ttl">platform tags, multi-select</span></div>
+    <div class="issue-pick">
+      <span class="issue-tag on">Security <span class="x">×</span></span>
+      <span class="issue-tag on">Education <span class="x">×</span></span>
+      <span class="issue-tag on">Manufacturing revival <span class="x">×</span></span>
+      <span class="issue-tag">Healthcare</span>
+      <span class="issue-tag">Fuel subsidy</span>
+      <span class="issue-tag">Naira reform</span>
+      <span class="issue-tag">Anti-corruption</span>
+      <span class="issue-tag">Youth employment</span>
+      <span class="issue-tag">+ add</span>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Incident severity<span class="ttl">1–5, 4+ pages CM in real time</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div class="sev">
+        <div class="seg">1 · low</div>
+        <div class="seg">2 · minor</div>
+        <div class="seg on">3 · serious</div>
+        <div class="seg on">4 · alert CM</div>
+        <div class="seg on crit">5 · crit</div>
+      </div>
+      <div class="hint" style="font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3);">Severity 4+ pages the campaign manager and triggers a War Room banner. Severity 5 (violence, BVAS-wide failure, large-scale vote-buying) escalates to legal dispatch.</div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">OTP<span class="ttl">citizen reporter verification · 6 digits</span></div>
+    <div class="otp">
+      <input value="0" maxlength="1" /><input value="4" maxlength="1" /><input value="1" maxlength="1" /><input value="2" maxlength="1" /><input value="" maxlength="1" /><input value="" maxlength="1" />
+    </div>
+    <div class="hint" style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 8px; letter-spacing: 0.08em;">SENT TO +234 80 *** **42 · resend in 0:48</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">AI copilot prompt<span class="ttl">natural-language scenario input</span></div>
+    <div class="ai-prompt">
+      <div class="tag-row">
+        <span class="pre">ASK SOLON ▸</span>
+        <span class="mono" style="font-size: 10.5px; color: var(--ink-3);">scoped to Anambra Central · Senate</span>
+      </div>
+      <textarea placeholder="What happens in Anambra Central if Soludo backs the LP candidate and APGA fields a weak alternative?">What happens in Anambra Central if Soludo backs the LP candidate and APGA fields a weak alternative? Apply +8pt youth turnout and a moderate BVAS-failure adjustment.</textarea>
+      <div class="foot">
+        <span class="hint">Solon is in <strong style="color: var(--forest-700); font-weight: 500;">neutral analyst</strong> mode. Voter-suppression queries will be blocked and logged.</span>
+        <button class="b b-secondary b-sm">Save scenario</button>
+        <button class="b b-primary b-sm">Run</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

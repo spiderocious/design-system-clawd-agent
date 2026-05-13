@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Trending board · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<link rel="stylesheet" href="_app.css" />
+<style>
+  /* platform tabs */
+  .plat-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+  .plat-tab {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid var(--hair); border-radius: var(--r-soft);
+    background: var(--sheet);
+    font-size: 13px; cursor: pointer; color: var(--ink-2); font-weight: 500;
+  }
+  .plat-tab:hover { border-color: var(--ink-4); }
+  .plat-tab.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .plat-tab .ct { font-size: 11px; padding: 2px 6px; border-radius: 999px; background: var(--paper-deep); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .plat-tab.on .ct { background: rgba(255,255,255,0.15); color: var(--paper); }
+
+  /* Top of the board: hero featured topic */
+  .featured {
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r-card);
+    padding: 36px 40px;
+    display: grid; grid-template-columns: 1fr 220px; gap: 36px; align-items: center;
+    margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .featured h2 { font-size: 44px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 8px; color: var(--paper); }
+  .featured .sub { font-size: 13.5px; color: rgba(255,255,255,0.65); margin-bottom: 16px; max-width: 56ch; line-height: 1.55; }
+  .featured .meta-row { display: flex; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 18px; flex-wrap: wrap; }
+  .featured .meta-row .item { display: inline-flex; gap: 6px; align-items: center; }
+  .featured .meta-row b { color: var(--paper); font-weight: 500; }
+  .featured .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .featured .tag-row .pill {
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.12);
+  }
+  .featured .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .featured .ring { width: 180px; height: 180px; position: relative; }
+  .featured .ring svg { width: 100%; height: 100%; }
+  .featured .ring .v { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .featured .ring .v .n { font-size: 52px; font-weight: 600; letter-spacing: -0.03em; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums; }
+  .featured .ring .v .u { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: var(--track-overline); margin-top: 6px; }
+  .featured .live-pip {
+    position: absolute; top: 28px; right: 32px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: var(--track-overline);
+  }
+  .featured .live-pip span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(83,58,253,0.25); }
+
+  /* trending list */
+  .list-card { background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden; }
+  .list-card .h-row {
+    display: grid; grid-template-columns: 44px 1fr 100px 110px 110px 44px;
+    padding: 12px 24px; gap: 18px;
+    font-size: 10.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline);
+    border-bottom: 1px solid var(--hair); background: var(--paper);
+  }
+  .trow {
+    display: grid; grid-template-columns: 44px 1fr 100px 110px 110px 44px;
+    padding: 16px 24px; gap: 18px; align-items: center;
+    border-top: 1px solid var(--hair); cursor: pointer;
+  }
+  .trow:first-of-type { border-top: 0; }
+  .trow:hover { background: var(--paper); }
+  .trow .rank {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: var(--ink); color: var(--paper);
+    display: grid; place-items: center; font-size: 11px; font-weight: 500;
+  }
+  .trow .rank.lead { background: var(--accent); }
+  .trow .name { font-size: 15px; font-weight: 500; }
+  .trow .name .tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+  .trow .v { text-align: right; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .trow .v .l { font-size: 10.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); margin-top: 2px; font-weight: 400; }
+  .trow .eng { text-align: right; }
+  .trow .eng .pct { font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .trow .eng .bar { width: 100%; margin-top: 6px; }
+  .trow .arrow { color: var(--ink-3); }
+  .trow:hover .arrow { color: var(--ink); }
+
+  /* secondary insight column */
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 28px; }
+  .insight-card { background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .insight-card h3 { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.012em; }
+  .insight-card .quote { border-left: 2px solid var(--accent); padding-left: 12px; font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+  .insight-card .formats { display: flex; flex-direction: column; gap: 10px; }
+  .insight-card .fmt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; background: var(--paper); border: 1px solid var(--hair); border-radius: var(--r-soft);
+    font-size: 12.5px;
+  }
+  .insight-card .fmt .pct { margin-left: auto; font-weight: 500; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<aside class="app-side">
+  <div class="app-brand"><div class="mark">B</div><div class="name">BuffByte</div></div>
+  <nav class="app-nav">
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Dashboard</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg>Content analysis</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M4 5h14v14H4z"/><path d="M8 9h6M8 13h6M8 17h4"/></svg>Script analysis</a>
+    <a class="on"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>Trending</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M5 7h14v10H5z"/><circle cx="12" cy="12" r="3"/></svg>Teleprompter</a>
+    <div class="nav-group-h">Library</div>
+    <a><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>All drafts <span style="margin-left:auto;font-size:11px;color:var(--ink-3);">12</span></a>
+  </nav>
+  <div class="meta"><div class="user"><span class="av">AA</span>Adewale Adeniji</div>Free plan · 138 / 200</div>
+</aside>
+
+<header class="app-top">
+  <div class="crumb"><b>Trending</b><span style="color:var(--ink-4);">/</span><span>Nigeria · today</span></div>
+  <div class="sp"></div>
+  <button class="btn btn-secondary btn-sm">
+    <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+    Region: NG
+  </button>
+  <button class="btn btn-primary btn-sm">Draft from a trending topic</button>
+</header>
+
+<main class="app-main">
+
+  <div class="page-h">
+    <div>
+      <h1>What's trending now</h1>
+      <div class="sub">Live data from twitter_api, instagram_insights, tiktok_analytics. Updated 30 seconds ago.</div>
+    </div>
+    <div class="actions">
+      <span class="status live"><span class="pip"></span>Live · 85% confidence</span>
+    </div>
+  </div>
+
+  <!-- Platform tabs -->
+  <div class="plat-tabs">
+    <div class="plat-tab on">𝕏 Twitter <span class="ct">10</span></div>
+    <div class="plat-tab">In Instagram <span class="ct">8</span></div>
+    <div class="plat-tab">Tk TikTok <span class="ct">12</span></div>
+    <div class="plat-tab">Li LinkedIn <span class="ct">5</span></div>
+    <div class="plat-tab">Yt YouTube <span class="ct">7</span></div>
+  </div>
+
+  <!-- Featured -->
+  <section class="featured">
+    <div class="live-pip"><span></span>Live · rising 3 days</div>
+    <div>
+      <div class="t-overline" style="color:rgba(255,255,255,0.55);margin-bottom:8px;">Featured · #1 on Twitter NG</div>
+      <h2>#HildaBaci</h2>
+      <p class="sub">Three days into a national conversation — large-scale-cooking content is converging into a single repeatable format on TikTok + Instagram. Posts framed as "behind-the-scenes" carry 89 % success rate.</p>
+      <div class="meta-row">
+        <span class="item"><b>58.0K</b> volume</span>
+        <span class="item"><b>91%</b> engagement</span>
+        <span class="item"><b>25–34</b> lead audience</span>
+        <span class="item">Reach <b>2.3M</b></span>
+      </div>
+      <div class="tag-row">
+        <span class="pill">jollof_rice</span>
+        <span class="pill">guinness_world_record</span>
+        <span class="pill">behind_the_scenes</span>
+        <span class="pill">video</span>
+        <span class="pill">text</span>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:8px;">
+        <button class="btn btn-primary btn-sm">Draft from this</button>
+        <button class="btn btn-secondary btn-sm" style="background:transparent;color:var(--paper);border-color:rgba(255,255,255,0.2);">Open insight</button>
+      </div>
+    </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 180 180">
+          <circle cx="90" cy="90" r="78" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="none"/>
+          <circle cx="90" cy="90" r="78" stroke="var(--accent)" stroke-width="6" fill="none"
+                  stroke-dasharray="490.1" stroke-dashoffset="44" stroke-linecap="round" transform="rotate(-90 90 90)"/>
+        </svg>
+        <div class="v">
+          <div>
+            <div class="n">91%</div>
+            <div class="u">Engagement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- List -->
+  <div class="list-card">
+    <div class="h-row">
+      <span>Rank</span>
+      <span>Topic</span>
+      <span style="text-align:right;">Volume</span>
+      <span style="text-align:right;">Engagement</span>
+      <span style="text-align:right;">Trend</span>
+      <span></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank lead">2</span>
+      <div class="name">#JollofRice
+        <div class="tags"><span class="pill">nigerian_food</span><span class="pill">world_record</span></div>
+      </div>
+      <div class="v">42.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct t-accent">84%</div><div class="bar"><i style="width:84%;"></i></div></div>
+      <div class="v" style="color:var(--accent);">↑ rising</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">3</span>
+      <div class="name">#Tottenham
+        <div class="tags"><span class="pill">football</span><span class="pill">premier_league</span></div>
+      </div>
+      <div class="v">35.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct">74%</div><div class="bar"><i style="width:74%;"></i></div></div>
+      <div class="v" style="color:var(--ink-3);">— stable</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">4</span>
+      <div class="name">#Atiku
+        <div class="tags"><span class="pill">politics</span><span class="pill">opposition</span></div>
+      </div>
+      <div class="v">28.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct">62%</div><div class="bar"><i style="width:62%;"></i></div></div>
+      <div class="v" style="color:var(--warn-deep);">↓ cooling</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">5</span>
+      <div class="name">#NaijaTwitter
+        <div class="tags"><span class="pill">community</span><span class="pill">culture</span></div>
+      </div>
+      <div class="v">21.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct t-accent">58%</div><div class="bar"><i style="width:58%;"></i></div></div>
+      <div class="v" style="color:var(--accent);">↑ rising</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">6</span>
+      <div class="name">#BuildInPublic
+        <div class="tags"><span class="pill">creators</span><span class="pill">indie</span><span class="pill">saas</span></div>
+      </div>
+      <div class="v">18.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct">68%</div><div class="bar"><i style="width:68%;"></i></div></div>
+      <div class="v" style="color:var(--accent);">★ matches you</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">7</span>
+      <div class="name">#AIContent
+        <div class="tags"><span class="pill">tools</span><span class="pill">creators</span></div>
+      </div>
+      <div class="v">14.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct">61%</div><div class="bar"><i style="width:61%;"></i></div></div>
+      <div class="v" style="color:var(--accent);">★ matches you</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="trow">
+      <span class="rank">8</span>
+      <div class="name">#LagosCheck
+        <div class="tags"><span class="pill">lifestyle</span><span class="pill">travel</span></div>
+      </div>
+      <div class="v">11.0K<div class="l">posts</div></div>
+      <div class="eng"><div class="pct">54%</div><div class="bar"><i style="width:54%;"></i></div></div>
+      <div class="v" style="color:var(--ink-3);">— stable</div>
+      <span class="arrow"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+  </div>
+
+  <!-- Format insights -->
+  <div class="grid">
+    <div class="insight-card">
+      <h3>Viral formats this week · NG</h3>
+      <p class="quote">"Behind-the-scenes" + "large-scale-cooking" + "record-attempts" is the highest-converting pattern. Twitter carries the setup; TikTok carries the payoff.</p>
+
+      <div class="formats">
+        <div class="fmt">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:var(--accent);"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg>
+          Recipe testing videos
+          <span class="pill">TikTok</span><span class="pill">Instagram</span>
+          <span class="pct t-accent">89%</span>
+        </div>
+        <div class="fmt">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:var(--accent);"><path d="M4 4h16v8H4z"/><path d="M4 12l8 8 8-8"/></svg>
+          Build-in-public threads
+          <span class="pill">Twitter</span>
+          <span class="pct t-accent">82%</span>
+        </div>
+        <div class="fmt">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:var(--accent);"><path d="M5 12h14M12 5v14"/></svg>
+          Political commentary
+          <span class="pill">Twitter</span><span class="pill">Instagram</span>
+          <span class="pct">74%</span>
+        </div>
+        <div class="fmt">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:var(--ink-3);"><path d="M5 5h14v14H5z"/></svg>
+          City vlogs
+          <span class="pill">TikTok</span><span class="pill">YouTube</span>
+          <span class="pct">68%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <h3>Peak posting times</h3>
+      <p class="t-caption">Based on your audience in NG over the past 14 days.</p>
+      <div class="formats">
+        <div class="fmt">
+          <span style="font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;">9:00 AM</span>
+          <span class="t-caption">Tuesday · professional peak</span>
+          <span class="pct t-accent">+25%</span>
+        </div>
+        <div class="fmt">
+          <span style="font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;">1:00 PM</span>
+          <span class="t-caption">Wednesday · lunch peak</span>
+          <span class="pct t-accent">+18%</span>
+        </div>
+        <div class="fmt">
+          <span style="font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;">3:00 PM</span>
+          <span class="t-caption">Thursday · afternoon focus</span>
+          <span class="pct t-accent">+15%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

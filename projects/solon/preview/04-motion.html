@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · motion</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .motion-row { display: grid; grid-template-columns: 220px 1fr 280px; gap: 24px; padding: 22px 0; border-top: 1px solid var(--hair); align-items: center; }
+  .motion-row .lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; }
+  .motion-row .demo { display: flex; align-items: center; }
+  .motion-row .cap { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; line-height: 1.5; }
+
+  .demo-card {
+    padding: 14px 20px;
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    cursor: pointer;
+  }
+
+  .lift { transition: transform 200ms var(--ease), box-shadow 200ms var(--ease); }
+  .lift:hover { transform: translateY(-2px); box-shadow: var(--shade-pop); }
+
+  .reveal { transition: opacity 200ms var(--ease), transform 200ms var(--ease); }
+  .reveal:hover { opacity: 0.6; transform: translateX(2px); }
+
+  .tick-row {
+    display: flex; gap: 0; align-items: center; padding: 8px 12px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+  }
+  .tick { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 28px; font-weight: 500; }
+  .tick-delta { font-family: var(--mono); font-size: 11px; color: var(--forest-600); margin-left: 12px; padding: 2px 6px; background: var(--forest-50); border-radius: 3px; }
+
+  .scrubber {
+    height: 36px; padding: 0 16px; background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  }
+  .scrubber .track { flex: 1; height: 2px; background: var(--hair); position: relative; }
+  .scrubber .track::after { content: ""; position: absolute; left: 0; top: 0; width: 38%; height: 2px; background: var(--forest-600); }
+  .scrubber .knob { position: absolute; left: 38%; top: -5px; width: 12px; height: 12px; background: var(--forest-600); border-radius: 50%; transform: translateX(-50%); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">04 / FOUNDATION</div>
+    <div class="ttl">Motion</div>
+    <div class="sub">— paper, not springs.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Solon moves slowly and rarely. Easing is one curve only — <span class="mono" style="font-size: 12px; color: var(--ink);">cubic-bezier(0.2, 0.6, 0.2, 1)</span>. Three durations: 120ms for instant feedback, 200ms for paper lifts, 320ms for modal entries. The War Room values <em>tick</em> rather than animate — one-frame increments, no easing on numbers. A spring would feel wrong on an order paper.
+  </p>
+
+  <div class="motion-row">
+    <div class="lbl">120ms · feedback</div>
+    <div class="demo"><button class="b b-primary">Run scenario</button></div>
+    <div class="cap">Hover and press on every interactive element. Background colour cross-fades; nothing translates or scales.</div>
+  </div>
+
+  <div class="motion-row">
+    <div class="lbl">200ms · paper lift</div>
+    <div class="demo">
+      <div class="demo-card lift" style="width: 220px;">
+        <div class="overline">Polling unit</div>
+        <div style="font-family: var(--serif); font-size: 16px; font-weight: 600;">St. Mary's Primary</div>
+        <div class="rec-id" style="margin-top: 4px;">PU 008-04-02</div>
+      </div>
+    </div>
+    <div class="cap">Cards lift 2px and gain a popover shadow on hover. The lift never bounces. Used on the polling-unit list, the constituency map drill-in card, and the scenario tile.</div>
+  </div>
+
+  <div class="motion-row">
+    <div class="lbl">200ms · scrubber</div>
+    <div class="demo">
+      <div class="scrubber" style="width: 100%;">
+        <span>Turnout</span>
+        <div class="track"><span class="knob"></span></div>
+        <span class="mono">±2.4 pts</span>
+      </div>
+    </div>
+    <div class="cap">Lever scrubbers — turnout, demographic shift, alliance — slide with linear easing. The bar fills behind the knob in the same 200ms.</div>
+  </div>
+
+  <div class="motion-row">
+    <div class="lbl">tick · no easing</div>
+    <div class="demo">
+      <div class="tick-row">
+        <span class="tick">412</span>
+        <span class="tick-delta">+18 PU last 60s</span>
+      </div>
+    </div>
+    <div class="cap">War Room counts step. The tally rolls one-frame at a time; the delta chip appears full-opacity, holds for 4s, fades. Numbers never tween between values.</div>
+  </div>
+
+  <div class="motion-row">
+    <div class="lbl">320ms · modal</div>
+    <div class="demo"><div class="reveal demo-card" style="width: 220px;"><div class="overline">Confirm</div><div style="font-family: var(--serif); font-size: 15px;">Withdraw candidate</div></div></div>
+    <div class="cap">Modals scale from 0.98 to 1.0 and fade in over 320ms. The backdrop fades to a 40% ink tint over the same duration. Hover this card to feel the curve.</div>
+  </div>
+
+  <div class="motion-row">
+    <div class="lbl">never</div>
+    <div class="demo"><span class="serif" style="font-size: 14px; color: var(--ink-3); font-style: italic;">No springs. No parallax. No skeleton shimmer.</span></div>
+    <div class="cap">Springs feel cheap on an order paper. Parallax breaks the document metaphor. Skeleton shimmer is replaced by faint pulse-on-rule.</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Tutor profile</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+  .shell { max-width: 1240px; margin: 0 auto; padding: 36px 48px 96px; }
+
+  /* topbar (same as search) */
+  .topbar { display: flex; align-items: center; gap: 18px; padding-bottom: 22px; margin-bottom: 28px; border-bottom: 1px solid var(--hair); }
+  .brand { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.014em; }
+  .brand .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); margin-right: 8px; transform: translateY(-2px); }
+  .top-spacer { flex: 1; }
+  .top-link { font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-decoration: none; }
+
+  .back { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; color: var(--ink-3); text-decoration: none; margin-bottom: 24px; }
+  .back:hover { color: var(--ink); }
+
+  /* hero */
+  .hero {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 32px; align-items: center;
+    padding-bottom: 36px; margin-bottom: 36px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .hero-photo { width: 180px; height: 180px; border-radius: 22px; background: linear-gradient(135deg, #D9C9A9, #B59F76); border: 1px solid #C2B69B; }
+  .hero h1 { font-family: var(--serif); font-size: 52px; font-weight: 500; letter-spacing: -0.024em; margin: 14px 0 8px; line-height: 1.02; }
+  .hero .role { font-size: 15px; color: var(--ink-3); margin-bottom: 18px; }
+  .hero .quote { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.5; color: var(--ink); max-width: 56ch; margin: 0; letter-spacing: -0.01em; border-left: 2px solid var(--green-500); padding-left: 18px; }
+  .hero .marks { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+
+  /* layout */
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: flex-start; }
+
+  /* sections */
+  section.block { margin-bottom: 44px; }
+  section.block .h-eye { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 8px; }
+  section.block h2 { font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: -0.018em; margin: 0 0 18px; line-height: 1.15; }
+  section.block .body { font-family: var(--serif); font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0; max-width: 60ch; }
+  section.block .body p { margin: 0 0 14px; }
+  section.block .body p:last-child { margin-bottom: 0; }
+
+  /* stats strip */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 18px; margin-bottom: 36px; }
+  .stat { padding: 22px 24px; border-right: 1px solid var(--hair); }
+  .stat:last-child { border-right: 0; }
+  .stat .l { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+  .stat .v { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.014em; line-height: 1; }
+  .stat .v.mono { font-family: var(--mono); }
+  .stat .s { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+
+  /* credentials */
+  .cred-list { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 16px; }
+  .cred { display: grid; grid-template-columns: 86px 1fr auto; gap: 22px; padding: 20px 24px; border-bottom: 1px solid var(--hair); align-items: center; }
+  .cred:last-child { border-bottom: 0; }
+  .cred-year { font-family: var(--mono); font-size: 13px; color: var(--ink-3); }
+  .cred-title { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; line-height: 1.2; }
+  .cred-where { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; letter-spacing: 0.02em; }
+
+  /* Sunday note */
+  .note-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 18px; padding: 28px 32px; }
+  .note-date { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .note-title { font-family: var(--serif); font-size: 24px; font-weight: 500; letter-spacing: -0.014em; margin: 6px 0 14px; line-height: 1.2; }
+  .note-body { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.65; color: var(--ink-2); }
+  .note-body p { margin: 0 0 12px; }
+
+  /* right rail (sticky) */
+  .rail { position: sticky; top: 28px; }
+  .rail-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 24px; }
+  .rail-card .row1 { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--hair); }
+  .rail-card .row1 .lab { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+  .rail-card .row2 { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--hair); }
+  .rail-card .row2 .lab { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+  .rail-card .tip { font-size: 12px; color: var(--ink-3); margin-top: 12px; text-align: center; line-height: 1.55; }
+
+  .rail-secondary { background: var(--info-bg); border: 1px solid var(--info-edge); border-radius: 16px; padding: 18px 20px; margin-top: 14px; color: var(--info); }
+  .rail-secondary .h { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 6px; }
+  .rail-secondary .b { font-size: 12.5px; line-height: 1.55; }
+
+  /* small actions row */
+  .small-actions { display: flex; gap: 12px; margin-top: 16px; }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="topbar">
+    <div class="brand"><span class="dot"></span>Tutorly</div>
+    <div class="top-spacer"></div>
+    <a class="top-link" href="30-search-results.html">Search</a>
+    <a class="top-link" href="#">Saved</a>
+    <a class="top-link" href="#">Inbox</a>
+    <div class="avatar avatar-sm" style="background: linear-gradient(135deg, #CFC6AE, #998E68);"></div>
+  </header>
+
+  <a class="back" href="30-search-results.html">← Back to 87 tutors near Lekki</a>
+
+  <section class="hero">
+    <div class="hero-photo"></div>
+    <div>
+      <div class="marks">
+        <span class="verified">Identity verified</span>
+        <span class="chip chip-sage chip-dot">Available this week</span>
+        <span class="chip chip-paper">In-person + online</span>
+      </div>
+      <h1>Marcus K.</h1>
+      <p class="role">Further Mathematics &amp; Physics · Lekki, Lagos · 4.2 km from you</p>
+      <blockquote class="quote">"I teach mathematics the way I wish I'd been taught — slowly, with the why before the how."</blockquote>
+    </div>
+  </section>
+
+  <div class="layout">
+
+    <!-- Left column · the reading -->
+    <main>
+
+      <div class="stats">
+        <div class="stat"><div class="l">Teaching</div><div class="v">8 years</div><div class="s">since 2018</div></div>
+        <div class="stat"><div class="l">Students taught</div><div class="v mono tabular">142</div><div class="s">14 currently</div></div>
+        <div class="stat"><div class="l">Lesson rate</div><div class="v mono tabular">₦12k</div><div class="s">per hour</div></div>
+        <div class="stat"><div class="l">Connect fee</div><div class="v mono tabular">₦2.5k</div><div class="s">one-time</div></div>
+      </div>
+
+      <section class="block">
+        <div class="h-eye">About Marcus</div>
+        <h2>An eight-year teacher of Cambridge mathematics, written for parents who'd rather hear from him than from a star rating.</h2>
+        <div class="body">
+          <p>Marcus has been teaching A-Level Mathematics in Lekki since 2018, after three years of full-time teaching at St. Paul's School, London. He works with roughly fifteen students a year, with a deliberate focus on building intuition before drill — most of them go on to read engineering or economics at Lagos, Ibadan, or abroad.</p>
+          <p>He writes a Sunday note for parents at the end of each week — a single problem from the week, explained in plain language, with attention to the question <em>before</em> the answer. Parents read these to younger children at the kitchen table.</p>
+          <p>Lessons run in person at his Lekki Phase 1 study (a quiet room with a whiteboard and good light) or online via Tutorly's built-in video. He never schedules more than two lessons in an evening.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="h-eye">Education &amp; teaching history</div>
+        <h2>What Marcus has done</h2>
+
+        <div class="cred-list">
+          <div class="cred">
+            <div class="cred-year">2016</div>
+            <div>
+              <div class="cred-title">BSc Mathematics (Hons.)</div>
+              <div class="cred-where">University of Cambridge · Trinity College</div>
+            </div>
+            <span class="verified">Verified</span>
+          </div>
+          <div class="cred">
+            <div class="cred-year">2018</div>
+            <div>
+              <div class="cred-title">PGCE Secondary · Mathematics</div>
+              <div class="cred-where">UCL Institute of Education · London</div>
+            </div>
+            <span class="verified">Verified</span>
+          </div>
+          <div class="cred">
+            <div class="cred-year">2018–2021</div>
+            <div>
+              <div class="cred-title">Mathematics teacher</div>
+              <div class="cred-where">St. Paul's School · London · Years 10 to 13</div>
+            </div>
+            <span class="verified">Verified</span>
+          </div>
+          <div class="cred">
+            <div class="cred-year">2022–</div>
+            <div>
+              <div class="cred-title">Private tutor · A-Level, SAT, WAEC preparation</div>
+              <div class="cred-where">Lagos · 142 students taught</div>
+            </div>
+            <span class="verified">Verified</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="h-eye">From Marcus's Sunday notes</div>
+        <h2>"Why the second derivative isn't 'the slope of the slope'"</h2>
+        <div class="note-card">
+          <div class="note-date">12 April 2026</div>
+          <div class="note-body">
+            <p>Most students arrive at the second derivative thinking it is just the slope of the slope. That's true the way <em>nutrition</em> is just the sugar in the apple. It is technically correct and it explains nothing.</p>
+            <p>The second derivative tells you how a quantity's rate of change is itself changing — which is the same thing, said with a tense that makes it matter. A ball thrown straight up has a velocity that is shrinking, then negative, then growing more negative. The thing that doesn't change is the acceleration: minus 9.8. The second derivative is the calm thing under the noisy thing.</p>
+            <p>When you start asking <em>"what is the calm thing under this?"</em> across other problems, you have begun to think the way the curriculum quietly hopes you will.</p>
+          </div>
+          <div style="margin-top: 18px;"><button class="b b-link">Read 23 more notes →</button></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="h-eye">Where Marcus teaches</div>
+        <h2>Lekki Phase 1 · or online</h2>
+        <div class="body" style="margin-bottom: 16px;">
+          <p>Lessons run in person at Marcus's study (a quiet room with a whiteboard and good light) or online via Tutorly's video. The address is shared only after you both agree to meet in person.</p>
+        </div>
+        <div style="background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 18px; padding: 20px 24px; display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center;">
+          <div>
+            <div class="overline" style="margin-bottom: 6px;">Approximate location</div>
+            <div class="serif" style="font-size: 19px; font-weight: 500; letter-spacing: -0.012em;">Lekki Phase 1 · Lagos, Nigeria</div>
+            <div class="tiny" style="margin-top: 4px;">4.2 km from you · exact address shared after both parties confirm</div>
+          </div>
+          <button class="b b-secondary b-sm">Open in maps</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Right rail · the connect moment -->
+    <aside>
+      <div class="rail">
+        <div class="rail-card">
+          <div class="row1">
+            <div class="lab">Lesson rate</div>
+            <div class="price price-lg tabular">₦12,000<span class="price-unit" style="margin-left: 6px;">per hour</span></div>
+          </div>
+          <div class="row2">
+            <div class="lab">Connection fee · one-time</div>
+            <div class="price price-md tabular">₦2,500</div>
+            <p class="tiny" style="margin: 6px 0 0; line-height: 1.5;">Paid to Tutorly. Lets you message Marcus and book lessons. Lessons are paid to Marcus separately.</p>
+          </div>
+          <button class="b b-primary b-lg b-block">Connect with Marcus</button>
+          <div class="small-actions">
+            <button class="b b-secondary b-sm" style="flex: 1;">Save</button>
+            <button class="b b-secondary b-sm" style="flex: 1;">Share</button>
+          </div>
+          <p class="tip">Identity stays masked until you both agree to share contact details.</p>
+        </div>
+
+        <div class="rail-secondary">
+          <div class="h">How Tutorly keeps you safe</div>
+          <div class="b">Marcus's identity, ID, and references have been checked. Conversations go through Tutorly until you both agree to take them elsewhere. You can report him at any time without warning.</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+</body>
+</html>

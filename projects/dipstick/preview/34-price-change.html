@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Price change</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1040px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .crumb .cur { color: var(--ink); }
+
+  .doc-head { padding: 36px 0 24px; }
+  .doc-head .h { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: -0.024em; line-height: 1.04; margin: 6px 0 0; }
+  .doc-head .sub { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3); margin-top: 8px; max-width: 64ch; }
+
+  /* Price ribbon — big OLD / NEW */
+  .ribbon { display: grid; grid-template-columns: 1fr 64px 1fr; gap: 0; margin-top: 28px; border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden; }
+  .ribbon .side { padding: 28px 32px; background: var(--sheet); }
+  .ribbon .side.new { background: var(--emerald-50); }
+  .ribbon .side .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.2em; text-transform: uppercase; }
+  .ribbon .side .v { font-family: var(--serif); font-size: 64px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; margin-top: 8px; }
+  .ribbon .side .u { font-family: var(--sans); font-size: 14px; color: var(--ink-3); margin-left: 6px; letter-spacing: 0.04em; }
+  .ribbon .side .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; margin-top: 10px; }
+  .ribbon .arrow { display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 36px; color: var(--ink-3); background: var(--paper-deep); }
+
+  /* form */
+  .form { display: grid; grid-template-columns: 1fr 320px; gap: 28px; margin-top: 28px; }
+  .form-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 24px 28px; }
+  .form-card .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; padding-bottom: 12px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+
+  /* impact panel */
+  .impact { background: var(--sheet-2); border: 1px solid var(--ink); border-radius: var(--r-card); padding: 22px 24px; }
+  .impact .h { font-family: var(--serif); font-size: 16px; font-weight: 600; letter-spacing: -0.012em; padding-bottom: 10px; border-bottom: 1px solid var(--hair); margin-bottom: 12px; }
+  .impact .row-l { display: grid; grid-template-columns: 1fr auto; padding: 6px 0; gap: 8px; font-size: 12px; }
+  .impact .row-l .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+  .impact .row-l .v { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .impact .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 28px; line-height: 1; letter-spacing: -0.018em; margin: 4px 0 12px;
+  }
+
+  /* history */
+  .history { margin-top: 36px; }
+  .h-h { display: flex; align-items: baseline; gap: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); margin-bottom: 4px; }
+  .h-h .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; }
+
+  .price-row { display: grid; grid-template-columns: 90px 100px 1fr 110px 120px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hair); gap: 16px; }
+  .price-row .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+  .price-row .prod-c .prod { font-size: 11px; }
+  .price-row .why { font-family: var(--serif); font-size: 13px; color: var(--ink-2); }
+  .price-row .why .who { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; margin-left: 8px; }
+  .price-row .from { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-3); text-align: right; }
+  .price-row .to { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 600; text-align: right; }
+  .price-row .up { color: var(--short); }
+  .price-row .down { color: var(--emerald-700); }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span>All branches</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Price change · PMS</span></div>
+    <div style="flex: 1;"></div>
+    <span class="rec">OWNER-ONLY ACTION</span>
+  </div>
+
+  <div class="doc-head">
+    <div class="overline">PRICE CHANGE · PMS · ALL BRANCHES</div>
+    <h1 class="h">New pump price, effective tomorrow at dawn.</h1>
+    <p class="sub">Pump prices change. Sometimes from NNPC, sometimes from market. Every change is signed by the owner, timestamped to the minute, and pinned to the shifts that come after — so a litre sold at the old price still reconciles to the old price.</p>
+  </div>
+
+  <div class="ribbon">
+    <div class="side">
+      <div class="k">Current — since Sat 10 May</div>
+      <div class="v">₦196<span class="u">/ L</span></div>
+      <div class="meta">SET BY SEGUN · 10 MAY 06:00 · 4 DAYS AGO</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="side new">
+      <div class="k">New — effective Wed 15 May 06:00</div>
+      <div class="v">₦210<span class="u">/ L</span></div>
+      <div class="meta">UNSIGNED · AWAITING CONFIRM</div>
+    </div>
+  </div>
+
+  <div class="form">
+    <div class="form-card">
+      <div class="h">Set the new price</div>
+
+      <div class="split split-2" style="gap: 18px;">
+        <div class="field-row">
+          <span class="lbl">Product</span>
+          <div class="f-affix"><input class="f" value="PMS — Premium Motor Spirit" disabled></div>
+        </div>
+        <div class="field-row">
+          <span class="lbl">New price per litre</span>
+          <div class="f-affix"><span class="pre">₦</span><input class="f f-mono f-lg" value="210.00"><span class="post">/ L</span></div>
+        </div>
+        <div class="field-row">
+          <span class="lbl">Effective date</span>
+          <div class="f-affix"><input class="f f-mono" value="Wed 15 May 2026"><span class="post">📅</span></div>
+        </div>
+        <div class="field-row">
+          <span class="lbl">Effective time</span>
+          <div class="f-affix"><input class="f f-mono" value="06:00"><span class="post">WAT</span></div>
+          <span class="hlp">Applied to the first shift opened after this moment.</span>
+        </div>
+      </div>
+
+      <div class="field-row" style="margin-top: 18px;">
+        <span class="lbl">Why this change (filed in audit log)</span>
+        <textarea class="f" style="height: 80px; padding: 8px 11px;">NNPC depot price up ₦12/L overnight. Adjusting forecourt to preserve ₦14/L margin. Verbal confirm from Tunde Surulere.</textarea>
+      </div>
+
+      <div class="row" style="margin-top: 20px; gap: 10px; justify-content: flex-end;">
+        <button class="b b-quiet">Save draft</button>
+        <button class="b b-secondary">Cancel</button>
+        <button class="b b-primary">Confirm &amp; pin to Wed 06:00</button>
+      </div>
+    </div>
+
+    <div class="impact">
+      <div class="h">Impact today</div>
+      <div>
+        <div class="row-l"><span class="k">Pump-price change</span></div>
+        <div class="big" style="color: var(--short);">+ ₦14 / L</div>
+      </div>
+      <div class="row-l"><span class="k">Branches affected</span><span class="v">3 of 3</span></div>
+      <div class="row-l"><span class="k">PMS in tanks</span><span class="v">38,090 L</span></div>
+      <div class="row-l"><span class="k">Re-value of stock</span><span class="v" style="color: var(--emerald-700);">+ ₦533,260</span></div>
+      <hr class="hair-soft" style="margin: 12px 0;">
+      <div class="row-l"><span class="k">First shift after</span><span class="v">Wed · morning</span></div>
+      <div class="row-l"><span class="k">Last shift at old price</span><span class="v">Tue · evening</span></div>
+      <p class="dictated" style="font-size: 13px; margin: 14px 0 0;">— Shifts already open at 06:00 continue at the old price until close. New shifts opened from 06:00 onwards use ₦210.</p>
+    </div>
+  </div>
+
+  <div class="history">
+    <div class="h-h">
+      <span class="overline">PMS · LAST 7 CHANGES</span>
+      <span class="h">Price history.</span>
+    </div>
+
+    <div class="price-row">
+      <span class="when">PENDING</span>
+      <div class="prod-c"><span class="prod prod-pms">PMS</span></div>
+      <div class="why">NNPC depot up ₦12 — preserve margin <span class="who">SEGUN · DRAFT</span></div>
+      <span class="from">196.00</span>
+      <span class="to up">↑ 210.00</span>
+    </div>
+
+    <div class="price-row">
+      <span class="when">10 MAY</span>
+      <div class="prod-c"><span class="prod prod-pms">PMS</span></div>
+      <div class="why">Market settled after NMDPRA announcement <span class="who">SEGUN</span></div>
+      <span class="from">204.00</span>
+      <span class="to down">↓ 196.00</span>
+    </div>
+
+    <div class="price-row">
+      <span class="when">02 MAY</span>
+      <div class="prod-c"><span class="prod prod-pms">PMS</span></div>
+      <div class="why">NNPC ex-depot raised ₦8 <span class="who">SEGUN</span></div>
+      <span class="from">196.00</span>
+      <span class="to up">↑ 204.00</span>
+    </div>
+
+    <div class="price-row">
+      <span class="when">18 APR</span>
+      <div class="prod-c"><span class="prod prod-pms">PMS</span></div>
+      <div class="why">Holiday weekend — held steady <span class="who">SEGUN</span></div>
+      <span class="from">196.00</span>
+      <span class="to" style="color: var(--ink-3);">= 196.00</span>
+    </div>
+
+    <div class="price-row">
+      <span class="when">02 APR</span>
+      <div class="prod-c"><span class="prod prod-ago">AGO</span></div>
+      <div class="why">Diesel up — international markets <span class="who">SEGUN</span></div>
+      <span class="from">820.00</span>
+      <span class="to up">↑ 880.00</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

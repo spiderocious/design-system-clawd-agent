@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Inputs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .form-grid { display: grid; gap: 16px; max-width: 560px; }
+  .form-grid.two { grid-template-columns: 1fr 1fr; }
+
+  /* error state */
+  .f-error { border-color: var(--crit) !important; box-shadow: 0 0 0 3px rgba(178,58,42,0.14) !important; }
+  .err-msg { font-size: 12px; color: var(--crit); margin-top: 4px; }
+  .help { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+  /* register form context */
+  .register-card {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 28px;
+    max-width: 540px;
+  }
+  .register-card .step {
+    font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 8px;
+  }
+  .register-card .title { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.018em; margin: 0 0 6px; }
+  .register-card .sub { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; line-height: 1.6; }
+
+  /* search context (single big input) */
+  .search-shell {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 22px;
+    display: grid; grid-template-columns: 2fr 1fr auto; gap: 14px; align-items: end;
+  }
+
+  .ref-block { background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 14px; padding: 22px; }
+  .ref-block .ref-h { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); margin-bottom: 12px; }
+  .ref-block .ref-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hair-soft); align-items: center; }
+  .ref-block .ref-row:last-child { border-bottom: 0; }
+  .ref-block .ref-name { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">11 / PRIMITIVES</span>
+    <h1 class="ttl">Inputs</h1>
+    <span class="meta">Filled · 14px radius · sage focus halo</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Filled inputs on cream paper, 14px radius, 48px tall. The focus halo is the brand green at 18% — a calm signal that the field is listening. Labels are small-caps overline; help text is muted ink. Errors are warm brick-red, never Bootstrap-red.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · search · the top of the marketplace</div>
+    <h3>One big search row · the front door</h3>
+    <p class="blurb">The home page leads with this. Subject and location are the only required inputs to start.</p>
+    <div class="search-shell">
+      <div class="field-row">
+        <label class="label">Subject or topic</label>
+        <input class="f f-lg" value="Further Mathematics" />
+      </div>
+      <div class="field-row">
+        <label class="label">Near</label>
+        <input class="f f-lg" value="Lekki, Lagos" />
+      </div>
+      <button class="b b-primary b-lg" style="margin-bottom: 0;">Find tutors</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · tutor registration · step 1</div>
+    <h3>Tutors fill these to claim a profile</h3>
+    <p class="blurb">The longest form in the product. We keep it spacious — one decision per row — and never ask for more than the screen needs at one time.</p>
+    <div class="register-card">
+      <div class="step">Step 1 of 4 · About you</div>
+      <h2 class="title">Tell us who you are</h2>
+      <p class="sub">Your full legal name and a photo go to our verification team. Students only ever see your first name and last initial.</p>
+
+      <div class="form-grid">
+        <div class="form-grid two">
+          <div class="field-row">
+            <label class="label">First name</label>
+            <input class="f" value="Marcus" />
+          </div>
+          <div class="field-row">
+            <label class="label">Last name</label>
+            <input class="f" value="Kowalski" />
+            <div class="help">Only the first letter — "K." — will show publicly.</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label class="label">Email · for sign-in only</label>
+          <input class="f" value="marcus@example.com" />
+        </div>
+
+        <div class="field-row">
+          <label class="label">Phone · verification</label>
+          <input class="f f-error" value="0801-555-200" />
+          <div class="err-msg">This number isn't reachable. Try a different number — we'll text a 6-digit code.</div>
+        </div>
+
+        <div class="field-row">
+          <label class="label">A note for parents · 1–2 sentences</label>
+          <textarea class="f" rows="3">I teach mathematics the way I wish I'd been taught — slowly, with the why before the how.</textarea>
+          <div class="help">This appears in italic at the top of your profile.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Variant reference</span></div>
+
+  <div class="ref-block">
+    <div class="ref-h">Variants · sizes · states</div>
+    <div class="ref-row"><span class="ref-name">default · md</span><input class="f" placeholder="Subject — Further Maths, English, Chemistry…"></div>
+    <div class="ref-row"><span class="ref-name">focused</span><input class="f" value="Further Mathematics" style="border-color: var(--green-500); box-shadow: 0 0 0 3px rgba(59,183,94,0.18);"></div>
+    <div class="ref-row"><span class="ref-name">filled</span><input class="f" value="Lekki, Lagos"></div>
+    <div class="ref-row"><span class="ref-name">error</span><input class="f f-error" value="0801-555-200"></div>
+    <div class="ref-row"><span class="ref-name">disabled</span><input class="f" value="adenijiadewale12@gmail.com" disabled style="opacity: .55; background: var(--paper-deep);"></div>
+    <div class="ref-row"><span class="ref-name">large · search</span><input class="f f-lg" placeholder="What do you want to learn?"></div>
+    <div class="ref-row"><span class="ref-name">small · filter</span><input class="f f-sm" value="Below ₦15,000 / hour"></div>
+    <div class="ref-row"><span class="ref-name">mono · price</span><input class="f f-mono" value="₦12,000"></div>
+    <div class="ref-row"><span class="ref-name">textarea</span><textarea class="f" rows="3">Marcus has been teaching A-Level Mathematics in Lekki for eight years…</textarea></div>
+  </div>
+
+</main>
+</body>
+</html>

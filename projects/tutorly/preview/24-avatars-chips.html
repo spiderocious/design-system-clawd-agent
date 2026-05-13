@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Avatars, chips, verified</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .av-row { display: flex; align-items: flex-end; gap: 18px; }
+  .av-row .cap { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 8px; display: block; text-align: center; }
+
+  .av-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+  .av-with-name { display: flex; align-items: center; gap: 12px; }
+  .av-with-name .nm { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.012em; }
+  .av-with-name .ms { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+
+  .masked { display: inline-flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ink-2); }
+  .masked code { font-family: var(--mono); font-size: 12px; color: var(--ink-3); background: var(--paper-deep); padding: 3px 7px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">24 / DATA &amp; STATE</span>
+    <h1 class="ttl">Avatars · chips · verified</h1>
+    <span class="meta">The trust idiom</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Avatars are warm-toned gradients with a hairline edge. They never carry a status dot or a checkmark badge — the <span class="verified">verified</span> capsule does that work, separately, where it can be read. The masked username convention shows only the first name and last initial; full names are stored privately for the verification team.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · avatars · sizes</div>
+    <h3>Five sizes · one shape</h3>
+    <div class="av-row">
+      <div><div class="avatar avatar-sm"></div><span class="cap">sm · 36</span></div>
+      <div><div class="avatar avatar-md"></div><span class="cap">md · 48</span></div>
+      <div><div class="avatar"></div><span class="cap">default · 56</span></div>
+      <div><div class="avatar avatar-lg"></div><span class="cap">lg · 88</span></div>
+      <div><div class="avatar avatar-xl"></div><span class="cap">xl · 128</span></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · avatars · tones</div>
+    <h3>Four warm gradients · used to vary a stack</h3>
+    <p class="blurb">When eight tutors stack in a search result we want the page to feel populated, not uniform. Four neutral, warm tones do the rotation. Never team colours, never personality colours.</p>
+    <div class="av-grid">
+      <div class="avatar"></div>
+      <div class="avatar avatar-sage"></div>
+      <div class="avatar avatar-sand"></div>
+      <div class="avatar avatar-clay"></div>
+      <div class="avatar avatar-bone"></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · the masked-username idiom</div>
+    <h3>Public name · first + initial only</h3>
+    <p class="blurb">Tutorly stores the full legal name privately. Publicly, only the first name and last initial appear — a small, deliberate signal that this is a person, not a transaction. We never show a username, handle, or surname in chrome.</p>
+
+    <div style="display: grid; gap: 14px; max-width: 540px;">
+      <div class="av-with-name"><div class="avatar avatar-sm"></div><div><div class="nm">Marcus K.</div><div class="ms">private name on file with Tutorly · "Marcus Kowalski"</div></div></div>
+      <div class="av-with-name"><div class="avatar avatar-sm avatar-sage"></div><div><div class="nm">Aisha O.</div><div class="ms">private name on file with Tutorly · "Aisha Okonkwo"</div></div></div>
+      <div class="av-with-name"><div class="avatar avatar-sm avatar-clay"></div><div><div class="nm">Tunde A.</div><div class="ms">private name on file with Tutorly · "Babatunde Akinola"</div></div></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · chips · the small palette</div>
+    <h3>Four chip kinds</h3>
+    <p class="blurb">Sage (the friendly default), Sand (neutral facts), Paper (very quiet, only outline), Warn and Crit (state). Never colour-coded by topic.</p>
+    <div class="chip-row">
+      <span class="chip chip-sage chip-dot">Available this week</span>
+      <span class="chip chip-sage">In-person + online</span>
+      <span class="chip chip-sand">Cambridge alumnus</span>
+      <span class="chip chip-sand">Speaks Yoruba</span>
+      <span class="chip chip-paper">Joined Mar 2024</span>
+      <span class="chip chip-warn chip-dot">Replies slowly</span>
+      <span class="chip chip-crit chip-dot">Reported once</span>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · the verified capsule · the only trust mark</div>
+    <h3>One trust mark. Repeated everywhere.</h3>
+    <p class="blurb">Used on profiles, in conversation headers, on credentials, on documents. Always the same shape. Always the same words. A parent who sees it three times reads the system as <em>consistent.</em></p>
+    <div class="chip-row">
+      <span class="verified">Identity verified</span>
+      <span class="verified">Document on file</span>
+      <span class="verified">Reference confirmed</span>
+    </div>
+    <p class="tiny" style="margin-top: 14px;">When a tutor's documents are still being checked, the equivalent reads <em>"Under review"</em> in warm amber — never as a half-finished verified.</p>
+  </div>
+
+</main>
+</body>
+</html>

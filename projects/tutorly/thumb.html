@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · thumb</title>
+<style>
+  /* Self-contained thumbnail. Renders inside an iframe in the gallery.
+     Shows the signature tutor list-row + connect moment at small scale. */
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #F7F5F0;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #1F231C;
+    overflow: hidden;
+  }
+
+  .frame {
+    height: 100%;
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    justify-content: center;
+  }
+
+  /* Top: a row */
+  .row {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 10px;
+    padding: 9px 11px;
+    display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center;
+  }
+  .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #D9C9A9, #B59F76); border: 1px solid #C2B69B; }
+  .av.sage { background: linear-gradient(135deg, #BFD5C5, #8FB39C); border-color: #A8C2B2; }
+  .av.sand { background: linear-gradient(135deg, #C7BFA2, #998E66); border-color: #B5AA82; }
+  .nm { font-family: 'Fraunces', serif; font-weight: 500; font-size: 12.5px; letter-spacing: -0.01em; line-height: 1.1; }
+  .meta { font-size: 8.5px; color: #6A7263; margin-top: 2px; }
+  .pr { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #1F231C; text-align: right; font-feature-settings: "tnum" 1; }
+  .un { font-family: 'Inter', sans-serif; font-size: 7px; color: #6A7263; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; text-align: right; }
+  .row.on { border-color: #3BB75E; }
+
+  /* Bottom: connect block */
+  .connect {
+    background: #FFFDF8;
+    border: 1px solid #E4DFCE;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  }
+  .connect .lbl { font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6A7263; }
+  .connect .big { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500; color: #1F231C; margin-top: 2px; font-feature-settings: "tnum" 1; }
+  .connect .big .u { font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 500; color: #6A7263; margin-left: 3px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .btn {
+    background: #3BB75E; color: #fff;
+    padding: 7px 12px; border-radius: 9px;
+    font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .btn b { font-family: 'JetBrains Mono', monospace; font-weight: 500; margin-left: 5px; padding-left: 6px; border-left: 1px solid rgba(255,255,255,0.36); }
+
+  .verified-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #E7EFE9; color: #1E6638;
+    padding: 1px 6px;
+    font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: 999px;
+    margin-top: 4px;
+  }
+  .verified-pill::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #3BB75E; }
+
+  .meta-bottom {
+    display: flex; justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 7px; color: #6A7263;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 600;
+    padding: 0 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <div class="row">
+    <div class="av"></div>
+    <div>
+      <div class="nm">Marcus K.</div>
+      <div class="meta">Further Maths · 8 yrs · Lekki</div>
+    </div>
+    <div>
+      <div class="pr">₦12,000</div>
+      <div class="un">/ hr</div>
+    </div>
+  </div>
+
+  <div class="row on">
+    <div class="av sage"></div>
+    <div>
+      <div class="nm">Aisha O.</div>
+      <div class="meta">A-Level + SAT · 6 yrs · VI</div>
+    </div>
+    <div>
+      <div class="pr">₦9,500</div>
+      <div class="un">/ hr</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="av sand"></div>
+    <div>
+      <div class="nm">Tunde A.</div>
+      <div class="meta">Further Maths · 12 yrs · Yaba</div>
+    </div>
+    <div>
+      <div class="pr">₦15,000</div>
+      <div class="un">/ hr</div>
+    </div>
+  </div>
+
+  <div class="connect">
+    <div>
+      <div class="lbl">Connection fee</div>
+      <div class="big">₦2,500<span class="u">one-time</span></div>
+      <span class="verified-pill">Identity verified</span>
+    </div>
+    <div class="btn">Connect <b>₦2,500</b></div>
+  </div>
+
+  <div class="meta-bottom">
+    <span>17 surfaces</span>
+    <span>v 0.1 · oat</span>
+  </div>
+
+</div>
+
+</body>
+</html>

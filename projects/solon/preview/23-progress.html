@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · progress & confidence</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  .card { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 22px 26px; }
+
+  .bar-line { display: grid; grid-template-columns: 180px 1fr 100px; gap: 16px; align-items: center; padding: 10px 0; border-top: 1px solid var(--hair-soft); }
+  .bar-line:first-of-type { border-top: 0; }
+  .bar-line .nm { font-family: var(--serif); font-size: 14px; font-weight: 500; }
+  .bar-line .sub { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
+  .bar-line .bar { height: 12px; background: var(--paper-3); border-radius: 1px; position: relative; overflow: hidden; }
+  .bar-line .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--forest-600); }
+  .bar-line .bar .cap { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--ink); }
+  .bar-line .bar.warn .fill { background: var(--orange); }
+  .bar-line .bar.crit .fill { background: var(--crit); }
+  .bar-line .val { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 14px; text-align: right; }
+
+  /* Donut */
+  .donut-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .donut { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); }
+  .donut svg { width: 88px; height: 88px; }
+  .donut .pct { font-family: var(--mono); font-size: 18px; font-weight: 500; }
+  .donut .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); text-align: center; }
+
+  /* Confidence indicator (large) */
+  .conf-big {
+    padding: 18px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px;
+  }
+  .conf-big .h { font-family: var(--serif); font-weight: 600; font-size: 18px; font-variation-settings: "opsz" 36; }
+  .conf-big .sub { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .conf-big .gauge { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .conf-big .gauge .bars { display: flex; gap: 3px; }
+  .conf-big .gauge .bars i { width: 22px; height: 10px; background: var(--hair); display: inline-block; border-radius: 1px; }
+  .conf-big .gauge .bars i.on { background: var(--forest-600); }
+  .conf-big .gauge .lvl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">23 / DATA & STATE</div>
+    <div class="ttl">Progress · confidence</div>
+    <div class="sub">— linear bars for cap usage, donuts for coverage, segment-gauge for model confidence.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · INEC compliance · spend vs cap</div>
+    <div class="card">
+      <div class="bar-line">
+        <div><div class="nm">Total spend</div><div class="sub">vs ₦ 4.0bn statutory cap (Senate)</div></div>
+        <div class="bar"><span class="fill" style="width: 52%;"></span><span class="cap" style="left: 75%;"></span></div>
+        <span class="val">₦ 2.07bn · 52%</span>
+      </div>
+      <div class="bar-line">
+        <div><div class="nm">Media</div><div class="sub">vs ₦ 1.2bn sub-cap</div></div>
+        <div class="bar warn"><span class="fill" style="width: 78%;"></span><span class="cap" style="left: 75%;"></span></div>
+        <span class="val">₦ 936m · 78%</span>
+      </div>
+      <div class="bar-line">
+        <div><div class="nm">Transport · logistics</div><div class="sub">vs ₦ 800m sub-cap</div></div>
+        <div class="bar"><span class="fill" style="width: 41%;"></span><span class="cap" style="left: 75%;"></span></div>
+        <span class="val">₦ 328m · 41%</span>
+      </div>
+      <div class="bar-line">
+        <div><div class="nm">Personnel · stipends</div><div class="sub">vs ₦ 600m sub-cap</div></div>
+        <div class="bar"><span class="fill" style="width: 64%;"></span><span class="cap" style="left: 75%;"></span></div>
+        <span class="val">₦ 384m · 64%</span>
+      </div>
+      <div class="bar-line">
+        <div><div class="nm">Materials</div><div class="sub">vs ₦ 400m sub-cap</div></div>
+        <div class="bar"><span class="fill" style="width: 28%;"></span><span class="cap" style="left: 75%;"></span></div>
+        <span class="val">₦ 112m · 28%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · election-day coverage</div>
+    <div class="donut-row">
+      <div class="donut">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--hair)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--forest-600)" stroke-width="3" stroke-dasharray="78 100" stroke-dashoffset="25" transform="rotate(-90 18 18)" stroke-linecap="butt"/>
+        </svg>
+        <div class="pct">78%</div>
+        <div class="lbl">Agents verified</div>
+      </div>
+      <div class="donut">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--hair)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--forest-600)" stroke-width="3" stroke-dasharray="64 100" stroke-dashoffset="25" transform="rotate(-90 18 18)"/>
+        </svg>
+        <div class="pct">64%</div>
+        <div class="lbl">PU staffed</div>
+      </div>
+      <div class="donut">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--hair)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--orange)" stroke-width="3" stroke-dasharray="38 100" stroke-dashoffset="25" transform="rotate(-90 18 18)"/>
+        </svg>
+        <div class="pct">38%</div>
+        <div class="lbl">Form EC8A submitted</div>
+      </div>
+      <div class="donut">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--hair)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="16" fill="none" stroke="var(--forest-700)" stroke-width="3" stroke-dasharray="22 100" stroke-dashoffset="25" transform="rotate(-90 18 18)"/>
+        </svg>
+        <div class="pct">22%</div>
+        <div class="lbl">Reconciled</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · model confidence · per projection</div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="conf-big">
+        <div>
+          <div class="h">Anambra Central · senate · baseline</div>
+          <div class="sub">Confidence is medium-high — model has dense 2023 PU coverage and a robust radio-call-in corpus for the constituency.</div>
+        </div>
+        <div class="gauge">
+          <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+          <div class="lvl">Medium-high · n=412 PU</div>
+        </div>
+      </div>
+      <div class="conf-big">
+        <div>
+          <div class="h">Lagos East · senate · baseline</div>
+          <div class="sub">Confidence is medium — limited polling-unit-level voter rolls; LP–APC swing is structurally noisy across cycles.</div>
+        </div>
+        <div class="gauge">
+          <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <div class="lvl">Medium · n=584 PU</div>
+        </div>
+      </div>
+      <div class="conf-big" style="border-color: var(--orange); background: var(--orange-soft);">
+        <div>
+          <div class="h">Zamfara North · senate · Soludo-equivalent scenario</div>
+          <div class="sub" style="color: var(--orange-deep);">Low confidence. You're asking the model to apply a Soludo-coalition pattern outside its trained context (south-east); flagged for caution.</div>
+        </div>
+        <div class="gauge">
+          <div class="bars"><i class="on" style="background: var(--orange);"></i><i></i><i></i><i></i><i></i></div>
+          <div class="lvl" style="color: var(--orange-deep);">Low · do not export</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

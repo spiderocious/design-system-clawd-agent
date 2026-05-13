@@ -1,0 +1,762 @@
+/* ============================================================
+   SOLON — parliamentary order-paper foundation
+   One stance, applied everywhere.
+
+   Palette: cream order-paper canvas, warm ink, deep forest as
+            the single interactive accent, burnt orange reserved
+            for alarms.
+   Type:    Fraunces (serif, projection + thinking),
+            Inter (sans, chrome + labels),
+            JetBrains Mono (record numbers + section marks).
+   Chrome:  hairlines only, no shadow except popovers/modals,
+            4px corners on controls (B's softening),
+            mono prefix on inputs (C's instrument touch),
+            drop-cap on the AI copilot card (A's classical voice).
+
+   Semantic rule that does real work:
+     MONO  = record / count / fact   (e.g., votes 1,284)
+     SERIF = projection / estimate    (e.g., model: LP 47.2%)
+   Every number in the system follows this split.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300..700&family=JetBrains+Mono:wght@400..700&display=swap');
+
+:root {
+  /* ---------- Paper & ink ---------- */
+  --paper:        #F5EFE0;   /* cream order-paper */
+  --paper-2:      #EFE7D2;   /* recessed surface */
+  --paper-3:      #E6DCC1;   /* divider band / table footers */
+  --sheet:        #FBF6E7;   /* a single sheet on the desk (lighter) */
+  --sheet-edge:   #C9BE9F;   /* hairline edge */
+  --ink:          #1A1714;   /* near-black, warm */
+  --ink-2:        #3C362C;   /* body */
+  --ink-3:        #6B6555;   /* secondary */
+  --ink-4:        #9A937F;   /* tertiary */
+  --hair:         #C9BE9F;
+  --hair-soft:    #DBD0AE;
+  --rule:         #1A1714;   /* heavy rule */
+
+  /* ---------- Forest (the one interactive accent) ---------- */
+  --forest-50:   #EAF1EC;
+  --forest-100:  #D2E0D6;
+  --forest-200:  #A8C2B0;
+  --forest-300:  #7AA386;
+  --forest-400:  #4F8460;
+  --forest-500:  #2D5A3D;   /* secondary brand */
+  --forest-600:  #1B4332;   /* PRIMARY — CTA, link, focus */
+  --forest-700:  #14342A;
+  --forest-800:  #0D2A1E;
+  --forest-900:  #061A12;
+
+  /* ---------- Burnt orange (alarm / reserved) ---------- */
+  --orange:       #C7522A;   /* alarm + warn (the only chromatic alert) */
+  --orange-soft:  #F4DDD0;
+  --orange-edge:  #E0A892;
+  --orange-deep:  #8C3416;   /* CRITICAL (irreversible) — even darker */
+
+  /* ---------- Reserved oxblood (CRITICAL only) ----------
+     Used for the irreversible idiom: candidate withdrawal,
+     ballot void, account suspension. Distinct from orange so
+     orange retains its "warn" meaning. */
+  --crit:         #8B1A1A;
+  --crit-bg:      #F6E1DE;
+  --crit-edge:    #D8A6A1;
+
+  /* ---------- State (sparingly) ---------- */
+  --warn:         var(--orange);
+  --warn-bg:      var(--orange-soft);
+  --warn-edge:    var(--orange-edge);
+
+  --ok:           var(--forest-600);
+  --ok-bg:        var(--forest-50);
+  --ok-edge:      var(--forest-200);
+
+  --info:         #2E5279;   /* deep parliamentary blue, used VERY rarely */
+  --info-bg:      #E2EAF3;
+  --info-edge:    #B7C7DC;
+
+  /* ---------- Win-probability tier colors ----------
+     Five-tier scale from the spec. Hold = forest, opposing = orange,
+     toss-up sits between. The chip is a filled tag (B's variant). */
+  --tier-hold-strong:  #14342A;   /* deep forest */
+  --tier-hold-lean:    #1B4332;
+  --tier-toss:         #C7522A;
+  --tier-opp-lean:     #6B6555;   /* ink-3 (graphite) */
+  --tier-opp-strong:   #1A1714;   /* ink (deepest opposition) */
+
+  /* ---------- Confidence band ---------- */
+  --conf-high:    var(--forest-600);
+  --conf-med:     var(--ink-3);
+  --conf-low:     var(--orange);
+
+  /* ---------- Type ---------- */
+  --serif:   'Fraunces', 'Source Serif 4', Georgia, serif;
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Tracking */
+  --track-display:  -0.018em;
+  --track-h:        -0.010em;
+  --track-body:      0;
+  --track-label:     0.01em;
+  --track-overline:  0.16em;
+  --track-mono:      0.02em;
+
+  /* ---------- Geometry ----------
+     Solon softens by exactly 4px (B's variant). Sheets stay 4px;
+     instrument inputs stay 4px; chips stay 4px. Only hairline rules
+     are sharp. */
+  --r-sharp:    2px;
+  --r-card:     4px;
+  --r-soft:     6px;
+  --r-pill:     9999px;
+
+  --gutter:     24px;
+
+  /* Hairlines */
+  --line-1: 0 0 0 1px var(--hair);
+  --shade-1: 0 1px 0 rgba(26,23,20,0.04);
+  --shade-pop: 0 8px 24px -8px rgba(26,23,20,0.18), 0 0 0 1px var(--hair);
+
+  /* Motion */
+  --ease:       cubic-bezier(0.2, 0.6, 0.2, 1);
+  --t-fast:     120ms;
+  --t-med:      200ms;
+  --t-slow:     320ms;
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "kern", "calt";
+}
+
+/* ----- Type primitives ----- */
+.serif {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: var(--track-display);
+  font-variation-settings: "opsz" 36;
+}
+.serif-display {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  font-variation-settings: "opsz" 144;
+}
+.serif-it {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.sans  { font-family: var(--sans); }
+.mono  {
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: var(--track-mono);
+}
+.tabular { font-variant-numeric: tabular-nums; }
+.overline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- The page-stamp at the top of every specimen ----- */
+.stamp {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 18px; margin-bottom: 36px;
+  border-bottom: 1px solid var(--ink);
+}
+.stamp .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.stamp .ttl {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  font-variation-settings: "opsz" 96;
+  flex: 1;
+  line-height: 1.05;
+}
+.stamp .sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.stamp .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ----- Subdued section break ----- */
+.break {
+  margin: 56px 0 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.break::before { content: ""; height: 1px; background: var(--hair); width: 24px; flex-shrink: 0; }
+.break::after  { content: ""; height: 1px; background: var(--hair); flex: 1; }
+.break .lbl {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Page wrapper ----- */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 64px 96px;
+}
+.page-wide { max-width: 1440px; }
+
+/* ----- Sheet (the order-paper card) ----- */
+.sheet {
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+}
+.sheet-tight { padding: 14px 18px; }
+.sheet-md    { padding: 20px 24px; }
+.sheet-lg    { padding: 28px 32px; }
+.sheet-flat  { background: var(--paper); }
+.sheet-paper2 { background: var(--paper-2); }
+
+hr.hair { border: 0; border-top: 1px solid var(--hair); margin: 0; }
+hr.hair-soft { border: 0; border-top: 1px solid var(--hair-soft); margin: 0; }
+hr.rule { border: 0; border-top: 1px solid var(--ink); margin: 0; }
+
+/* ----- Small mark / stamp inside components ----- */
+.mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ============================================================
+   PRIMITIVES — buttons, inputs, chips
+   ============================================================ */
+
+/* Buttons — 4px radius (B), forest fill primary, hairline-ink secondary, hairline-orange alert */
+.b {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: var(--r-card);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.b:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.28);
+}
+.b-primary    { background: var(--forest-600); color: var(--paper); border-color: var(--forest-600); }
+.b-primary:hover { background: var(--forest-800); border-color: var(--forest-800); }
+.b-secondary  { background: var(--paper); border-color: var(--ink); color: var(--ink); }
+.b-secondary:hover { background: var(--ink); color: var(--paper); }
+.b-quiet      { color: var(--ink-2); border-color: transparent; }
+.b-quiet:hover{ background: rgba(26,23,20,0.05); color: var(--ink); }
+.b-warn       { color: var(--orange); border-color: var(--orange); background: var(--paper); }
+.b-warn:hover { background: var(--orange-soft); }
+.b-crit       { color: var(--paper); background: var(--crit); border-color: var(--crit); }
+.b-crit:hover { background: var(--orange-deep); border-color: var(--orange-deep); }
+.b-link       {
+  color: var(--forest-600);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--forest-300);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  height: auto;
+}
+.b-link:hover { text-decoration-color: var(--forest-600); }
+.b-sm { height: 28px; padding: 0 12px; font-size: 12px; }
+.b-lg { height: 42px; padding: 0 20px; font-size: 14px; }
+.b-icon { padding: 0; width: 34px; justify-content: center; }
+
+/* Input wrap (C's instrument) — 4px radius, mono prefix cell */
+.f-wrap {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+  background: var(--paper);
+  height: 34px;
+  width: 100%;
+  overflow: hidden;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.f-wrap:focus-within {
+  border-color: var(--forest-600);
+  box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.18);
+}
+.f-prefix {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 0 12px;
+  background: var(--paper-2);
+  border-right: 1px solid var(--hair);
+  display: inline-flex; align-items: center;
+  white-space: nowrap;
+}
+.f {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  height: 100%;
+  padding: 0 12px;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: var(--track-body);
+  flex: 1;
+}
+.f::placeholder { color: var(--ink-4); }
+.f-mono { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; }
+
+/* Plain input (no prefix) */
+.f-plain {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  height: 34px;
+  padding: 0 12px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.f-plain:focus { border-color: var(--forest-600); box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.18); }
+
+/* Select */
+.f-select {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  height: 34px;
+  padding: 0 36px 0 12px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 14px, calc(100% - 13px) 14px;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+.f-select:focus { border-color: var(--forest-600); box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.18); }
+
+/* Label */
+.f-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Field group */
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+/* ============================================================
+   CHIPS — win-probability tiers (B's filled variant), state pills
+   ============================================================ */
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 22px; padding: 0 9px;
+  border-radius: var(--r-card);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--paper-3);
+  color: var(--ink-2);
+  border: 1px solid transparent;
+}
+
+/* Win-probability tier chips (filled, per the pick) */
+.chip-hold-strong { background: var(--tier-hold-strong); color: var(--paper); }
+.chip-hold        { background: var(--forest-600); color: var(--paper); }
+.chip-toss        { background: var(--orange); color: var(--paper); }
+.chip-opp         { background: var(--paper-3); color: var(--ink-2); border-color: var(--hair); }
+.chip-opp-strong  { background: var(--ink); color: var(--paper); }
+
+/* State pills (smaller, for inline status) */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 20px; padding: 0 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hair);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: var(--track-label);
+  white-space: nowrap;
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill-ok    { color: var(--forest-700); border-color: var(--forest-300); background: var(--forest-50); }
+.pill-warn  { color: var(--orange); border-color: var(--orange-edge); background: var(--orange-soft); }
+.pill-crit  { color: var(--paper); border-color: var(--crit); background: var(--crit); }
+.pill-info  { color: var(--info); border-color: var(--info-edge); background: var(--info-bg); }
+.pill-ink   { color: var(--paper); border-color: var(--ink); background: var(--ink); }
+.pill-quiet { color: var(--ink-3); border-color: var(--hair); }
+
+/* Tag — a non-status descriptor inside content (e.g., language pill) */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--sans); font-size: 11.5px; color: var(--ink-2);
+  padding: 1px 7px; border-radius: 3px; background: var(--paper-2);
+  border: 1px solid var(--hair-soft);
+}
+
+/* ============================================================
+   NUMERIC READOUTS — the semantic split
+   MONO = fact, SERIF = projection
+   ============================================================ */
+
+/* Record (mono, tabular) — used for vote counts, expenses, INEC cap, agent counts */
+.rec-num {
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+}
+.rec-xl { font-size: 44px; }
+.rec-lg { font-size: 32px; }
+.rec-md { font-size: 22px; }
+.rec-sm { font-size: 16px; }
+.rec-num .u {
+  font-family: var(--sans);
+  font-size: 0.46em;
+  color: var(--ink-3);
+  margin-left: 4px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+/* Projection (serif, italic optional) — used for modelled %, projected vote share, confidence */
+.proj-num {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-variation-settings: "opsz" 72;
+  color: var(--forest-700);
+  letter-spacing: -0.015em;
+  line-height: 0.95;
+}
+.proj-xl { font-size: 52px; }
+.proj-lg { font-size: 36px; }
+.proj-md { font-size: 24px; }
+.proj-sm { font-size: 18px; }
+.proj-num .band {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.42em;
+  color: var(--ink-3);
+  margin-left: 8px;
+  letter-spacing: 0;
+}
+
+/* Record number — small monospace label (e.g., PU 008-04-02) */
+.rec-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* ============================================================
+   CONFIDENCE BAR — 5-segment instrument
+   ============================================================ */
+.conf {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.conf-bar { display: inline-flex; gap: 2px; }
+.conf-bar i {
+  width: 16px; height: 6px;
+  background: var(--hair);
+  display: inline-block;
+  border-radius: 1px;
+}
+.conf-bar i.on { background: var(--forest-600); }
+.conf-bar.low i.on { background: var(--orange); }
+.conf-bar.high i.on { background: var(--forest-700); }
+
+/* ============================================================
+   AVATARS — initials, hairlined
+   ============================================================ */
+.av {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-2);
+  color: var(--ink-2);
+  font-family: var(--sans); font-weight: 600; font-size: 11px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  user-select: none;
+  border: 1px solid var(--sheet-edge);
+}
+.av-sm { width: 24px; height: 24px; font-size: 10px; }
+.av-md { width: 32px; height: 32px; font-size: 11px; }
+.av-lg { width: 44px; height: 44px; font-size: 14px; }
+.av-xl { width: 64px; height: 64px; font-size: 19px; }
+.av-forest { background: var(--forest-50); color: var(--forest-700); border-color: var(--forest-200); }
+.av-orange { background: var(--orange-soft); color: var(--orange-deep); border-color: var(--orange-edge); }
+.av-ink    { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ============================================================
+   PULSE — live election-day signal
+   ============================================================ */
+.pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--forest-600);
+  box-shadow: 0 0 0 0 rgba(27,67,50,0.5);
+  animation: pulse 1.6s ease-out infinite;
+  flex-shrink: 0;
+}
+.pulse-warn { background: var(--orange); box-shadow: 0 0 0 0 rgba(199,82,42,0.5); animation: pulse-warn 1.4s ease-out infinite; }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(27,67,50,0.45); }
+  100% { box-shadow: 0 0 0 8px rgba(27,67,50,0); }
+}
+@keyframes pulse-warn {
+  0%   { box-shadow: 0 0 0 0 rgba(199,82,42,0.45); }
+  100% { box-shadow: 0 0 0 8px rgba(199,82,42,0); }
+}
+
+/* ============================================================
+   PARLIAMENTARY MASTHEAD — for the order-paper feel
+   A single drop-cap M paired with a small mono dateline.
+   ============================================================ */
+.masthead {
+  display: flex; align-items: flex-end; gap: 18px;
+  padding-bottom: 14px;
+  border-bottom: 3px double var(--ink);
+}
+.masthead .dropcap {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 0.85;
+  font-variation-settings: "opsz" 144;
+  color: var(--ink);
+}
+.masthead .title-block { flex: 1; line-height: 1.1; }
+.masthead .title-block .t {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: var(--track-h);
+  font-variation-settings: "opsz" 72;
+}
+.masthead .title-block .s {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.masthead .dateline {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  text-align: right;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.masthead .dateline strong { color: var(--ink); font-weight: 500; }
+
+/* ============================================================
+   SCAFFOLDING
+   ============================================================ */
+.row    { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col    { display: flex; flex-direction: column; gap: 12px; }
+.stack  { display: flex; flex-direction: column; gap: 0; }
+.split  { display: grid; gap: 16px; }
+.split-2 { grid-template-columns: 1fr 1fr; }
+.split-3 { grid-template-columns: repeat(3, 1fr); }
+.split-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ============================================================
+   AI COPILOT CARD — the canonical citation block
+   Drop-cap (A), serif body, mono meta, hairline rules.
+   ============================================================ */
+.ai-card {
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  border-radius: var(--r-card);
+  padding: 18px 22px 16px;
+}
+.ai-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding-bottom: 8px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--hair);
+}
+.ai-tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ai-meta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  margin-left: auto;
+}
+.ai-body {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-variation-settings: "opsz" 18;
+}
+.ai-body::first-letter {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 0.9;
+  float: left;
+  margin: 4px 8px 0 0;
+  color: var(--forest-600);
+  font-variation-settings: "opsz" 144;
+}
+.ai-body sup {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--forest-600);
+  margin-left: 1px;
+  vertical-align: super;
+  cursor: pointer;
+}
+.ai-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+.ai-foot strong { font-style: normal; font-weight: 500; color: var(--ink-2); }
+
+/* ============================================================
+   THE INEC-OFFICIAL STAMP — used on exports, audits, signed reports
+   A square hairline rule with mono SOLON inside.
+   ============================================================ */
+.stamp-official {
+  display: inline-block;
+  border: 2px solid var(--ink);
+  padding: 6px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transform: rotate(-2deg);
+  position: relative;
+}
+.stamp-official.signed {
+  border-color: var(--forest-600);
+  color: var(--forest-600);
+}
+.stamp-official.void {
+  border-color: var(--crit);
+  color: var(--crit);
+  transform: rotate(-6deg);
+}
+
+/* ============================================================
+   FOOTNOTE / CITATION (parliamentary order-paper)
+   ============================================================ */
+.fn {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.fn-num {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  color: var(--forest-600);
+  margin-right: 4px;
+}
+
+/* ============================================================
+   SELECTION & SCROLLBAR
+   ============================================================ */
+::selection { background: rgba(27, 67, 50, 0.20); color: var(--ink); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--sheet-edge); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+/* ============================================================
+   PREVIEW FRAME — used on iframe pages
+   ============================================================ */
+.iframe-page {
+  background: var(--paper);
+  min-height: 100vh;
+}

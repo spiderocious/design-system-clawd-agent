@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · List row</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .stack > * + * { margin-top: 10px; }
+
+  .list-row.hover-on { border-color: var(--ink-3); transform: translateY(-2px); }
+  .list-row.active   { border-color: var(--green-500); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">20 / DATA &amp; STATE</span>
+    <h1 class="ttl">List row · the directory</h1>
+    <span class="meta">A1 lean line · locked in Act III</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">This is the unit of the marketplace. One row per tutor. Avatar 44px. Name in Fraunces. One-line meta: subject · years · neighbourhood. Price right-aligned, mono, tabular. No chips, no decoration, no five-star nonsense — credibility lives in the profile, not the row. Three states shown: default, hover, active.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · search results · a Sunday evening</div>
+    <h3>Eight tutors near Lekki · Further Maths</h3>
+    <p class="blurb">A parent has searched. Each row is a calm choice — the same shape eight times. Scrolling tells them they have options without overwhelming them.</p>
+
+    <div class="stack">
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm"></div>
+        <div>
+          <div class="lr-name">Marcus K.</div>
+          <div class="lr-meta">Further Maths · 8 yrs · Lekki</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦12,000</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row hover-on" href="#">
+        <div class="avatar avatar-sm avatar-sage"></div>
+        <div>
+          <div class="lr-name">Aisha O.</div>
+          <div class="lr-meta">Further Maths · 6 yrs · Victoria Island</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦9,500</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row active" href="#">
+        <div class="avatar avatar-sm avatar-sand"></div>
+        <div>
+          <div class="lr-name">Tunde A.</div>
+          <div class="lr-meta">Further Maths · 12 yrs · Yaba</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦15,000</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm avatar-clay"></div>
+        <div>
+          <div class="lr-name">Funke E.</div>
+          <div class="lr-meta">Further Maths · 4 yrs · Ikoyi</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦7,200</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm avatar-bone"></div>
+        <div>
+          <div class="lr-name">Chinedu O.</div>
+          <div class="lr-meta">Further Maths · 9 yrs · Surulere</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦11,000</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm"></div>
+        <div>
+          <div class="lr-name">Adaeze N.</div>
+          <div class="lr-meta">Further Maths · 7 yrs · Magodo</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦10,500</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm avatar-sage"></div>
+        <div>
+          <div class="lr-name">Babatunde I.</div>
+          <div class="lr-meta">Further Maths · 11 yrs · Ajah</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦13,000</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+
+      <a class="list-row" href="#">
+        <div class="avatar avatar-sm avatar-clay"></div>
+        <div>
+          <div class="lr-name">Olamide K.</div>
+          <div class="lr-meta">Further Maths · 5 yrs · Yaba</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price lr-price tabular">₦8,800</div>
+          <div class="lr-unit">per hour</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">States · for reference</span></div>
+
+  <div class="scene">
+    <div class="stack">
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: center;">
+        <span class="overline">Default</span>
+        <a class="list-row" href="#">
+          <div class="avatar avatar-sm"></div>
+          <div>
+            <div class="lr-name">Marcus K.</div>
+            <div class="lr-meta">Further Maths · 8 yrs · Lekki</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="price lr-price tabular">₦12,000</div>
+            <div class="lr-unit">per hour</div>
+          </div>
+        </a>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: center;">
+        <span class="overline">Hover</span>
+        <a class="list-row hover-on" href="#">
+          <div class="avatar avatar-sm avatar-sage"></div>
+          <div>
+            <div class="lr-name">Aisha O.</div>
+            <div class="lr-meta">Further Maths · 6 yrs · Victoria Island</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="price lr-price tabular">₦9,500</div>
+            <div class="lr-unit">per hour</div>
+          </div>
+        </a>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: center;">
+        <span class="overline">Active · selected</span>
+        <a class="list-row active" href="#">
+          <div class="avatar avatar-sm avatar-sand"></div>
+          <div>
+            <div class="lr-name">Tunde A.</div>
+            <div class="lr-meta">Further Maths · 12 yrs · Yaba</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="price lr-price tabular">₦15,000</div>
+            <div class="lr-unit">per hour</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cards</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .grid-2 { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; }
+
+  /* Branch card — the signature card */
+  .branch {
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card);
+    padding: 22px 24px; display: flex; flex-direction: column; gap: 14px;
+    transition: border-color 120ms, transform 180ms ease;
+  }
+  .branch:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .branch .head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--hair); }
+  .branch .id { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .branch .name { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.018em; }
+  .branch .loc  { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; margin-left: auto; }
+  .branch .figure {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 38px; line-height: 1; letter-spacing: -0.02em; color: var(--emerald-700);
+  }
+  .branch .figure .u { font-family: var(--sans); font-size: 12px; color: var(--ink-3); margin-left: 6px; letter-spacing: 0.04em; }
+  .branch .lines { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .branch .lines .col-d .k { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px; }
+  .branch .lines .col-d .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .branch .foot {
+    padding-top: 12px; border-top: 1px solid var(--hair); display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3);
+  }
+
+  /* Stat card (smaller, for owner roll-up) */
+  .stat {
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card);
+    padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .stat .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .stat .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 28px; line-height: 1; letter-spacing: -0.018em; }
+  .stat .sub { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+
+  /* Person card */
+  .person {
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card);
+    padding: 18px 20px; display: flex; align-items: center; gap: 14px;
+  }
+  .person .av { width: 48px; height: 48px; font-size: 16px; }
+  .person .name { font-family: var(--serif); font-size: 17px; font-weight: 600; letter-spacing: -0.012em; }
+  .person .role { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; text-transform: uppercase; }
+  .person .meta { margin-left: auto; text-align: right; }
+  .person .meta .figure { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; }
+  .person .meta .sub { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">27.</div>
+    <div class="ttl">Cards — sheets on the desk.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    A card is a single sheet. Hairline edge, paper background, no shadow at rest, a small lift on hover. The branch card is the signature: a number-led summary the owner reads first.
+  </p>
+
+  <div class="break"><span class="lbl">Branch summary — three branches</span></div>
+  <div class="grid-3">
+
+    <div class="branch">
+      <div class="head">
+        <span class="id">B-01</span>
+        <span class="name">Mokola</span>
+        <span class="loc">IBADAN</span>
+      </div>
+      <div>
+        <div class="overline" style="margin-bottom: 6px;">PMS SOLD · TUE</div>
+        <div class="figure">1,928<span class="u">L</span></div>
+      </div>
+      <div class="lines">
+        <div class="col-d"><div class="k">IN TANK</div><div class="v">20,460 L</div></div>
+        <div class="col-d"><div class="k">CASH IN</div><div class="v">₦377,888</div></div>
+        <div class="col-d"><div class="k">VARIANCE</div><div class="v read-short">− ₦2,400</div></div>
+      </div>
+      <div class="foot">
+        <span class="pulse"></span>
+        <span>evening shift still open · Femi on P-03</span>
+      </div>
+    </div>
+
+    <div class="branch">
+      <div class="head">
+        <span class="id">B-02</span>
+        <span class="name">Surulere</span>
+        <span class="loc">LAGOS</span>
+      </div>
+      <div>
+        <div class="overline" style="margin-bottom: 6px;">PMS SOLD · TUE</div>
+        <div class="figure">2,140<span class="u">L</span></div>
+      </div>
+      <div class="lines">
+        <div class="col-d"><div class="k">IN TANK</div><div class="v">14,820 L</div></div>
+        <div class="col-d"><div class="k">CASH IN</div><div class="v">₦419,440</div></div>
+        <div class="col-d"><div class="k">VARIANCE</div><div class="v read-ok">+ ₦0</div></div>
+      </div>
+      <div class="foot">
+        <span style="color: var(--emerald-700)">✓</span>
+        <span>both shifts posted by Tunde · 22:14</span>
+      </div>
+    </div>
+
+    <div class="branch">
+      <div class="head">
+        <span class="id">B-03</span>
+        <span class="name">PH-Rumuola</span>
+        <span class="loc">RIVERS</span>
+      </div>
+      <div>
+        <div class="overline" style="margin-bottom: 6px;">PMS SOLD · TUE</div>
+        <div class="figure">1,140<span class="u">L</span></div>
+      </div>
+      <div class="lines">
+        <div class="col-d"><div class="k">IN TANK</div><div class="v">2,810 L</div></div>
+        <div class="col-d"><div class="k">CASH IN</div><div class="v">₦223,440</div></div>
+        <div class="col-d"><div class="k">VARIANCE</div><div class="v read-short">− ₦2,400</div></div>
+      </div>
+      <div class="foot" style="color: var(--short);">
+        <span>!</span>
+        <span>tank near reorder · awaiting tanker</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="break"><span class="lbl">Stat cards — owner dashboard strip</span></div>
+  <div class="grid-3">
+    <div class="stat">
+      <div class="k">TODAY'S GROSS · ALL</div>
+      <div class="v">₦1,020,768</div>
+      <div class="sub">3 branches · 9 shifts · 12 attendants</div>
+    </div>
+    <div class="stat">
+      <div class="k">VARIANCE TODAY</div>
+      <div class="v read-short">− ₦4,800</div>
+      <div class="sub">2 short shifts open</div>
+    </div>
+    <div class="stat">
+      <div class="k">PMS IN GROUND</div>
+      <div class="v">38,090<span style="font-size: 12px; font-family: var(--sans); color: var(--ink-3); letter-spacing: 0.04em;"> L</span></div>
+      <div class="sub">10 days at current pace</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Person cards — staff index</span></div>
+  <div class="grid-2">
+    <div class="person">
+      <div class="av av-mgr av-lg">AB</div>
+      <div>
+        <div class="name">Adeola Bakare</div>
+        <div class="role">Manager · Mokola</div>
+      </div>
+      <div class="meta">
+        <div class="figure">42 shifts</div>
+        <div class="sub">VARIANCE · ₦8,400</div>
+      </div>
+    </div>
+    <div class="person">
+      <div class="av av-att av-lg">FA</div>
+      <div>
+        <div class="name">Femi Adekunle</div>
+        <div class="role">Attendant · P-03 · Mokola</div>
+      </div>
+      <div class="meta">
+        <div class="figure">28 shifts</div>
+        <div class="sub">VARIANCE · ₦0</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

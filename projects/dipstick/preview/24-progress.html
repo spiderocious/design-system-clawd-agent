@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Progress & totals</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .sheet-row { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .h-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .h-row .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .h-row .meta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* Linear bar (sales-to-target) */
+  .bar-row { display: grid; grid-template-columns: 200px 1fr 100px 80px; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--hair); }
+  .bar-row:first-child { border-top: 1px solid var(--ink); }
+  .bar-row .who { font-family: var(--serif); font-size: 14px; font-weight: 500; }
+  .bar-row .bar-wrap { height: 12px; background: var(--paper-deep); border: 1px solid var(--sheet-edge); border-radius: 2px; position: relative; overflow: hidden; }
+  .bar-row .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--emerald-600); }
+  .bar-row .bar-fill.short { background: var(--short); }
+  .bar-row .bar-fill.watch { background: var(--watch); }
+  .bar-row .bar-target { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--ink); }
+  .bar-row .pct { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; font-size: 13px; }
+  .bar-row .v { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; font-size: 13px; color: var(--ink-3); }
+
+  /* Big totals strip */
+  .totals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+  .totals .cell { padding: 18px 22px; border-right: 1px solid var(--hair); }
+  .totals .cell:last-child { border-right: 0; }
+  .totals .cell .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .totals .cell .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 30px; letter-spacing: -0.018em; line-height: 1; }
+  .totals .cell .sub { font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+
+  /* circular gauge */
+  .gauge { display: inline-flex; align-items: center; gap: 14px; }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge .ring-bg { fill: none; stroke: var(--paper-deep); stroke-width: 8; }
+  .gauge .ring-fill { fill: none; stroke: var(--emerald-600); stroke-width: 8; stroke-linecap: butt; }
+  .gauge .v { font-family: var(--mono); font-size: 18px; font-variant-numeric: tabular-nums; }
+  .gauge .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">24.</div>
+    <div class="ttl">Progress &amp; totals.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Progress is always against a real target — daily litres, monthly variance budget, tanker-load remaining. The bar is a working measure: filled emerald when on pace, oxblood when behind on sales or over on variance.
+  </p>
+
+  <!-- Big totals strip -->
+  <div class="totals">
+    <div class="cell">
+      <div class="k">PMS sold today</div>
+      <div class="v">14,820 <span style="font-size: 12px; font-family: var(--sans); color: var(--ink-3); letter-spacing: 0.04em;">L</span></div>
+      <div class="sub">across 3 branches · 12 attendants</div>
+    </div>
+    <div class="cell">
+      <div class="k">Gross</div>
+      <div class="v">₦2,904,720</div>
+      <div class="sub">at avg ₦196/L</div>
+    </div>
+    <div class="cell">
+      <div class="k">Expenses</div>
+      <div class="v">₦83,400</div>
+      <div class="sub">17 line items · ₦18k diesel</div>
+    </div>
+    <div class="cell">
+      <div class="k">Variance</div>
+      <div class="v read-short">− ₦4,800</div>
+      <div class="sub" style="color: var(--short);">2 short shifts open</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Sales vs daily target — per branch</span></div>
+  <div class="sheet-row">
+    <div class="bar-row">
+      <span class="who">Mokola Station <span class="rec" style="margin-left: 6px;">IBADAN</span></span>
+      <div class="bar-wrap">
+        <div class="bar-fill" style="width: 64%;"></div>
+        <div class="bar-target" style="left: 75%;"></div>
+      </div>
+      <span class="pct">64%</span>
+      <span class="v">1,928 / 3,000 L</span>
+    </div>
+    <div class="bar-row">
+      <span class="who">Surulere <span class="rec" style="margin-left: 6px;">LAGOS</span></span>
+      <div class="bar-wrap">
+        <div class="bar-fill" style="width: 85%;"></div>
+        <div class="bar-target" style="left: 75%;"></div>
+      </div>
+      <span class="pct" style="color: var(--emerald-700);">85%</span>
+      <span class="v">2,140 / 2,500 L</span>
+    </div>
+    <div class="bar-row">
+      <span class="who">PH-Rumuola <span class="rec" style="margin-left: 6px;">RIVERS</span></span>
+      <div class="bar-wrap">
+        <div class="bar-fill watch" style="width: 38%;"></div>
+        <div class="bar-target" style="left: 75%;"></div>
+      </div>
+      <span class="pct" style="color: var(--watch);">38%</span>
+      <span class="v">1,140 / 3,000 L</span>
+    </div>
+    <p class="dictated" style="margin: 18px 0 0; font-size: 13px;">— The thin ink line is the day's pace-target at 18:00. Bars short of the line are behind for the time of day.</p>
+  </div>
+
+  <div class="break"><span class="lbl">Variance budget — month to date</span></div>
+  <div class="sheet-row">
+    <div class="row" style="gap: 32px; align-items: center;">
+      <div class="gauge">
+        <svg width="92" height="92" viewBox="0 0 92 92">
+          <circle class="ring-bg" cx="46" cy="46" r="40"/>
+          <circle class="ring-fill" cx="46" cy="46" r="40" stroke-dasharray="251.3" stroke-dashoffset="138" stroke="#9A1F18"/>
+        </svg>
+        <div>
+          <div class="v">45%</div>
+          <div class="k">OF MONTHLY BUDGET</div>
+        </div>
+      </div>
+      <hr style="height: 60px; width: 1px; background: var(--hair); border: 0;">
+      <div>
+        <div class="overline">SPENT</div>
+        <div style="font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 22px; color: var(--short);">− ₦68,400</div>
+        <div class="rec">OF ₦150,000 BUDGET</div>
+      </div>
+      <div>
+        <div class="overline">DAYS LEFT</div>
+        <div style="font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 22px;">17</div>
+        <div class="rec">PROJECTED OVERAGE · ₦42K</div>
+      </div>
+      <div style="margin-left: auto;">
+        <button class="b b-secondary">Review variance log</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

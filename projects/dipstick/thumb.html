@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dipstick · thumb</title>
+<style>
+  /* Self-contained thumbnail. Renders inside an iframe in the gallery.
+     Shows the signature reconciliation row at small scale. */
+
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: #F2EDE2;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #1A1714;
+    overflow: hidden;
+  }
+
+  .frame {
+    height: 100%;
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    justify-content: center;
+  }
+
+  .head-row {
+    display: flex; align-items: baseline; gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1A1714;
+  }
+  .wm {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px; font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .wm .dot { color: #0E5C3A; }
+  .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    color: #6E665B;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .title {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: -0.012em;
+    margin-top: 2px;
+  }
+  .sub {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-style: italic;
+    font-size: 9px;
+    color: #6E665B;
+    margin-top: 1px;
+    line-height: 1.4;
+  }
+
+  .ledger {
+    margin-top: 6px;
+    background: #FBF7EC;
+    border: 1px solid #D6CDB8;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 50px 70px 14px;
+    align-items: baseline;
+    column-gap: 8px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #D6CDB8;
+  }
+  .row:last-child { border-bottom: 0; background: #F7F2E4; border-top: 1px solid #1A1714; }
+  .row .who {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 10px; font-weight: 500; line-height: 1.2;
+  }
+  .row .who .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7px;
+    color: #6E665B;
+    letter-spacing: 0.06em;
+    margin-top: 1px;
+  }
+  .row .fig {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 9px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .row .var {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 9px;
+    text-align: right;
+    font-weight: 600;
+  }
+  .row .var.ok { color: #0E5C3A; }
+  .row .var.short { color: #9A1F18; }
+  .row .var.total { font-weight: 600; }
+  .row .mk { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-align: right; }
+  .row .mk.ok  { color: #0E5C3A; }
+  .row .mk.bad { color: #9A1F18; }
+
+  .row.total .who {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="head-row">
+    <span class="wm">Dipstick<span class="dot">.</span></span>
+    <span class="meta">MOKOLA · TUE 14 MAY</span>
+  </div>
+
+  <div>
+    <div class="title">Evening shift — reconciliation</div>
+    <div class="sub">4 attendants · 2,340 L · ₦740,448 expected · ₦1,960 short</div>
+  </div>
+
+  <div class="ledger">
+    <div class="row">
+      <div class="who">Aisha Bello<div class="sub">P-01 · PMS · 502 L</div></div>
+      <div class="fig">502 L</div>
+      <div class="var ok">+ ₦0</div>
+      <div class="mk ok">✓</div>
+    </div>
+    <div class="row">
+      <div class="who">Chidera Okoye<div class="sub">P-02 · PMS · 612 L</div></div>
+      <div class="fig">612 L</div>
+      <div class="var short">− ₦2,400</div>
+      <div class="mk bad">!</div>
+    </div>
+    <div class="row">
+      <div class="who">Femi Adekunle<div class="sub">P-03 · PMS · 814 L</div></div>
+      <div class="fig">814 L</div>
+      <div class="var ok">+ ₦0</div>
+      <div class="mk ok">✓</div>
+    </div>
+    <div class="row total">
+      <div class="who">Evening total<div class="sub">4 ATTENDANTS</div></div>
+      <div class="fig">2,340</div>
+      <div class="var total short">− ₦1,960</div>
+      <div class="mk"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

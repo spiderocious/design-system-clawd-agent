@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solon — parliamentary order paper</title>
+<link rel="stylesheet" href="preview/_foundation.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--paper); }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+    column-gap: 0;
+  }
+
+  /* ---- Left index ---- */
+  .toc {
+    background: var(--paper);
+    border-right: 1px solid var(--ink);
+    padding: 28px 24px 20px;
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .brand {
+    display: flex; align-items: baseline; gap: 6px;
+  }
+  .brand .dropcap { font-family: var(--serif); font-weight: 700; font-size: 38px; line-height: 1; font-variation-settings: "opsz" 144; letter-spacing: -0.01em; }
+  .brand .dropcap .dot { color: var(--orange); }
+  .brand .tag { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); padding-bottom: 5px; }
+  .vol {
+    font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3);
+    margin-top: 6px; line-height: 1.45;
+  }
+
+  .toc-search { margin: 22px 0 14px; }
+  .toc-search input {
+    width: 100%;
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    height: 32px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink);
+    outline: none;
+    padding: 0 12px;
+    letter-spacing: 0.04em;
+  }
+  .toc-search input:focus { border-color: var(--forest-600); box-shadow: 0 0 0 3px rgba(27,67,50,0.18); }
+  .toc-search input::placeholder { color: var(--ink-4); text-transform: uppercase; letter-spacing: 0.12em; font-size: 10px; }
+
+  .nav { flex: 1; padding: 0; margin: 0; list-style: none; }
+
+  .group { margin-top: 22px; }
+  .group:first-child { margin-top: 8px; }
+  .group-h {
+    display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  .group-h .n { color: var(--ink); }
+  .group-h .l { flex: 1; height: 1px; background: var(--hair); }
+
+  .item {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 5px 0;
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.45;
+  }
+  .item .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: transparent; border: 1px solid var(--ink-4);
+    flex-shrink: 0; transform: translateY(-3px);
+  }
+  .item:hover { color: var(--ink); }
+  .item.on { color: var(--ink); font-weight: 500; }
+  .item.on .dot { background: var(--forest-600); border-color: var(--forest-600); }
+
+  .meta {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    margin-top: 20px; padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    line-height: 1.7;
+    text-transform: uppercase; letter-spacing: 0.16em;
+  }
+
+  /* ---- Stage ---- */
+  .stage {
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: var(--paper);
+  }
+
+  .head {
+    flex-shrink: 0;
+    padding: 16px 26px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 16px;
+    background: var(--paper);
+  }
+  .crumb {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .crumb .cur { color: var(--ink); }
+  .head .gap { flex: 1; }
+  .head a {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.12em; text-decoration: none;
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .head a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .frame {
+    flex: 1;
+    min-height: 0;
+    background: var(--paper-2);
+    border-left: 1px solid var(--paper);
+  }
+  .frame iframe {
+    width: 100%; height: 100%; border: 0; display: block;
+    background: var(--paper);
+  }
+
+  /* ---- Welcome ---- */
+  .welcome-shell { height: 100%; overflow: auto; padding: 56px 72px; }
+  .welcome-shell h1 { font-family: var(--serif); font-weight: 700; font-size: 56px; font-variation-settings: "opsz" 144; letter-spacing: -0.015em; line-height: 1.05; margin: 0; }
+  .welcome-shell .lede { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink-3); line-height: 1.55; margin: 14px 0 36px; max-width: 60ch; }
+  .welcome-shell .lede strong { font-family: var(--serif); font-style: normal; font-weight: 500; color: var(--ink-2); }
+  .welcome-shell .scenes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 880px; }
+  .welcome-shell .scene-card { padding: 22px 26px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); cursor: pointer; transition: border-color 120ms var(--ease), transform 200ms var(--ease); }
+  .welcome-shell .scene-card:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .welcome-shell .scene-card .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .welcome-shell .scene-card .h { font-family: var(--serif); font-weight: 600; font-size: 20px; margin: 6px 0; font-variation-settings: "opsz" 36; }
+  .welcome-shell .scene-card .p { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="toc">
+    <div class="brand">
+      <h1 class="dropcap">Solon<span class="dot">.</span></h1>
+    </div>
+    <div class="vol">— a political intelligence platform for Nigeria, set in parliamentary order paper.</div>
+
+    <div class="toc-search">
+      <input id="filter" placeholder="Search…" autocomplete="off">
+    </div>
+
+    <nav id="nav" class="nav"></nav>
+
+    <div class="meta">
+      Anambra Central · v 0.1<br>
+      Solon-Athens · neutral
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="head">
+      <div class="crumb" id="crumb">
+        <span>Part I · Foundation</span>
+        <span style="margin: 0 8px; color: var(--ink-4)">/</span>
+        <span class="cur">Welcome</span>
+      </div>
+      <div class="gap"></div>
+      <a href="../../index.html">← Playground</a>
+      <a href="mvp.md" target="_blank">Brief</a>
+      <a id="popout" href="#" target="_blank">Open ↗</a>
+    </div>
+    <div class="frame">
+      <iframe id="preview" title="Solon specimen"></iframe>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const PARTS = [
+    { id: "I",   title: "Foundation", items: [
+        { name: "Welcome",                    file: "" },
+        { name: "Palette",                    file: "preview/01-palette.html" },
+        { name: "Type",                       file: "preview/02-type.html" },
+        { name: "Spacing & geometry",         file: "preview/03-geometry.html" },
+        { name: "Motion",                     file: "preview/04-motion.html" },
+        { name: "Iconography",                file: "preview/05-icons.html" },
+    ]},
+    { id: "II",  title: "Primitives", items: [
+        { name: "Buttons",                    file: "preview/10-buttons.html" },
+        { name: "Inputs",                     file: "preview/11-inputs.html" },
+        { name: "Selection",                  file: "preview/12-selection.html" },
+        { name: "Date & time",                file: "preview/13-datetime.html" },
+        { name: "Specialized inputs",         file: "preview/14-specialized.html" },
+    ]},
+    { id: "III", title: "Data & state", items: [
+        { name: "Tables",                     file: "preview/20-tables.html" },
+        { name: "Win-probability list",       file: "preview/21-pulist.html" },
+        { name: "Charts",                     file: "preview/22-charts.html" },
+        { name: "Progress · confidence",      file: "preview/23-progress.html" },
+        { name: "Skeletons · empty",          file: "preview/24-skeletons.html" },
+        { name: "Avatars · pills · stamps",   file: "preview/25-avatars-pills.html" },
+        { name: "Cards",                      file: "preview/26-cards.html" },
+        { name: "Tooltips · hovercards",      file: "preview/27-tooltips.html" },
+        { name: "Navigation · shell · ⌘K",    file: "preview/28-navigation.html" },
+    ]},
+    { id: "IV",  title: "Scenes", items: [
+        { name: "Simulator · scenario builder",  file: "preview/30-simulator.html" },
+        { name: "Constituency intelligence map", file: "preview/31-map.html" },
+        { name: "Election-day War Room",         file: "preview/32-warroom.html" },
+        { name: "Finance compliance dashboard",  file: "preview/33-finance.html" },
+    ]},
+    { id: "V",   title: "Overlays & system", items: [
+        { name: "Modals",                     file: "preview/40-modals.html" },
+        { name: "Toasts · banners · status",  file: "preview/41-feedback.html" },
+        { name: "Citizen reporter · mobile",  file: "preview/42-citizen.html" },
+        { name: "INEC export sheet",          file: "preview/43-export.html" },
+    ]},
+  ];
+
+  const WELCOME = `
+    <link rel="stylesheet" href="preview/_foundation.css">
+    <style>
+      body { background: var(--paper); }
+      .welcome-shell { padding: 56px 72px 80px; max-width: 1080px; }
+      h1 { font-family: var(--serif); font-weight: 700; font-size: 64px; font-variation-settings: "opsz" 144; letter-spacing: -0.015em; line-height: 1.02; margin: 0; }
+      h1 .dot { color: var(--orange); }
+      .lede { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink-3); line-height: 1.6; margin: 18px 0 16px; max-width: 60ch; }
+      .lede strong { font-family: var(--serif); font-style: normal; font-weight: 500; color: var(--ink-2); }
+      .principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 22px; max-width: 800px; margin: 28px 0 36px; padding: 18px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+      .principles .row { font-family: var(--serif); font-size: 14.5px; color: var(--ink-2); padding: 6px 0; line-height: 1.5; }
+      .principles .row strong { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest-700); display: block; margin-bottom: 2px; }
+      .scenes-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+      .scenes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 880px; }
+      .scene-card { padding: 22px 26px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); }
+      .scene-card .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+      .scene-card .h { font-family: var(--serif); font-weight: 600; font-size: 20px; margin: 6px 0 4px; font-variation-settings: "opsz" 36; }
+      .scene-card .p { font-family: var(--serif); font-style: italic; font-size: 13.5px; color: var(--ink-3); line-height: 1.55; }
+    </style>
+    <div class="welcome-shell">
+      <h1>Solon<span class="dot">.</span></h1>
+      <p class="lede">A political intelligence and campaign platform for Nigeria, dressed as a parliamentary order paper. One stance, applied to every surface — the simulator, the constituency map, the war room, the finance return. <strong>Cream paper. Deep forest as the one accent. Burnt orange reserved for warn. Fraunces, Inter, JetBrains Mono.</strong></p>
+
+      <div class="principles">
+        <div class="row"><strong>Frame</strong> the printed order paper of a deliberative body — read in daylight, weighed before signed.</div>
+        <div class="row"><strong>Voice</strong> Solon is a <em>neutral analyst</em> — citation-heavy, hedged, never campaigning.</div>
+        <div class="row"><strong>Numbers</strong> mono for record (votes, expenses, IDs), serif for projection (modelled %, confidence).</div>
+        <div class="row"><strong>Colour</strong> forest is the CTA, orange is alarm, oxblood is irreversible. No others.</div>
+        <div class="row"><strong>Chrome</strong> hairlines instead of shadows; 4-pixel corners on controls; shadows only on popovers.</div>
+        <div class="row"><strong>Ethics</strong> voter-suppression queries are blocked at the model layer and logged for audit.</div>
+      </div>
+
+      <div class="scenes-h">Four scenes carry the system</div>
+      <div class="scenes">
+        <div class="scene-card"><div class="cap">SCENE · I</div><div class="h">Simulator · scenario builder</div><div class="p">The flagship: race picker, candidate matchup, lever panel, projection with confidence band, AI copilot citation block. The order paper laid on the strategist's desk.</div></div>
+        <div class="scene-card"><div class="cap">SCENE · II</div><div class="h">Constituency intelligence map</div><div class="p">Every polling unit in Anambra Central coloured by win-probability tier. Drill-in card shows the top three drivers behind each PU's projection.</div></div>
+        <div class="scene-card"><div class="cap">SCENE · III</div><div class="h">Election-day War Room</div><div class="p">Live tally, incident feed, anomaly flags. Ink-on-cream above; the counts banner inverts to ink-with-mono for the operator's eye.</div></div>
+        <div class="scene-card"><div class="cap">SCENE · IV</div><div class="h">Finance compliance dashboard</div><div class="p">INEC spend cap as the masthead. Anomaly feed, donor register, signed signature block. The export sheet is real paper.</div></div>
+      </div>
+    </div>
+  `;
+
+  const nav = document.getElementById('nav');
+  const filter = document.getElementById('filter');
+  const iframe = document.getElementById('preview');
+  const crumb = document.getElementById('crumb');
+  const popout = document.getElementById('popout');
+
+  let currentFile = null;
+
+  function render(query = "") {
+    nav.innerHTML = "";
+    const q = query.trim().toLowerCase();
+    PARTS.forEach(part => {
+      const items = part.items.filter(it => !q || it.name.toLowerCase().includes(q));
+      if (!items.length) return;
+      const g = document.createElement('div');
+      g.className = 'group';
+      g.innerHTML = `<div class="group-h"><span class="n">${part.id}</span><span>${part.title}</span><span class="l"></span></div>`;
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.className = 'item' + (it.file === currentFile ? ' on' : '');
+        a.innerHTML = `<span class="dot"></span><span>${it.name}</span>`;
+        a.addEventListener('click', e => { e.preventDefault(); load(it, part); });
+        g.appendChild(a);
+      });
+      nav.appendChild(g);
+    });
+  }
+
+  function load(item, part) {
+    currentFile = item.file;
+    if (item.file) {
+      iframe.removeAttribute('srcdoc');
+      iframe.src = item.file;
+      popout.href = item.file;
+      popout.style.opacity = '1';
+      popout.style.pointerEvents = 'auto';
+    } else {
+      iframe.removeAttribute('src');
+      iframe.srcdoc = WELCOME;
+      popout.href = '#';
+      popout.style.opacity = '0.4';
+      popout.style.pointerEvents = 'none';
+    }
+    crumb.innerHTML = `<span>Part ${part.id} · ${part.title}</span><span style="margin:0 8px;color:var(--ink-4)">/</span><span class="cur">${item.name}</span>`;
+    render(filter.value);
+    if (item.file) location.hash = encodeURIComponent(item.file);
+    else location.hash = '';
+  }
+
+  filter.addEventListener('input', e => render(e.target.value));
+  filter.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { filter.value = ''; render(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== filter) {
+      e.preventDefault(); filter.focus();
+    }
+  });
+
+  // Boot
+  const hash = decodeURIComponent(location.hash.slice(1));
+  let booted = false;
+  if (hash) {
+    PARTS.forEach(p => p.items.forEach(it => {
+      if (it.file === hash) { load(it, p); booted = true; }
+    }));
+  }
+  if (!booted) { load(PARTS[0].items[0], PARTS[0]); }
+</script>
+
+</body>
+</html>

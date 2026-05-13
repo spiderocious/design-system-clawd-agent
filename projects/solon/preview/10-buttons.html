@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · buttons</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+  /* Scene: modal foot */
+  .modal {
+    border: 1px solid var(--ink); border-radius: var(--r-soft);
+    background: var(--sheet); width: 520px; max-width: 100%;
+  }
+  .modal .body { padding: 24px 28px 20px; }
+  .modal .body .h { font-family: var(--serif); font-weight: 600; font-size: 20px; font-variation-settings: "opsz" 36; margin-bottom: 8px; }
+  .modal .body .p { font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink-2); }
+  .modal .foot {
+    padding: 14px 18px;
+    border-top: 1px solid var(--hair);
+    background: var(--paper);
+    display: flex; justify-content: flex-end; gap: 10px;
+    border-radius: 0 0 var(--r-soft) var(--r-soft);
+  }
+
+  /* Scene: toolbar */
+  .toolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    background: var(--sheet);
+  }
+  .toolbar .sep { width: 1px; height: 18px; background: var(--hair); }
+  .toolbar .gap { flex: 1; }
+  .toolbar .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+
+  /* Scene: list row with inline action */
+  .list-row {
+    display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 16px;
+    padding: 14px 16px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+  }
+  .list-row .nm { font-family: var(--serif); font-weight: 600; font-size: 15px; }
+  .list-row .sub { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+
+  /* Critical scene: irreversible */
+  .crit-card {
+    border: 1px solid var(--crit); border-radius: var(--r-card);
+    background: var(--crit-bg);
+    padding: 20px 24px;
+  }
+  .crit-card .h { font-family: var(--serif); font-weight: 600; font-size: 17px; color: var(--crit); margin-bottom: 6px; }
+  .crit-card .p { font-family: var(--serif); font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+  .crit-card .row { margin-top: 14px; }
+
+  /* State grid (small, at end) */
+  .ref-grid { display: grid; grid-template-columns: repeat(5, auto); gap: 12px 16px; padding: 14px 0; align-items: center; }
+  .ref-grid .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">10 / PRIMITIVES</div>
+    <div class="ttl">Buttons</div>
+    <div class="sub">— rendered in scenes.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Five button intents, drawn in the places they live. Primary is forest, secondary is hairline-ink, quiet is text-only, warn (orange) sits beside actions that need attention, critical (oxblood) is reserved for irreversible — and never appears without a confirmation pattern.
+  </p>
+
+  <div class="scene">
+    <div class="scene-h"><span>Scene · scenario modal foot</span><span class="ttl">primary, secondary, quiet</span></div>
+    <div class="modal">
+      <div class="body">
+        <div class="h">Save scenario</div>
+        <div class="p">Give this scenario a name. It will be filed under <strong>Anambra Central · Senate</strong> and accessible to your strategist team.</div>
+        <div style="margin-top: 14px;"><input class="f-plain" placeholder="Soludo endorsement · base case" /></div>
+      </div>
+      <div class="foot">
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-secondary">Save & close</button>
+        <button class="b b-primary">Save & re-run</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h"><span>Scene · constituency toolbar</span><span class="ttl">primary action paired with quiet siblings</span></div>
+    <div class="toolbar">
+      <span class="crumb">ANAMBRA CENTRAL · SENATE · BASELINE</span>
+      <span class="sep"></span>
+      <button class="b b-quiet b-sm">Filter</button>
+      <button class="b b-quiet b-sm">Compare</button>
+      <button class="b b-quiet b-sm">Export</button>
+      <span class="gap"></span>
+      <button class="b b-secondary b-sm">Save scenario</button>
+      <button class="b b-primary b-sm">Re-run</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h"><span>Scene · candidate row with inline action</span><span class="ttl">link button + warn for withdraw</span></div>
+    <div class="list-row">
+      <div>
+        <div class="nm">Soludo, Charles — APGA</div>
+        <div class="sub">Incumbent governor · prior backer of LP coalition · ethnoreligious: Igbo Christian</div>
+      </div>
+      <button class="b b-link">Edit attributes</button>
+      <button class="b b-warn b-sm">Withdraw</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h"><span>Scene · irreversible</span><span class="ttl">critical idiom — type-to-confirm</span></div>
+    <div class="crit-card">
+      <div class="h">Void this polling-unit result</div>
+      <div class="p">Voiding a polling-unit submission removes it from the live War Room tally and writes an audit entry signed by your account. This action is reported in the public export. To proceed, type the word <strong>VOID</strong> in the field below.</div>
+      <div class="row">
+        <input class="f-plain" style="max-width: 220px; display: inline-block; vertical-align: middle; margin-right: 12px;" placeholder="type VOID to confirm" />
+        <button class="b b-quiet" style="vertical-align: middle;">Cancel</button>
+        <button class="b b-crit" style="vertical-align: middle; opacity: 0.55;" disabled>Void result</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Reference grid · all intents, all sizes</span></div>
+
+  <div class="ref-grid">
+    <span class="lbl">Primary</span>
+    <button class="b b-primary b-sm">Save</button>
+    <button class="b b-primary">Save</button>
+    <button class="b b-primary b-lg">Save & re-run</button>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">28 · 34 · 42 px</span>
+
+    <span class="lbl">Secondary</span>
+    <button class="b b-secondary b-sm">Cancel</button>
+    <button class="b b-secondary">Cancel</button>
+    <button class="b b-secondary b-lg">Cancel</button>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">hairline ink</span>
+
+    <span class="lbl">Quiet</span>
+    <button class="b b-quiet b-sm">More</button>
+    <button class="b b-quiet">More</button>
+    <button class="b b-quiet b-lg">More</button>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">text only</span>
+
+    <span class="lbl">Warn</span>
+    <button class="b b-warn b-sm">Withdraw</button>
+    <button class="b b-warn">Withdraw</button>
+    <button class="b b-warn b-lg">Withdraw candidate</button>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">hairline orange</span>
+
+    <span class="lbl">Critical</span>
+    <button class="b b-crit b-sm">Void</button>
+    <button class="b b-crit">Void</button>
+    <button class="b b-crit b-lg">Void result</button>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">oxblood fill</span>
+
+    <span class="lbl">Link</span>
+    <button class="b b-link" style="font-size: 12px;">Edit</button>
+    <button class="b b-link">Edit attributes</button>
+    <span></span>
+    <span class="mono" style="font-size: 11px; color: var(--ink-3);">underlined forest</span>
+  </div>
+
+</div>
+</body>
+</html>

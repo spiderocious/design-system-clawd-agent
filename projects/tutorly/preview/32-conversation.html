@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Conversation</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); height: 100vh; overflow: hidden; }
+  .shell { display: grid; grid-template-columns: 320px 1fr 280px; height: 100vh; }
+
+  /* ===== Left rail · inbox ===== */
+  .inbox { border-right: 1px solid var(--hair); display: flex; flex-direction: column; min-height: 0; background: var(--paper); }
+  .inbox-h {
+    padding: 22px 24px 16px;
+    display: flex; align-items: baseline; gap: 8px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .inbox-h h2 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.014em; margin: 0; }
+  .inbox-h .count { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-left: auto; }
+  .inbox-list { flex: 1; overflow-y: auto; padding: 12px; }
+
+  .conv-item {
+    display: grid; grid-template-columns: 40px 1fr; gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .conv-item:hover { background: var(--sheet); }
+  .conv-item.on { background: var(--sheet); border: 1px solid var(--sheet-edge); }
+  .conv-item .nm { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .conv-item .pv {
+    font-size: 12.5px; color: var(--ink-3);
+    margin-top: 4px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; line-height: 1.4;
+  }
+  .conv-item .meta-top { display: flex; align-items: baseline; gap: 8px; }
+  .conv-item .ts { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-left: auto; }
+  .conv-item.unread .nm { color: var(--ink); }
+  .conv-item.unread .pv { color: var(--ink-2); }
+  .conv-item.unread .ts { color: var(--green-700); font-weight: 500; }
+  .conv-item .unread-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-500); display: inline-block; margin-left: 6px; transform: translateY(-1px); }
+
+  /* ===== Center · the thread ===== */
+  .thread { display: flex; flex-direction: column; min-height: 0; background: var(--paper); }
+  .thread-h {
+    display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--paper);
+  }
+  .thread-h .nm { font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.014em; }
+  .thread-h .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+  .thread-h .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-500); animation: pulse 1400ms cubic-bezier(.4,0,.2,1) infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.5 } 50% { opacity: 1 } }
+  .thread-h .acts { display: flex; gap: 8px; }
+
+  /* Safety banner */
+  .safety-banner {
+    background: var(--info-bg); color: var(--info);
+    padding: 14px 28px;
+    display: grid; grid-template-columns: 22px 1fr auto; gap: 14px; align-items: center;
+    border-bottom: 1px solid var(--info-edge);
+    font-size: 13px;
+  }
+  .safety-banner svg { width: 20px; height: 20px; }
+  .safety-banner .ttl { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); margin-bottom: 2px; }
+  .safety-banner .copy { font-size: 12.5px; line-height: 1.5; }
+  .safety-banner button { background: transparent; border: 1px solid var(--info); color: var(--info); padding: 6px 14px; border-radius: 999px; font-family: var(--sans); font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  /* Messages */
+  .messages { flex: 1; overflow-y: auto; padding: 32px 28px; }
+  .day-marker {
+    display: flex; align-items: center; gap: 14px;
+    margin: 12px 0 22px;
+  }
+  .day-marker::before, .day-marker::after { content: ""; flex: 1; height: 1px; background: var(--hair-soft); }
+  .day-marker span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+
+  .msg { display: flex; gap: 14px; margin-bottom: 18px; max-width: 78%; }
+  .msg.in { align-self: flex-start; }
+  .msg.out { align-self: flex-end; flex-direction: row-reverse; margin-left: auto; }
+  .msg .bubble {
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 14.5px; line-height: 1.55;
+    background: var(--sheet); border: 1px solid var(--sheet-edge);
+    color: var(--ink-2);
+    max-width: 56ch;
+  }
+  .msg.out .bubble {
+    background: var(--green-50); border-color: var(--green-200); color: var(--ink);
+  }
+  .msg .bubble p { margin: 0 0 8px; }
+  .msg .bubble p:last-child { margin: 0; }
+  .msg .meta { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-top: 6px; }
+  .msg.out .meta { text-align: right; }
+
+  /* Quote in bubble (replying to context) */
+  .msg .bubble .reply-q { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); padding: 8px 12px; border-left: 2px solid var(--green-500); background: rgba(0,0,0,.02); border-radius: 8px; margin-bottom: 10px; }
+
+  /* Redacted-style contact masking */
+  .redacted {
+    display: inline-block;
+    background: var(--warn-bg);
+    color: var(--warn);
+    border: 1px dashed var(--warn-edge);
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Composer */
+  .composer {
+    border-top: 1px solid var(--hair);
+    padding: 16px 28px 24px;
+    background: var(--paper);
+  }
+  .composer-mask {
+    font-size: 11.5px; color: var(--ink-3); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .composer-mask svg { width: 14px; height: 14px; stroke: var(--ink-3); stroke-width: 1.5; fill: none; }
+  .composer-input {
+    background: var(--sheet); border: 1px solid var(--sheet-edge-2);
+    border-radius: 18px;
+    padding: 14px 16px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1), box-shadow 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .composer-input:focus-within { border-color: var(--green-500); box-shadow: 0 0 0 3px rgba(59,183,94,0.18); }
+  .composer-input .icon-btn { width: 32px; height: 32px; border: 0; background: transparent; cursor: pointer; color: var(--ink-3); }
+  .composer-input textarea {
+    border: 0; resize: none; outline: none;
+    font-family: var(--sans); font-size: 14.5px;
+    color: var(--ink); background: transparent;
+    width: 100%; height: 24px; line-height: 1.5;
+  }
+  .composer-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--ink-3); }
+
+  /* ===== Right rail · context ===== */
+  .ctx { border-left: 1px solid var(--hair); padding: 24px; overflow-y: auto; background: var(--paper); }
+  .ctx-h { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin: 0 0 12px; }
+  .ctx-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .ctx-card .nm { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.012em; }
+  .ctx-card .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
+  .ctx-card .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; margin: 16px 0; }
+  .ctx-card .meta-grid .l { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 3px; }
+  .ctx-card .meta-grid .v { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+
+  .report-link { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--crit-bg); color: var(--crit); border: 1px solid var(--crit-edge); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .report-link svg { width: 18px; height: 18px; stroke-width: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ LEFT · INBOX ============ -->
+  <aside class="inbox">
+    <div class="inbox-h">
+      <h2>Conversations</h2>
+      <span class="count">3 active</span>
+    </div>
+    <div class="inbox-list">
+      <div class="conv-item on">
+        <div class="avatar avatar-sm"></div>
+        <div>
+          <div class="meta-top">
+            <span class="nm">Marcus K.</span>
+            <span class="ts">19:42</span>
+          </div>
+          <div class="pv">"That's exactly the way I'd want to start. We can begin this Saturday afternoon if that suits…"</div>
+        </div>
+      </div>
+      <div class="conv-item unread">
+        <div class="avatar avatar-sm avatar-sage"></div>
+        <div>
+          <div class="meta-top">
+            <span class="nm">Aisha O.<span class="unread-dot"></span></span>
+            <span class="ts">Tue</span>
+          </div>
+          <div class="pv">Lovely. I'll send the reading list tonight. Is there anything specific that worried him in the last paper?</div>
+        </div>
+      </div>
+      <div class="conv-item">
+        <div class="avatar avatar-sm avatar-sand"></div>
+        <div>
+          <div class="meta-top">
+            <span class="nm">Tunde A.</span>
+            <span class="ts">10 Apr</span>
+          </div>
+          <div class="pv">Thank you for the introduction. I'm afraid my Saturdays are full till May — would a Sunday work?</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ CENTER · THREAD ============ -->
+  <main class="thread">
+
+    <header class="thread-h">
+      <div class="avatar avatar-md"></div>
+      <div>
+        <div class="nm">Marcus K.</div>
+        <div class="sub">
+          <span class="verified" style="height: 20px; padding: 0 8px; font-size: 10px;">Identity verified</span>
+          <span><span class="pulse-dot"></span> typing…</span>
+        </div>
+      </div>
+      <div class="acts">
+        <button class="b b-secondary b-sm">View profile</button>
+        <button class="b b-quiet b-sm">More</button>
+      </div>
+    </header>
+
+    <div class="safety-banner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.5 3.5 7 8 8 4.5-1 8-3.5 8-8V7l-8-4Z"/></svg>
+      <div>
+        <div class="ttl">Contact information is hidden until you both agree to share it.</div>
+        <div class="copy">Phone numbers, emails, and WhatsApp links will be redacted automatically. You can share them by tapping "Share contact" once you're both ready.</div>
+      </div>
+      <button>How it works</button>
+    </div>
+
+    <div class="messages">
+
+      <div class="day-marker"><span>Saturday · 12 April</span></div>
+
+      <div class="msg out">
+        <div>
+          <div class="bubble">
+            <p>Hi Marcus — my son Ifeanyi sits A-Level Further Maths in May. He's bright but he keeps drifting on calculus questions, especially the ones with parametric equations. We're hoping to find someone who can do a weekly hour with him until the exam.</p>
+            <p>I read your Sunday note on the second derivative — that's exactly the way I'd want him to be taught. Are you taking new students?</p>
+          </div>
+          <div class="meta">Sent · 18:14</div>
+        </div>
+      </div>
+
+      <div class="msg in">
+        <div class="avatar avatar-sm"></div>
+        <div>
+          <div class="bubble">
+            <div class="reply-q">"…that's exactly the way I'd want him to be taught."</div>
+            <p>Thank you — that means a great deal. Yes, I have room for one more student through May.</p>
+            <p>Before we go further, two things help me a lot: (1) what topic was the last paper that worried him? and (2) does he prefer working from past papers, or from a textbook?</p>
+          </div>
+          <div class="meta">19:31 · Marcus</div>
+        </div>
+      </div>
+
+      <div class="msg out">
+        <div>
+          <div class="bubble">
+            <p>(1) Parametric calculus — Edexcel June 2024 paper 2, question 7. He got 4 of 11 marks.</p>
+            <p>(2) Past papers. He says textbooks "go on about things he already understands and then skip the thing he doesn't."</p>
+            <p>You can reach me on <span class="redacted">[redacted phone]</span> if that's easier — happy to keep it here too.</p>
+          </div>
+          <div class="meta">Sent · 19:38</div>
+        </div>
+      </div>
+
+      <div class="msg in">
+        <div class="avatar avatar-sm"></div>
+        <div>
+          <div class="bubble">
+            <p>I'll keep it here, thank you. (Tutorly hides phone numbers until we've both met once — it's a small thing but it keeps the boundary clean.)</p>
+            <p>That's a useful diagnosis. Question 7 on that paper is exactly the moment students who 'know the rules' fall over. He doesn't need new technique — he needs a slower reading of what the parameter is doing.</p>
+            <p>If you're free next Saturday afternoon, I have 14:00 or 16:00 open. We can begin in person at my Lekki Phase 1 study, or online — whichever Ifeanyi prefers for the first one.</p>
+          </div>
+          <div class="meta">19:42 · Marcus · just now</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="composer">
+      <div class="composer-mask">
+        <svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.5 10.5a3 3 0 0 0 4 4M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68M6.6 6.6A13.5 13.5 0 0 0 2 12s3 8 10 8a9.74 9.74 0 0 0 5.4-1.6"/></svg>
+        Tutorly will redact phone numbers and emails until you both share contact details.
+      </div>
+      <div class="composer-input">
+        <button class="icon-btn" title="Attach">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.05 12 20.45a5.5 5.5 0 0 1-7.8-7.78L13.45 3.4a3.5 3.5 0 0 1 4.95 4.95L9 17.74a1.5 1.5 0 0 1-2.12-2.12l8-8"/></svg>
+        </button>
+        <textarea placeholder="Write to Marcus…">Saturday 16:00 works — Ifeanyi will join you in person. Shall I send the Edexcel paper ahead?</textarea>
+        <button class="b b-primary b-sm">Send</button>
+      </div>
+      <div class="composer-foot">
+        <span>Press Enter to send · Shift+Enter for a new line</span>
+        <span>Encrypted in transit · Tutorly retains records for safety</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ RIGHT · CONTEXT ============ -->
+  <aside class="ctx">
+    <h4 class="ctx-h">About this tutor</h4>
+    <div class="ctx-card">
+      <div class="avatar"></div>
+      <div class="nm" style="margin-top: 14px;">Marcus K.</div>
+      <div class="sub">Further Maths &amp; Physics · Lekki</div>
+      <div class="meta-grid">
+        <div><div class="l">Rate</div><div class="v">₦12,000 / hr</div></div>
+        <div><div class="l">Teaching</div><div class="v">8 yrs</div></div>
+        <div><div class="l">Students</div><div class="v">142</div></div>
+        <div><div class="l">Replies in</div><div class="v">≤ 2 hrs</div></div>
+      </div>
+      <button class="b b-secondary b-block b-sm">View full profile</button>
+    </div>
+
+    <h4 class="ctx-h">Lessons booked</h4>
+    <div class="ctx-card" style="padding: 14px 18px;">
+      <div class="serif" style="font-size: 16px; font-weight: 500;">None yet</div>
+      <div class="tiny" style="margin-top: 4px;">Schedule the first lesson once you're both comfortable.</div>
+      <button class="b b-primary b-sm b-block" style="margin-top: 12px;">Propose a time</button>
+    </div>
+
+    <h4 class="ctx-h">Safety</h4>
+    <div class="report-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M3 17.5 12 3l9 14.5z"/></svg>
+      Report Marcus
+    </div>
+    <p class="tiny" style="margin-top: 12px; line-height: 1.55;">Anything from "they aren't replying" to "I'm worried about my child." Reports go to our trust team within minutes.</p>
+
+  </aside>
+
+</div>
+
+</body>
+</html>

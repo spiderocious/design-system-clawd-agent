@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Buttons</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 28px 32px; margin-bottom: 20px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 18px; max-width: 56ch; line-height: 1.6; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+  /* Profile-rail context */
+  .rail {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 16px; padding: 22px;
+    max-width: 320px;
+  }
+  .rail .price-block {
+    padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--hair);
+  }
+  .rail .rate-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+
+  /* List row context */
+  .row-card {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 14px; padding: 14px 18px;
+    display: grid; grid-template-columns: 44px 1fr auto auto; gap: 14px; align-items: center;
+  }
+
+  /* Modal foot */
+  .modal-foot {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 22px 24px;
+  }
+  .modal-foot p { margin: 0 0 16px; font-family: var(--serif); font-size: 17px; font-style: italic; color: var(--ink); letter-spacing: -0.008em; }
+  .modal-foot .foot-row { display: flex; gap: 12px; justify-content: flex-end; align-items: center; }
+  .modal-foot .spacer { flex: 1; }
+  .modal-foot .note { font-size: 12px; color: var(--ink-3); }
+
+  .ref-block { background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 14px; padding: 22px; }
+  .ref-block .ref-h { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); margin-bottom: 12px; }
+  .ref-block .ref-row { display: flex; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--hair-soft); }
+  .ref-block .ref-row:last-child { border-bottom: 0; }
+  .ref-block .ref-name { font-family: var(--mono); font-size: 11px; color: var(--ink-3); width: 140px; }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">10 / PRIMITIVES</span>
+    <h1 class="ttl">Buttons</h1>
+    <span class="meta">Drawn in scenes · single accent</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Five variants, but the only one you'll see often is <strong>Primary</strong>. Tutorly's signature interaction is Connect — pay the fee, start the conversation — and the button is designed for that single act. Danger appears only on irreversible safety actions (report-a-tutor, leave-conversation). Buttons are shown here in the situations they actually live in.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · profile rail · the connect moment</div>
+    <h3>The button that earns the company money</h3>
+    <p class="blurb">A parent has read Marcus's profile and decided. The Connect button anchors the right rail — full-width, 52px tall, with the fee shown inline so the price is never a surprise.</p>
+    <div class="rail">
+      <div class="price-block">
+        <div class="rate-label">Lesson rate</div>
+        <div class="price price-lg tabular">₦12,000<span class="price-unit" style="margin-left: 6px;">per hour</span></div>
+      </div>
+      <button class="b b-primary b-lg b-block">Connect with Marcus — ₦2,500</button>
+      <p class="tiny" style="margin: 12px 0 0; text-align: center;">One-time fee. Identity stays masked until you both agree.</p>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · list row · the toolbar</div>
+    <h3>Quiet actions inside a row</h3>
+    <p class="blurb">Save-for-later and Compare are quiet secondary actions. They never compete with Connect.</p>
+    <div class="row-card">
+      <div class="avatar avatar-sm"></div>
+      <div>
+        <div class="serif" style="font-size: 17px;">Marcus K.</div>
+        <div class="tiny" style="margin-top: 2px;">Further Maths · 8 yrs · Lekki</div>
+      </div>
+      <button class="b b-quiet b-sm">Save</button>
+      <button class="b b-primary b-sm">Connect</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · modal foot · the confirmation</div>
+    <h3>Cancel sits left of the action, never beside it</h3>
+    <p class="blurb">On a confirm modal, the cancel always sits at the left and the action at the right. The action's label restates the consequence — not "Confirm" but "Connect — ₦2,500."</p>
+    <div class="modal-foot">
+      <p>"Once you connect, ₦2,500 will be charged. You'll be able to message Marcus immediately."</p>
+      <div class="foot-row">
+        <span class="note">You can cancel before you send your first message.</span>
+        <div class="spacer"></div>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-primary">Connect — ₦2,500</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · safety · the danger variant</div>
+    <h3>The irreversible button is drawn in brick-red, not Bootstrap-red</h3>
+    <p class="blurb">Used on report-a-tutor, leave-conversation, and delete-account. Pairs with a critical-bg modal background so the danger always reads as one composition, not a loose button.</p>
+    <div class="modal-foot" style="background: var(--crit-bg); border-color: var(--crit-edge);">
+      <p style="color: var(--crit);">"Reporting Marcus will close this conversation immediately and notify our trust team. This cannot be undone."</p>
+      <div class="foot-row">
+        <div class="spacer"></div>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-danger">Report &amp; close conversation</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Variant reference · small grid at the end</span></div>
+
+  <div class="ref-block">
+    <div class="ref-h">Variants · sizes · states</div>
+    <div class="ref-row"><span class="ref-name">primary · md</span><button class="b b-primary">Connect — ₦2,500</button><button class="b b-primary" disabled style="opacity: .45; cursor: not-allowed;">Disabled</button></div>
+    <div class="ref-row"><span class="ref-name">primary · lg</span><button class="b b-primary b-lg">Connect with Marcus</button></div>
+    <div class="ref-row"><span class="ref-name">primary · sm</span><button class="b b-primary b-sm">Connect</button></div>
+    <div class="ref-row"><span class="ref-name">secondary</span><button class="b b-secondary">Save tutor</button><button class="b b-secondary b-sm">Save</button></div>
+    <div class="ref-row"><span class="ref-name">quiet</span><button class="b b-quiet">Cancel</button><button class="b b-quiet b-sm">Filter</button></div>
+    <div class="ref-row"><span class="ref-name">link</span><button class="b b-link">Read Marcus's Sunday note →</button></div>
+    <div class="ref-row"><span class="ref-name">danger</span><button class="b b-danger">Report tutor</button></div>
+  </div>
+
+</main>
+</body>
+</html>

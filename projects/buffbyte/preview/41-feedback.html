@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Toasts & banners · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin: 24px 0 14px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  /* Banner — inline, full-width */
+  .banner {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 18px;
+    background: var(--accent-tint); color: var(--accent-ink);
+    border: 1px solid var(--accent-edge); border-radius: var(--r-soft);
+    margin-bottom: 16px;
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; color: var(--accent); }
+  .banner .text { flex: 1; font-size: 13.5px; line-height: 1.5; }
+  .banner .text strong { font-weight: 600; }
+  .banner .actions { display: flex; gap: 8px; }
+  .banner.warn { background: var(--warn-bg); color: var(--warn-deep); border-color: var(--warn-edge); }
+  .banner.warn svg { color: var(--warn-deep); }
+  .banner.crit { background: var(--crit-bg); color: var(--crit-deep); border-color: var(--crit-edge); }
+  .banner.crit svg { color: var(--crit); }
+  .banner.ink { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .banner.ink svg { color: var(--accent); }
+
+  /* Toast stack */
+  .toast-stage {
+    position: relative;
+    background: var(--paper-deep);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    min-height: 280px;
+    padding: 24px;
+  }
+  .toast-stack {
+    position: absolute; right: 24px; bottom: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    width: 360px;
+  }
+  .toast {
+    background: var(--sheet); border: 1px solid var(--hair);
+    border-radius: var(--r-soft);
+    box-shadow: var(--shade-pop);
+    display: grid; grid-template-columns: 28px 1fr 18px; gap: 12px; align-items: flex-start;
+    padding: 12px 14px;
+  }
+  .toast .ic {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent-tint); color: var(--accent);
+  }
+  .toast .body .h { font-size: 13px; font-weight: 600; }
+  .toast .body p { font-size: 12.5px; color: var(--ink-3); margin: 2px 0 0; line-height: 1.45; }
+  .toast .body .actions { margin-top: 8px; display: flex; gap: 8px; }
+  .toast .body .actions a { font-size: 12px; color: var(--accent); font-weight: 500; cursor: pointer; }
+  .toast .dismiss { color: var(--ink-4); cursor: pointer; line-height: 1; font-size: 16px; }
+  .toast.warn .ic { background: var(--warn-bg); color: var(--warn-deep); }
+  .toast.crit .ic { background: var(--crit-bg); color: var(--crit); }
+
+  /* Inline note (in-product, contextual) */
+  .inline-note {
+    padding: 12px 14px;
+    border: 1px solid var(--hair); border-radius: var(--r-soft);
+    background: var(--paper);
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13px; line-height: 1.55; color: var(--ink-2);
+    margin-bottom: 12px;
+  }
+  .inline-note svg { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .inline-note strong { color: var(--ink); font-weight: 600; }
+  .inline-note.coach { border-left: 2px solid var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Toasts & banners</h1>
+  <p>Three feedback strengths — <em>inline note</em> in-flow, <em>banner</em> across a surface, <em>toast</em> from a corner. Colour signals impact: accent for info, amber for warn, oxblood for critical.</p>
+</header>
+
+<!-- Banners -->
+<div class="scene-h"><span class="roman">01</span><span class="ttl">Banners · contextual, inline with the page</span></div>
+
+<div class="banner">
+  <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/></svg>
+  <div class="text">
+    <strong>The coach has a new model.</strong> Analyses now include voice-consistency scoring against your past 12 drafts. <a href="#">See what changed →</a>
+  </div>
+  <div class="actions">
+    <button class="btn btn-ghost btn-sm" style="color:var(--accent-ink);">Dismiss</button>
+  </div>
+</div>
+
+<div class="banner warn">
+  <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.01"/></svg>
+  <div class="text">
+    <strong>You're at 180 of 200 analyses today.</strong> Your free plan resets at midnight. Upgrade if you want to keep going.
+  </div>
+  <div class="actions">
+    <button class="btn btn-secondary btn-sm">Upgrade plan</button>
+    <button class="btn btn-ghost btn-sm" style="color:var(--warn-deep);">Dismiss</button>
+  </div>
+</div>
+
+<div class="banner crit">
+  <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+  <div class="text">
+    <strong>The analysis service is degraded.</strong> Some requests are failing. We're working on it — your drafts are safe in local storage.
+  </div>
+  <div class="actions">
+    <button class="btn btn-secondary btn-sm">Status page</button>
+  </div>
+</div>
+
+<div class="banner ink">
+  <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  <div class="text">
+    <strong>BuffByte for Teams is here.</strong> Share collections, assign drafts to reviewers, and see everyone's progress at a glance.
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary btn-sm">See plans</button>
+  </div>
+</div>
+
+<!-- Inline coach note -->
+<div class="scene-h"><span class="roman">02</span><span class="ttl">Inline notes · in-flow, contextual</span></div>
+<div class="inline-note coach">
+  <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/></svg>
+  <div><strong>The coach says:</strong> your last three drafts all opened with "Spent some time…" — strong pattern, but consider varying the hook on this one to avoid sounding formulaic.</div>
+</div>
+<div class="inline-note">
+  <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+  <div><strong>Auto-saved</strong> just now. Last 12 versions are available in history.</div>
+</div>
+
+<!-- Toasts -->
+<div class="scene-h"><span class="roman">03</span><span class="ttl">Toasts · corner, transient</span></div>
+<div class="toast-stage">
+  <div class="t-overline">Imagine these arrive in the lower-right of any surface</div>
+  <div class="toast-stack">
+
+    <div class="toast">
+      <div class="ic"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-5"/></svg></div>
+      <div class="body">
+        <div class="h">Analysis complete</div>
+        <p>"Spent some time last month…" scored 87. Three coach notes are waiting.</p>
+        <div class="actions"><a>Open</a><a style="color:var(--ink-3);">Later</a></div>
+      </div>
+      <span class="dismiss">×</span>
+    </div>
+
+    <div class="toast warn">
+      <div class="ic"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.01"/></svg></div>
+      <div class="body">
+        <div class="h">Compliance flag</div>
+        <p>"the only AI" reads as unverified. We're saving a flagged copy.</p>
+        <div class="actions"><a>Review</a></div>
+      </div>
+      <span class="dismiss">×</span>
+    </div>
+
+    <div class="toast crit">
+      <div class="ic"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.01"/></svg></div>
+      <div class="body">
+        <div class="h">Could not reach the analysis service</div>
+        <p>Your draft is safe locally. We'll retry every 30 seconds.</p>
+        <div class="actions"><a>Retry now</a></div>
+      </div>
+      <span class="dismiss">×</span>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

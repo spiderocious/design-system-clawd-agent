@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Spacing & geometry</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scale { display: grid; grid-template-columns: 80px 1fr; gap: 18px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--hair); }
+  .scale .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .scale .bar { height: 14px; background: var(--ink); border-radius: 2px; }
+  .radii { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+  .radii .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .radii .swatch { width: 96px; height: 64px; background: var(--ink); }
+  .radii .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .grid-demo { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; padding: 16px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); }
+  .grid-demo .col-dem { background: rgba(14,92,58,0.06); border: 1px dashed rgba(14,92,58,0.4); height: 64px; border-radius: 2px; font-family: var(--mono); font-size: 10px; color: var(--emerald-700); display: flex; align-items: center; justify-content: center; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">03.</div>
+    <div class="ttl">Geometry — 4 / 8, hairlines, 3px corners.</div>
+    <div class="meta">FOUNDATION</div>
+  </div>
+
+  <p class="dictated" style="margin: 0 0 28px; max-width: 60ch;">
+    The grid is 8px. The hairline is 1px. Corners are 3px on sheets, 4px on inputs and buttons. We don't soften — this is a logbook, not a fintech app.
+  </p>
+
+  <div class="break"><span class="lbl">Spacing scale (8-multiple)</span></div>
+  <div class="scale"><div class="k">4 / s-1</div><div class="bar" style="width: 4px;"></div></div>
+  <div class="scale"><div class="k">8 / s-2</div><div class="bar" style="width: 8px;"></div></div>
+  <div class="scale"><div class="k">12 / s-3</div><div class="bar" style="width: 12px;"></div></div>
+  <div class="scale"><div class="k">16 / s-4</div><div class="bar" style="width: 16px;"></div></div>
+  <div class="scale"><div class="k">24 / s-6</div><div class="bar" style="width: 24px;"></div></div>
+  <div class="scale"><div class="k">32 / s-8</div><div class="bar" style="width: 32px;"></div></div>
+  <div class="scale"><div class="k">48 / s-12</div><div class="bar" style="width: 48px;"></div></div>
+  <div class="scale"><div class="k">64 / s-16</div><div class="bar" style="width: 64px;"></div></div>
+  <div class="scale"><div class="k">96 / s-24</div><div class="bar" style="width: 96px;"></div></div>
+
+  <div class="break"><span class="lbl">Radii</span></div>
+  <div class="radii">
+    <div class="item"><div class="swatch" style="border-radius: 2px;"></div><div class="k">2px · r-sharp</div></div>
+    <div class="item"><div class="swatch" style="border-radius: 3px;"></div><div class="k">3px · r-card ★</div></div>
+    <div class="item"><div class="swatch" style="border-radius: 4px;"></div><div class="k">4px · r-soft</div></div>
+    <div class="item"><div class="swatch" style="border-radius: 9999px; width: 96px;"></div><div class="k">pill · r-pill</div></div>
+  </div>
+  <p class="dictated" style="margin: 12px 0 0; font-size: 13px;">★ 3px is the default. The rest are reserved — 2px for flag chips, 4px for controls, pill only on status badges.</p>
+
+  <div class="break"><span class="lbl">Page grid · 12 cols / 8px gutter / 1100 max</span></div>
+  <div class="grid-demo">
+    <div class="col-dem">01</div><div class="col-dem">02</div><div class="col-dem">03</div><div class="col-dem">04</div>
+    <div class="col-dem">05</div><div class="col-dem">06</div><div class="col-dem">07</div><div class="col-dem">08</div>
+    <div class="col-dem">09</div><div class="col-dem">10</div><div class="col-dem">11</div><div class="col-dem">12</div>
+  </div>
+
+  <div class="break"><span class="lbl">Rules — three weights</span></div>
+  <div class="col" style="gap: 18px;">
+    <div>
+      <hr class="hair">
+      <div class="rec" style="margin-top: 6px;">HAIR — 1px / hair colour · default separator</div>
+    </div>
+    <div>
+      <hr class="ink">
+      <div class="rec" style="margin-top: 6px;">INK — 1px / ink colour · section / table head</div>
+    </div>
+    <div>
+      <hr class="ink-thick">
+      <div class="rec" style="margin-top: 6px;">INK-THICK — 2px / ink · ledger totals only</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Sheets in context</span></div>
+  <div class="split split-3">
+    <div class="sheet sheet-tight">
+      <div class="overline">TIGHT — 14 / 18</div>
+      <div class="serif" style="font-size: 16px; margin-top: 6px;">Inline detail row</div>
+    </div>
+    <div class="sheet sheet-md">
+      <div class="overline">MEDIUM — 20 / 24</div>
+      <div class="serif" style="font-size: 18px; margin-top: 6px;">Branch summary card</div>
+    </div>
+    <div class="sheet sheet-lg">
+      <div class="overline">LARGE — 28 / 32</div>
+      <div class="serif" style="font-size: 20px; margin-top: 6px;">Shift-close panel</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

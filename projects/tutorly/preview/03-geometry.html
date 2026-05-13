@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Spacing & geometry</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .demo-card { background: var(--sheet); border: 1px solid var(--sheet-edge); padding: 18px; }
+  .demo-card .lbl { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); margin-bottom: 12px; }
+  .demo-card .val { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .scale { display: flex; align-items: flex-end; gap: 12px; padding: 24px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 14px; }
+  .scale .box { background: var(--green-100); border: 1px solid var(--green-200); }
+  .legend { color: var(--ink-3); font-size: 13px; line-height: 1.65; max-width: 64ch; }
+  .gauge { display: flex; align-items: center; gap: 24px; padding: 28px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 18px; }
+  .gauge .sw { width: 80px; height: 80px; background: var(--green-500); flex-shrink: 0; }
+  .gauge .gauge-txt { flex: 1; }
+  .hair-demo { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 14px; padding: 24px; }
+  .hair-row { display: flex; align-items: center; gap: 18px; padding: 12px 0; }
+  .hair-row + .hair-row { border-top: 1px solid var(--hair); }
+  .hair-row + .hair-row.soft { border-top-color: var(--hair-soft); }
+  .hair-row .b1 { font-family: var(--serif); font-size: 17px; flex: 1; }
+  .hair-row .b2 { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">03 / FOUNDATION</span>
+    <h1 class="ttl">Spacing &amp; geometry</h1>
+    <span class="meta">4-unit base · soft radii · hairlines</span>
+  </div>
+
+  <p class="legend">Generous radii (16–20px on cards, 14px on inputs, 999px on chips). The corner softness is the stance's signal — it's what makes oat-paper feel like a Sunday morning. Spacing follows a 4-unit base; eight is the unit you'll see most often. Hairlines, never shadows, separate two cards on the canvas.</p>
+
+  <div class="break"><span class="lbl">Spacing scale</span></div>
+
+  <div class="scale">
+    <div class="box" style="width: 4px; height: 4px;"></div>
+    <div class="box" style="width: 8px; height: 8px;"></div>
+    <div class="box" style="width: 12px; height: 12px;"></div>
+    <div class="box" style="width: 16px; height: 16px;"></div>
+    <div class="box" style="width: 24px; height: 24px;"></div>
+    <div class="box" style="width: 32px; height: 32px;"></div>
+    <div class="box" style="width: 48px; height: 48px;"></div>
+    <div class="box" style="width: 64px; height: 64px;"></div>
+  </div>
+  <p class="legend" style="margin-top: 14px;"><strong>4 · 8 · 12 · 16 · 24 · 32 · 48 · 64</strong>. Inside a card, 14–18 between rows. Between cards, 16–24. Outer page margins, 56–88. Cards are spacious because the project's answer to density was spacious — packed has no place here.</p>
+
+  <div class="break"><span class="lbl">Radii</span></div>
+
+  <div class="grid-4">
+    <div class="demo-card" style="border-radius: 6px">
+      <div class="lbl">Sharp</div>
+      <div class="val">6 px</div>
+      <p class="tiny" style="margin: 10px 0 0;">Chips, small icons, inline marks.</p>
+    </div>
+    <div class="demo-card" style="border-radius: 12px">
+      <div class="lbl">Soft</div>
+      <div class="val">12 px</div>
+      <p class="tiny" style="margin: 10px 0 0;">Inputs, small buttons.</p>
+    </div>
+    <div class="demo-card" style="border-radius: 16px">
+      <div class="lbl">Card</div>
+      <div class="val">16 px</div>
+      <p class="tiny" style="margin: 10px 0 0;">Buttons, list rows, the standard card.</p>
+    </div>
+    <div class="demo-card" style="border-radius: 20px">
+      <div class="lbl">Card lg</div>
+      <div class="val">20 px</div>
+      <p class="tiny" style="margin: 10px 0 0;">Profile cards, modals.</p>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Hairlines over shadows</span></div>
+
+  <div class="hair-demo">
+    <div class="hair-row">
+      <div class="b1">Marcus K.</div>
+      <div class="b2">strong hair · 1px on edge</div>
+    </div>
+    <div class="hair-row">
+      <div class="b1">Aisha O.</div>
+      <div class="b2">strong hair · 1px between rows</div>
+    </div>
+    <div class="hair-row soft">
+      <div class="b1">Tunde A.</div>
+      <div class="b2">soft hair · for sub-rows inside one block</div>
+    </div>
+  </div>
+  <p class="legend" style="margin-top: 14px;">A drop-shadow is the second-easiest way to make a card look "AI-default." We use it only for modals and the rare popover. Everywhere else: a 1px hairline at the sheet-edge tone.</p>
+
+  <div class="break"><span class="lbl">Component density · the answer</span></div>
+
+  <div class="gauge">
+    <div class="sw"></div>
+    <div class="gauge-txt">
+      <div class="overline" style="margin-bottom: 8px">Spacious · room to breathe</div>
+      <div class="body"><strong>Tutorly is spacious.</strong> One tutor per row, paragraph-level depth in the profile, a search results page that feels like a quiet library — not a Black-Friday grid. The brief was clear: a parent on the couch on a Sunday evening should never feel rushed.</div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

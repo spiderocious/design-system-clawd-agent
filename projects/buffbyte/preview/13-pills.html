@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pills & tags · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 28px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  /* hashtag, ranked */
+  .hash-row {
+    display: grid; grid-template-columns: 22px 1fr auto auto;
+    align-items: center; gap: 14px;
+    padding: 14px 0; border-top: 1px solid var(--hair);
+  }
+  .hash-row:first-child { border-top: 0; }
+  .hash-row .rank {
+    width: 22px; height: 22px; border-radius: 4px;
+    background: var(--ink); color: var(--paper);
+    display: grid; place-items: center; font-size: 11px; font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .hash-row .rank.lead { background: var(--accent); }
+  .hash-row .h { font-weight: 500; font-size: 14px; }
+  .hash-row .h .tags { display: flex; gap: 6px; margin-top: 4px; }
+  .hash-row .v { text-align: right; }
+  .hash-row .v .n { font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .hash-row .v .l { font-size: 10.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); }
+
+  /* status pills with dots */
+  .status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 10px 2px 6px;
+    border-radius: 999px; font-size: 11.5px; font-weight: 500;
+    background: var(--paper-deep); border: 1px solid var(--hair); color: var(--ink-2);
+  }
+  .status .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); }
+  .status.live .pip { background: var(--accent); box-shadow: 0 0 0 3px rgba(83,58,253,0.15); }
+  .status.warn .pip { background: var(--warn); }
+  .status.crit .pip { background: var(--crit); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Pills & tags</h1>
+  <p>The system has three real pills: <em>status</em> (with a dot), <em>chip</em> (a value), <em>tag</em> (a label). They share radius and tracking; they differ in chroma.</p>
+</header>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">01</span><span class="ttl">Status pills</span></div>
+  <div class="row">
+    <span class="status live"><span class="pip"></span>Live · analysis active</span>
+    <span class="status"><span class="pip"></span>Draft</span>
+    <span class="status"><span class="pip"></span>Stable</span>
+    <span class="status warn"><span class="pip"></span>Approaching limit</span>
+    <span class="status crit"><span class="pip"></span>Compliance flag</span>
+    <span class="status"><span class="pip" style="background:var(--accent);"></span>Ready to publish</span>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">02</span><span class="ttl">Value chips</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">Used on the AI's findings — every adjective is a chip with a colour-by-meaning rule.</p>
+  <div class="row">
+    <span class="pill pill-accent">Strong hook</span>
+    <span class="pill pill-accent">High virality</span>
+    <span class="pill pill-warn">Tighten middle</span>
+    <span class="pill pill-warn">Hashtag drift</span>
+    <span class="pill pill-crit">Unverified claim</span>
+    <span class="pill pill-crit">Competitor mention</span>
+    <span class="pill pill-ink">Recommended</span>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">03</span><span class="ttl">Tags · neutral labels</span></div>
+  <div class="row">
+    <span class="pill">jollof_rice</span>
+    <span class="pill">nigerian_food</span>
+    <span class="pill">guinness_world_record</span>
+    <span class="pill">premier_league</span>
+    <span class="pill">behind_the_scenes</span>
+    <span class="pill">25-34</span>
+    <span class="pill">35-44</span>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">04</span><span class="ttl">Ranked list · trending hashtags</span></div>
+  <p style="margin:0 0 8px;font-size:12.5px;color:var(--ink-3);">Pills earn their place in scenes. This is the trending board's anatomy.</p>
+  <div>
+    <div class="hash-row">
+      <span class="rank lead">1</span>
+      <div class="h">#HildaBaci<div class="tags"><span class="pill">jollof_rice</span><span class="pill">guinness_world_record</span></div></div>
+      <div class="v"><div class="n">58.0K</div><div class="l">Volume</div></div>
+      <div class="v"><div class="n t-accent">87%</div><div class="l">Engagement</div></div>
+    </div>
+    <div class="hash-row">
+      <span class="rank">2</span>
+      <div class="h">#JollofRice<div class="tags"><span class="pill">nigerian_food</span><span class="pill">world_record</span></div></div>
+      <div class="v"><div class="n">42.0K</div><div class="l">Volume</div></div>
+      <div class="v"><div class="n t-accent">84%</div><div class="l">Engagement</div></div>
+    </div>
+    <div class="hash-row">
+      <span class="rank">3</span>
+      <div class="h">#Tottenham<div class="tags"><span class="pill">football</span><span class="pill">premier_league</span></div></div>
+      <div class="v"><div class="n">35.0K</div><div class="l">Volume</div></div>
+      <div class="v"><div class="n">74%</div><div class="l">Engagement</div></div>
+    </div>
+    <div class="hash-row">
+      <span class="rank">4</span>
+      <div class="h">#Atiku<div class="tags"><span class="pill">politics</span></div></div>
+      <div class="v"><div class="n">28.0K</div><div class="l">Volume</div></div>
+      <div class="v"><div class="n">62%</div><div class="l">Engagement</div></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Icons · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px; }
+  .ic {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    aspect-ratio: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; padding: 14px;
+  }
+  .ic .label { font-size: 11px; color: var(--ink-3); }
+  .ic svg { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Iconography</h1>
+  <p>Single-stroke, 1.5 px, 24-grid. Round caps, round joins. The icon is a line drawing — never filled, never coloured, never an emoji.</p>
+</header>
+
+<div class="grid">
+
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span class="label">analyze</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span class="label">trending</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg><span class="label">timing</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 12l8-5"/><path d="M12 12l-8-5"/><path d="M12 12v9"/></svg><span class="label">platform</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-8-8"/><path d="M20 4l-8 8"/></svg><span class="label">score</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span class="label">script</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M5 6h14v10H7l-2 3z"/></svg><span class="label">tip</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 4l2 5h5l-4 3 2 6-5-4-5 4 2-6-4-3h5z"/></svg><span class="label">star</span></div>
+
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-5"/></svg><span class="label">good</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.01"/></svg><span class="label">warn</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span class="label">critical</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 1 0 18"/><path d="M3 12h13"/><path d="M12 7l5 5-5 5"/></svg><span class="label">publish</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 7h16v10H4z"/><path d="M4 7l8 6 8-6"/></svg><span class="label">message</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M21 16V8l-9-5-9 5v8l9 5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg><span class="label">library</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><path d="M21 21l-7-7"/></svg><span class="label">search</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 4v6"/><path d="M12 4l-3 3M12 4l3 3"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg><span class="label">export</span></div>
+
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/><path d="M19 14l.7 2.1L22 17l-2.3.9L19 20l-.7-2.1L16 17l2.3-.9z"/></svg><span class="label">ai</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span class="label">dashboard</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg><span class="label">analysis</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M5 7h14v10H5z"/><circle cx="12" cy="12" r="3"/></svg><span class="label">teleprompter</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16V11M12 16V8M16 16V13"/></svg><span class="label">chart</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 7l2 2 4-4"/></svg><span class="label">audience</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M9 6L4 12l5 6"/><path d="M15 6l5 6-5 6"/></svg><span class="label">code</span></div>
+  <div class="ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 4h16v4H4z"/><path d="M4 12h16v8H4z"/></svg><span class="label">layout</span></div>
+
+</div>
+
+</body>
+</html>

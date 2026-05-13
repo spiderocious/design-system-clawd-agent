@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · scene · finance & compliance</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 0; background: var(--paper); }
+  .scene-shell { display: grid; grid-template-rows: 56px 1fr; min-height: 100vh; }
+
+  .topbar {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 22px;
+    align-items: center; padding: 0 28px;
+    background: var(--paper); border-bottom: 1px solid var(--ink);
+  }
+  .topbar .brand { font-family: var(--serif); font-weight: 700; font-size: 22px; font-variation-settings: "opsz" 96; }
+  .topbar .crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); border-left: 1px solid var(--hair); padding-left: 18px; }
+  .topbar .crumb .cur { color: var(--ink); }
+
+  /* Layout */
+  .body-shell {
+    padding: 28px 36px 56px;
+    max-width: 1440px; margin: 0 auto;
+  }
+
+  /* Masthead — INEC-style */
+  .stmt-head {
+    display: grid; grid-template-columns: 1fr auto; gap: 24px;
+    padding-bottom: 18px; margin-bottom: 24px;
+    border-bottom: 3px double var(--ink);
+  }
+  .stmt-head h1 {
+    font-family: var(--serif); font-weight: 700; font-size: 32px;
+    font-variation-settings: "opsz" 144; margin: 0;
+    letter-spacing: -0.012em;
+  }
+  .stmt-head .sub {
+    font-family: var(--serif); font-style: italic; font-size: 14.5px;
+    color: var(--ink-3); margin-top: 6px;
+  }
+  .stmt-head .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    text-align: right; line-height: 1.7;
+  }
+  .stmt-head .meta strong { color: var(--ink); font-weight: 500; }
+
+  /* Top grid — 3 cards */
+  .top-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .card { background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); padding: 22px 26px; }
+  .card .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+
+  /* INEC cap card */
+  .cap-card {
+    border: 1px solid var(--ink);
+    padding: 24px 28px;
+  }
+  .cap-card .row1 { display: flex; align-items: baseline; gap: 16px; margin-bottom: 14px; }
+  .cap-card .row1 .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 44px; font-weight: 500; line-height: 1; }
+  .cap-card .row1 .of { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 15px; }
+  .cap-card .row1 .of strong { font-style: normal; font-weight: 500; color: var(--ink-2); }
+  .cap-card .row1 .pct { font-family: var(--mono); font-size: 18px; color: var(--ink-2); margin-left: auto; }
+  .cap-card .bar {
+    height: 12px; background: var(--paper-3); border-radius: 1px;
+    position: relative; overflow: hidden;
+  }
+  .cap-card .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--forest-600); }
+  .cap-card .bar .marker { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--ink); }
+  .cap-card .bar .marker::before {
+    content: "75% threshold"; position: absolute; bottom: 18px;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.06em;
+    transform: translateX(-50%); white-space: nowrap;
+  }
+  .cap-card .legend { display: flex; gap: 22px; margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); }
+  .cap-card .legend strong { font-style: normal; font-weight: 500; color: var(--ink-2); }
+
+  /* Small stat cards */
+  .stat-card { padding: 18px 22px; }
+  .stat-card .l { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .stat-card .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 28px; font-weight: 500; margin-top: 8px; line-height: 1; }
+  .stat-card .v.warn { color: var(--orange); }
+  .stat-card .sub { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 6px; line-height: 1.5; }
+
+  /* Mid section — sub-cap bars */
+  .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 28px; }
+
+  .subcap-row { display: grid; grid-template-columns: 200px 1fr 100px 100px; gap: 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--hair-soft); }
+  .subcap-row:first-of-type { border-top: 0; }
+  .subcap-row .nm { font-family: var(--serif); font-size: 14px; font-weight: 500; font-variation-settings: "opsz" 18; }
+  .subcap-row .sub { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+  .subcap-row .bar { height: 10px; background: var(--paper-3); border-radius: 1px; position: relative; overflow: hidden; }
+  .subcap-row .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--forest-600); }
+  .subcap-row .bar .fill.warn { background: var(--orange); }
+  .subcap-row .bar .marker { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--ink); }
+  .subcap-row .val { font-family: var(--mono); font-size: 13px; text-align: right; }
+  .subcap-row .pct { font-family: var(--mono); font-size: 12px; text-align: right; }
+  .subcap-row .pct.warn { color: var(--orange); }
+
+  /* Anomaly feed */
+  .ano { padding: 12px 14px; border: 1px solid var(--hair); border-radius: var(--r-card); margin-bottom: 8px; background: var(--sheet); }
+  .ano.warn { background: var(--orange-soft); border-color: var(--orange-edge); }
+  .ano .hd { display: flex; align-items: baseline; gap: 8px; }
+  .ano .ttl { font-family: var(--serif); font-weight: 600; font-size: 13.5px; }
+  .ano .when { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-left: auto; }
+  .ano .body { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-2); margin-top: 4px; line-height: 1.45; }
+  .ano .actions { margin-top: 8px; display: flex; gap: 6px; }
+
+  /* Donor table */
+  table.don { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13px; }
+  table.don thead th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 10px 12px 8px; border-bottom: 1px solid var(--ink); font-weight: 500; }
+  table.don thead th.num { text-align: right; }
+  table.don tbody td { padding: 12px; border-bottom: 1px solid var(--hair); }
+  table.don tbody td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  table.don tbody tr.flagged { background: var(--orange-soft); }
+  table.don tbody tr.flagged td:first-child { border-left: 3px solid var(--orange); padding-left: 9px; }
+  table.don tbody td .nm { font-family: var(--serif); font-weight: 600; font-size: 13.5px; }
+  table.don tbody td .sub { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
+
+  /* Bottom: signature line */
+  .sig {
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 36px; align-items: end;
+  }
+  .sig .line { border-bottom: 1px solid var(--ink); padding-bottom: 4px; font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; min-height: 36px; }
+  .sig .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="scene-shell">
+
+  <header class="topbar">
+    <div class="brand">Solon<span style="color: var(--orange);">.</span></div>
+    <div class="crumb">MODULE 3 · FINANCE & COMPLIANCE <span style="margin:0 6px;color:var(--ink-4)">/</span> ANAMBRA CENTRAL · SENATE <span style="margin:0 6px;color:var(--ink-4)">/</span> <span class="cur">LIVE SPEND</span></div>
+    <div style="display: flex; gap: 8px;">
+      <button class="b b-quiet b-sm">Period · YTD</button>
+      <button class="b b-secondary b-sm">Export CSV</button>
+      <button class="b b-primary b-sm">Generate INEC report</button>
+    </div>
+    <span class="av av-md av-forest">FO</span>
+  </header>
+
+  <div class="body-shell">
+
+    <div class="stmt-head">
+      <div>
+        <h1>Statement of campaign expenditure</h1>
+        <div class="sub">— under INEC notice of election &sect; 88 of the Electoral Act, statutory spending cap applies from 25 February 2026.</div>
+      </div>
+      <div class="meta">
+        <strong>Anambra Central · Senate</strong><br/>
+        Filed by: Chinwe Obi (Campaign Manager)<br/>
+        Reporting period: 25 Feb — 11 May 2026<br/>
+        Next return due: <strong>10 Jul 2026</strong>
+      </div>
+    </div>
+
+    <!-- Top row -->
+    <div class="top-grid">
+      <div class="card cap-card">
+        <div class="cap">INEC statutory cap · senate · ₦ 4,000,000,000</div>
+        <div class="row1">
+          <span class="v">₦ 2.07bn</span>
+          <span class="of">of <strong>₦ 4.00 bn</strong> cap</span>
+          <span class="pct">52%</span>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width: 52%;"></div>
+          <div class="marker" style="left: 75%;"></div>
+        </div>
+        <div class="legend">
+          <span><strong>Burn rate</strong> ₦ 26m / day</span>
+          <span><strong>Projected final</strong> ₦ 3.72 bn at current pace</span>
+          <span><strong>Headroom</strong> ₦ 1.93 bn before cap</span>
+        </div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="l">Open anomalies</div>
+        <div class="v warn">3</div>
+        <div class="sub">Two duplicate invoices and one peer-divergent stipend claim, all in ward 6.</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="l">High-risk donors</div>
+        <div class="v warn">1</div>
+        <div class="sub">A cash entry near the statutory individual cap was flagged on 02 May 2026.</div>
+      </div>
+    </div>
+
+    <!-- Mid -->
+    <div class="grid-2">
+      <div class="card">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px;">
+          <div>
+            <div class="cap">Sub-cap usage</div>
+            <h3 style="font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0;">Spend by INEC category</h3>
+          </div>
+          <span class="serif-it" style="font-size: 12px; color: var(--ink-3);">— marker at 75% triggers a CM alert.</span>
+        </div>
+
+        <div class="subcap-row">
+          <div><div class="nm">Media · advertising</div><div class="sub">cap ₦ 1.2 bn</div></div>
+          <div class="bar"><div class="fill warn" style="width: 78%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 936m</div>
+          <div class="pct warn">78%</div>
+        </div>
+        <div class="subcap-row">
+          <div><div class="nm">Personnel · stipends</div><div class="sub">cap ₦ 600 m</div></div>
+          <div class="bar"><div class="fill" style="width: 64%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 384m</div>
+          <div class="pct">64%</div>
+        </div>
+        <div class="subcap-row">
+          <div><div class="nm">Transport · logistics</div><div class="sub">cap ₦ 800 m</div></div>
+          <div class="bar"><div class="fill" style="width: 41%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 328m</div>
+          <div class="pct">41%</div>
+        </div>
+        <div class="subcap-row">
+          <div><div class="nm">Materials · printing</div><div class="sub">cap ₦ 400 m</div></div>
+          <div class="bar"><div class="fill" style="width: 28%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 112m</div>
+          <div class="pct">28%</div>
+        </div>
+        <div class="subcap-row">
+          <div><div class="nm">Convention · events</div><div class="sub">cap ₦ 500 m</div></div>
+          <div class="bar"><div class="fill" style="width: 52%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 260m</div>
+          <div class="pct">52%</div>
+        </div>
+        <div class="subcap-row">
+          <div><div class="nm">Misc · other</div><div class="sub">cap ₦ 500 m</div></div>
+          <div class="bar"><div class="fill" style="width: 10%;"></div><div class="marker" style="left: 75%;"></div></div>
+          <div class="val">₦ 50m</div>
+          <div class="pct">10%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cap">Anomaly feed · this week</div>
+        <h3 style="font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0 0 12px;">Flagged by Solon</h3>
+
+        <div class="ano warn">
+          <div class="hd">
+            <span class="ttl">Duplicate invoice — vendor #VND-0412</span>
+            <span class="when">2d ago</span>
+          </div>
+          <div class="body">Two invoices, identical line items, dated 1 day apart, from a vendor with no prior history before this cycle. Total ₦ 1.8m.</div>
+          <div class="actions">
+            <button class="b b-quiet b-sm">Dismiss</button>
+            <button class="b b-secondary b-sm">View invoices</button>
+            <button class="b b-warn b-sm">Action taken</button>
+          </div>
+        </div>
+
+        <div class="ano warn">
+          <div class="hd">
+            <span class="ttl">Stipend claim diverges from peers</span>
+            <span class="when">4d ago</span>
+          </div>
+          <div class="body">Coordinator @EMbachu's claimed stipend is 3.2× the median claim across other ward-4-equivalent coordinators in similar LGAs.</div>
+          <div class="actions">
+            <button class="b b-quiet b-sm">Dismiss</button>
+            <button class="b b-secondary b-sm">Compare peers</button>
+            <button class="b b-warn b-sm">Action taken</button>
+          </div>
+        </div>
+
+        <div class="ano">
+          <div class="hd">
+            <span class="ttl">Single-use high-value vendor</span>
+            <span class="when">6d ago</span>
+          </div>
+          <div class="body">Vendor #VND-0418 was paid ₦ 4.2m for "logistics services" and has not been used before or since. Documentation provided is a one-page invoice.</div>
+          <div class="actions">
+            <button class="b b-quiet b-sm">Dismiss</button>
+            <button class="b b-secondary b-sm">Open record</button>
+            <button class="b b-primary b-sm">Investigated · OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donor register -->
+    <div class="card">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px;">
+        <div>
+          <div class="cap">Donor register · this period</div>
+          <h3 style="font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0;">Income · 5 most recent</h3>
+        </div>
+        <button class="b b-link" style="font-size: 12px;">View all 28 donors →</button>
+      </div>
+      <table class="don">
+        <thead>
+          <tr>
+            <th>Donor</th>
+            <th>Type</th>
+            <th>Method</th>
+            <th>Date</th>
+            <th class="num">Amount</th>
+            <th class="num">Risk</th>
+            <th class="num"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="flagged">
+            <td><div class="nm">Anonymous trust</div><div class="sub">Cash · agent-deposited · Onitsha N.</div></td>
+            <td>Individual</td>
+            <td>Cash · agent</td>
+            <td class="mono" style="color: var(--ink-3);">02 May 2026</td>
+            <td class="num">₦ 5,000,000</td>
+            <td class="num"><span class="chip chip-toss">High</span></td>
+            <td class="num"><button class="b b-warn b-sm">Acknowledge</button></td>
+          </tr>
+          <tr>
+            <td><div class="nm">Joseph Ibe</div><div class="sub">Individual · Aguata</div></td>
+            <td>Individual</td>
+            <td>Wire (Access)</td>
+            <td class="mono" style="color: var(--ink-3);">09 May 2026</td>
+            <td class="num">₦ 250,000</td>
+            <td class="num"><span class="chip chip-hold">Low</span></td>
+            <td class="num"><button class="b b-quiet b-sm">View</button></td>
+          </tr>
+          <tr>
+            <td><div class="nm">Nigerian Union of Teachers — Anambra</div><div class="sub">Affiliated body</div></td>
+            <td>Corporate</td>
+            <td>Transfer (Access)</td>
+            <td class="mono" style="color: var(--ink-3);">05 May 2026</td>
+            <td class="num">₦ 600,000</td>
+            <td class="num"><span class="chip chip-hold">Low</span></td>
+            <td class="num"><button class="b b-quiet b-sm">View</button></td>
+          </tr>
+          <tr>
+            <td><div class="nm">Chinatu Manufacturing Ltd</div><div class="sub">Corporate · Anambra East</div></td>
+            <td>Corporate</td>
+            <td>Cheque</td>
+            <td class="mono" style="color: var(--ink-3);">22 Apr 2026</td>
+            <td class="num">₦ 2,400,000</td>
+            <td class="num"><span class="chip chip-hold">Low</span></td>
+            <td class="num"><button class="b b-quiet b-sm">View</button></td>
+          </tr>
+          <tr>
+            <td><div class="nm">Eze Okonkwo</div><div class="sub">Individual · diaspora · UK</div></td>
+            <td>Individual</td>
+            <td>Wire (Zenith)</td>
+            <td class="mono" style="color: var(--ink-3);">12 Apr 2026</td>
+            <td class="num">₦ 850,000</td>
+            <td class="num"><span class="chip chip-hold">Low</span></td>
+            <td class="num"><button class="b b-quiet b-sm">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Signature -->
+    <div class="sig">
+      <div>
+        <div class="line">Chinwe Obi</div>
+        <div class="lbl">Campaign Manager</div>
+      </div>
+      <span class="stamp-official signed">SOLON-VERIFIED · 2026-05-11</span>
+      <div>
+        <div class="line">—</div>
+        <div class="lbl">Finance Officer · countersign required</div>
+      </div>
+      <span class="stamp-official">DRAFT · NOT SUBMITTED</span>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

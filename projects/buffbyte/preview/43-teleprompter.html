@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Teleprompter · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  /* Teleprompter is a PERFORMANCE MODE. It has its own rules:
+     ink-black background, oversized warm-paper type, minimal chrome.
+     The system DNA still shows through — same accent, same family — but
+     scaled and inverted because this is for the moment of recording. */
+
+  html, body { height: 100%; margin: 0; background: #0A0A09; color: #FAF7F2; overflow: hidden; }
+  body {
+    font-family: var(--sans);
+    display: grid;
+    grid-template-rows: 56px 1fr 96px;
+    height: 100vh;
+  }
+
+  /* Top bar — minimal */
+  .tp-top {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .tp-top .crumb { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: var(--track-label); }
+  .tp-top .crumb b { color: var(--paper); font-weight: 500; }
+  .tp-top .sp { flex: 1; }
+  .tp-top .live {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: var(--track-overline);
+    color: rgba(255,255,255,0.7);
+  }
+  .tp-top .live .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(83,58,253,0.25); }
+  .tp-top .tp-btn {
+    background: transparent; color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.08);
+    padding: 6px 12px; border-radius: var(--r-soft); font-size: 12px; font-family: var(--sans); cursor: pointer;
+  }
+  .tp-top .tp-btn:hover { color: var(--paper); border-color: rgba(255,255,255,0.2); }
+  .tp-top .exit { color: rgba(255,255,255,0.4); font-size: 11px; letter-spacing: var(--track-label); }
+
+  /* Script area */
+  .tp-stage {
+    overflow: auto;
+    padding: 80px 0;
+    display: flex; justify-content: center;
+    position: relative;
+  }
+  .tp-stage::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 120px;
+    background: linear-gradient(to bottom, #0A0A09, transparent);
+    pointer-events: none; z-index: 2;
+  }
+  .tp-stage::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 200px;
+    background: linear-gradient(to top, #0A0A09, transparent);
+    pointer-events: none; z-index: 2;
+  }
+  .tp-script {
+    max-width: 1100px; width: 100%; padding: 0 64px;
+    font-size: 56px; font-weight: 500; line-height: 1.45;
+    letter-spacing: -0.022em;
+    color: rgba(255,255,255,0.95);
+  }
+  .tp-script p { margin: 0 0 0.7em; }
+  .tp-script .now {
+    color: var(--paper); position: relative;
+  }
+  .tp-script .past { color: rgba(255,255,255,0.32); }
+  .tp-script .future { color: rgba(255,255,255,0.55); }
+  .tp-script .cue {
+    display: inline-block; vertical-align: middle;
+    margin: 0 0.4em 0.2em 0;
+    font-size: 14px;
+    background: var(--accent); color: var(--paper);
+    padding: 2px 9px; border-radius: 999px;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .tp-script .breath {
+    display: inline-block; color: var(--accent); font-weight: 600; margin: 0 0.3em;
+  }
+
+  /* Reading indicator — the rolling baseline */
+  .tp-baseline {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    opacity: 0.35;
+    transform: translateY(-1px);
+    pointer-events: none; z-index: 3;
+  }
+
+  /* Bottom dock */
+  .tp-dock {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 0 32px;
+  }
+  .tp-dock .left, .tp-dock .right { display: flex; align-items: center; gap: 16px; }
+  .tp-dock .right { justify-content: flex-end; }
+  .tp-dock .center {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px; padding: 8px 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tp-dock .play {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--paper); color: #0A0A09; border: 0;
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .tp-dock .play svg { width: 20px; height: 20px; }
+  .tp-dock .ctrl {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: transparent; color: rgba(255,255,255,0.65);
+    border: 0; display: grid; place-items: center; cursor: pointer;
+  }
+  .tp-dock .ctrl:hover { color: var(--paper); background: rgba(255,255,255,0.06); }
+
+  .tp-time {
+    font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+  }
+  .tp-time .target { color: rgba(255,255,255,0.45); font-size: 14px; margin-left: 6px; }
+
+  .tp-meta-block {
+    display: flex; gap: 18px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: var(--track-overline);
+    color: rgba(255,255,255,0.5);
+  }
+  .tp-meta-block .item { display: flex; flex-direction: column; align-items: center; }
+  .tp-meta-block .item .v { font-size: 14px; color: var(--paper); font-variant-numeric: tabular-nums; letter-spacing: 0; font-weight: 500; text-transform: none; }
+
+  /* Speed slider */
+  .speed {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: var(--track-overline);
+  }
+  .speed-bar {
+    width: 120px; height: 2px; background: rgba(255,255,255,0.12); border-radius: 999px;
+    position: relative;
+  }
+  .speed-bar::after {
+    content: ""; position: absolute; left: 0; top: -5px;
+    width: 12px; height: 12px; background: var(--accent); border-radius: 50%;
+    transform: translateX(72px);
+  }
+  .speed-val { color: var(--paper); font-variant-numeric: tabular-nums; font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 500; }
+
+  /* Coach overlay — appears when the AI flags something during recording */
+  .tp-coach {
+    position: absolute;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20,18,16,0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--r-soft);
+    padding: 12px 16px;
+    color: rgba(255,255,255,0.9);
+    font-size: 13.5px;
+    max-width: 540px;
+    z-index: 4;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .tp-coach .label { color: var(--accent); font-size: 10.5px; text-transform: uppercase; letter-spacing: var(--track-overline); margin-bottom: 2px; display: block; }
+  .tp-coach svg { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<header class="tp-top">
+  <span class="crumb"><b>Why we built BuffByte AI</b> · 60-second video</span>
+  <span class="sp"></span>
+  <span class="live"><span class="pip"></span>Recording · 00:18 elapsed</span>
+  <button class="tp-btn">Mirror</button>
+  <button class="tp-btn">Type · 56 px</button>
+  <button class="tp-btn">Pace · 130 wpm</button>
+  <span class="exit">ESC to exit</span>
+</header>
+
+<main class="tp-stage">
+  <div class="tp-baseline"></div>
+
+  <div class="tp-script">
+    <p class="past"><span class="cue">FAST · 145</span> Hi, I'm Adewale. Last month I built BuffByte — an AI that reads your drafts and leaves notes the way a good editor would.</p>
+
+    <p class="past"><span class="cue">FAST · 140</span> The hook? Most AI tools treat creators like data subjects. They score, they rank, they don't <em>read</em>. <span class="breath">⏎</span></p>
+
+    <p class="now"><span class="cue">SLOW · 95</span> For those who don't know, creating content full-time means you write alone. You write fast. You write late.</p>
+
+    <p class="future"><span class="cue">SLOW · 100</span> You don't have a friend on the inside who'll tell you the middle is dragging. <span class="breath">⏎</span></p>
+
+    <p class="future"><span class="cue">MEDIUM · 120</span> So I built one.</p>
+
+    <p class="future"><span class="cue">FAST · 145</span> Paste your draft. BuffByte reads it in seconds. It tells you where the hook lands, where the energy drops, and which line is going to lose the reader on Twitter.</p>
+  </div>
+
+  <!-- Live coach note overlay -->
+  <div class="tp-coach">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/></svg>
+    <div>
+      <span class="label">Slow your delivery · pronunciation</span>
+      You're hitting "BuffByte" at 145 wpm. Drop your pace through this word — the 'r' transition tightens at speed.
+    </div>
+  </div>
+</main>
+
+<footer class="tp-dock">
+  <div class="left">
+    <div class="tp-time">00:18<span class="target">/ 60s</span></div>
+    <div class="tp-meta-block">
+      <div class="item"><div class="v">128</div>wpm</div>
+      <div class="item"><div class="v">3 / 8</div>breaths</div>
+      <div class="item"><div class="v">75%</div>readability</div>
+    </div>
+  </div>
+
+  <div class="center">
+    <button class="ctrl" aria-label="Restart">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    </button>
+    <button class="ctrl" aria-label="Previous">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="play" aria-label="Play / pause">
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="6" width="3.5" height="12" rx="0.5"/><rect x="13.5" y="6" width="3.5" height="12" rx="0.5"/></svg>
+    </button>
+    <button class="ctrl" aria-label="Next">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 6l6 6-6 6"/></svg>
+    </button>
+    <button class="ctrl" aria-label="Fullscreen">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+
+  <div class="right">
+    <div class="speed">
+      <span>Pace</span>
+      <div class="speed-bar"></div>
+      <span class="speed-val">1.0×</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

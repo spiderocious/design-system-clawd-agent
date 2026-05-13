@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Modals · CRITICAL void</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .stage { display: flex; flex-direction: column; gap: 48px; }
+  .lbl-stamp { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .lbl-stamp .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .lbl-stamp .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+
+  /* modal frame for demonstration on page */
+  .scrim {
+    background: rgba(26,23,20,0.36);
+    padding: 36px;
+    border-radius: var(--r-card);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px dashed var(--hair);
+  }
+  .modal {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    box-shadow: 0 32px 80px -32px rgba(26,23,20,0.45);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+  }
+  .modal .head {
+    padding: 22px 26px 14px;
+    display: flex; align-items: baseline; gap: 10px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .modal .head .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .modal .head .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.1; }
+  .modal .head .close { margin-left: auto; font-family: var(--mono); font-size: 14px; color: var(--ink-3); cursor: pointer; }
+  .modal .body-m { padding: 18px 26px 22px; }
+  .modal .body-m p { font-family: var(--serif); font-size: 15px; line-height: 1.55; color: var(--ink-2); margin: 0 0 12px; }
+  .modal .foot { padding: 14px 22px 18px; border-top: 1px solid var(--hair); background: var(--sheet-2); display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+
+  /* critical variant */
+  .modal.critical { border-color: var(--short); border-width: 1px; }
+  .modal.critical .head { background: var(--short-bg); border-bottom-color: var(--short-edge); }
+  .modal.critical .head .num { color: var(--short); }
+  .modal.critical .head .h { color: var(--short); }
+  .modal.critical .stripe {
+    display: block; height: 6px; background: repeating-linear-gradient(45deg, var(--short) 0 8px, var(--short-bg) 8px 16px);
+  }
+  .modal.critical .foot { background: var(--short-bg); }
+  .modal .ledger-mini { background: var(--paper-deep); border: 1px solid var(--sheet-edge); border-radius: 2px; padding: 12px 14px; margin: 6px 0 12px; }
+  .modal .ledger-mini .row-l { display: grid; grid-template-columns: 1fr auto; padding: 4px 0; }
+  .modal .ledger-mini .row-l .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; }
+  .modal .ledger-mini .row-l .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .modal .confirm-f input {
+    width: 100%; background: var(--sheet); border: 1px solid var(--ink); padding: 11px 13px;
+    font-family: var(--mono); font-size: 16px; letter-spacing: 0.06em; border-radius: 2px;
+    outline: none; color: var(--ink); text-transform: uppercase;
+  }
+  .modal .confirm-f input:focus { border-color: var(--short); box-shadow: 0 0 0 3px rgba(154,31,24,0.18); }
+  .modal .b-irrev {
+    background: var(--short); color: var(--sheet); border: 1px solid var(--short); padding: 0 16px; height: 36px; border-radius: 3px;
+    font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer;
+  }
+  .modal .b-irrev:hover { background: #7A1410; border-color: #7A1410; }
+  .modal .b-irrev[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">40.</div>
+    <div class="ttl">Modals — including the CRITICAL idiom.</div>
+    <div class="meta">OVERLAYS &amp; SYSTEM</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Three modals. The default for confirmations. The form for collecting structured data. And the critical, irreversible modal — only when the action cannot be undone. The critical modal requires typing the literal word VOID and is the only place we use a hazard stripe.
+  </p>
+
+  <div class="stage">
+
+    <!-- 1. Default confirm -->
+    <div>
+      <div class="lbl-stamp"><span class="num">01.</span><span class="h">Default confirmation</span></div>
+      <div class="scrim">
+        <div class="modal">
+          <div class="head">
+            <span class="num">CONFIRM</span>
+            <span class="h">Post evening shift — Mokola?</span>
+            <span class="close">×</span>
+          </div>
+          <div class="body-m">
+            <p>Four pumps active. Two balanced, one short by ₦2,400 (Chidera, note filed), one over by ₦440 (Yusuf). Once posted, edits leave an audit trail.</p>
+            <div class="ledger-mini">
+              <div class="row-l"><span class="k">Litres</span><span class="v">2,340.0 L</span></div>
+              <div class="row-l"><span class="k">Gross</span><span class="v">₦740,448</span></div>
+              <div class="row-l"><span class="k">Declared</span><span class="v">₦738,488</span></div>
+              <div class="row-l"><span class="k">Variance</span><span class="v read-short">− ₦1,960</span></div>
+            </div>
+            <p class="dictated" style="font-size: 13px;">— Signed as Adeola, branch manager · Tue 18:51 WAT.</p>
+          </div>
+          <div class="foot">
+            <button class="b b-quiet">Cancel</button>
+            <button class="b b-primary">Post shift &nbsp;→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Form modal -->
+    <div>
+      <div class="lbl-stamp"><span class="num">02.</span><span class="h">Form modal — quick add</span></div>
+      <div class="scrim">
+        <div class="modal" style="max-width: 540px;">
+          <div class="head">
+            <span class="num">NEW ENTRY</span>
+            <span class="h">Add an expense to today's book</span>
+            <span class="close">×</span>
+          </div>
+          <div class="body-m">
+            <div class="split split-2" style="gap: 16px;">
+              <div class="field-row">
+                <span class="lbl">Category</span>
+                <input class="f" value="Diesel · generator">
+              </div>
+              <div class="field-row">
+                <span class="lbl">Time</span>
+                <input class="f f-mono" value="19:42">
+              </div>
+            </div>
+            <div class="field-row" style="margin-top: 12px;">
+              <span class="lbl">What was paid for</span>
+              <input class="f" value="Generator diesel — 20L from Mama Risi">
+            </div>
+            <div class="split split-2" style="gap: 16px; margin-top: 12px;">
+              <div class="field-row">
+                <span class="lbl">Amount</span>
+                <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" value="18,000.00"></div>
+              </div>
+              <div class="field-row">
+                <span class="lbl">Witness</span>
+                <input class="f" value="Adeola B.">
+              </div>
+            </div>
+            <div class="field-row" style="margin-top: 12px;">
+              <span class="lbl">Note (optional)</span>
+              <textarea class="f" style="height: 64px; padding: 8px 11px;" placeholder="Anything else worth recording…"></textarea>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="b b-quiet">Save draft</button>
+            <button class="b b-secondary">Cancel</button>
+            <button class="b b-primary">Add to day-book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Critical -->
+    <div>
+      <div class="lbl-stamp"><span class="num">03.</span><span class="h">★ CRITICAL — void a posted shift (irreversible)</span></div>
+      <div class="scrim" style="background: rgba(154,31,24,0.18);">
+        <div class="modal critical">
+          <span class="stripe"></span>
+          <div class="head">
+            <span class="num">CRITICAL</span>
+            <span class="h">Void Chidera's posted shift?</span>
+            <span class="close">×</span>
+          </div>
+          <div class="body-m">
+            <p>You are about to void a <strong style="color: var(--short)">signed and posted</strong> shift. This action is <strong style="color: var(--short)">irreversible</strong>. The entry will remain visible in the audit log, struck through, with your name and reason attached forever.</p>
+            <div class="ledger-mini">
+              <div class="row-l"><span class="k">Shift</span><span class="v">SHIFT-MOK-2026-05-14-PM · P-02</span></div>
+              <div class="row-l"><span class="k">Attendant</span><span class="v">Chidera Okoye</span></div>
+              <div class="row-l"><span class="k">Posted by</span><span class="v">Adeola · Tue 18:51</span></div>
+              <div class="row-l"><span class="k">Litres</span><span class="v">612.0 L · PMS</span></div>
+              <div class="row-l"><span class="k">Variance</span><span class="v read-short">− ₦2,400</span></div>
+            </div>
+            <div class="field-row">
+              <span class="lbl">Why are you voiding this? (required, audited)</span>
+              <textarea class="f" style="height: 60px; padding: 8px 11px;">CCTV review confirms entry error — Chidera was on P-04, not P-02. Re-issuing under correct pump.</textarea>
+            </div>
+            <div class="field-row" style="margin-top: 14px;">
+              <span class="lbl" style="color: var(--short);">Type the word VOID to confirm</span>
+              <div class="confirm-f"><input value="VOID" autocomplete="off"></div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="b b-secondary">Cancel · keep the shift</button>
+            <button class="b-irrev">Yes — void irreversibly</button>
+          </div>
+        </div>
+      </div>
+      <p class="dictated" style="font-size: 13px; margin-top: 12px; max-width: 60ch;">— The critical modal is the ONLY place we use a hazard stripe and a typed-word gate. Reserve it for actions that cannot be undone and that have legal / financial weight.</p>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

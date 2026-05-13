@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tooltips & hovercards</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .h-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .h-row .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+
+  /* simple tooltip */
+  .tip-host { display: inline-block; position: relative; }
+  .tip-host .tip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    padding: 6px 10px; border-radius: 3px; white-space: nowrap;
+    pointer-events: none; box-shadow: 0 6px 24px -12px rgba(0,0,0,0.4);
+  }
+  .tip-host .tip::after {
+    content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 4px solid transparent; border-top-color: var(--ink);
+  }
+
+  /* hovercard */
+  .hover-host { display: inline-block; position: relative; }
+  .hover-host .hover {
+    position: absolute; top: calc(100% + 10px); left: 0;
+    width: 320px;
+    background: var(--sheet); border: 1px solid var(--ink); border-radius: 3px;
+    padding: 14px 16px;
+    font-family: var(--sans); font-size: 12px;
+    box-shadow: 0 12px 36px -16px rgba(26,23,20,0.35);
+  }
+  .hover .head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--hair); margin-bottom: 10px; }
+  .hover .name { font-family: var(--serif); font-size: 16px; font-weight: 600; letter-spacing: -0.012em; }
+  .hover .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+  .hover .lines { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hover .lines .k { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .hover .lines .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; margin-top: 2px; }
+
+  /* hint inline */
+  .hint {
+    width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--ink-3);
+    color: var(--ink-3); font-family: var(--mono); font-size: 9px; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center; cursor: help;
+    margin-left: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">28.</div>
+    <div class="ttl">Tooltips &amp; hovercards.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Tooltips are tiny ink rectangles — used for short clarifications on icons or labels. Hovercards are the only place we allow a shallow shadow; they reveal more about a person, a pump, or a transaction without leaving the page.
+  </p>
+
+  <div class="scene">
+    <div class="h-row"><span class="h">Tooltips — short labels</span></div>
+    <div class="row" style="gap: 36px;">
+      <span class="tip-host">
+        <button class="b b-secondary">Open shift</button>
+        <span class="tip">Starts the day-book — opens all pumps</span>
+      </span>
+      <span class="tip-host">
+        <span class="rec" style="border-bottom: 1px dashed var(--ink-3); cursor: help;">P-03</span>
+        <span class="tip">Pump 3 · PMS · Femi Adekunle on shift</span>
+      </span>
+      <span class="tip-host">
+        <span class="hint">i</span>
+        <span class="tip">Variance is expected minus declared</span>
+      </span>
+      <span class="tip-host">
+        <span class="pill pill-watch"><span class="dot"></span>Reorder soon</span>
+        <span class="tip">3,200 L left · ~ 4 days at current pace</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Hovercard — attendant</span></div>
+  <div class="scene">
+    <p style="font-family: var(--serif); font-size: 14px; max-width: 64ch; line-height: 1.6;">
+      The shift was closed by
+      <span class="hover-host" style="vertical-align: baseline;">
+        <a href="#" style="color: var(--ink); border-bottom: 1px solid var(--emerald-600); text-decoration: none;">Femi Adekunle</a>
+        <span class="hover">
+          <div class="head">
+            <span class="av av-att av-lg" style="width: 40px; height: 40px; font-size: 14px;">FA</span>
+            <div>
+              <div class="name">Femi Adekunle</div>
+              <div class="role">Attendant · P-03 · Mokola</div>
+            </div>
+          </div>
+          <div class="lines">
+            <div><div class="k">Shifts (90d)</div><div class="v">28</div></div>
+            <div><div class="k">Variance avg</div><div class="v read-ok">₦0</div></div>
+            <div><div class="k">Litres dispensed</div><div class="v">22,440 L</div></div>
+            <div><div class="k">Joined</div><div class="v">2024-08-12</div></div>
+          </div>
+        </span>
+      </span>
+      at 18:51 — variance ₦0, posted clean.
+    </p>
+    <p class="dictated" style="margin-top: 12px; font-size: 13px;">— The hovercard reveals the manager's quick read on a person: their trust track-record, the numbers behind them, when they joined.</p>
+  </div>
+
+  <div class="break"><span class="lbl">Hovercard — pump</span></div>
+  <div class="scene">
+    <p style="font-family: var(--serif); font-size: 14px; max-width: 64ch; line-height: 1.6;">
+      Tonight's shortage was on
+      <span class="hover-host">
+        <a href="#" style="color: var(--ink); border-bottom: 1px solid var(--emerald-600); text-decoration: none;">P-02</a>
+        <span class="hover" style="width: 280px;">
+          <div class="head">
+            <div>
+              <div class="name" style="font-family: var(--mono); font-size: 18px; letter-spacing: 0;">P-02</div>
+              <div class="role">Pump · PMS · Mokola</div>
+            </div>
+            <span class="pulse" style="margin-left: auto;"></span>
+          </div>
+          <div class="lines">
+            <div><div class="k">Meter open</div><div class="v">412,118.00</div></div>
+            <div><div class="k">Meter now</div><div class="v">412,730.00</div></div>
+            <div><div class="k">Dispensed</div><div class="v">612.00 L</div></div>
+            <div><div class="k">Last service</div><div class="v">2026-04-22</div></div>
+          </div>
+        </span>
+      </span>
+      — Chidera's pump, six hundred and twelve litres dispensed.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · type</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .specimen { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .specimen:last-of-type { border-bottom: 0; }
+  .specimen .label {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px;
+  }
+
+  .scale-row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--hair-soft); }
+  .scale-row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; padding: 20px 0; }
+  .pair .col-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+
+  .num-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 18px 0; }
+  .num-pair .col { gap: 14px; }
+  .num-pair .col .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .num-pair .col .sample { padding: 18px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); }
+  .num-pair .col .sample .cap { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">02 / FOUNDATION</div>
+    <div class="ttl">Type</div>
+    <div class="sub">— three families, two jobs each, one semantic rule.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Fraunces carries the thinking: section titles, masthead, projection numbers, the AI copilot's voice. Inter carries the chrome: buttons, inputs, labels, table cells. JetBrains Mono carries record: vote counts, polling-unit IDs, INEC cap percentages, dates, anything that's a fact.
+  </p>
+
+  <div class="break"><span class="lbl">Display · Fraunces</span></div>
+
+  <div class="specimen">
+    <div class="scale-row">
+      <div class="meta">72 / 600</div>
+      <div class="serif-display" style="font-size: 72px; line-height: 1;">Order paper</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">48 / 600</div>
+      <div class="serif-display" style="font-size: 48px; line-height: 1;">Anambra Central</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">30 / 600</div>
+      <div class="serif" style="font-size: 30px; font-weight: 600;">Scenario builder</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">22 / 500 · it.</div>
+      <div class="serif-it" style="font-size: 22px;">"Soludo carries this one."</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">16 / 500 · body</div>
+      <div class="serif" style="font-size: 16px; font-weight: 500; font-variation-settings: 'opsz' 18;">The model attributes Labour Party's six-point lift in Anambra Central to a turnout rebound in the 18–34 cohort and to APGA's weakened ground game.</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Chrome · Inter</span></div>
+
+  <div class="specimen">
+    <div class="scale-row">
+      <div class="meta">18 / 600</div>
+      <div class="sans" style="font-size: 18px; font-weight: 600;">Polling units · ward 4</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">14 / 500</div>
+      <div class="sans" style="font-size: 14px; font-weight: 500;">Apply lever · re-run scenario</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">13 / 400</div>
+      <div class="sans" style="font-size: 13px;">Labour Party (LP), All Progressives Congress (APC), Peoples Democratic Party (PDP), All Progressives Grand Alliance (APGA)</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">11 / 500 · oc.</div>
+      <div class="overline">Confidence · medium · n=412 PU</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Record · JetBrains Mono</span></div>
+
+  <div class="specimen">
+    <div class="scale-row">
+      <div class="meta">44 / 500</div>
+      <div class="rec-num rec-xl tabular">1,284,096<span class="u">votes</span></div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">22 / 500</div>
+      <div class="rec-num rec-md tabular">₦ 142,308,500</div>
+    </div>
+    <div class="scale-row">
+      <div class="meta">11 / 500</div>
+      <div class="mono tabular" style="font-size: 11px; color: var(--ink-3);">PU 008-04-02 · LGA-008 · WARD-04</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">The semantic split — MONO is fact, SERIF is projection</span></div>
+
+  <div class="num-pair">
+    <div class="col">
+      <div class="lbl">Fact (mono)</div>
+      <div class="sample">
+        <div class="rec-num rec-lg tabular">1,284<span class="u">accredited</span></div>
+        <div class="cap">A counted, signed number from Form EC8A. It either matches the polling unit register or it doesn't.</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="lbl">Projection (serif)</div>
+      <div class="sample">
+        <div class="proj-num proj-lg">47.2%<span class="band">± 3.1</span></div>
+        <div class="cap">A modelled estimate from Solon. Carries a confidence band; reads in Fraunces so you know at a glance it's a projection, not a count.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Variable-axis behaviour</span></div>
+
+  <div class="pair">
+    <div>
+      <div class="col-h">Fraunces · optical-size axis</div>
+      <div style="font-family: var(--serif); font-size: 13px; font-variation-settings: 'opsz' 9; line-height: 1.6;">9 · Order paper · A printed clinical chart on a desk, in caption-grade Fraunces. Tight tracking, smaller eye.</div>
+      <div style="font-family: var(--serif); font-size: 22px; font-variation-settings: 'opsz' 36; line-height: 1.3; margin-top: 8px;">36 · Order paper · The body grade.</div>
+      <div style="font-family: var(--serif); font-size: 40px; font-variation-settings: 'opsz' 96; line-height: 1.1; margin-top: 8px;">96 · Order paper</div>
+      <div style="font-family: var(--serif); font-size: 64px; font-variation-settings: 'opsz' 144; line-height: 1; margin-top: 8px;">144</div>
+    </div>
+    <div>
+      <div class="col-h">Inter · weight axis</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 300;">300 — Inter Light for descriptive captions</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 400; margin-top: 8px;">400 — Inter Regular for body copy</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 500; margin-top: 8px;">500 — Inter Medium for chrome labels</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 600; margin-top: 8px;">600 — Inter Semibold for table headers</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 700; margin-top: 8px;">700 — Inter Bold (used sparingly)</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

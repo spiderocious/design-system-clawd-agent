@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Staff & shifts</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1180px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .crumb .cur { color: var(--ink); }
+
+  .doc-head { padding: 36px 0 24px; }
+  .doc-head .h { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: -0.024em; line-height: 1.04; margin: 0; }
+  .doc-head .sub { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3); margin-top: 8px; max-width: 64ch; }
+
+  /* Roster grid */
+  .roster {
+    margin-top: 28px;
+    border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden;
+  }
+  .roster .roster-head, .roster .roster-row {
+    display: grid; grid-template-columns: 220px repeat(7, 1fr); gap: 0;
+  }
+  .roster .roster-head {
+    background: var(--paper-deep); border-bottom: 1px solid var(--ink);
+  }
+  .roster .roster-head .cell {
+    padding: 14px 12px; font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.14em; text-transform: uppercase; border-right: 1px solid var(--hair);
+  }
+  .roster .roster-head .cell:last-child { border-right: 0; }
+  .roster .roster-head .cell.today { color: var(--ink); font-weight: 600; }
+  .roster .roster-row {
+    border-bottom: 1px solid var(--hair);
+  }
+  .roster .roster-row:last-child { border-bottom: 0; }
+  .roster .roster-row .who {
+    padding: 14px 12px; background: var(--sheet); border-right: 1px solid var(--hair);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .roster .roster-row .who .av { width: 32px; height: 32px; font-size: 11px; }
+  .roster .roster-row .who .nm { font-family: var(--serif); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  .roster .roster-row .who .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .roster .roster-row .slot {
+    padding: 6px; border-right: 1px solid var(--hair); display: flex; flex-direction: column; gap: 3px;
+    min-height: 64px;
+  }
+  .roster .roster-row .slot:last-child { border-right: 0; }
+  .roster .roster-row .slot.today { background: var(--sheet-2); }
+  .roster .roster-row .slot .chip {
+    font-family: var(--mono); font-size: 10px; padding: 3px 5px; border-radius: 2px;
+    letter-spacing: 0.04em;
+  }
+  .roster .roster-row .slot .chip.am { background: var(--emerald-50); color: var(--emerald-700); border: 1px solid var(--emerald-200); }
+  .roster .roster-row .slot .chip.pm { background: var(--paper-deep); color: var(--ink-2); border: 1px solid var(--sheet-edge); }
+  .roster .roster-row .slot .chip.off { background: transparent; color: var(--ink-4); border: 1px dashed var(--sheet-edge); text-align: center; }
+  .roster .roster-row .slot .chip.short { background: var(--short-bg); color: var(--short); border: 1px solid var(--short-edge); }
+
+  /* Staff list */
+  .body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; margin-top: 36px; }
+  .section-h { display: flex; align-items: baseline; gap: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); margin-bottom: 4px; }
+  .section-h .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; }
+
+  .staff-row { display: grid; grid-template-columns: 48px 1fr 80px 90px 80px 28px; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .staff-row .av { width: 40px; height: 40px; font-size: 13px; }
+  .staff-row .nm { font-family: var(--serif); font-size: 15px; font-weight: 500; }
+  .staff-row .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  .staff-row .fig { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; text-align: right; }
+  .staff-row .fig-k { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; text-align: right; margin-top: 2px; }
+
+  .leaderboard { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 20px 22px; }
+  .leaderboard .lb-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--hair-soft); align-items: center; }
+  .leaderboard .lb-row:last-child { border-bottom: 0; }
+  .leaderboard .lb-row .rk { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em; }
+  .leaderboard .lb-row .nm { font-family: var(--serif); font-size: 13px; }
+  .leaderboard .lb-row .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span>Mokola</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Staff &amp; shifts</span></div>
+    <div style="flex: 1;"></div>
+    <button class="b b-ghost b-sm">Last week</button>
+    <button class="b b-secondary b-sm">Print roster</button>
+    <button class="b b-primary b-sm">+ Add attendant</button>
+  </div>
+
+  <div class="doc-head">
+    <div class="overline">STAFF · MOKOLA · WK 19 · 12 — 18 MAY</div>
+    <h1 class="h">Eight people, two shifts a day.</h1>
+    <p class="sub">Adeola the manager, seven attendants. Two shifts: morning 06:00 — 14:00 and evening 14:00 — 22:00. Sunday is roster off except for a skeleton evening crew.</p>
+  </div>
+
+  <!-- Roster -->
+  <div class="roster">
+    <div class="roster-head">
+      <div class="cell">Attendant</div>
+      <div class="cell">Mon 12</div>
+      <div class="cell">Tue 13</div>
+      <div class="cell today">Tue 14 ←</div>
+      <div class="cell">Wed 15</div>
+      <div class="cell">Thu 16</div>
+      <div class="cell">Fri 17</div>
+      <div class="cell">Sat 18</div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-mgr">AB</span><div><div class="nm">Adeola Bakare</div><div class="role">Manager</div></div></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot today"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip off">OFF</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-att">AB</span><div><div class="nm">Aisha Bello</div><div class="role">P-01 · PMS</div></div></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot today"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip off">OFF</span></div>
+      <div class="slot"><span class="chip pm">PM</span></div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-att">CO</span><div><div class="nm">Chidera Okoye</div><div class="role">P-02 · PMS</div></div></div>
+      <div class="slot"><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip pm">PM</span></div>
+      <div class="slot today"><span class="chip pm short">PM · short ₦2.4k</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip off">OFF</span></div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-att">FA</span><div><div class="nm">Femi Adekunle</div><div class="role">P-03 · PMS</div></div></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot today"><span class="chip pm">PM · live</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip off">OFF</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-att">YL</span><div><div class="nm">Yusuf Lawal</div><div class="role">P-05 · AGO</div></div></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip pm">PM</span></div>
+      <div class="slot today"><span class="chip pm">PM · live</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+    </div>
+
+    <div class="roster-row">
+      <div class="who"><span class="av av-att">TS</span><div><div class="nm">Tunde Salami</div><div class="role">P-04 · PMS</div></div></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot today"><span class="chip off">OFF</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+      <div class="slot"><span class="chip am">AM</span><span class="chip pm">PM</span></div>
+      <div class="slot"><span class="chip off">OFF</span></div>
+      <div class="slot"><span class="chip am">AM</span></div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div>
+      <div class="section-h">
+        <span class="overline">YOUR TEAM</span>
+        <span class="h">Eight people.</span>
+        <div style="margin-left: auto;" class="row">
+          <button class="b b-ghost b-sm">Sort by variance</button>
+        </div>
+      </div>
+
+      <div class="staff-row">
+        <span class="av av-owner">SO</span>
+        <div><div class="nm">Segun Olaitan</div><div class="role">Owner · 3 branches</div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-ink">Owner</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-mgr">AB</span>
+        <div><div class="nm">Adeola Bakare</div><div class="role">Manager · Mokola · joined 2024-03-12</div></div>
+        <div><div class="fig">42</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig read-short">− ₦8,400</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-ok"><span class="dot"></span>On shift</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-att">AB</span>
+        <div><div class="nm">Aisha Bello</div><div class="role">Attendant · P-01 · joined 2025-01-08</div></div>
+        <div><div class="fig">22</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig read-ok">₦0</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-ok"><span class="dot"></span>On shift</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-att">CO</span>
+        <div><div class="nm">Chidera Okoye</div><div class="role">Attendant · P-02 · joined 2024-09-04</div></div>
+        <div><div class="fig">24</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig read-short">− ₦9,800</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-short"><span class="dot"></span>Shortage</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-att">FA</span>
+        <div><div class="nm">Femi Adekunle</div><div class="role">Attendant · P-03 · joined 2024-08-12</div></div>
+        <div><div class="fig">28</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig read-ok">₦0</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-ok"><span class="dot"></span>On shift</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-att">YL</span>
+        <div><div class="nm">Yusuf Lawal</div><div class="role">Attendant · P-05 · joined 2025-03-18</div></div>
+        <div><div class="fig">20</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig" style="color: var(--watch);">+ ₦1,840</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-watch"><span class="dot"></span>Over</span></span>
+      </div>
+      <div class="staff-row">
+        <span class="av av-att">TS</span>
+        <div><div class="nm">Tunde Salami</div><div class="role">Attendant · P-04 · joined 2023-11-22</div></div>
+        <div><div class="fig">18</div><div class="fig-k">SHIFTS · 30D</div></div>
+        <div><div class="fig read-ok">₦0</div><div class="fig-k">VARIANCE · 30D</div></div>
+        <div></div>
+        <span style="text-align: right;"><span class="pill pill-paper">Off today</span></span>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">
+        <span class="overline">30-DAY LEDGER</span>
+        <span class="h">Variance per head.</span>
+      </div>
+      <div class="leaderboard">
+        <div class="lb-row"><span class="rk">01</span><span class="nm">Aisha Bello</span><span class="v read-ok">₦0</span></div>
+        <div class="lb-row"><span class="rk">02</span><span class="nm">Femi Adekunle</span><span class="v read-ok">₦0</span></div>
+        <div class="lb-row"><span class="rk">03</span><span class="nm">Tunde Salami</span><span class="v read-ok">₦0</span></div>
+        <div class="lb-row"><span class="rk">04</span><span class="nm">Yusuf Lawal</span><span class="v" style="color: var(--watch);">+ ₦1,840</span></div>
+        <div class="lb-row"><span class="rk">05</span><span class="nm">Adeola Bakare</span><span class="v read-short">− ₦8,400</span></div>
+        <div class="lb-row"><span class="rk">06</span><span class="nm">Chidera Okoye</span><span class="v read-short">− ₦9,800</span></div>
+        <p class="dictated" style="margin: 12px 0 0; font-size: 13px;">— The leaderboard is a quiet review tool. Owner reviews monthly. No public shaming.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · charts</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  .chart-card { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 22px 26px; }
+  .chart-card .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .chart-card h3 { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0 0 14px; font-variation-settings: "opsz" 36; }
+  .chart-foot { display: flex; gap: 18px; align-items: baseline; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair); font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); }
+  .chart-foot strong { font-family: var(--serif); font-style: normal; font-weight: 500; color: var(--ink-2); }
+
+  /* Vote-share stacked bar (horizontal) */
+  .vs-bar { display: flex; height: 36px; border-radius: var(--r-card); overflow: hidden; }
+  .vs-bar span { display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+  .vs-legend { display: flex; gap: 18px; margin-top: 12px; flex-wrap: wrap; }
+  .vs-legend span { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 12.5px; color: var(--ink-2); }
+  .vs-legend i { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+
+  /* Sparkline / area chart */
+  .area-wrap { padding: 8px 0; }
+  .area-wrap svg { width: 100%; height: 200px; }
+  .area .grid line { stroke: var(--hair); stroke-width: 1; stroke-dasharray: 2 4; }
+  .area .baseline { stroke: var(--ink); stroke-width: 1; }
+  .area .band { fill: var(--forest-100); opacity: 0.6; }
+  .area .line { fill: none; stroke: var(--forest-600); stroke-width: 2; }
+  .area .line-opp { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 4 3; }
+  .area .dot { fill: var(--forest-600); }
+  .area text { font-family: var(--mono); font-size: 10px; fill: var(--ink-3); }
+  .area .axis-l { text-anchor: end; }
+  .area .axis-c { text-anchor: middle; }
+
+  /* Crosstab */
+  .crosstab { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--ink); border: 1px solid var(--ink); }
+  .crosstab .ch { padding: 10px 12px; background: var(--paper-2); font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+  .crosstab .cv { padding: 12px; background: var(--sheet); font-family: var(--mono); font-feature-settings: "tnum"; font-size: 13px; text-align: right; }
+  .crosstab .cv.label { text-align: left; font-family: var(--serif); font-weight: 600; font-size: 13px; }
+  .crosstab .cv.heat-h { background: var(--forest-50); color: var(--forest-700); }
+  .crosstab .cv.heat-m { background: var(--paper-2); }
+  .crosstab .cv.heat-l { background: var(--orange-soft); color: var(--orange-deep); }
+
+  /* Issue salience bars */
+  .issue-list { display: flex; flex-direction: column; gap: 8px; }
+  .issue-list .row {
+    display: grid; grid-template-columns: 32px 1fr 72px 80px; gap: 12px; align-items: center;
+    padding: 8px 0; border-top: 1px solid var(--hair-soft);
+  }
+  .issue-list .row:first-child { border-top: 0; }
+  .issue-list .rank { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .issue-list .nm { font-family: var(--serif); font-size: 14px; font-weight: 500; font-variation-settings: "opsz" 18; }
+  .issue-list .bar { height: 10px; background: var(--paper-3); border-radius: 1px; position: relative; overflow: hidden; }
+  .issue-list .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--forest-600); }
+  .issue-list .delta { font-family: var(--mono); font-size: 11px; font-weight: 500; text-align: right; }
+  .issue-list .delta.up { color: var(--forest-700); }
+  .issue-list .delta.dn { color: var(--orange); }
+  .issue-list .delta.fl { color: var(--ink-3); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page page-wide">
+
+  <div class="stamp">
+    <div class="num">22 / DATA & STATE</div>
+    <div class="ttl">Charts</div>
+    <div class="sub">— vote share, scenario lines, crosstab, issue salience.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="split-2" style="gap: 24px;">
+    <div class="chart-card">
+      <div class="cap">Vote share · baseline · Anambra Central</div>
+      <h3>Projected outcome <span class="serif-it" style="font-weight: 400; color: var(--ink-3);">— senate, 2027</span></h3>
+      <div class="vs-bar">
+        <span style="width: 47.2%; background: var(--forest-600); color: var(--paper);">LP · 47.2%</span>
+        <span style="width: 22.1%; background: var(--ink); color: var(--paper);">APC · 22.1%</span>
+        <span style="width: 18.4%; background: var(--paper-3); color: var(--ink-2);">APGA · 18.4%</span>
+        <span style="width: 9.8%; background: var(--orange-soft); color: var(--ink-2);">PDP · 9.8%</span>
+        <span style="width: 2.5%; background: var(--paper-2); color: var(--ink-3);">.</span>
+      </div>
+      <div class="vs-legend">
+        <span><i style="background: var(--forest-600);"></i> Labour Party · n=412 PU sampled</span>
+        <span><i style="background: var(--ink);"></i> APC</span>
+        <span><i style="background: var(--paper-3); border: 1px solid var(--hair);"></i> APGA</span>
+        <span><i style="background: var(--orange-soft); border: 1px solid var(--orange-edge);"></i> PDP</span>
+      </div>
+      <div class="chart-foot">
+        <span><strong>Confidence</strong> medium</span>
+        <span>± 3.1 pts</span>
+        <span>baseline as of 2026-05-11</span>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="cap">Scenario divergence · LP vote share</div>
+      <h3>Three lines, one cohort <span class="serif-it" style="font-weight: 400; color: var(--ink-3);">— turnout sensitivity</span></h3>
+      <div class="area-wrap area">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+          <g class="grid">
+            <line x1="40" y1="20" x2="600" y2="20"/>
+            <line x1="40" y1="70" x2="600" y2="70"/>
+            <line x1="40" y1="120" x2="600" y2="120"/>
+            <line x1="40" y1="170" x2="600" y2="170"/>
+          </g>
+          <text x="36" y="24" class="axis-l">55%</text>
+          <text x="36" y="74" class="axis-l">45%</text>
+          <text x="36" y="124" class="axis-l">35%</text>
+          <text x="36" y="174" class="axis-l">25%</text>
+          <line x1="40" y1="170" x2="600" y2="170" class="baseline"/>
+          <text x="100" y="192" class="axis-c">2019</text>
+          <text x="240" y="192" class="axis-c">2023</text>
+          <text x="380" y="192" class="axis-c">2027 baseline</text>
+          <text x="520" y="192" class="axis-c">2027 +youth</text>
+
+          <!-- Confidence band (LP baseline) -->
+          <path class="band" d="M 40 130 L 180 100 L 320 78 L 460 64 L 600 52 L 600 96 L 460 108 L 320 122 L 180 144 L 40 174 Z"/>
+          <!-- LP baseline line -->
+          <path class="line" d="M 40 152 L 180 122 L 320 100 L 460 86 L 600 74"/>
+          <!-- APC opposition (dashed) -->
+          <path class="line-opp" d="M 40 88 L 180 102 L 320 124 L 460 138 L 600 148"/>
+
+          <circle cx="320" cy="100" r="4" class="dot"/>
+          <text x="334" y="96" style="font-family: var(--serif); font-style: italic; font-size: 12px; fill: var(--ink);">baseline · 47.2%</text>
+          <circle cx="600" cy="74" r="4" class="dot"/>
+        </svg>
+      </div>
+      <div class="chart-foot">
+        <span><strong>LP</strong> forest line</span>
+        <span><strong>APC</strong> dashed ink</span>
+        <span><strong>Band</strong> ± 3.1 pts</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Crosstab</span></div>
+
+  <div class="chart-card">
+    <div class="cap">Vote share × age cohort × LGA · projected</div>
+    <h3>Anambra Central · senate <span class="serif-it" style="font-weight: 400; color: var(--ink-3);">— heat by hold likelihood</span></h3>
+
+    <div class="crosstab" style="margin-top: 8px;">
+      <div class="ch">LGA</div>
+      <div class="ch" style="text-align: right;">18–34</div>
+      <div class="ch" style="text-align: right;">35–54</div>
+      <div class="ch" style="text-align: right;">55+</div>
+      <div class="ch" style="text-align: right;">All</div>
+
+      <div class="cv label">Onitsha North</div>
+      <div class="cv heat-h">+ 12.4</div>
+      <div class="cv heat-m">+ 4.1</div>
+      <div class="cv heat-l">– 1.2</div>
+      <div class="cv heat-h">+ 6.4</div>
+
+      <div class="cv label">Onitsha South</div>
+      <div class="cv heat-h">+ 8.7</div>
+      <div class="cv heat-m">+ 2.0</div>
+      <div class="cv heat-l">– 3.6</div>
+      <div class="cv heat-m">+ 3.1</div>
+
+      <div class="cv label">Idemili North</div>
+      <div class="cv heat-m">+ 5.2</div>
+      <div class="cv heat-l">– 0.4</div>
+      <div class="cv heat-l">– 4.8</div>
+      <div class="cv heat-m">+ 0.8</div>
+
+      <div class="cv label">Ogbaru</div>
+      <div class="cv heat-l">– 2.1</div>
+      <div class="cv heat-l">– 6.4</div>
+      <div class="cv heat-l">– 8.2</div>
+      <div class="cv heat-l">– 5.7</div>
+
+      <div class="cv label">Oyi</div>
+      <div class="cv heat-h">+ 14.2</div>
+      <div class="cv heat-h">+ 7.8</div>
+      <div class="cv heat-m">+ 1.4</div>
+      <div class="cv heat-h">+ 8.0</div>
+    </div>
+
+    <div class="chart-foot">
+      <span><strong>Reading</strong> values are LP gain (+) or loss (–) vs 2023 actual, in percentage points</span>
+      <span>n = 412 PU</span>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Issue salience</span></div>
+
+  <div class="chart-card">
+    <div class="cap">Constituency · weekly · top 6 issues</div>
+    <h3>What Anambra Central is talking about <span class="serif-it" style="font-weight: 400; color: var(--ink-3);">— may 5–11</span></h3>
+
+    <div class="issue-list">
+      <div class="row"><span class="rank">01</span><span class="nm">Cost of living</span><span class="bar"><span class="fill" style="width: 92%;"></span></span><span class="delta up">↑ 14%</span></div>
+      <div class="row"><span class="rank">02</span><span class="nm">Insecurity · Onitsha</span><span class="bar"><span class="fill" style="width: 71%;"></span></span><span class="delta up">↑ 22%</span></div>
+      <div class="row"><span class="rank">03</span><span class="nm">Manufacturing revival</span><span class="bar"><span class="fill" style="width: 58%;"></span></span><span class="delta fl">→ 0%</span></div>
+      <div class="row"><span class="rank">04</span><span class="nm">Soludo–LP alignment</span><span class="bar"><span class="fill" style="width: 42%;"></span></span><span class="delta up">↑ 38%</span></div>
+      <div class="row"><span class="rank">05</span><span class="nm">Education funding</span><span class="bar"><span class="fill" style="width: 36%;"></span></span><span class="delta dn">↓ 8%</span></div>
+      <div class="row"><span class="rank">06</span><span class="nm">Naira reform</span><span class="bar"><span class="fill" style="width: 28%;"></span></span><span class="delta dn">↓ 12%</span></div>
+    </div>
+
+    <div class="chart-foot">
+      <span><strong>Sources</strong> radio call-in (52%), Nairaland (24%), public X (18%), public WhatsApp (6%)</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Tutor-specific inputs</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 6px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  /* subject picker */
+  .picker-shell { background: var(--paper); border: 1px solid var(--sheet-edge); border-radius: 16px; padding: 18px; max-width: 540px; }
+  .picker-search { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--sheet); border: 1px solid var(--sheet-edge-2); border-radius: 12px; }
+  .picker-search svg { width: 18px; height: 18px; color: var(--ink-3); }
+  .picker-search input { flex: 1; border: 0; background: transparent; outline: none; font-family: var(--sans); font-size: 14px; color: var(--ink); }
+  .picker-results { margin-top: 12px; max-height: 220px; overflow-y: auto; }
+  .picker-result { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; cursor: pointer; font-family: var(--sans); font-size: 14px; transition: background 120ms cubic-bezier(.4,0,.2,1); }
+  .picker-result:hover, .picker-result.on { background: var(--green-50); }
+  .picker-result.on { color: var(--green-800); font-weight: 600; }
+  .picker-result .sub { color: var(--ink-3); font-size: 12px; font-weight: 400; margin-left: auto; }
+
+  /* radius slider */
+  .radius { display: grid; gap: 14px; max-width: 540px; }
+  .radius .track {
+    position: relative; height: 6px; background: var(--sheet-edge); border-radius: 999px; margin: 18px 0 6px;
+  }
+  .radius .fill { position: absolute; top: 0; bottom: 0; left: 0; width: 55%; background: var(--green-500); border-radius: 999px; }
+  .radius .knob { position: absolute; top: 50%; left: 55%; width: 18px; height: 18px; border-radius: 50%; background: var(--green-500); transform: translate(-50%, -50%); border: 3px solid var(--sheet); box-shadow: 0 0 0 1px var(--green-500); }
+  .radius .ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* price band */
+  .band { display: grid; gap: 14px; max-width: 540px; }
+  .band-track { position: relative; height: 6px; background: var(--sheet-edge); border-radius: 999px; margin: 18px 0 6px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 18%; right: 32%; background: var(--green-500); border-radius: 999px; }
+  .band-knob { position: absolute; top: 50%; width: 18px; height: 18px; border-radius: 50%; background: var(--green-500); transform: translate(-50%, -50%); border: 3px solid var(--sheet); box-shadow: 0 0 0 1px var(--green-500); }
+  .band-readout { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 13px; color: var(--ink); }
+  .band-readout .l { font-size: 11px; color: var(--ink-3); margin-bottom: 2px; font-family: var(--sans); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+
+  /* availability picker — week grid */
+  .week-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 4px; max-width: 720px; }
+  .week-grid .h { font-family: var(--sans); font-size: 11px; color: var(--ink-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 6px 0; }
+  .week-grid .slot { height: 34px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 8px; cursor: pointer; transition: background 120ms cubic-bezier(.4,0,.2,1), border-color 120ms cubic-bezier(.4,0,.2,1); }
+  .week-grid .slot.on { background: var(--green-100); border-color: var(--green-200); }
+  .week-grid .slot.busy { background: var(--paper-deep); border-color: var(--hair); opacity: 0.6; cursor: not-allowed; }
+  .week-grid .ts { font-family: var(--mono); font-size: 11px; color: var(--ink-3); padding: 8px 4px; align-self: center; }
+
+  /* photo upload */
+  .upload {
+    border: 2px dashed var(--sheet-edge-2);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    background: var(--paper);
+    max-width: 460px;
+  }
+  .upload svg { width: 38px; height: 38px; color: var(--ink-3); stroke-width: 1.2; }
+  .upload .h { font-family: var(--serif); font-size: 18px; font-weight: 500; margin: 14px 0 4px; }
+  .upload .d { font-size: 12.5px; color: var(--ink-3); margin: 0 0 14px; line-height: 1.5; }
+
+  /* file under review */
+  .doc {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 12px; padding: 14px 16px;
+    display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; align-items: center; max-width: 460px;
+  }
+  .doc svg { width: 26px; height: 26px; color: var(--ink-3); stroke-width: 1.4; }
+  .doc .nm { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .doc .sub { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+  .status-chip { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--warn); background: var(--warn-bg); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--warn-edge); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">13 / PRIMITIVES</span>
+    <h1 class="ttl">Tutor-specific inputs</h1>
+    <span class="meta">Subject · radius · price · availability · evidence</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">The inputs no other system needs in quite this form: the <em>subject</em> picker (typeahead with curriculum hints), the <em>distance radius</em> for local lessons, the <em>price band</em> a parent will pay, the <em>weekly availability</em> grid a tutor publishes, and the <em>evidence</em> upload (degree certs, ID) — each shown as its own scene.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · search · subject picker</div>
+    <h3>Type to find · curriculum hints attached</h3>
+    <p class="blurb">A parent types "math" and we suggest the exam-bound versions of the subject so the search lands in the right pool.</p>
+    <div class="picker-shell">
+      <div class="picker-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input value="math" />
+      </div>
+      <div class="picker-results">
+        <div class="picker-result on">Further Mathematics <span class="sub">A-Level · 142 tutors</span></div>
+        <div class="picker-result">Mathematics <span class="sub">WAEC + IGCSE · 318 tutors</span></div>
+        <div class="picker-result">Additional Maths <span class="sub">IGCSE · 56 tutors</span></div>
+        <div class="picker-result">Mathematics <span class="sub">JAMB UTME · 84 tutors</span></div>
+        <div class="picker-result">Quantitative Reasoning <span class="sub">Common Entrance · 22 tutors</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · search · distance</div>
+    <h3>Radius slider · "within 12 km of Lekki"</h3>
+    <p class="blurb">A single thumb on a track, in the brand green. The readout is mono so the number reads as a measurement.</p>
+    <div class="radius">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div class="overline">Distance from Lekki, Lagos</div>
+        <div class="mono tabular" style="font-size: 14px;">12 km</div>
+      </div>
+      <div class="track">
+        <div class="fill"></div>
+        <div class="knob"></div>
+      </div>
+      <div class="ticks">
+        <span>2</span><span>5</span><span>10</span><span>20</span><span>50</span><span>any</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · search · price band</div>
+    <h3>Two-thumb band · "what we'll pay per hour"</h3>
+    <p class="blurb">A parent sets a range. The fill between thumbs is brand green; the rest is sheet-edge.</p>
+    <div class="band">
+      <div style="display: flex; gap: 32px; align-items: flex-end;">
+        <div><div class="l">Min</div><div class="mono tabular">₦4,000</div></div>
+        <div><div class="l">Max</div><div class="mono tabular">₦14,000</div></div>
+      </div>
+      <div class="band-track">
+        <div class="band-fill"></div>
+        <div class="band-knob" style="left: 18%;"></div>
+        <div class="band-knob" style="left: 68%;"></div>
+      </div>
+      <div class="band-readout"><span>₦1,000</span><span>₦25,000+</span></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · tutor settings · availability</div>
+    <h3>Weekly availability grid</h3>
+    <p class="blurb">Tutor taps blocks of time they're available. Pale sage = available; recessed = already-booked. No-one is shown a slot a tutor hasn't published.</p>
+    <div class="week-grid">
+      <div class="h"></div>
+      <div class="h">Mon</div><div class="h">Tue</div><div class="h">Wed</div><div class="h">Thu</div><div class="h">Fri</div><div class="h">Sat</div><div class="h">Sun</div>
+
+      <div class="ts">09:00</div>
+      <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot on"></div><div class="slot on"></div>
+
+      <div class="ts">11:00</div>
+      <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot on"></div><div class="slot on"></div>
+
+      <div class="ts">14:00</div>
+      <div class="slot busy"></div><div class="slot on"></div><div class="slot busy"></div><div class="slot on"></div><div class="slot busy"></div><div class="slot on"></div><div class="slot"></div>
+
+      <div class="ts">16:00</div>
+      <div class="slot on"></div><div class="slot on"></div><div class="slot on"></div><div class="slot on"></div><div class="slot on"></div><div class="slot"></div><div class="slot"></div>
+
+      <div class="ts">18:00</div>
+      <div class="slot on"></div><div class="slot busy"></div><div class="slot on"></div><div class="slot busy"></div><div class="slot on"></div><div class="slot"></div><div class="slot"></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · tutor registration · evidence</div>
+    <h3>Upload a degree certificate or ID</h3>
+    <p class="blurb">Tutors upload documents to the verification team. Files sit in their profile as quiet cards, never as badges.</p>
+    <div class="upload">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 10l7-7 7 7"/></svg>
+      <div class="h">Drop a PDF or photograph here</div>
+      <div class="d">Up to 10 MB. We accept degrees, teaching certificates, IDs, references.</div>
+      <button class="b b-secondary b-sm">Choose file</button>
+    </div>
+
+    <div class="doc" style="margin-top: 16px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h6M9 16h4"/></svg>
+      <div>
+        <div class="nm">Cambridge BSc (Hons) Mathematics · 2016</div>
+        <div class="sub">marcus-degree.pdf · 1.2 MB</div>
+      </div>
+      <span class="status-chip">Under review</span>
+    </div>
+    <div class="doc" style="margin-top: 8px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h6M9 16h4"/></svg>
+      <div>
+        <div class="nm">National Identification card</div>
+        <div class="sub">id-marcus-k.jpg · 820 KB</div>
+      </div>
+      <span class="verified">Verified</span>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

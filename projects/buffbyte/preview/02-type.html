@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Type · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink);
+    margin-bottom: 36px;
+  }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .row {
+    display: grid; grid-template-columns: 120px 1fr 160px;
+    align-items: baseline; gap: 24px;
+    padding: 20px 0; border-top: 1px solid var(--hair);
+  }
+  .row:first-of-type { border-top: 0; }
+  .row .role { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); }
+  .row .spec { font-size: 11.5px; color: var(--ink-3); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .blk { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--ink); }
+  .blk h2 { font-size: 17px; font-weight: 600; margin: 0 0 22px; letter-spacing: -0.012em; }
+  .blk h2 span { color: var(--ink-3); font-weight: 400; margin-left: 8px; font-size: 12px; letter-spacing: var(--track-overline); text-transform: uppercase; }
+
+  .num-demo {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+    margin-top: 12px;
+  }
+  .num-demo .cell {
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    padding: 18px 20px;
+    background: var(--sheet);
+  }
+  .num-demo .v {
+    font-size: 38px; font-weight: 600; letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .num-demo .l {
+    font-size: 11px; color: var(--ink-3); text-transform: uppercase;
+    letter-spacing: var(--track-overline); margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Type</h1>
+  <p>Inter only. Three weights (400, 500, 600). Hierarchy comes from <em>size and tracking</em>, not from face variety. Numbers ride Inter's tabular figures — readable without looking engineered.</p>
+</header>
+
+<!-- Scale -->
+<div class="row">
+  <div class="role">Display</div>
+  <div style="font-size:56px;font-weight:600;letter-spacing:-0.035em;line-height:1;">Analyse content that<br/>actually converts</div>
+  <div class="spec">56 / 60 · -0.035em · 600</div>
+</div>
+<div class="row">
+  <div class="role">H1</div>
+  <div style="font-size:32px;font-weight:600;letter-spacing:-0.02em;">Recipe testing video, draft 3</div>
+  <div class="spec">32 / 38 · -0.020em · 600</div>
+</div>
+<div class="row">
+  <div class="role">H2</div>
+  <div style="font-size:22px;font-weight:600;letter-spacing:-0.014em;">Your hook lands</div>
+  <div class="spec">22 / 28 · -0.014em · 600</div>
+</div>
+<div class="row">
+  <div class="role">H3</div>
+  <div style="font-size:15px;font-weight:500;letter-spacing:0.008em;">Sentiment analysis</div>
+  <div class="spec">15 / 22 · +0.008em · 500</div>
+</div>
+<div class="row">
+  <div class="role">Body</div>
+  <div style="font-size:14px;line-height:1.55;color:var(--ink-2);max-width:60ch;">
+    A coach reads your draft and leaves a margin note. Tighten the middle, the hook is fine; cut the second example, it weakens the first; rename the file because nobody will find this on Friday morning.
+  </div>
+  <div class="spec">14 / 22 · 0em · 400</div>
+</div>
+<div class="row">
+  <div class="role">Caption</div>
+  <div style="font-size:12.5px;line-height:1.45;color:var(--ink-3);">251 characters · TikTok + Instagram · analysed 4 min ago</div>
+  <div class="spec">12.5 / 18 · 0em · 400</div>
+</div>
+<div class="row">
+  <div class="role">Overline</div>
+  <div class="t-overline">Optimal posting times</div>
+  <div class="spec">11 / 14 · +0.20em · 500</div>
+</div>
+
+<!-- Numbers -->
+<section class="blk">
+  <h2>Numbers shout <span>tabular figures · the loudest objects on screen</span></h2>
+  <div class="num-demo">
+    <div class="cell"><div class="v t-accent">89<span style="font-size:18px;color:var(--ink-3);">%</span></div><div class="l">Success rate</div></div>
+    <div class="cell"><div class="v">76<span style="font-size:18px;color:var(--ink-3);">%</span></div><div class="l">Hook strength</div></div>
+    <div class="cell"><div class="v">0.78</div><div class="l">Sentiment</div></div>
+    <div class="cell"><div class="v t-crit">14<span style="font-size:18px;color:var(--ink-3);">%</span></div><div class="l">Risk</div></div>
+  </div>
+</section>
+
+<!-- The coach voice -->
+<section class="blk">
+  <h2>The coach voice <span>copy patterns the AI uses</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+    <div style="border:1px solid var(--hair);border-radius:var(--r-card);background:var(--sheet);padding:22px;">
+      <div class="t-overline" style="margin-bottom:10px;">Constructive</div>
+      <p style="margin:0;font-size:14px;line-height:1.55;color:var(--ink-2);border-left:2px solid var(--accent);padding-left:12px;">Your hook lands. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns.</p>
+    </div>
+    <div style="border:1px solid var(--hair);border-radius:var(--r-card);background:var(--sheet);padding:22px;">
+      <div class="t-overline" style="margin-bottom:10px;">Specific</div>
+      <p style="margin:0;font-size:14px;line-height:1.55;color:var(--ink-2);border-left:2px solid var(--accent);padding-left:12px;">Move the call-to-action up. Right now it's the last thing, and the last thing rarely gets read on Twitter.</p>
+    </div>
+    <div style="border:1px solid var(--warn-edge);background:var(--warn-bg);border-radius:var(--r-card);padding:22px;">
+      <div class="t-overline" style="margin-bottom:10px;color:var(--warn-deep);">Warning · amber</div>
+      <p style="margin:0;font-size:14px;line-height:1.55;color:var(--warn-deep);">Minor grammar issue may impact professional credibility — see line 7.</p>
+    </div>
+    <div style="border:1px solid var(--crit-edge);background:var(--crit-bg);border-radius:var(--r-card);padding:22px;">
+      <div class="t-overline" style="margin-bottom:10px;color:var(--crit-deep);">Critical · oxblood</div>
+      <p style="margin:0;font-size:14px;line-height:1.55;color:var(--crit-deep);">The opening claim is unverified. Publishing as-is risks misinformation — add a source or remove.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

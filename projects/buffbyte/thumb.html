@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BuffByte · thumb</title>
+<style>
+  /* Self-contained thumbnail. Renders inside an iframe in the gallery.
+     Shows the signature score-ring + coach-quote moment at small scale. */
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #FAF7F2;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #1C1B19;
+    overflow: hidden;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  .frame {
+    height: 100%;
+    padding: 14px 14px;
+    display: flex; flex-direction: column; gap: 10px;
+    justify-content: center;
+  }
+
+  .card {
+    background: #FFFDF8;
+    border: 1px solid #DDD7CB;
+    border-radius: 6px;
+    padding: 14px 14px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+    align-items: center;
+    position: relative;
+  }
+
+  .ring { width: 56px; height: 56px; position: relative; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .v {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-size: 14px; font-weight: 600; letter-spacing: -0.02em;
+    color: #533AFD;
+  }
+
+  .col h2 {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+    margin-bottom: 3px;
+    color: #1C1B19;
+  }
+  .col .meta {
+    font-size: 7.5px;
+    color: #6B6862;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .col .quote {
+    border-left: 1.5px solid #533AFD;
+    padding-left: 6px;
+    font-size: 8.5px;
+    line-height: 1.4;
+    color: #3A3835;
+  }
+  .col .quote em { color: #1C1B19; font-style: italic; }
+
+  .ribbon {
+    display: flex; gap: 4px; align-items: center;
+    font-size: 7px;
+    color: #6B6862;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+  }
+  .ribbon .pip { width: 4px; height: 4px; border-radius: 50%; background: #533AFD; }
+
+  .bottom {
+    display: flex; gap: 5px; align-items: center;
+  }
+  .pill {
+    font-size: 7px; padding: 1px 5px;
+    border-radius: 99px; font-weight: 500;
+    background: #EAE6FF; color: #1A0F86; border: 1px solid #C9C0FF;
+    letter-spacing: 0.04em;
+  }
+  .pill.warn { background: #FBF4E5; color: #8E6112; border-color: #E6D2A1; }
+  .pill.ink  { background: #1C1B19; color: #FAF7F2; border-color: #1C1B19; }
+  .pill.neutral { background: #F2EEE6; color: #3A3835; border-color: #DDD7CB; }
+
+  .mark {
+    position: absolute; top: 8px; right: 10px;
+    font-size: 7px; color: #9A968D;
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  }
+
+  /* second tiny row — trending */
+  .trend {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    background: #FFFDF8;
+    border: 1px solid #DDD7CB;
+    border-radius: 6px;
+  }
+  .trend .rank {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: #533AFD; color: #FFFDF8;
+    font-size: 8px; font-weight: 600;
+    display: grid; place-items: center;
+  }
+  .trend .name { font-size: 9.5px; font-weight: 500; flex: 1; }
+  .trend .v { font-size: 9px; font-weight: 500; color: #533AFD; }
+  .trend .vol { font-size: 8px; color: #6B6862; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="ribbon"><span class="pip"></span>Analysis · ready to publish</div>
+
+  <div class="card">
+    <span class="mark">BB</span>
+    <div class="ring">
+      <svg viewBox="0 0 56 56">
+        <circle cx="28" cy="28" r="24" stroke="#DDD7CB" stroke-width="3.5" fill="none"/>
+        <circle cx="28" cy="28" r="24" stroke="#533AFD" stroke-width="3.5" fill="none"
+                stroke-dasharray="150.8" stroke-dashoffset="22" stroke-linecap="round"/>
+      </svg>
+      <div class="v">87</div>
+    </div>
+    <div class="col">
+      <h2>Spent some time last month building BuffByte AI</h2>
+      <div class="meta">37 words · TikTok + Instagram · 4 min ago</div>
+      <p class="quote">Your hook lands. Cut <em>"for those who don't know"</em> — the middle returns.</p>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <span class="pill">Strong hook</span>
+    <span class="pill warn">Tighten middle</span>
+    <span class="pill neutral">𝕏 Twitter</span>
+  </div>
+
+  <div class="trend">
+    <span class="rank">1</span>
+    <span class="name">#HildaBaci</span>
+    <span class="vol">58.0K</span>
+    <span class="v">↑ 91%</span>
+  </div>
+</div>
+
+</body>
+</html>

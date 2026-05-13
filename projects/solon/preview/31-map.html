@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · scene · constituency map</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 0; background: var(--paper); }
+
+  .scene-shell { display: grid; grid-template-rows: 56px 1fr; min-height: 100vh; }
+
+  .topbar {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 22px;
+    align-items: center; padding: 0 28px;
+    background: var(--paper); border-bottom: 1px solid var(--ink);
+  }
+  .topbar .brand { font-family: var(--serif); font-weight: 700; font-size: 22px; font-variation-settings: "opsz" 96; }
+  .topbar .crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); padding-left: 18px; border-left: 1px solid var(--hair); }
+  .topbar .crumb .cur { color: var(--ink); }
+
+  /* Module 1 layout */
+  .grid { display: grid; grid-template-columns: 320px 1fr 360px; min-height: 0; }
+
+  /* LEFT */
+  .lhs { padding: 22px; border-right: 1px solid var(--hair); overflow: auto; }
+  .lhs h2 { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0 0 8px; font-variation-settings: "opsz" 36; }
+  .lhs .sub { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: var(--ink-3); margin-bottom: 16px; }
+
+  .stat-block { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); margin-bottom: 16px; }
+  .stat { padding: 14px 16px; border-right: 1px solid var(--hair-soft); border-bottom: 1px solid var(--hair-soft); }
+  .stat:nth-child(2n) { border-right: 0; }
+  .stat:nth-last-child(-n+2) { border-bottom: 0; }
+  .stat .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .stat .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 20px; font-weight: 500; margin-top: 6px; }
+  .stat .v.proj { font-family: var(--serif); font-weight: 600; color: var(--forest-700); font-variation-settings: "opsz" 36; }
+  .stat .v small { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+
+  .tier-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); overflow: hidden; }
+  .tier-row { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--hair-soft); cursor: pointer; }
+  .tier-row:first-child { border-top: 0; }
+  .tier-row:hover { background: var(--paper-2); }
+  .tier-row .sw { width: 10px; height: 10px; border-radius: 2px; }
+  .tier-row .nm { font-family: var(--serif); font-size: 13.5px; }
+  .tier-row .count { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .tier-row .pct { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+
+  /* MAP */
+  .map-area {
+    background: var(--paper-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .map-canvas {
+    width: 100%; height: 100%; min-height: 600px;
+    background:
+      radial-gradient(circle at 30% 35%, rgba(255,255,255,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 70% 65%, rgba(255,255,255,0.4) 0%, transparent 50%),
+      var(--paper-2);
+    position: relative;
+  }
+  .map-svg { width: 100%; height: 100%; display: block; }
+  .map-svg .ward { fill: var(--paper); stroke: var(--ink-3); stroke-width: 0.6; }
+  .map-svg .ward.h1 { fill: #14342A; stroke: var(--ink); }
+  .map-svg .ward.h2 { fill: var(--forest-600); stroke: var(--ink); }
+  .map-svg .ward.h3 { fill: var(--forest-300); }
+  .map-svg .ward.toss { fill: var(--orange); stroke: var(--ink); }
+  .map-svg .ward.o1 { fill: var(--paper-3); }
+  .map-svg .ward.o2 { fill: var(--ink); }
+  .map-svg .pu-dot { fill: var(--ink); }
+  .map-svg .ward-name { font-family: var(--serif); font-style: italic; font-size: 12px; fill: var(--ink); pointer-events: none; }
+  .map-svg .ward-name.dark { fill: var(--paper); }
+
+  .map-toolbar {
+    position: absolute; top: 18px; left: 18px; right: 18px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .map-toolbar .seg {
+    display: inline-flex; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden;
+  }
+  .map-toolbar .seg button { font-family: var(--sans); font-size: 12px; padding: 7px 12px; border: 0; background: transparent; border-right: 1px solid var(--hair); cursor: pointer; color: var(--ink-2); }
+  .map-toolbar .seg button:last-child { border-right: 0; }
+  .map-toolbar .seg button.on { background: var(--ink); color: var(--paper); }
+
+  .compass {
+    position: absolute; bottom: 22px; left: 22px;
+    display: flex; flex-direction: column; gap: 4px; align-items: center;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; color: var(--ink-3); text-transform: uppercase;
+  }
+  .compass svg { width: 32px; height: 32px; stroke: var(--ink); fill: none; stroke-width: 1.4; }
+
+  .map-legend {
+    position: absolute; bottom: 22px; right: 22px;
+    background: var(--paper); border: 1px solid var(--ink); padding: 12px 14px;
+    border-radius: var(--r-card); font-family: var(--mono); font-size: 10.5px;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .map-legend .ttl { font-size: 10px; letter-spacing: 0.16em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 6px; }
+  .map-legend .row { display: flex; align-items: center; gap: 8px; }
+  .map-legend .row i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  /* RHS */
+  .rhs { padding: 22px; border-left: 1px solid var(--hair); overflow: auto; background: var(--paper); }
+
+  .pu-detail .hd { padding: 16px 20px; background: var(--paper-2); border-bottom: 1px solid var(--ink); margin: -22px -22px 16px; }
+  .pu-detail .hd .h { font-family: var(--serif); font-weight: 600; font-size: 18px; font-variation-settings: "opsz" 36; }
+  .pu-detail .hd .sub { font-family: var(--sans); font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .pu-detail .hd .rec-id { margin-top: 4px; display: inline-block; }
+
+  .kv { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--hair-soft); }
+  .kv:first-of-type { border-top: 0; }
+  .kv .k { font-family: var(--sans); font-size: 12.5px; color: var(--ink-3); }
+  .kv .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 13.5px; }
+  .kv .v.proj { font-family: var(--serif); font-weight: 600; color: var(--forest-700); }
+
+  .drivers { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--hair); }
+  .drivers ol { margin: 8px 0 0 18px; padding: 0; font-family: var(--serif); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+  .drivers ol li { margin-bottom: 4px; }
+  .drivers ol li .pt { font-family: var(--mono); font-size: 11px; color: var(--forest-700); margin-left: 4px; }
+</style>
+</head>
+<body>
+<div class="scene-shell">
+
+  <header class="topbar">
+    <div class="brand">Solon<span style="color: var(--orange);">.</span></div>
+    <div class="crumb">MODULE 1 · VOTER DATA <span style="margin:0 6px;color:var(--ink-4)">/</span> ANAMBRA CENTRAL <span style="margin:0 6px;color:var(--ink-4)">/</span> <span class="cur">CONSTITUENCY MAP</span></div>
+    <div style="display: flex; gap: 8px;">
+      <button class="b b-quiet b-sm">CSV</button>
+      <button class="b b-secondary b-sm">Print</button>
+      <button class="b b-primary b-sm">Run scenario here</button>
+    </div>
+    <span class="av av-md av-forest">CO</span>
+  </header>
+
+  <div class="grid">
+
+    <aside class="lhs">
+      <h2>Anambra Central</h2>
+      <div class="sub">— 412 polling units across 5 LGAs · senate, 2027 cycle.</div>
+
+      <div class="stat-block">
+        <div class="stat"><div class="l">Registered</div><div class="v">186,492</div></div>
+        <div class="stat"><div class="l">2023 turnout</div><div class="v">41.3<small>%</small></div></div>
+        <div class="stat"><div class="l">Projection</div><div class="v proj">47.2<small>%</small></div></div>
+        <div class="stat"><div class="l">Margin · 2nd</div><div class="v">+ 25.1<small>pt</small></div></div>
+      </div>
+
+      <div class="overline" style="margin-bottom: 8px;">Win-probability tier</div>
+      <div class="tier-list">
+        <div class="tier-row"><span class="sw" style="background: #14342A;"></span><span class="nm">Strong hold</span><span class="count">142 PU</span><span class="pct" style="color: var(--forest-700);">34.5%</span></div>
+        <div class="tier-row"><span class="sw" style="background: var(--forest-600);"></span><span class="nm">Lean hold</span><span class="count">98 PU</span><span class="pct" style="color: var(--forest-700);">23.8%</span></div>
+        <div class="tier-row"><span class="sw" style="background: var(--orange);"></span><span class="nm">Toss-up</span><span class="count">67 PU</span><span class="pct" style="color: var(--orange);">16.3%</span></div>
+        <div class="tier-row"><span class="sw" style="background: var(--paper-3); border: 1px solid var(--hair);"></span><span class="nm">Lean opp.</span><span class="count">71 PU</span><span class="pct" style="color: var(--ink-2);">17.2%</span></div>
+        <div class="tier-row"><span class="sw" style="background: var(--ink);"></span><span class="nm">Strong opp.</span><span class="count">34 PU</span><span class="pct" style="color: var(--ink-2);">8.2%</span></div>
+      </div>
+
+      <div class="overline" style="margin: 18px 0 8px;">Cluster — top 3</div>
+      <div style="font-family: var(--serif); font-size: 13.5px; line-height: 1.55; color: var(--ink-2);">
+        <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">Persuadable urban youth · <span class="mono" style="font-size: 11px; color: var(--ink-3);">14.2k</span></div>
+        <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">Rural party-loyal · <span class="mono" style="font-size: 11px; color: var(--ink-3);">9.8k</span></div>
+        <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">Market women · <span class="mono" style="font-size: 11px; color: var(--ink-3);">6.4k</span></div>
+      </div>
+    </aside>
+
+    <!-- MAP -->
+    <section class="map-area">
+      <div class="map-toolbar">
+        <div class="seg">
+          <button class="on">Win-probability</button>
+          <button>2023 result</button>
+          <button>Turnout</button>
+          <button>Cluster</button>
+        </div>
+        <div class="seg">
+          <button class="on">All cycles</button>
+          <button>2023</button>
+          <button>2019</button>
+        </div>
+        <div style="flex: 1"></div>
+        <span class="pill pill-ok"><span class="dot"></span> 412 / 412 PU loaded</span>
+      </div>
+
+      <div class="map-canvas">
+        <svg class="map-svg" viewBox="0 0 700 600" preserveAspectRatio="xMidYMid meet">
+          <!-- Decorative cream backdrop with rule grid -->
+          <defs>
+            <pattern id="ggrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(26,23,20,0.05)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="700" height="600" fill="url(#ggrid)"/>
+
+          <!-- Wards drawn as polygons (constituency shape) -->
+          <!-- Onitsha North (strong hold) -->
+          <polygon class="ward h1" points="120,90 260,80 290,160 230,230 130,240 90,170"/>
+          <text class="ward-name dark" x="190" y="160">Onitsha North</text>
+
+          <!-- Onitsha South (lean hold) -->
+          <polygon class="ward h2" points="260,80 380,90 420,180 360,250 290,230 290,160"/>
+          <text class="ward-name dark" x="330" y="170">Onitsha South</text>
+
+          <!-- Idemili North (toss-up) -->
+          <polygon class="ward toss" points="380,90 510,110 520,210 420,230 420,180"/>
+          <text class="ward-name dark" x="450" y="170">Idemili North</text>
+
+          <!-- Idemili South (lean opp) -->
+          <polygon class="ward o1" points="510,110 620,140 620,260 520,290 520,210"/>
+          <text class="ward-name" x="560" y="200">Idemili South</text>
+
+          <!-- Anambra East (lean hold) -->
+          <polygon class="ward h3" points="90,170 130,240 230,230 280,310 240,400 130,390 70,310"/>
+          <text class="ward-name" x="170" y="310">Anambra East</text>
+
+          <!-- Aguata (strong hold) -->
+          <polygon class="ward h1" points="280,310 360,250 420,230 480,300 470,400 380,450 280,420 240,400"/>
+          <text class="ward-name dark" x="360" y="350">Aguata</text>
+
+          <!-- Ogbaru (strong opp) -->
+          <polygon class="ward o2" points="480,300 520,290 620,260 600,380 510,410 470,400"/>
+          <text class="ward-name dark" x="540" y="340">Ogbaru</text>
+
+          <!-- Oyi (lean hold) -->
+          <polygon class="ward h2" points="240,400 280,420 380,450 350,540 250,540 200,470"/>
+          <text class="ward-name dark" x="280" y="480">Oyi</text>
+
+          <!-- Ihiala (toss-up) -->
+          <polygon class="ward toss" points="380,450 470,400 510,410 600,380 600,490 480,540 350,540"/>
+          <text class="ward-name dark" x="480" y="465">Ihiala</text>
+
+          <!-- PU dots scattered -->
+          <g>
+            <circle cx="170" cy="140" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="200" cy="180" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="220" cy="120" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="320" cy="150" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="350" cy="200" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="440" cy="150" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="470" cy="185" r="3" class="pu-dot" fill="#fff" stroke="#fff" stroke-width="2"/>
+            <circle cx="560" cy="180" r="3" class="pu-dot" fill="var(--ink)"/>
+            <circle cx="580" cy="220" r="3" class="pu-dot" fill="var(--ink)"/>
+            <circle cx="160" cy="290" r="3" class="pu-dot" fill="var(--ink)"/>
+            <circle cx="200" cy="340" r="3" class="pu-dot" fill="var(--ink)"/>
+            <circle cx="350" cy="320" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="380" cy="380" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="540" cy="330" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="270" cy="470" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="320" cy="510" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="430" cy="490" r="3" class="pu-dot" fill="#fff"/>
+            <circle cx="500" cy="510" r="3" class="pu-dot" fill="#fff"/>
+
+            <!-- Selected PU — ringed -->
+            <circle cx="220" cy="120" r="8" fill="none" stroke="#fff" stroke-width="2"/>
+            <circle cx="220" cy="120" r="12" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="2 3"/>
+          </g>
+
+          <!-- Selected callout line -->
+          <line x1="220" y1="120" x2="120" y2="60" stroke="#fff" stroke-width="1"/>
+          <rect x="40" y="36" width="170" height="34" fill="var(--ink)" rx="3"/>
+          <text x="50" y="51" style="font-family: var(--mono); font-size: 10px; fill: rgba(245,239,224,0.7); letter-spacing: 0.08em;">PU 008-04-02</text>
+          <text x="50" y="64" style="font-family: 'Fraunces', serif; font-size: 11px; font-style: italic; fill: var(--paper);">St. Mary's Primary · Strong hold</text>
+        </svg>
+      </div>
+
+      <div class="compass">
+        <svg viewBox="0 0 24 24"><path d="M12 3v9M12 21v-3M3 12h3M18 12h3"/></svg>
+        N
+      </div>
+
+      <div class="map-legend">
+        <div class="ttl">Win-probability</div>
+        <div class="row"><i style="background: #14342A;"></i> Strong hold</div>
+        <div class="row"><i style="background: var(--forest-600);"></i> Lean hold</div>
+        <div class="row"><i style="background: var(--orange);"></i> Toss-up</div>
+        <div class="row"><i style="background: var(--paper-3);"></i> Lean opp.</div>
+        <div class="row"><i style="background: var(--ink);"></i> Strong opp.</div>
+        <div class="row" style="margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--hair); font-size: 10px; color: var(--ink-3);">Dots: 412 polling units</div>
+      </div>
+    </section>
+
+    <aside class="rhs pu-detail">
+      <div class="hd">
+        <div class="h">St. Mary's Primary</div>
+        <div class="sub">Onitsha North · ward 4</div>
+        <div class="rec-id">PU 008-04-02 · LGA-008</div>
+      </div>
+
+      <div class="kv"><span class="k">Registered voters</span><span class="v">1,284</span></div>
+      <div class="kv"><span class="k">2019 result</span><span class="v">LP · 48.2%</span></div>
+      <div class="kv"><span class="k">2023 turnout</span><span class="v">412 · 32%</span></div>
+      <div class="kv"><span class="k">2023 result · winner</span><span class="v">LP · 51.3%</span></div>
+      <div class="kv"><span class="k">Projected 2027</span><span class="v proj">LP 52.1% <span class="serif-it" style="font-size: 11.5px; color: var(--ink-3);">± 2.4</span></span></div>
+      <div class="kv"><span class="k">Tier</span><span><span class="chip chip-hold-strong">Strong hold</span></span></div>
+
+      <div class="drivers">
+        <div class="overline">Top 3 drivers · why this PU holds</div>
+        <ol>
+          <li>Incumbent advantage <span class="pt">+ 14.8 pt</span></li>
+          <li>2023 turnout pattern <span class="pt">+ 6.2 pt</span></li>
+          <li>Ethnoreligious composition <span class="pt">+ 3.4 pt</span></li>
+        </ol>
+      </div>
+
+      <div class="drivers">
+        <div class="overline">Suggested outreach</div>
+        <div style="font-family: var(--serif); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-top: 8px;">
+          Maintain current outreach. Persuadable share is small (~ 4.1%). Allocate ground-staff hours to the toss-up wards south of here.
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hair);">
+        <button class="b b-quiet b-sm">Watchlist</button>
+        <button class="b b-secondary b-sm" style="flex: 1;">Open scenarios</button>
+        <button class="b b-primary b-sm">Brief</button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+</body>
+</html>

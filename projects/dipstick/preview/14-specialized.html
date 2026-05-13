@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Specialized inputs</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .head-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+
+  /* dip stick — visual input */
+  .dip {
+    display: grid; grid-template-columns: 60px 1fr 220px; gap: 24px; align-items: stretch;
+  }
+  .dip .stick {
+    height: 280px; width: 36px; margin: 0 auto;
+    background: linear-gradient(to top, var(--paper-deep) 0%, var(--paper-deep) 100%);
+    border: 1px solid var(--ink); border-radius: 4px; position: relative;
+  }
+  .dip .stick::after {
+    content: ""; position: absolute; left: -4px; right: -4px; bottom: 0;
+    height: 62%; background: var(--emerald-600); border-radius: 0 0 4px 4px;
+  }
+  .dip .ticks { position: relative; height: 280px; }
+  .dip .tick { position: absolute; left: 0; right: 0; display: grid; grid-template-columns: 60px 1fr; gap: 12px; align-items: center; font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .dip .tick::before { content: ""; position: absolute; left: 60px; right: 0; height: 1px; background: var(--hair); }
+  .dip .tick.major { color: var(--ink); font-weight: 600; }
+  .dip .tick.major::before { background: var(--ink-3); }
+  .dip .tick .l { text-align: right; }
+  .dip .read-panel {
+    display: flex; flex-direction: column; justify-content: center; gap: 10px;
+    background: var(--sheet-2); border-left: 2px solid var(--emerald-600); padding: 18px 20px; border-radius: 2px;
+  }
+  .dip .read-panel .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); }
+  .dip .read-panel .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 32px; line-height: 1; letter-spacing: -0.02em; }
+  .dip .read-panel hr { border: 0; border-top: 1px solid var(--hair); margin: 2px 0; }
+
+  /* attendant tag */
+  .att-tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; background: var(--paper-deep); border: 1px solid var(--sheet-edge); border-radius: 9999px; font-family: var(--sans); font-size: 12px; }
+  .att-tag .av { width: 22px; height: 22px; font-size: 9px; }
+  .att-tag .x { font-family: var(--mono); color: var(--ink-3); cursor: pointer; padding: 0 2px; }
+
+  /* pump-pick chips */
+  .pump-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .pump-chip {
+    border: 1px solid var(--sheet-edge); border-radius: 3px; background: var(--sheet);
+    padding: 12px; cursor: pointer; position: relative; transition: border-color 100ms;
+  }
+  .pump-chip:hover { border-color: var(--ink-3); }
+  .pump-chip.on { border-color: var(--ink); }
+  .pump-chip .id { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.1em; }
+  .pump-chip .prod { margin-top: 4px; }
+  .pump-chip .stat { font-family: var(--serif); font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+  .pump-chip.live::after { content: ""; position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald-600); animation: pulse 1.6s ease-out infinite; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">14.</div>
+    <div class="ttl">Specialized — dip readings, pump picks, attendants.</div>
+    <div class="meta">PRIMITIVES</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    The dip reading is the most fraud-prone moment in the business — it earns a visual input, not a number box. The pump picker shows which pumps have open shifts and which are idle. Attendant tags are quick badges that compose.
+  </p>
+
+  <!-- Dipstick input -->
+  <div class="scene">
+    <div class="head-row">
+      <span class="h">Tank 01 — closing dip</span>
+      <span class="meta">PMS · 33,000 L CAPACITY · EVENING</span>
+    </div>
+    <div class="dip">
+      <div class="stick" id="stick"></div>
+      <div class="ticks">
+        <div class="tick major" style="bottom: 100%;"><span class="l">33,000</span><span class="rec">FULL</span></div>
+        <div class="tick" style="bottom: 75%;"><span class="l">24,750</span><span class="rec">¾</span></div>
+        <div class="tick major" style="bottom: 50%;"><span class="l">16,500</span><span class="rec">HALF</span></div>
+        <div class="tick" style="bottom: 25%;"><span class="l">8,250</span><span class="rec">¼</span></div>
+        <div class="tick major" style="bottom: 12%;"><span class="l">4,000</span><span class="rec">REORDER</span></div>
+        <div class="tick" style="bottom: 0%;"><span class="l">0</span><span class="rec">EMPTY</span></div>
+      </div>
+      <div class="read-panel">
+        <div>
+          <div class="k">Closing dip</div>
+          <div class="v">20,460<span style="font-size: 11px; font-family: var(--sans); color: var(--ink-3); letter-spacing: 0.04em;"> L</span></div>
+        </div>
+        <hr>
+        <div>
+          <div class="k">Wet stock variance</div>
+          <div class="v read-ok" style="font-size: 22px;">+ 0 L</div>
+        </div>
+        <div class="rec" style="margin-top: 2px;">VS COMPUTED (OPEN − SOLD)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pump picker -->
+  <div class="scene" style="margin-top: 24px;">
+    <div class="head-row">
+      <span class="h">Choose a pump</span>
+      <span class="meta">MOKOLA · 6 PUMPS · EVENING SHIFT</span>
+    </div>
+    <div class="pump-grid">
+      <div class="pump-chip on live">
+        <div class="id">P-01</div>
+        <div class="prod prod-pms">PMS</div>
+        <div class="stat">Aisha Bello</div>
+        <div class="rec" style="margin-top: 6px;">OPENED 14:00</div>
+      </div>
+      <div class="pump-chip live">
+        <div class="id">P-02</div>
+        <div class="prod prod-pms">PMS</div>
+        <div class="stat">Chidera Okoye</div>
+        <div class="rec" style="margin-top: 6px;">OPENED 14:00</div>
+      </div>
+      <div class="pump-chip live">
+        <div class="id">P-03</div>
+        <div class="prod prod-pms">PMS</div>
+        <div class="stat">Femi Adekunle</div>
+        <div class="rec" style="margin-top: 6px;">OPENED 14:00</div>
+      </div>
+      <div class="pump-chip">
+        <div class="id">P-04</div>
+        <div class="prod prod-pms">PMS</div>
+        <div class="stat" style="color: var(--ink-3);">— idle —</div>
+        <div class="rec" style="margin-top: 6px;">NO SHIFT</div>
+      </div>
+      <div class="pump-chip live">
+        <div class="id">P-05</div>
+        <div class="prod prod-ago">AGO</div>
+        <div class="stat">Yusuf Lawal</div>
+        <div class="rec" style="margin-top: 6px;">OPENED 14:00</div>
+      </div>
+      <div class="pump-chip">
+        <div class="id">P-06</div>
+        <div class="prod prod-dpk">DPK</div>
+        <div class="stat" style="color: var(--ink-3);">— offline —</div>
+        <div class="rec" style="margin-top: 6px; color: var(--short);">FAULT REPORTED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendant chip / picker -->
+  <div class="scene" style="margin-top: 24px;">
+    <div class="head-row">
+      <span class="h">Attendants on shift</span>
+      <span class="meta">TAG &amp; COMPOSE</span>
+    </div>
+    <div class="row">
+      <span class="att-tag"><span class="av av-att">FA</span><span>Femi Adekunle</span><span class="rec">P-03</span><span class="x">×</span></span>
+      <span class="att-tag"><span class="av av-att">CO</span><span>Chidera Okoye</span><span class="rec">P-02</span><span class="x">×</span></span>
+      <span class="att-tag"><span class="av av-att">AB</span><span>Aisha Bello</span><span class="rec">P-01</span><span class="x">×</span></span>
+      <span class="att-tag"><span class="av av-att">YL</span><span>Yusuf Lawal</span><span class="rec">P-05</span><span class="x">×</span></span>
+      <button class="b b-ghost b-sm">+ Add</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

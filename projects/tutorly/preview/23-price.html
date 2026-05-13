@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Price &amp; connect-fee</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .price-rail {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 22px;
+    max-width: 320px;
+  }
+  .price-block { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--hair); }
+  .price-block:last-child { border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+  .price-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+
+  /* receipt — used post-connect */
+  .receipt {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 26px 28px;
+    max-width: 480px;
+  }
+  .receipt h4 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.014em; margin: 0 0 4px; }
+  .receipt .sub { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; }
+  .receipt-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--hair-soft); font-size: 14px; }
+  .receipt-row.last { border-bottom: 0; padding-top: 16px; border-top: 1px solid var(--ink); margin-top: 8px; }
+  .receipt-row .l { color: var(--ink-2); }
+  .receipt-row .r { font-family: var(--mono); }
+  .receipt-row.last .l { font-family: var(--serif); font-weight: 500; font-size: 16px; }
+  .receipt-row.last .r { font-size: 18px; font-weight: 500; }
+
+  /* multi-country variants */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .country-card { background: var(--paper); border: 1px solid var(--sheet-edge); border-radius: 14px; padding: 16px 18px; }
+  .country-card .flag { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">23 / DATA &amp; STATE</span>
+    <h1 class="ttl">Price · connect-fee</h1>
+    <span class="meta">Numbers shout · units whisper</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Price is the moment the product earns money — both the tutor's hourly rate and Tutorly's connect-fee. We give it room. Mono, tabular figures, the unit ("per hour") demoted to a small-caps label beside. Currency symbol bound to the number, not floating.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · profile rail · lesson rate &amp; fee</div>
+    <h3>Two prices, never confused</h3>
+    <p class="blurb">Lesson rate is what the parent pays the tutor; connect-fee is what they pay Tutorly. They sit on the same rail but separated by a hairline and labelled distinctly.</p>
+
+    <div class="price-rail">
+      <div class="price-block">
+        <div class="price-label">Lesson rate</div>
+        <div class="price price-lg tabular">₦12,000<span class="price-unit" style="margin-left: 6px;">per hour</span></div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">Connection fee · one-time</div>
+        <div class="price price-md tabular">₦2,500</div>
+        <p class="tiny" style="margin: 6px 0 0;">Paid to Tutorly. Lets you message Marcus and book lessons.</p>
+      </div>
+      <button class="b b-primary b-lg b-block" style="margin-top: 4px;">Connect with Marcus</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · post-connect · the receipt</div>
+    <h3>What a parent sees after they pay</h3>
+    <p class="blurb">A printed-looking receipt. Heavy ink rule between sub-totals and total. The conversation link sits below.</p>
+
+    <div class="receipt">
+      <h4>Receipt · connection with Marcus K.</h4>
+      <div class="sub">12 April 2026 · 19:42 WAT</div>
+      <div class="receipt-row"><span class="l">Connection fee</span><span class="r tabular">₦2,500.00</span></div>
+      <div class="receipt-row"><span class="l">VAT (7.5%)</span><span class="r tabular">₦187.50</span></div>
+      <div class="receipt-row"><span class="l">Card processing</span><span class="r tabular">₦62.50</span></div>
+      <div class="receipt-row last"><span class="l">Total charged</span><span class="r tabular">₦2,750.00</span></div>
+      <div style="margin-top: 22px; display: flex; gap: 10px;">
+        <button class="b b-primary">Open conversation</button>
+        <button class="b b-secondary">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · multi-country · the same price, four currencies</div>
+    <h3>Tutorly is multi-country · the price block adapts</h3>
+    <p class="blurb">The component is the same; only the symbol and figure change. Local users see local currency. Currency abbreviations sit small underneath when ambiguity is possible (₦ NGN vs USD vs GBP).</p>
+
+    <div class="grid-3">
+      <div class="country-card">
+        <div class="flag">NGN · Nigeria</div>
+        <div class="price price-md tabular">₦12,000<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · ₦2,500</div>
+      </div>
+      <div class="country-card">
+        <div class="flag">GHS · Ghana</div>
+        <div class="price price-md tabular">₵180<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · ₵35</div>
+      </div>
+      <div class="country-card">
+        <div class="flag">KES · Kenya</div>
+        <div class="price price-md tabular">KSh 1,400<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · KSh 320</div>
+      </div>
+      <div class="country-card">
+        <div class="flag">GBP · United Kingdom</div>
+        <div class="price price-md tabular">£28<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · £4</div>
+      </div>
+      <div class="country-card">
+        <div class="flag">ZAR · South Africa</div>
+        <div class="price price-md tabular">R420<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · R85</div>
+      </div>
+      <div class="country-card">
+        <div class="flag">USD · United States</div>
+        <div class="price price-md tabular">$32<span class="price-unit" style="margin-left: 6px;">/ hr</span></div>
+        <div class="tiny" style="margin-top: 6px;">Connect · $5</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

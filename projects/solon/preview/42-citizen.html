@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · citizen reporter (mobile)</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 28px 0; background: var(--paper-2); }
+
+  .stage { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  .head-row { display: flex; align-items: baseline; gap: 18px; padding-bottom: 14px; margin-bottom: 24px; border-bottom: 1px solid var(--ink); }
+  .head-row .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .head-row .ttl { font-family: var(--serif); font-weight: 600; font-size: 28px; flex: 1; font-variation-settings: "opsz" 96; letter-spacing: -0.01em; line-height: 1.1; }
+  .head-row .sub { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-3); }
+  .head-row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  /* Phone frames */
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .phone {
+    background: var(--ink);
+    padding: 12px 8px 14px;
+    border-radius: 24px;
+    width: 100%;
+  }
+  .phone .screen {
+    background: var(--paper);
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 580px;
+    display: flex; flex-direction: column;
+  }
+  .phone .status {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 14px 4px;
+    font-family: var(--mono); font-size: 10px; color: var(--ink);
+  }
+  .phone .status .clock { font-weight: 500; }
+  .phone .status .icons { display: flex; gap: 4px; }
+
+  .phone .top {
+    padding: 4px 16px 12px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .phone .top .brand { font-family: var(--serif); font-weight: 700; font-size: 18px; font-variation-settings: "opsz" 96; }
+  .phone .top .brand .dot { color: var(--orange); }
+  .phone .top .crumb { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); letter-spacing: 0.1em; }
+
+  .phone .body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+
+  .phone-caption { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-top: 12px; text-align: center; }
+
+  .phone h3 { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 0; font-variation-settings: "opsz" 36; line-height: 1.2; }
+  .phone .lede { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  /* Phone 1: PU select */
+  .pu-list-mob { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+  .pu-mob {
+    padding: 10px 12px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+    display: grid; grid-template-columns: 1fr auto; gap: 4px;
+  }
+  .pu-mob.on { border-color: var(--ink); background: var(--paper-2); }
+  .pu-mob .nm { font-family: var(--serif); font-weight: 600; font-size: 13px; }
+  .pu-mob .code { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+  .pu-mob .ward { font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
+
+  /* Phone 2: photo capture */
+  .photo-frame {
+    border: 1px dashed var(--ink); border-radius: var(--r-card);
+    height: 220px; padding: 16px; background: var(--paper-2);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  }
+  .photo-frame .icon svg { width: 38px; height: 38px; stroke: var(--ink-3); stroke-width: 1.2; fill: none; }
+  .photo-frame .h { font-family: var(--serif); font-weight: 600; font-size: 13px; }
+  .photo-frame .p { font-family: var(--serif); font-style: italic; font-size: 11.5px; color: var(--ink-3); text-align: center; line-height: 1.5; max-width: 220px; }
+
+  .check-list { display: flex; flex-direction: column; gap: 6px; padding: 12px; background: var(--forest-50); border: 1px solid var(--forest-200); border-radius: var(--r-card); }
+  .check-list .row { font-family: var(--serif); font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 8px; line-height: 1.4; }
+  .check-list .row::before { content: "✓"; color: var(--forest-700); font-family: var(--mono); font-weight: 700; }
+
+  /* Phone 3: confirmation */
+  .sent-card {
+    text-align: center; padding: 22px 16px;
+    border: 1px solid var(--ink); border-radius: var(--r-card); background: var(--sheet);
+  }
+  .sent-card .icon svg { width: 44px; height: 44px; stroke: var(--forest-600); stroke-width: 1.4; fill: none; }
+  .sent-card .h { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 12px 0 6px; }
+  .sent-card .p { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+  .sent-card .trust { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hair); }
+  .sent-card .trust .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .sent-card .trust .v { font-family: var(--serif); font-weight: 600; font-size: 22px; color: var(--forest-700); margin-top: 4px; font-variation-settings: "opsz" 36; }
+  .sent-card .trust .sub { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+  .next-card { padding: 12px 14px; background: var(--paper-2); border: 1px solid var(--hair); border-radius: var(--r-card); font-family: var(--serif); font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+</style>
+</head>
+
+<div class="stage">
+  <div class="head-row">
+    <div class="num">42 / OVERLAYS</div>
+    <div>
+      <div class="ttl">Citizen reporter — mobile flow</div>
+      <div class="sub">— phone-only, 2G-friendly, no full account required. The opposite of the desk experience.</div>
+    </div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="phones">
+
+    <!-- Phone 1 -->
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status">
+            <span class="clock">11:42</span>
+            <span class="icons">2G ⚪ ⚪ ⚫</span>
+          </div>
+          <div class="top">
+            <div class="brand">Solon<span class="dot">.</span></div>
+            <div class="crumb">REPORT · STEP 1 OF 3</div>
+          </div>
+          <div class="body">
+            <h3>Where are you reporting from?</h3>
+            <div class="lede">We've found polling units near you. Choose the one whose result you want to share.</div>
+
+            <div class="f-wrap" style="height: 38px; flex-shrink: 0;">
+              <span class="f-prefix" style="font-size: 10px;">PU ▸</span>
+              <input class="f" placeholder="search by name or code" style="font-size: 13px;" />
+            </div>
+
+            <div class="pu-list-mob">
+              <div class="pu-mob on">
+                <span class="nm">St. Mary's Primary</span>
+                <span class="code">008-04-02</span>
+                <span class="ward">Onitsha North · ward 4 · 120m away</span>
+                <span></span>
+              </div>
+              <div class="pu-mob">
+                <span class="nm">Onitsha Town Hall</span>
+                <span class="code">008-04-09</span>
+                <span class="ward">Onitsha North · ward 4 · 480m away</span>
+                <span></span>
+              </div>
+              <div class="pu-mob">
+                <span class="nm">Niger Bridge Yard</span>
+                <span class="code">008-04-11</span>
+                <span class="ward">Onitsha North · ward 4 · 720m away</span>
+                <span></span>
+              </div>
+              <div class="pu-mob">
+                <span class="nm">Nkpor Civic Centre</span>
+                <span class="code">008-05-11</span>
+                <span class="ward">Idemili N. · ward 5 · 1.4km away</span>
+                <span></span>
+              </div>
+            </div>
+
+            <button class="b b-primary" style="width: 100%;">Continue · St. Mary's Primary</button>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">1 · Pick your polling unit</div>
+    </div>
+
+    <!-- Phone 2 -->
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status">
+            <span class="clock">11:43</span>
+            <span class="icons">2G ⚪ ⚪ ⚫</span>
+          </div>
+          <div class="top">
+            <div class="brand">Solon<span class="dot">.</span></div>
+            <div class="crumb">REPORT · STEP 2 OF 3</div>
+          </div>
+          <div class="body">
+            <h3>Take a photo of the result sheet</h3>
+            <div class="lede">Photograph Form EC8A so the whole sheet is visible — including the signatures at the bottom.</div>
+
+            <div class="photo-frame">
+              <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="14" r="4"/></svg></div>
+              <div class="h">Tap to open camera</div>
+              <div class="p">Hold the sheet flat. Make sure all the numbers and the signatures are inside the frame.</div>
+            </div>
+
+            <div class="check-list">
+              <div class="row">Numbers in the photo will reconcile against other reports.</div>
+              <div class="row">The image is geotagged to confirm you're at this PU.</div>
+              <div class="row">Your phone number stays hidden from the public feed.</div>
+            </div>
+
+            <div style="margin-top: auto; display: flex; gap: 8px;">
+              <button class="b b-secondary" style="flex: 1;">Back</button>
+              <button class="b b-primary" style="flex: 2;">Take photo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">2 · Capture Form EC8A</div>
+    </div>
+
+    <!-- Phone 3 -->
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status">
+            <span class="clock">11:44</span>
+            <span class="icons">2G ⚪ ⚪ ⚫</span>
+          </div>
+          <div class="top">
+            <div class="brand">Solon<span class="dot">.</span></div>
+            <div class="crumb">REPORT · COMPLETE</div>
+          </div>
+          <div class="body">
+            <div class="sent-card">
+              <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <div class="h">Report submitted</div>
+              <div class="p">Solon is reading the sheet. Your report joins one already submitted from this PU; both will reconcile automatically if the numbers match.</div>
+
+              <div class="trust">
+                <div class="l">Trust score</div>
+                <div class="v">High</div>
+                <div class="sub">Your phone has verified reports before, the geotag matches, and the photo is sharp enough to read.</div>
+              </div>
+            </div>
+
+            <div class="next-card">
+              <strong style="font-family: var(--serif); font-weight: 500;">See an incident?</strong> Tap below to report violence, vote-buying, BVAS failure, or anything urgent — in any Nigerian language.
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: auto;">
+              <button class="b b-secondary" style="flex: 1;">Done</button>
+              <button class="b b-warn" style="flex: 1.4;">Report incident</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">3 · Sent, trust-scored</div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 36px; padding: 18px 24px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--paper); font-family: var(--serif); font-style: italic; font-size: 13.5px; line-height: 1.6; color: var(--ink-3); max-width: 70ch;">
+    <strong style="font-family: var(--serif); font-style: normal; font-weight: 500; color: var(--ink-2);">Why the desk feels so different from this.</strong> The desk is a parliamentary order paper read in daylight by a small team. The phone is a working pen carried by a citizen in a crowd. Same stance — Fraunces on the header, mono on the codes, forest for action, orange for warn — but the gesture is bigger, the buttons are full-width, and the chrome leans on the few things a thumb can do.
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Charts · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 28px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; justify-content: space-between; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .scene-h .left { display: flex; gap: 10px; align-items: baseline; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  .chart-h {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .chart-h h3 { font-size: 14px; font-weight: 500; margin: 0; }
+  .chart-h .v { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .chart-h .delta { font-size: 11.5px; color: var(--accent); }
+
+  /* common */
+  svg.chart text { font-family: var(--sans); font-size: 9.5px; fill: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  svg.chart .axis { stroke: var(--hair); stroke-width: 1; }
+  svg.chart .grid { stroke: var(--hair-soft); stroke-width: 1; stroke-dasharray: 2 4; }
+  svg.chart .line { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  svg.chart .area { fill: rgba(83,58,253,0.07); }
+  svg.chart .pt { fill: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Charts</h1>
+  <p>Three chart primitives: <em>area-line</em> (a metric over time), <em>vertical bar</em> (per-platform compare), <em>horizontal bar</em> (segment rank). Hairline axes. One accent. Dashes for projection.</p>
+</header>
+
+<!-- Area-line -->
+<section class="scene">
+  <div class="scene-h">
+    <div class="left"><span class="roman">01</span><span class="ttl">Area-line · score over time</span></div>
+    <span class="t-overline">Aug 1 — Aug 22, 2026</span>
+  </div>
+  <div class="chart-h">
+    <h3>Average analysis score</h3>
+    <div>
+      <span class="v t-accent">82</span>
+      <span class="delta">↑ 6 vs last period</span>
+    </div>
+  </div>
+
+  <svg class="chart" viewBox="0 0 720 220" width="100%" height="220">
+    <!-- grid -->
+    <line class="axis" x1="40" y1="180" x2="700" y2="180"/>
+    <line class="grid" x1="40" y1="50"  x2="700" y2="50"/>
+    <line class="grid" x1="40" y1="90"  x2="700" y2="90"/>
+    <line class="grid" x1="40" y1="130" x2="700" y2="130"/>
+
+    <!-- y labels -->
+    <text x="32" y="54" text-anchor="end">100</text>
+    <text x="32" y="94" text-anchor="end">80</text>
+    <text x="32" y="134" text-anchor="end">60</text>
+    <text x="32" y="184" text-anchor="end">40</text>
+
+    <!-- area -->
+    <path class="area" d="M 60 130 L 120 110 L 180 85 L 240 95 L 300 70 L 360 78 L 420 60 L 480 72 L 540 50 L 600 64 L 660 56 L 660 180 L 60 180 Z"/>
+    <!-- line -->
+    <path class="line" d="M 60 130 L 120 110 L 180 85 L 240 95 L 300 70 L 360 78 L 420 60 L 480 72 L 540 50 L 600 64 L 660 56"/>
+    <!-- projection (dashed) -->
+    <path d="M 660 56 L 700 50" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+    <!-- points -->
+    <circle class="pt" cx="540" cy="50" r="3"/>
+    <circle class="pt" cx="660" cy="56" r="3"/>
+
+    <!-- x labels -->
+    <text x="60"  y="200" text-anchor="middle">AUG 1</text>
+    <text x="180" y="200" text-anchor="middle">AUG 5</text>
+    <text x="300" y="200" text-anchor="middle">AUG 9</text>
+    <text x="420" y="200" text-anchor="middle">AUG 13</text>
+    <text x="540" y="200" text-anchor="middle">AUG 17</text>
+    <text x="660" y="200" text-anchor="middle">AUG 21</text>
+  </svg>
+</section>
+
+<!-- Two charts in a row -->
+<div class="grid">
+
+  <!-- Vertical bar by platform -->
+  <section class="scene">
+    <div class="scene-h">
+      <div class="left"><span class="roman">02</span><span class="ttl">By platform</span></div>
+    </div>
+    <svg class="chart" viewBox="0 0 340 240" width="100%" height="240">
+      <line class="axis" x1="40" y1="200" x2="320" y2="200"/>
+      <line class="grid" x1="40" y1="60"  x2="320" y2="60"/>
+      <line class="grid" x1="40" y1="100" x2="320" y2="100"/>
+      <line class="grid" x1="40" y1="140" x2="320" y2="140"/>
+
+      <text x="32" y="64"  text-anchor="end">100</text>
+      <text x="32" y="104" text-anchor="end">75</text>
+      <text x="32" y="144" text-anchor="end">50</text>
+      <text x="32" y="184" text-anchor="end">25</text>
+
+      <!-- bars -->
+      <rect x="70"  y="86"  width="30" height="114" fill="var(--accent)"/>
+      <rect x="120" y="120" width="30" height="80"  fill="var(--accent)"/>
+      <rect x="170" y="92"  width="30" height="108" fill="var(--ink)"/>
+      <rect x="220" y="108" width="30" height="92"  fill="var(--ink)"/>
+      <rect x="270" y="160" width="30" height="40"  fill="var(--warn)"/>
+
+      <text x="85"  y="218" text-anchor="middle">TWITTER</text>
+      <text x="135" y="218" text-anchor="middle">INSTAGRAM</text>
+      <text x="185" y="218" text-anchor="middle">TIKTOK</text>
+      <text x="235" y="218" text-anchor="middle">YOUTUBE</text>
+      <text x="285" y="218" text-anchor="middle">LINKEDIN</text>
+
+      <!-- values on top -->
+      <text x="85"  y="80"  text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="500">80</text>
+      <text x="135" y="114" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="500">60</text>
+      <text x="185" y="86"  text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="500">76</text>
+      <text x="235" y="102" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="500">68</text>
+      <text x="285" y="154" text-anchor="middle" fill="var(--warn-deep)" font-size="12" font-weight="500">28</text>
+    </svg>
+  </section>
+
+  <!-- Horizontal bar — audience segments -->
+  <section class="scene">
+    <div class="scene-h">
+      <div class="left"><span class="roman">03</span><span class="ttl">Audience segments</span></div>
+    </div>
+    <svg class="chart" viewBox="0 0 340 240" width="100%" height="240">
+      <line class="axis" x1="120" y1="20" x2="120" y2="220"/>
+
+      <!-- bars -->
+      <g font-family="Inter" font-size="10" fill="var(--ink-2)">
+        <text x="114" y="36" text-anchor="end">Developers</text>
+        <rect x="120" y="26" width="180" height="14" fill="var(--accent)"/>
+        <text x="306" y="36" fill="var(--ink)">90</text>
+
+        <text x="114" y="66" text-anchor="end">PMs</text>
+        <rect x="120" y="56" width="160" height="14" fill="var(--accent)"/>
+        <text x="286" y="66" fill="var(--ink)">85</text>
+
+        <text x="114" y="96" text-anchor="end">Founders</text>
+        <rect x="120" y="86" width="156" height="14" fill="var(--accent)"/>
+        <text x="282" y="96" fill="var(--ink)">78</text>
+
+        <text x="114" y="126" text-anchor="end">Designers</text>
+        <rect x="120" y="116" width="142" height="14" fill="var(--ink)"/>
+        <text x="268" y="126" fill="var(--ink)">71</text>
+
+        <text x="114" y="156" text-anchor="end">Marketers</text>
+        <rect x="120" y="146" width="108" height="14" fill="var(--ink)"/>
+        <text x="234" y="156" fill="var(--ink)">54</text>
+
+        <text x="114" y="186" text-anchor="end">Recruiters</text>
+        <rect x="120" y="176" width="68" height="14" fill="var(--warn)"/>
+        <text x="194" y="186" fill="var(--warn-deep)">34</text>
+      </g>
+    </svg>
+  </section>
+
+</div>
+
+</body>
+</html>

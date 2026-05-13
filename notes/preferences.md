@@ -57,6 +57,22 @@ Medcord uses 1px borders and the rare heavy ink-rule for separation. Drop shadow
 
 ---
 
+## 2026-05-11 · variations are read per-component, not per-package
+
+Across two projects now (medcord and tutorly), when shown A/B/C variations of signature components, the user accepts the *stance* in one click but then dissects the package: "I like A for everything except the list row — give me three alternatives just for that." On tutorly they swapped the profile card to B's design while keeping the rest of A, then asked for A1/A2/A3 inside the same `_variations.html`.
+
+**Take-away.** Build `_variations.html` so it can host *sub-variations of a single specimen* without redoing the whole file. After the first pick, expect a "redesign just this one" request and treat it as normal flow, not a setback.
+
+---
+
+## 2026-05-11 · "lock it in, what's next?" means run, not deliberate
+
+When the user says they're ready to lock the design, the appropriate response is to outline the Act IV plan in 3–5 bullets, confirm the remaining ambiguities (currency, scenes), and then build without check-ins between specimens. On tutorly this meant batching foundation → primitives → scenes → overlays → register into one continuous run, surfacing progress at section boundaries only.
+
+**Take-away.** Mid-build interruptions to ask "shall I do X next?" break the user's trust that the agent has a plan. Confirm once, then commit.
+
+---
+
 ## 2026-05-01 · plain language
 
 The user is non-technical and prefers plain explanations. They paste in voice notes, ramble, brainstorm. Don't expect formatted PRDs.

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Content library · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<link rel="stylesheet" href="_app.css" />
+<style>
+  .layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
+
+  .filters {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 18px; display: flex; flex-direction: column; gap: 18px;
+  }
+  .filters .group .h { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); margin-bottom: 10px; font-weight: 500; }
+  .filters .check { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 0; cursor: pointer; }
+  .filters .check .box { width: 14px; height: 14px; border: 1px solid var(--ink-4); border-radius: 3px; background: var(--paper); position: relative; flex-shrink: 0; }
+  .filters .check .box.on { background: var(--accent); border-color: var(--accent); }
+  .filters .check .box.on::after { content: ""; position: absolute; top: 2px; left: 4px; width: 4px; height: 7px; border-right: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: rotate(45deg); }
+  .filters .check .count { margin-left: auto; font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  .filters .range { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
+
+  .results { background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden; }
+  .results-h {
+    padding: 14px 20px; border-bottom: 1px solid var(--hair);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12.5px; color: var(--ink-3);
+  }
+  .results-h .l { display: flex; gap: 10px; align-items: center; }
+  .results-h .l b { color: var(--ink); font-weight: 500; }
+  .results-h .seg { display: inline-flex; border: 1px solid var(--hair); border-radius: var(--r-soft); overflow: hidden; }
+  .results-h .seg button { border: 0; background: var(--paper); padding: 6px 10px; font-size: 12px; color: var(--ink-3); cursor: pointer; font-family: var(--sans); }
+  .results-h .seg button.on { background: var(--ink); color: var(--paper); }
+
+  .draft {
+    display: grid;
+    grid-template-columns: 44px 1fr 100px 100px 110px 64px;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--hair);
+    cursor: pointer;
+  }
+  .draft:hover { background: var(--paper); }
+  .draft .ring { width: 40px; height: 40px; position: relative; }
+  .draft .ring svg { width: 100%; height: 100%; }
+  .draft .ring .v { font-size: 10px; font-weight: 600; position: absolute; inset: 0; display: grid; place-items: center; font-variant-numeric: tabular-nums; color: var(--accent); }
+  .draft .title { font-size: 13.5px; font-weight: 500; }
+  .draft .meta { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+  .draft .plat { display: flex; gap: 4px; }
+  .draft .pl { width: 22px; height: 22px; border-radius: 5px; background: var(--ink-2); color: var(--paper); display: grid; place-items: center; font-size: 10px; font-weight: 600; }
+  .draft .pl.lead { background: var(--ink); }
+  .draft .when { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .draft .spark svg { width: 80px; height: 16px; }
+  .draft .spark svg path { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+  .draft .spark svg path.flat { stroke: var(--ink-3); }
+  .draft .actions {
+    visibility: hidden;
+    display: flex; gap: 4px; justify-content: flex-end;
+  }
+  .draft:hover .actions { visibility: visible; }
+  .draft .pin { color: var(--accent); font-size: 14px; line-height: 1; }
+</style>
+</head>
+<body>
+
+<aside class="app-side">
+  <div class="app-brand"><div class="mark">B</div><div class="name">BuffByte</div></div>
+  <nav class="app-nav">
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Dashboard</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg>Content analysis</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M4 5h14v14H4z"/><path d="M8 9h6M8 13h6M8 17h4"/></svg>Script analysis</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>Trending</a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M5 7h14v10H5z"/><circle cx="12" cy="12" r="3"/></svg>Teleprompter</a>
+    <div class="nav-group-h">Library</div>
+    <a class="on"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>All drafts <span style="margin-left:auto;font-size:11px;color:var(--accent);">12</span></a>
+    <a><svg class="icon" viewBox="0 0 24 24"><path d="M12 4l2 5h5l-4 3 2 6-5-4-5 4 2-6-4-3h5z"/></svg>Saved insights</a>
+  </nav>
+  <div class="meta"><div class="user"><span class="av">AA</span>Adewale Adeniji</div>Free plan · 138 / 200</div>
+</aside>
+
+<header class="app-top">
+  <div class="crumb"><b>Library</b><span style="color:var(--ink-4);">/</span><span>All drafts</span></div>
+  <div class="sp"></div>
+  <div class="search">
+    <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><path d="M21 21l-7-7"/></svg>
+    <input placeholder="Search by content, hashtag, score…" />
+    <span class="kbd">⌘ K</span>
+  </div>
+  <button class="btn btn-primary btn-sm">New analysis</button>
+</header>
+
+<main class="app-main">
+
+  <div class="page-h">
+    <div>
+      <h1>Library</h1>
+      <div class="sub">12 drafts · 4 published · 8 in progress · sorted by last edited</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary btn-sm">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+        3 filters
+      </button>
+      <button class="btn btn-secondary btn-sm">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        Sort: Last edited
+      </button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- FILTERS -->
+    <aside class="filters">
+      <div class="group">
+        <div class="h">Score</div>
+        <div class="range"><span>0</span><span>100</span></div>
+        <input type="range" class="slider" min="0" max="100" value="60" style="-webkit-appearance:none;appearance:none;width:100%;height:4px;background:var(--hair-soft);border-radius:999px;margin-top:6px;">
+        <div class="t-caption" style="margin-top:4px;">Showing 60 and above</div>
+      </div>
+
+      <div class="group">
+        <div class="h">Platform</div>
+        <label class="check"><span class="box on"></span>Twitter / X<span class="count">8</span></label>
+        <label class="check"><span class="box on"></span>Instagram<span class="count">5</span></label>
+        <label class="check"><span class="box"></span>TikTok<span class="count">4</span></label>
+        <label class="check"><span class="box"></span>LinkedIn<span class="count">3</span></label>
+        <label class="check"><span class="box"></span>YouTube<span class="count">2</span></label>
+      </div>
+
+      <div class="group">
+        <div class="h">Status</div>
+        <label class="check"><span class="box on"></span>Draft<span class="count">8</span></label>
+        <label class="check"><span class="box"></span>Ready<span class="count">3</span></label>
+        <label class="check"><span class="box"></span>Published<span class="count">4</span></label>
+        <label class="check"><span class="box"></span>Archived<span class="count">2</span></label>
+      </div>
+
+      <div class="group">
+        <div class="h">Risk</div>
+        <label class="check"><span class="box"></span>Low<span class="count">9</span></label>
+        <label class="check"><span class="box"></span>Medium<span class="count">2</span></label>
+        <label class="check"><span class="box"></span>High<span class="count">1</span></label>
+      </div>
+    </aside>
+
+    <!-- RESULTS -->
+    <section class="results">
+      <div class="results-h">
+        <div class="l"><span><b>12</b> drafts</span><span style="color:var(--ink-4);">·</span><span>Filtered by score ≥ 60, platform: Twitter + Instagram</span></div>
+        <div class="seg"><button class="on">List</button><button>Grid</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--accent)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="14" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v">87</div></div>
+        <div>
+          <div class="title">Spent some time last month building BuffByte AI — a short note</div>
+          <div class="meta"><span class="pin">★</span> Pinned · 231 chars · 37 words · ready to publish</div>
+        </div>
+        <div class="plat"><span class="pl lead">𝕏</span><span class="pl">In</span></div>
+        <div class="when">4 min ago</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path d="M0 12 L16 10 L32 8 L48 4 L64 6 L80 2"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--accent)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="22" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v">80</div></div>
+        <div>
+          <div class="title">Why we built BuffByte — a 60-second video script</div>
+          <div class="meta">150 words · 64 s estimated · ready for teleprompter</div>
+        </div>
+        <div class="plat"><span class="pl">Tk</span><span class="pl">Yt</span></div>
+        <div class="when">2h ago</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path d="M0 11 L16 8 L32 9 L48 5 L64 7 L80 4"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--accent)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="34" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v">76</div></div>
+        <div>
+          <div class="title">If you've ever wondered how some creators work full-time…</div>
+          <div class="meta">468 chars · 75 words</div>
+        </div>
+        <div class="plat"><span class="pl lead">𝕏</span><span class="pl">In</span><span class="pl">Tk</span></div>
+        <div class="when">Aug 10</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path d="M0 10 L16 8 L32 9 L48 6 L64 7 L80 4"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--accent)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="30" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v">72</div></div>
+        <div>
+          <div class="title">Striking the right balance between shipping new features…</div>
+          <div class="meta">942 chars · 150 words · published</div>
+        </div>
+        <div class="plat"><span class="pl lead">𝕏</span></div>
+        <div class="when">Aug 12</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path d="M0 8 L16 9 L32 7 L48 8 L64 7 L80 5"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--ink)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="40" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v" style="color:var(--ink);">66</div></div>
+        <div>
+          <div class="title">A thread on how AI is changing the writing process for content creators</div>
+          <div class="meta">1,240 chars · 198 words · auto-saved</div>
+        </div>
+        <div class="plat"><span class="pl lead">𝕏</span></div>
+        <div class="when">Aug 9</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path d="M0 8 L16 9 L32 9 L48 8 L64 8 L80 7"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--warn)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="49" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v" style="color:var(--warn-deep);">54</div></div>
+        <div>
+          <div class="title">New Buffer posting streak leaderboard, featuring m…</div>
+          <div class="meta">158 chars · 25 words · auto-saved · slow middle</div>
+        </div>
+        <div class="plat"><span class="pl">Tk</span></div>
+        <div class="when">Aug 12</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path class="flat" d="M0 9 L16 8 L32 10 L48 9 L64 11 L80 10"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+      <div class="draft">
+        <div class="ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" stroke="var(--hair)" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="17" stroke="var(--crit)" stroke-width="3" fill="none" stroke-dasharray="106.8" stroke-dashoffset="66" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg><div class="v" style="color:var(--crit);">38</div></div>
+        <div>
+          <div class="title">Why the "productivity tax" argument actually works for…</div>
+          <div class="meta">612 chars · 94 words · <span style="color:var(--crit-deep);">unverified claim flagged</span></div>
+        </div>
+        <div class="plat"><span class="pl">Li</span></div>
+        <div class="when">Aug 8</div>
+        <div class="spark"><svg viewBox="0 0 80 16"><path class="flat" d="M0 4 L16 6 L32 8 L48 9 L64 11 L80 13"/></svg></div>
+        <div class="actions"><button class="btn btn-ghost btn-sm">Open</button></div>
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+</body>
+</html>

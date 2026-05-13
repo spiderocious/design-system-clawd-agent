@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Navigation · shell · ⌘K</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .app {
+    display: grid; grid-template-columns: 220px 1fr; min-height: 100vh;
+    background: var(--paper-deep);
+  }
+  .side {
+    background: var(--paper);
+    border-right: 1px solid var(--ink);
+    padding: 18px 16px;
+    display: flex; flex-direction: column;
+  }
+  .side .brand { display: flex; align-items: baseline; gap: 6px; padding: 0 6px 18px; border-bottom: 1px solid var(--ink); }
+  .side .brand .wm { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.022em; }
+  .side .brand .wm .dot { color: var(--emerald-600); }
+  .side .brand .v { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.18em; margin-left: auto; padding-top: 6px; }
+
+  .side .group { margin-top: 22px; }
+  .side .group .g-h { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; padding: 0 6px 8px; }
+  .side .link {
+    display: flex; align-items: center; gap: 10px; padding: 7px 8px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-2);
+    text-decoration: none; border-radius: 3px;
+  }
+  .side .link .ic { width: 16px; height: 16px; color: var(--ink-3); }
+  .side .link:hover { background: var(--paper-deep); color: var(--ink); }
+  .side .link.on { background: var(--ink); color: var(--paper); }
+  .side .link.on .ic { color: var(--paper); }
+  .side .link .right { margin-left: auto; font-family: var(--mono); font-size: 10px; color: inherit; opacity: 0.55; letter-spacing: 0.06em; }
+
+  .side .branches { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--ink); }
+  .side .branches .b-link {
+    display: flex; align-items: center; gap: 8px; padding: 6px 6px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2); text-decoration: none;
+  }
+  .side .branches .b-link::before { content: ""; width: 6px; height: 6px; border-radius: 1px; background: var(--ink-3); }
+  .side .branches .b-link.live::before { background: var(--emerald-600); animation: pulse 1.6s ease-out infinite; }
+  .side .branches .b-link.warn::before { background: var(--short); }
+
+  .stage {
+    padding: 22px 32px 32px;
+    background: var(--paper);
+    overflow: auto;
+  }
+  .top {
+    display: flex; align-items: baseline; gap: 18px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--ink);
+  }
+  .top .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .top .crumb .cur { color: var(--ink); }
+  .top .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .top .k-trigger {
+    display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px;
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 3px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+  }
+  .top .k-trigger .kbd { font-family: var(--mono); font-size: 10px; background: var(--paper-deep); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--sheet-edge); }
+  .top .av { width: 28px; height: 28px; font-size: 10px; }
+
+  /* command palette */
+  .k-panel {
+    margin-top: 28px;
+    background: var(--sheet); border: 1px solid var(--ink); border-radius: 4px;
+    box-shadow: 0 24px 64px -32px rgba(26,23,20,0.45);
+    max-width: 560px;
+  }
+  .k-panel .k-input {
+    padding: 14px 16px; border-bottom: 1px solid var(--hair);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .k-panel .k-input input {
+    flex: 1; background: transparent; border: 0; outline: none;
+    font-family: var(--sans); font-size: 14px; color: var(--ink);
+  }
+  .k-panel .k-input .esc { font-family: var(--mono); font-size: 10px; color: var(--ink-3); padding: 2px 6px; border: 1px solid var(--sheet-edge); border-radius: 2px; letter-spacing: 0.06em; }
+  .k-section { padding: 8px 10px; }
+  .k-section .lbl { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; padding: 6px 8px; }
+  .k-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    font-family: var(--sans); font-size: 13px;
+    border-radius: 2px; cursor: pointer;
+  }
+  .k-row.on { background: var(--ink); color: var(--paper); }
+  .k-row .ic { width: 14px; height: 14px; opacity: 0.7; }
+  .k-row .sub { margin-left: auto; font-family: var(--mono); font-size: 10px; opacity: 0.7; letter-spacing: 0.08em; }
+
+  .ic { display: inline-block; width: 16px; height: 16px; vertical-align: middle; }
+  .ic svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="side">
+    <div class="brand">
+      <span class="wm">Dipstick<span class="dot">.</span></span>
+      <span class="v">v 0.1</span>
+    </div>
+
+    <div class="group">
+      <div class="g-h">Today</div>
+      <a class="link on" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><span>Day-book</span><span class="right">⌘1</span></a>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v18"/><path d="M9 20h6"/><path d="M10 6h4"/><path d="M9 12h6"/></svg></span><span>Shift close</span><span class="right">⌘2</span></a>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="2.5"/><path d="M4 6v12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6"/></svg></span><span>Tanks &amp; deliveries</span></a>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h18l-2 12H5z"/><path d="M8 7V5a4 4 0 1 1 8 0v2"/></svg></span><span>Expenses</span></a>
+    </div>
+
+    <div class="group">
+      <div class="g-h">Records</div>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></span><span>Staff</span></a>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12l3-3 4 4 5-6 6 7"/><path d="M3 19h18"/></svg></span><span>Reports</span></a>
+      <a class="link" href="#"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span><span>Audit log</span></a>
+    </div>
+
+    <div class="branches">
+      <div class="g-h" style="padding: 0 6px 6px;">Branches</div>
+      <a class="b-link live" href="#">Mokola — Ibadan</a>
+      <a class="b-link" href="#">Surulere — Lagos</a>
+      <a class="b-link warn" href="#">PH-Rumuola — Rivers</a>
+      <a class="link" href="#" style="margin-top: 6px;"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span style="font-size: 12px;">Add branch</span></a>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="top">
+      <div class="crumb"><span>Mokola</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Day-book · Tue 14 May</span></div>
+      <div class="right">
+        <button class="k-trigger" onclick="document.getElementById('cmdk').scrollIntoView({behavior:'smooth'})"><span>Jump anywhere…</span><span class="kbd">⌘ K</span></button>
+        <span class="av av-mgr">AB</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px;">
+      <div class="overline" style="margin-bottom: 6px;">DAY-BOOK · MOKOLA · TUESDAY</div>
+      <div class="serif" style="font-size: 36px; font-weight: 600; letter-spacing: -0.022em; line-height: 1.05;">Evening shift — 4 pumps active</div>
+      <p class="dictated" style="margin-top: 6px; max-width: 56ch;">Femi balanced. Chidera short ₦2,400. Yusuf over ₦440. Aisha clean. Two posted, two open.</p>
+    </div>
+
+    <div id="cmdk" class="k-panel">
+      <div class="k-input">
+        <span class="ic" style="color: var(--ink-3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg></span>
+        <input value="post evening" autofocus>
+        <span class="esc">ESC</span>
+      </div>
+      <div class="k-section">
+        <div class="lbl">Quick actions</div>
+        <div class="k-row on">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span>Post evening shift — Mokola</span>
+          <span class="sub">↵ enter</span>
+        </div>
+        <div class="k-row">
+          <span class="ic" style="color: var(--ink-3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/></svg></span>
+          <span>Post all balanced shifts (8)</span>
+          <span class="sub">⌘ ↵</span>
+        </div>
+      </div>
+      <div class="k-section" style="border-top: 1px solid var(--hair);">
+        <div class="lbl">Go to</div>
+        <div class="k-row">
+          <span class="ic" style="color: var(--ink-3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h14v16H5z"/></svg></span>
+          <span>Day-book — Surulere</span>
+          <span class="sub">⌘ 4</span>
+        </div>
+        <div class="k-row">
+          <span class="ic" style="color: var(--ink-3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="6" rx="8" ry="2.5"/></svg></span>
+          <span>Tank 03 · DPK · order delivery</span>
+          <span class="sub">⌘ 5</span>
+        </div>
+        <div class="k-row">
+          <span class="ic" style="color: var(--ink-3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></span>
+          <span>Femi Adekunle · attendant profile</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

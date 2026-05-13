@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Bars & meters · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 28px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .emo-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 16px; padding: 12px 0; border-top: 1px solid var(--hair); }
+  .emo-row:first-of-type { border-top: 0; }
+  .emo-row .label { font-size: 13px; }
+  .emo-row .v { text-align: right; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  .segments { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .seg-card { padding: 18px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--paper); }
+  .seg-card h3 { font-size: 13.5px; font-weight: 500; margin: 0 0 14px; }
+  .seg-row { display: grid; grid-template-columns: 1fr 240px 40px; gap: 12px; align-items: center; padding: 8px 0; }
+  .seg-row .name { font-size: 12.5px; color: var(--ink-2); }
+  .seg-row .v { font-size: 12.5px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* stacked bar */
+  .stacked {
+    display: flex; height: 8px; border-radius: 999px; overflow: hidden;
+    background: var(--hair-soft); border: 1px solid var(--hair);
+  }
+  .stacked > i { display: block; }
+  .stacked > i.a { background: var(--accent); }
+  .stacked > i.b { background: var(--warn); }
+  .stacked > i.c { background: var(--crit); }
+
+  .legend { display: flex; gap: 16px; margin-top: 12px; font-size: 11.5px; color: var(--ink-3); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .sw { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* score line — for the percentage above-bar pattern */
+  .score-line { padding: 12px 0; border-top: 1px solid var(--hair); }
+  .score-line:first-of-type { border-top: 0; }
+  .score-line .top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+  .score-line .top .l { font-size: 13px; font-weight: 500; }
+  .score-line .top .sub { font-size: 11.5px; color: var(--ink-3); }
+  .score-line .top .n { font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Bars & meters</h1>
+  <p>Bars are 4 px tall, pill-rounded, ride a hairline track. Colour is meaningful: violet for "good," amber for "tighten," oxblood for "fix." Used for emotion breakdowns, score lines, audience splits.</p>
+</header>
+
+<!-- Emotion breakdown — like in the current product, but mono -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">01</span><span class="ttl">Emotion breakdown</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">When the AI maps sentiment into emotions, each row is one bar.</p>
+  <div class="emo-row">
+    <div class="label">Excitement</div>
+    <div class="bar"><i style="width:82%;"></i></div>
+    <div class="v">82%</div>
+  </div>
+  <div class="emo-row">
+    <div class="label">Trust</div>
+    <div class="bar"><i style="width:68%;"></i></div>
+    <div class="v">68%</div>
+  </div>
+  <div class="emo-row">
+    <div class="label">Anticipation</div>
+    <div class="bar"><i style="width:75%;"></i></div>
+    <div class="v">75%</div>
+  </div>
+  <div class="emo-row">
+    <div class="label">Joy</div>
+    <div class="bar"><i style="width:65%;"></i></div>
+    <div class="v">65%</div>
+  </div>
+  <div class="emo-row">
+    <div class="label">Anger</div>
+    <div class="bar warn"><i style="width:18%;"></i></div>
+    <div class="v t-warn">18%</div>
+  </div>
+  <div class="emo-row">
+    <div class="label">Fear</div>
+    <div class="bar crit"><i style="width:8%;"></i></div>
+    <div class="v t-crit">8%</div>
+  </div>
+</section>
+
+<!-- Trending alignment — three bars in line -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">02</span><span class="ttl">Trending alignment</span></div>
+  <div class="score-line">
+    <div class="top"><span class="l">AI Tools Revolution</span><span class="n t-accent">95</span></div>
+    <div class="bar"><i style="width:95%;"></i></div>
+  </div>
+  <div class="score-line">
+    <div class="top"><span class="l">Content Analytics</span><span class="n t-accent">89</span></div>
+    <div class="bar"><i style="width:89%;"></i></div>
+  </div>
+  <div class="score-line">
+    <div class="top"><span class="l">Creator Economy</span><span class="n t-accent">82</span></div>
+    <div class="bar"><i style="width:82%;"></i></div>
+  </div>
+  <div class="score-line">
+    <div class="top"><span class="l">Productivity SaaS</span><span class="n">61</span></div>
+    <div class="bar"><i style="width:61%;background:var(--ink-3);"></i></div>
+  </div>
+</section>
+
+<!-- Audience segments — stacked compare -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">03</span><span class="ttl">Audience segment performance</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">Each segment shows three competing metrics — comprehension, engagement, retention — on a single stacked line.</p>
+  <div class="segments">
+    <div class="seg-card">
+      <h3>Software developers</h3>
+      <div class="seg-row"><span class="name">Comprehension</span><div class="bar"><i style="width:90%;"></i></div><span class="v">90</span></div>
+      <div class="seg-row"><span class="name">Engagement</span><div class="bar"><i style="width:85%;"></i></div><span class="v">85</span></div>
+      <div class="seg-row"><span class="name">Retention</span><div class="bar"><i style="width:80%;"></i></div><span class="v">80</span></div>
+    </div>
+    <div class="seg-card">
+      <h3>Product managers</h3>
+      <div class="seg-row"><span class="name">Comprehension</span><div class="bar"><i style="width:85%;"></i></div><span class="v">85</span></div>
+      <div class="seg-row"><span class="name">Engagement</span><div class="bar"><i style="width:90%;"></i></div><span class="v">90</span></div>
+      <div class="seg-row"><span class="name">Retention</span><div class="bar"><i style="width:75%;"></i></div><span class="v">75</span></div>
+    </div>
+    <div class="seg-card">
+      <h3>Social-media marketers</h3>
+      <div class="seg-row"><span class="name">Comprehension</span><div class="bar"><i style="width:72%;"></i></div><span class="v">72</span></div>
+      <div class="seg-row"><span class="name">Engagement</span><div class="bar warn"><i style="width:54%;"></i></div><span class="v t-warn">54</span></div>
+      <div class="seg-row"><span class="name">Retention</span><div class="bar"><i style="width:60%;"></i></div><span class="v">60</span></div>
+    </div>
+    <div class="seg-card">
+      <h3>Founders</h3>
+      <div class="seg-row"><span class="name">Comprehension</span><div class="bar"><i style="width:88%;"></i></div><span class="v">88</span></div>
+      <div class="seg-row"><span class="name">Engagement</span><div class="bar"><i style="width:78%;"></i></div><span class="v">78</span></div>
+      <div class="seg-row"><span class="name">Retention</span><div class="bar"><i style="width:70%;"></i></div><span class="v">70</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Risk composition stacked -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">04</span><span class="ttl">Risk composition</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">A single stacked bar splits where the risk score comes from.</p>
+  <div class="stacked">
+    <i class="a" style="width:62%"></i>
+    <i class="b" style="width:24%"></i>
+    <i class="c" style="width:14%"></i>
+  </div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent);"></span>Brand-fit · 62</span>
+    <span><span class="sw" style="background:var(--warn);"></span>Tone drift · 24</span>
+    <span><span class="sw" style="background:var(--crit);"></span>Unverified claim · 14</span>
+  </div>
+</section>
+
+</body>
+</html>

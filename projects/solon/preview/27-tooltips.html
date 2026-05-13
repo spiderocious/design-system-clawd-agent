@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · tooltips · hovercards</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  /* Tooltip — black pill, mono caption */
+  .tt {
+    display: inline-block; position: relative;
+  }
+  .tt > .label { font-family: var(--serif); font-size: 14px; color: var(--forest-600); border-bottom: 1px dotted var(--forest-300); cursor: help; }
+  .tt > .tip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    padding: 6px 10px; border-radius: 3px; white-space: nowrap;
+    pointer-events: none;
+  }
+  .tt > .tip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--ink); }
+
+  /* Hovercard — full citation block */
+  .hover-host { padding: 16px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); position: relative; }
+  .hover-host .ref { font-family: var(--mono); font-size: 11px; color: var(--forest-700); cursor: help; padding: 0 2px; border-radius: 2px; background: var(--forest-50); }
+
+  .hovercard {
+    width: 360px;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-card);
+    padding: 14px 18px;
+    box-shadow: var(--shade-pop);
+  }
+  .hovercard .h { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--forest-700); margin-bottom: 6px; }
+  .hovercard .ttl { font-family: var(--serif); font-weight: 600; font-size: 15px; font-variation-settings: "opsz" 18; margin-bottom: 6px; }
+  .hovercard .p { font-family: var(--serif); font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+  .hovercard .meta { display: flex; gap: 14px; padding-top: 10px; margin-top: 10px; border-top: 1px solid var(--hair); font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+
+  /* Person hovercard */
+  .person-hover { display: grid; grid-template-columns: 44px 1fr; gap: 12px; }
+  .person-hover .nm { font-family: var(--serif); font-weight: 600; font-size: 15px; }
+  .person-hover .role { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+  .person-hover .stats { display: flex; gap: 18px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair-soft); }
+  .person-hover .stat .n { font-family: var(--mono); font-size: 14px; font-weight: 500; }
+  .person-hover .stat .l { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; }
+
+  .demo-passage {
+    font-family: var(--serif); font-size: 15px; line-height: 1.7;
+    max-width: 60ch;
+  }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">27 / DATA & STATE</div>
+    <div class="ttl">Tooltips · hovercards</div>
+    <div class="sub">— mono on ink for labels; full citation card for sources.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Tooltip · short label</div>
+    <p class="demo-passage">
+      The model attributes Labour Party's six-point lift in
+      <span class="tt"><span class="label">Anambra Central</span><span class="tip">Senatorial district · 412 PU</span></span>
+      to a turnout rebound in the
+      <span class="tt"><span class="label">18–34 cohort</span><span class="tip">Youth · cohort A</span></span>
+      and to
+      <span class="tt"><span class="label">APGA</span><span class="tip">All Progressives Grand Alliance</span></span>'s
+      weakened ground game following the Soludo signal.
+    </p>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Hovercard · citation source</div>
+    <div class="hover-host">
+      <p class="demo-passage" style="margin: 0;">
+        The model attributes Labour Party's six-point lift to a turnout rebound in the 18–34 cohort
+        <span class="ref">[1]</span>
+        and to APGA's weakened ground game.
+        <span class="ref">[2]</span>
+        The same youth-turnout assumption, applied to Onitsha South, reduces but does not erase APC's structural advantage.
+      </p>
+    </div>
+
+    <div style="margin-top: 18px; display: flex; gap: 20px;">
+      <div class="hovercard">
+        <div class="h">Source [1]</div>
+        <div class="ttl">INEC senate turnout tables · 2023</div>
+        <div class="p">PU-level accredited-voter counts for the Anambra Central senatorial district, reconciled against the BVAS audit file released by INEC in March 2023. Coverage: 412 / 412 polling units.</div>
+        <div class="meta"><span>n=412 PU</span><span>updated 2023-03-14</span><span>open dataset</span></div>
+      </div>
+
+      <div class="hovercard">
+        <div class="h">Source [2]</div>
+        <div class="ttl">Radio call-in transcripts · Apr–May 2026</div>
+        <div class="p">Aggregated transcripts from Anambra-broadcast morning programs, transcribed in Igbo and translated. Subset filtered to political-discourse segments; n=1,148 calls. Sentiment scored against a domain-adapted Yoruba/Igbo/Pidgin model.</div>
+        <div class="meta"><span>n=1,148</span><span>updated daily</span><span>internal corpus</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Hovercard · person</div>
+    <div class="hover-host">
+      <p class="demo-passage" style="margin: 0;">
+        Reported by
+        <span class="ref" style="background: var(--paper-2); color: var(--ink-2);">@ChinweObi</span>
+        and corroborated by two citizen reporters.
+      </p>
+    </div>
+
+    <div style="margin-top: 18px;">
+      <div class="hovercard" style="width: 320px;">
+        <div class="person-hover">
+          <span class="av av-lg av-forest">CO</span>
+          <div>
+            <div class="nm">Chinwe Obi</div>
+            <div class="role">Campaign Manager · Anambra Central</div>
+            <div class="stats">
+              <div class="stat"><div class="n">412</div><div class="l">Reports filed</div></div>
+              <div class="stat"><div class="n">98%</div><div class="l">Verified rate</div></div>
+              <div class="stat"><div class="n">2026-02</div><div class="l">Active since</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

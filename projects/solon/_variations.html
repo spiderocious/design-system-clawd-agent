@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300..700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F5EFE0;
+    --paper-2: #EFE7D2;
+    --paper-3: #E6DCC1;
+    --ink: #1A1714;
+    --ink-2: #3C362C;
+    --ink-3: #6B6555;
+    --ink-4: #9A937F;
+    --rule: #C9BE9F;
+    --rule-strong: #1A1714;
+    --forest: #1B4332;
+    --forest-2: #2D5A3D;
+    --forest-ink: #0D2A1E;
+    --orange: #C7522A;
+    --orange-soft: #F4DDD0;
+    --serif: "Fraunces", "Source Serif 4", Georgia, serif;
+    --sans: "Inter", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #E7DEC4; color: var(--ink); font-family: var(--sans); }
+  body {
+    padding: 36px 28px 80px;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .page-head {
+    max-width: 1480px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .page-head .title {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    font-variation-settings: "opsz" 96;
+  }
+  .page-head .sub {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-3);
+    font-size: 14px;
+  }
+  .page-head .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+  }
+  .grid {
+    max-width: 1480px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  .col {
+    padding: 28px 26px 36px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .col:last-child { border-right: 0; }
+  .col-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .col-letter {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 0.9;
+    font-variation-settings: "opsz" 144;
+    color: var(--ink);
+  }
+  .col-cap {
+    flex: 1;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .col-cap b { font-style: normal; font-weight: 600; color: var(--ink); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: all 120ms ease;
+  }
+
+  /* A — squared, forest fill, no radius */
+  .A .btn-primary { background: var(--forest); color: var(--paper); border-radius: 0; border-color: var(--forest); }
+  .A .btn-primary:hover { background: var(--forest-ink); border-color: var(--forest-ink); }
+  .A .btn-secondary { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); border-radius: 0; }
+  .A .btn-secondary:hover { background: var(--paper-2); }
+  .A .btn-alert { background: var(--paper); color: var(--orange); border: 1px solid var(--orange); border-radius: 0; }
+
+  /* B — 4px radius, forest fill, underline on secondary (newspaper link feel) */
+  .B .btn-primary { background: var(--forest); color: var(--paper); border-radius: 4px; border-color: var(--forest); }
+  .B .btn-primary:hover { background: var(--forest-ink); }
+  .B .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 0;
+    padding: 9px 4px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--ink-3);
+  }
+  .B .btn-secondary:hover { text-decoration-color: var(--ink); }
+  .B .btn-alert { background: var(--paper); color: var(--orange); border: 1px solid var(--orange); border-radius: 4px; }
+
+  /* C — 2px radius, forest with rule-under, secondary as ghost */
+  .C .btn-primary {
+    background: var(--forest);
+    color: var(--paper);
+    border-radius: 2px;
+    border-bottom: 2px solid var(--forest-ink);
+    padding: 8px 16px 7px;
+  }
+  .C .btn-primary:hover { background: var(--forest-ink); }
+  .C .btn-secondary {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  .C .btn-secondary:hover { border-color: var(--ink); }
+  .C .btn-alert {
+    background: var(--orange-soft);
+    color: var(--orange);
+    border: 1px solid var(--orange);
+    border-radius: 2px;
+  }
+
+  /* ---------- INPUTS ---------- */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .input, .select {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 9px 12px;
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    outline: none;
+    width: 100%;
+  }
+  .input:focus, .select:focus { box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.25); }
+  .select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 32px;
+  }
+
+  /* A — sharp, underline-only inputs (broadsheet form) */
+  .A .input, .A .select { border: 0; border-bottom: 1px solid var(--ink); padding-left: 0; padding-right: 24px; background-color: transparent; }
+  .A .select { background-position: 100% 50%, calc(100% - 5px) 50%; }
+  .A .input:focus, .A .select:focus { box-shadow: none; border-bottom-color: var(--forest); border-bottom-width: 2px; padding-bottom: 8px; }
+
+  /* B — boxed with serif feel, slight radius */
+  .B .input, .B .select { border-radius: 4px; border: 1px solid var(--rule); background: var(--paper); }
+  .B .input::placeholder { font-style: italic; color: var(--ink-4); }
+  .B .input:focus, .B .select:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.18); }
+
+  /* C — instrument: 2px radius, mono prefix, thin top rule */
+  .C .input-wrap {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    background: var(--paper);
+  }
+  .C .input-prefix {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 9px 10px;
+    border-right: 1px solid var(--rule);
+    background: var(--paper-2);
+    display: inline-flex;
+    align-items: center;
+  }
+  .C .input-wrap .input { border: 0; padding-left: 12px; }
+  .C .select { border-radius: 2px; }
+
+  /* ---------- POLLING-UNIT LIST ROW ---------- */
+  .pu-list { border-top: 1px solid var(--ink); }
+  .pu-row {
+    display: grid;
+    align-items: center;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .pu-code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+  .pu-name {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    font-variation-settings: "opsz" 36;
+    color: var(--ink);
+  }
+  .pu-name small {
+    display: block;
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+  .pu-num {
+    font-family: var(--mono);
+    font-feature-settings: "tnum";
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .pu-proj {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .pu-proj b { font-style: normal; font-weight: 600; color: var(--forest); }
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+  }
+
+  /* A — wide rule columns, no row stripe */
+  .A .pu-row { grid-template-columns: 90px 1fr 90px 150px 110px; gap: 14px; }
+  .A .tag { background: transparent; color: var(--ink-3); border: 1px solid var(--rule); }
+  .A .tag.hold { color: var(--forest); border-color: var(--forest); }
+  .A .tag.toss { color: var(--orange); border-color: var(--orange); }
+
+  /* B — stripes alternate paper / paper-2; tags filled */
+  .B .pu-row { grid-template-columns: 90px 1fr 90px 150px 110px; gap: 14px; }
+  .B .pu-row:nth-child(even) { background: var(--paper-2); }
+  .B .tag { background: var(--paper-3); color: var(--ink-2); }
+  .B .tag.hold { background: var(--forest); color: var(--paper); }
+  .B .tag.toss { background: var(--orange); color: var(--paper); }
+
+  /* C — instrument row: left forest rule on flagged rows; numbers grow */
+  .C .pu-row { grid-template-columns: 6px 80px 1fr 96px 150px 110px; gap: 12px; padding-left: 0; }
+  .C .pu-row .pu-rule { height: 100%; width: 6px; background: transparent; }
+  .C .pu-row.flagged .pu-rule { background: var(--orange); }
+  .C .pu-row.held .pu-rule { background: var(--forest); }
+  .C .pu-num { font-size: 20px; font-weight: 500; }
+  .C .tag { background: var(--paper-2); color: var(--ink-2); border: 1px solid var(--rule); }
+  .C .tag.hold { color: var(--forest); border-color: var(--forest); }
+  .C .tag.toss { color: var(--orange); border-color: var(--orange); }
+
+  /* ---------- AI COPILOT CITATION CARD ---------- */
+  .ai-card {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    padding: 18px 20px 16px;
+    position: relative;
+  }
+  .ai-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ai-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .ai-meta {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-3);
+    margin-left: auto;
+  }
+  .ai-body {
+    font-family: var(--serif);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    font-variation-settings: "opsz" 18;
+  }
+  .ai-body sup {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--forest);
+    margin-left: 2px;
+    vertical-align: super;
+  }
+  .ai-conf {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .conf-bar {
+    display: inline-flex;
+    gap: 2px;
+  }
+  .conf-bar i {
+    width: 14px;
+    height: 6px;
+    background: var(--rule);
+    display: inline-block;
+  }
+  .conf-bar i.on { background: var(--forest); }
+  .ai-foot {
+    margin-top: 10px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+
+  /* A — drop cap, classical */
+  .A .ai-card { border-radius: 0; }
+  .A .ai-body::first-letter {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 0.9;
+    float: left;
+    margin: 4px 8px 0 0;
+    color: var(--forest);
+    font-variation-settings: "opsz" 144;
+  }
+
+  /* B — italic call-out, hairline tinted */
+  .B .ai-card { border-radius: 4px; border-color: var(--rule); background: var(--paper-2); }
+  .B .ai-body { font-style: italic; }
+  .B .ai-body sup { font-style: normal; }
+
+  /* C — instrument: thin orange/forest rule top + meta strip */
+  .C .ai-card { border-radius: 2px; border-top: 3px solid var(--forest); padding-top: 14px; }
+  .C .ai-card::before {
+    content: "MODEL OUTPUT — confidence band ±2.1pp";
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .C .ai-body { font-size: 14px; }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <div>
+      <div class="title">Solon — variation pick</div>
+      <div class="sub">Three readings of the parliamentary order-paper stance. Pick one, or pick parts.</div>
+    </div>
+    <div class="meta">Stance · Parliamentary order paper · 2026-05-11</div>
+  </header>
+
+  <main class="grid">
+
+    <!-- ============== A ============== -->
+    <section class="col A">
+      <div class="col-head">
+        <div class="col-letter">A</div>
+        <div class="col-cap"><b>Order paper, sharp.</b> Square corners, underline-only inputs, drop-cap analysis, no row stripes. The most classical reading — every surface treated like a printed broadsheet column.</div>
+      </div>
+
+      <div>
+        <div class="section-label">Buttons</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">Run scenario</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-alert">Withdraw candidate</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Inputs</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="field">
+            <label>Constituency</label>
+            <input class="input" placeholder="Anambra Central" />
+          </div>
+          <div class="field">
+            <label>Office</label>
+            <select class="select">
+              <option>Senate</option>
+              <option>Governor</option>
+              <option>House of Reps</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Polling units · win-probability list</div>
+        <div class="pu-list">
+          <div class="pu-row">
+            <span class="pu-code">PU 008-04-02</span>
+            <span class="pu-name">St. Mary's Primary <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">1,284</span>
+            <span class="pu-proj">model: <b>LP 47.2%</b> ± 3.1</span>
+            <span class="tag hold">Lean hold</span>
+          </div>
+          <div class="pu-row">
+            <span class="pu-code">PU 008-04-09</span>
+            <span class="pu-name">Onitsha Town Hall <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">2,041</span>
+            <span class="pu-proj">model: <b>LP 38.6%</b> ± 4.0</span>
+            <span class="tag toss">Toss-up</span>
+          </div>
+          <div class="pu-row">
+            <span class="pu-code">PU 008-05-11</span>
+            <span class="pu-name">Nkpor Civic Centre <small>Onitsha North · ward 5</small></span>
+            <span class="pu-num">896</span>
+            <span class="pu-proj">model: <b>APC 41.3%</b> ± 5.2</span>
+            <span class="tag">Lean opp.</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">AI copilot · scenario note</div>
+        <div class="ai-card">
+          <div class="ai-head">
+            <span class="ai-tag">SOLON · Analyst</span>
+            <span class="ai-meta">2026-05-11 · 14:08</span>
+          </div>
+          <div class="ai-body">
+            The model attributes Labour Party's six-point lift in Anambra Central to a turnout rebound in the 18–34 cohort<sup>[1]</sup> and to APGA's weakened ground game following the Soludo–Obi alignment signal<sup>[2]</sup>. The same youth-turnout assumption, applied to Onitsha South, reduces but does not erase APC's structural advantage there.
+          </div>
+          <div class="ai-conf">
+            <span>Confidence</span>
+            <span class="conf-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+            <span>Medium · n = 412 PU</span>
+          </div>
+          <div class="ai-foot">Sources: [1] INEC 2023 turnout tables, [2] Radio call-in transcript corpus, Apr–May 2026.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== B ============== -->
+    <section class="col B">
+      <div class="col-head">
+        <div class="col-letter">B</div>
+        <div class="col-cap"><b>Broadsheet, warmed.</b> 4px corners, boxed inputs with italic placeholders, alternating row stripes like a printed table, italic copilot voice. The most editorial reading — leans into the Atlas Obscura side of the stance.</div>
+      </div>
+
+      <div>
+        <div class="section-label">Buttons</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">Run scenario</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-alert">Withdraw candidate</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Inputs</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="field">
+            <label>Constituency</label>
+            <input class="input" placeholder="Anambra Central" />
+          </div>
+          <div class="field">
+            <label>Office</label>
+            <select class="select">
+              <option>Senate</option>
+              <option>Governor</option>
+              <option>House of Reps</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Polling units · win-probability list</div>
+        <div class="pu-list">
+          <div class="pu-row">
+            <span class="pu-code">PU 008-04-02</span>
+            <span class="pu-name">St. Mary's Primary <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">1,284</span>
+            <span class="pu-proj">model: <b>LP 47.2%</b> ± 3.1</span>
+            <span class="tag hold">Lean hold</span>
+          </div>
+          <div class="pu-row">
+            <span class="pu-code">PU 008-04-09</span>
+            <span class="pu-name">Onitsha Town Hall <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">2,041</span>
+            <span class="pu-proj">model: <b>LP 38.6%</b> ± 4.0</span>
+            <span class="tag toss">Toss-up</span>
+          </div>
+          <div class="pu-row">
+            <span class="pu-code">PU 008-05-11</span>
+            <span class="pu-name">Nkpor Civic Centre <small>Onitsha North · ward 5</small></span>
+            <span class="pu-num">896</span>
+            <span class="pu-proj">model: <b>APC 41.3%</b> ± 5.2</span>
+            <span class="tag">Lean opp.</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">AI copilot · scenario note</div>
+        <div class="ai-card">
+          <div class="ai-head">
+            <span class="ai-tag">SOLON · Analyst</span>
+            <span class="ai-meta">2026-05-11 · 14:08</span>
+          </div>
+          <div class="ai-body">
+            The model attributes Labour Party's six-point lift in Anambra Central to a turnout rebound in the 18–34 cohort<sup>[1]</sup> and to APGA's weakened ground game following the Soludo–Obi alignment signal<sup>[2]</sup>. The same youth-turnout assumption, applied to Onitsha South, reduces but does not erase APC's structural advantage there.
+          </div>
+          <div class="ai-conf">
+            <span>Confidence</span>
+            <span class="conf-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+            <span>Medium · n = 412 PU</span>
+          </div>
+          <div class="ai-foot">Sources: [1] INEC 2023 turnout tables, [2] Radio call-in transcript corpus, Apr–May 2026.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== C ============== -->
+    <section class="col C">
+      <div class="col-head">
+        <div class="col-letter">C</div>
+        <div class="col-cap"><b>Order paper × instrument.</b> 2px corners, mono prefixes on inputs, left rule on flagged rows, forest top-stripe on copilot. Editorial gravitas with terminal underbelly — the Bloomberg side of the stance.</div>
+      </div>
+
+      <div>
+        <div class="section-label">Buttons</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">Run scenario</button>
+          <button class="btn btn-secondary">Save draft</button>
+          <button class="btn btn-alert">Withdraw candidate</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Inputs</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="field">
+            <label>Constituency</label>
+            <div class="input-wrap">
+              <span class="input-prefix">CON</span>
+              <input class="input" placeholder="Anambra Central" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Office</label>
+            <select class="select">
+              <option>Senate</option>
+              <option>Governor</option>
+              <option>House of Reps</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Polling units · win-probability list</div>
+        <div class="pu-list">
+          <div class="pu-row held">
+            <span class="pu-rule"></span>
+            <span class="pu-code">PU 008-04-02</span>
+            <span class="pu-name">St. Mary's Primary <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">1,284</span>
+            <span class="pu-proj">model: <b>LP 47.2%</b> ± 3.1</span>
+            <span class="tag hold">Lean hold</span>
+          </div>
+          <div class="pu-row flagged">
+            <span class="pu-rule"></span>
+            <span class="pu-code">PU 008-04-09</span>
+            <span class="pu-name">Onitsha Town Hall <small>Onitsha North · ward 4</small></span>
+            <span class="pu-num">2,041</span>
+            <span class="pu-proj">model: <b>LP 38.6%</b> ± 4.0</span>
+            <span class="tag toss">Toss-up</span>
+          </div>
+          <div class="pu-row">
+            <span class="pu-rule"></span>
+            <span class="pu-code">PU 008-05-11</span>
+            <span class="pu-name">Nkpor Civic Centre <small>Onitsha North · ward 5</small></span>
+            <span class="pu-num">896</span>
+            <span class="pu-proj">model: <b>APC 41.3%</b> ± 5.2</span>
+            <span class="tag">Lean opp.</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">AI copilot · scenario note</div>
+        <div class="ai-card">
+          <div class="ai-head">
+            <span class="ai-tag">SOLON · Analyst</span>
+            <span class="ai-meta">2026-05-11 · 14:08</span>
+          </div>
+          <div class="ai-body">
+            The model attributes Labour Party's six-point lift in Anambra Central to a turnout rebound in the 18–34 cohort<sup>[1]</sup> and to APGA's weakened ground game following the Soludo–Obi alignment signal<sup>[2]</sup>. The same youth-turnout assumption, applied to Onitsha South, reduces but does not erase APC's structural advantage there.
+          </div>
+          <div class="ai-conf">
+            <span>Confidence</span>
+            <span class="conf-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+            <span>Medium · n = 412 PU</span>
+          </div>
+          <div class="ai-foot">Sources: [1] INEC 2023 turnout tables, [2] Radio call-in transcript corpus, Apr–May 2026.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="max-width: 1480px; margin: 20px auto 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); display: flex; justify-content: space-between;">
+    <span>Solon · _variations.html</span>
+    <span>Same stance, three readings — pick A, B, C, or mix specimens.</span>
+  </footer>
+</body>
+</html>

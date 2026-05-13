@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · skeletons & empty</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  /* Skeleton — paper-tinted rules, no shimmer */
+  .sk {
+    background: var(--paper-2);
+    border-radius: 2px;
+    height: 12px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .sk::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, var(--paper-3), transparent);
+    animation: sk-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes sk-pulse {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .sk-line { display: flex; align-items: center; gap: 14px; }
+  .sk-card { padding: 18px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); display: flex; flex-direction: column; gap: 12px; }
+
+  /* Empty state */
+  .empty {
+    border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+    padding: 56px 36px; text-align: center;
+  }
+  .empty .glyph svg { width: 36px; height: 36px; stroke: var(--ink-3); stroke-width: 1; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .empty .h { font-family: var(--serif); font-weight: 600; font-size: 20px; margin-top: 18px; font-variation-settings: "opsz" 36; }
+  .empty .p { font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink-3); max-width: 46ch; margin: 8px auto 18px; }
+  .empty .row { justify-content: center; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">24 / DATA & STATE</div>
+    <div class="ttl">Skeletons · empty states</div>
+    <div class="sub">— paper-tinted skeletons; empty states with one figure and one action.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Skeleton · scenario card loading</div>
+    <div class="grid-2">
+      <div class="sk-card">
+        <div class="sk" style="width: 40%; height: 10px;"></div>
+        <div class="sk" style="width: 70%; height: 22px;"></div>
+        <div class="sk" style="width: 100%;"></div>
+        <div class="sk" style="width: 92%;"></div>
+        <div class="sk" style="width: 60%;"></div>
+        <div class="sk-line"><span class="sk" style="width: 80px;"></span><span class="sk" style="width: 120px;"></span></div>
+      </div>
+      <div class="sk-card">
+        <div class="sk" style="width: 40%; height: 10px;"></div>
+        <div class="sk" style="width: 70%; height: 22px;"></div>
+        <div class="sk" style="width: 100%;"></div>
+        <div class="sk" style="width: 92%;"></div>
+        <div class="sk" style="width: 60%;"></div>
+        <div class="sk-line"><span class="sk" style="width: 80px;"></span><span class="sk" style="width: 120px;"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Empty · no scenarios yet</div>
+    <div class="empty">
+      <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 4l9 8-9 8z"/><path d="M14 4v16"/><path d="M14 4l7 8-7 8"/></svg></div>
+      <div class="h">No scenarios saved yet</div>
+      <div class="p">Run a scenario from the builder and save it here. Saved scenarios can be compared side by side or exported as a PDF brief.</div>
+      <div class="row">
+        <button class="b b-secondary">Open builder</button>
+        <button class="b b-primary">Run baseline scenario</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Empty · search returned nothing</div>
+    <div class="empty">
+      <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></svg></div>
+      <div class="h">Nothing matched "<span class="serif-it">Anambra North</span>"</div>
+      <div class="p">There is no constituency named that. The closest matches are <strong style="color: var(--ink-2);">Anambra Central</strong>, <strong style="color: var(--ink-2);">Anambra East</strong>, <strong style="color: var(--ink-2);">Anambra West</strong>.</div>
+      <div class="row">
+        <button class="b b-quiet">Clear search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Empty · model can't answer</div>
+    <div class="empty" style="border-color: var(--orange-edge); background: var(--orange-soft);">
+      <div class="glyph"><svg viewBox="0 0 24 24" style="stroke: var(--orange-deep);"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17v.5"/></svg></div>
+      <div class="h" style="color: var(--orange-deep);">Solon refused this query</div>
+      <div class="p" style="color: var(--orange-deep);">This scenario asked the model to suppress turnout in opposition wards. That kind of question is blocked under Solon's <strong>ethical guardrails</strong> and has been logged for audit. The query is not run.</div>
+      <div class="row">
+        <button class="b b-quiet">Edit scenario</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

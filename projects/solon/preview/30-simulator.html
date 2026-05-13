@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · scene · scenario builder</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 0; background: var(--paper); }
+
+  .scene-shell {
+    display: grid;
+    grid-template-rows: 64px 1fr;
+    min-height: 100vh;
+  }
+
+  /* Masthead — order-paper feel */
+  .masthead-bar {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 22px;
+    align-items: center;
+    padding: 0 32px;
+    background: var(--paper);
+    border-bottom: 3px double var(--ink);
+  }
+  .masthead-bar .brand {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .masthead-bar .brand .dropcap {
+    font-family: var(--serif); font-weight: 700; font-size: 32px; line-height: 1;
+    font-variation-settings: "opsz" 144;
+  }
+  .masthead-bar .brand .ttl {
+    font-family: var(--serif); font-size: 18px; font-weight: 600; font-variation-settings: "opsz" 36;
+  }
+  .masthead-bar .brand .sub {
+    font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3);
+  }
+  .masthead-bar .crumb {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3);
+    border-left: 1px solid var(--hair); padding-left: 22px;
+  }
+  .masthead-bar .crumb .cur { color: var(--ink); }
+  .masthead-bar .dateline {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; line-height: 1.5;
+  }
+  .masthead-bar .dateline strong { color: var(--ink); font-weight: 500; }
+  .masthead-bar .actions { display: flex; gap: 8px; }
+
+  .body-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr 380px;
+    min-height: 0;
+  }
+
+  /* LEFT — race & candidates */
+  .lhs {
+    border-right: 1px solid var(--hair);
+    padding: 22px 22px 32px;
+    background: var(--paper);
+    overflow: auto;
+  }
+  .lhs .grp { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--hair); }
+  .lhs .grp:first-child { margin-top: 0; }
+
+  .cand-row { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--hair-soft); }
+  .cand-row:first-of-type { border-top: 0; }
+  .cand-row .nm { font-family: var(--serif); font-weight: 600; font-size: 14px; font-variation-settings: "opsz" 18; }
+  .cand-row .sub { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
+  .cand-row.you .nm { color: var(--forest-700); }
+  .cand-row.you::before { content: "▸"; position: absolute; color: var(--forest-600); font-family: var(--mono); font-size: 12px; }
+
+  /* CENTER — projection + levers */
+  .center {
+    padding: 32px 40px 48px;
+    overflow: auto;
+  }
+  .center h1.scn-h {
+    font-family: var(--serif); font-weight: 600; font-size: 28px; font-variation-settings: "opsz" 96;
+    letter-spacing: var(--track-display); margin: 0 0 6px;
+  }
+  .center .scn-sub { font-family: var(--serif); font-style: italic; font-size: 14.5px; color: var(--ink-3); margin-bottom: 26px; }
+
+  .out-card {
+    border: 1px solid var(--ink); border-radius: var(--r-card);
+    background: var(--sheet);
+    padding: 26px 30px 24px;
+    margin-bottom: 26px;
+  }
+  .out-card .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--forest-700); margin-bottom: 6px; }
+  .out-card .h { display: flex; align-items: baseline; gap: 18px; margin-bottom: 16px; }
+  .out-card .h .v { font-family: var(--serif); font-weight: 700; font-size: 56px; color: var(--forest-700); font-variation-settings: "opsz" 144; line-height: 1; letter-spacing: -0.02em; }
+  .out-card .h .vs { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--ink-3); font-size: 18px; }
+  .out-card .h .band { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 18px; color: var(--ink-3); }
+
+  .stack-bar { display: flex; height: 32px; border-radius: var(--r-card); overflow: hidden; margin-bottom: 12px; }
+  .stack-bar span { display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; font-weight: 500; }
+
+  .out-foot { display: flex; gap: 18px; align-items: baseline; padding-top: 14px; border-top: 1px solid var(--hair); }
+  .out-foot .conf { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .out-foot .conf-bar { display: inline-flex; gap: 2px; }
+  .out-foot .conf-bar i { width: 14px; height: 6px; background: var(--hair); display: inline-block; border-radius: 1px; }
+  .out-foot .conf-bar i.on { background: var(--forest-600); }
+  .out-foot .ts { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+
+  /* Levers */
+  .levers-h {
+    display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px;
+  }
+  .levers-h .h {
+    font-family: var(--serif); font-weight: 600; font-size: 18px; font-variation-settings: "opsz" 36;
+  }
+  .levers-h .sub { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); }
+
+  .lever { display: grid; grid-template-columns: 220px 1fr 70px; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); margin-bottom: 8px; }
+  .lever .name { font-family: var(--serif); font-size: 14.5px; font-weight: 500; font-variation-settings: "opsz" 18; }
+  .lever .sub { font-family: var(--serif); font-style: italic; font-size: 11.5px; color: var(--ink-3); }
+  .lever .track { position: relative; height: 4px; background: var(--hair); border-radius: 2px; }
+  .lever .track .center-mark { position: absolute; left: 50%; top: -3px; height: 10px; width: 1px; background: var(--ink); }
+  .lever .track .fill { position: absolute; left: 50%; top: 0; height: 4px; background: var(--forest-600); border-radius: 2px; }
+  .lever .track.warn .fill { background: var(--orange); }
+  .lever .track .knob { position: absolute; top: -6px; width: 16px; height: 16px; background: var(--paper); border: 2px solid var(--forest-600); border-radius: 50%; transform: translateX(-50%); }
+  .lever .track.warn .knob { border-color: var(--orange); }
+  .lever .val { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 13.5px; font-weight: 500; text-align: right; }
+  .lever .val.up { color: var(--forest-700); }
+  .lever .val.warn { color: var(--orange); }
+
+  /* RIGHT — AI copilot */
+  .rhs {
+    border-left: 1px solid var(--hair);
+    background: var(--paper);
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .rhs .head {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--ink);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rhs .head .ic svg { width: 18px; height: 18px; stroke: var(--forest-600); stroke-width: 1.4; fill: none; }
+  .rhs .head .h { font-family: var(--serif); font-weight: 600; font-size: 15px; }
+  .rhs .head .gap { flex: 1; }
+  .rhs .head .mode { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest-700); padding: 3px 8px; background: var(--forest-50); border-radius: 3px; }
+
+  .rhs .conv { flex: 1; padding: 20px 22px 12px; display: flex; flex-direction: column; gap: 16px; }
+  .you-q {
+    background: var(--paper-2);
+    border-radius: var(--r-card);
+    padding: 12px 14px;
+    font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink-2);
+    border-left: 2px solid var(--ink);
+  }
+  .solon-a {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-card);
+    border-top: 3px solid var(--forest-600);
+    padding: 16px 18px 14px;
+  }
+  .solon-a .body {
+    font-family: var(--serif); font-size: 14.5px; line-height: 1.6;
+    font-variation-settings: "opsz" 18;
+  }
+  .solon-a .body::first-letter {
+    font-family: var(--serif); font-weight: 700; font-size: 38px; line-height: 0.9;
+    float: left; margin: 4px 8px 0 0; color: var(--forest-600);
+    font-variation-settings: "opsz" 144;
+  }
+  .solon-a .body sup { font-family: var(--mono); font-size: 9px; color: var(--forest-700); margin-left: 1px; vertical-align: super; cursor: pointer; }
+  .solon-a .foot { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair); font-family: var(--serif); font-style: italic; font-size: 11.5px; color: var(--ink-3); line-height: 1.5; }
+  .solon-a .foot strong { font-style: normal; font-weight: 500; color: var(--ink-2); }
+  .solon-a .conf-line { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair); display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+
+  .rhs .composer {
+    border-top: 1px solid var(--hair);
+    padding: 14px 22px 18px;
+    background: var(--paper);
+  }
+  .composer textarea {
+    width: 100%; min-height: 44px;
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    background: var(--sheet);
+    padding: 10px 12px;
+    font-family: var(--serif); font-size: 14px;
+    resize: vertical; outline: none;
+    color: var(--ink);
+  }
+  .composer textarea:focus { border-color: var(--forest-600); box-shadow: 0 0 0 3px rgba(27,67,50,0.18); }
+  .composer .row { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+  .composer .hint { flex: 1; font-family: var(--serif); font-style: italic; font-size: 11.5px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="scene-shell">
+
+  <header class="masthead-bar">
+    <div class="brand">
+      <span class="dropcap">S</span>
+      <div>
+        <div class="ttl">Solon — Election Simulator</div>
+        <div class="sub">a parliamentary order paper</div>
+      </div>
+    </div>
+    <div class="crumb">SIMULATOR <span style="margin:0 6px;color:var(--ink-4)">/</span> ANAMBRA CENTRAL <span style="margin:0 6px;color:var(--ink-4)">/</span> SENATE <span style="margin:0 6px;color:var(--ink-4)">/</span> <span class="cur">SOLUDO–LP scenario</span></div>
+    <div class="dateline">
+      <strong>11 May 2026</strong> · 14:08 WAT<br/>
+      <span style="color: var(--ink-4);">cycle: 2027 general</span>
+    </div>
+    <div class="actions">
+      <button class="b b-quiet b-sm">Compare</button>
+      <button class="b b-secondary b-sm">Save</button>
+      <button class="b b-primary b-sm">Re-run</button>
+    </div>
+  </header>
+
+  <div class="body-grid">
+
+    <!-- LEFT: race & candidates -->
+    <aside class="lhs">
+      <div class="grp">Race</div>
+      <div class="field" style="margin-bottom: 12px;">
+        <label class="f-label">Constituency</label>
+        <div class="f-wrap"><span class="f-prefix">CON ▸</span><input class="f" value="Anambra Central" /></div>
+      </div>
+      <div class="field" style="margin-bottom: 12px;">
+        <label class="f-label">Office</label>
+        <select class="f-select"><option>Senate</option><option>House of Reps</option><option>Governor</option></select>
+      </div>
+      <div class="field">
+        <label class="f-label">Cycle</label>
+        <select class="f-select"><option>2027 general</option><option>2031 general</option></select>
+      </div>
+
+      <div class="grp">Candidates · 4 in matchup</div>
+      <div style="position: relative;">
+        <div class="cand-row you">
+          <span class="av av-md av-forest">SO</span>
+          <div>
+            <div class="nm">Soludo, Charles · LP</div>
+            <div class="sub">incumbent gov · coalition signal</div>
+          </div>
+          <button class="b b-quiet b-sm" style="height: 24px; padding: 0 6px;">⋯</button>
+        </div>
+        <div class="cand-row">
+          <span class="av av-md">UE</span>
+          <div>
+            <div class="nm">Umeh, Victor · APGA</div>
+            <div class="sub">two-term sitting senator</div>
+          </div>
+          <button class="b b-quiet b-sm" style="height: 24px; padding: 0 6px;">⋯</button>
+        </div>
+        <div class="cand-row">
+          <span class="av av-md">AC</span>
+          <div>
+            <div class="nm">Achonu, Athan · APC</div>
+            <div class="sub">running mate · governorship '23</div>
+          </div>
+          <button class="b b-quiet b-sm" style="height: 24px; padding: 0 6px;">⋯</button>
+        </div>
+        <div class="cand-row">
+          <span class="av av-md">NO</span>
+          <div>
+            <div class="nm">Nwoye, Tony · PDP</div>
+            <div class="sub">prior senate aspirant</div>
+          </div>
+          <button class="b b-quiet b-sm" style="height: 24px; padding: 0 6px;">⋯</button>
+        </div>
+      </div>
+      <button class="b b-link" style="margin-top: 10px; font-size: 12px;">+ add hypothetical profile</button>
+
+      <div class="grp">Saved scenarios</div>
+      <div style="display: flex; flex-direction: column; gap: 0;">
+        <div style="padding: 8px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 1fr auto; gap: 8px;">
+          <span style="font-family: var(--serif); font-size: 13px;">Baseline</span><span class="mono" style="font-size: 11px; color: var(--forest-700);">47.2%</span>
+        </div>
+        <div style="padding: 8px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 1fr auto; gap: 8px; background: var(--paper-2); margin: 0 -10px; padding-left: 10px; padding-right: 10px;">
+          <span style="font-family: var(--serif); font-size: 13px; font-weight: 500;">Soludo–LP coalition</span><span class="mono" style="font-size: 11px; color: var(--forest-700);">53.4%</span>
+        </div>
+        <div style="padding: 8px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 1fr auto; gap: 8px;">
+          <span style="font-family: var(--serif); font-size: 13px;">Security shock · sev 4</span><span class="mono" style="font-size: 11px; color: var(--orange);">42.1%</span>
+        </div>
+        <div style="padding: 8px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 1fr auto; gap: 8px;">
+          <span style="font-family: var(--serif); font-size: 13px;">BVAS failure 12%</span><span class="mono" style="font-size: 11px; color: var(--ink-2);">45.6%</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER: output + levers -->
+    <main class="center">
+      <h1 class="scn-h">Soludo backs LP, with youth lift</h1>
+      <div class="scn-sub">— a parliamentary brief produced 2026-05-11, 14:08 WAT.</div>
+
+      <div class="out-card">
+        <div class="cap">Projected vote share · senate · Anambra Central</div>
+        <div class="h">
+          <span class="v">53.4%</span>
+          <span class="vs">to Labour Party</span>
+          <span class="band">± 3.8 points</span>
+        </div>
+        <div class="stack-bar">
+          <span style="width: 53.4%; background: var(--forest-600); color: var(--paper);">LP · 53.4%</span>
+          <span style="width: 19.8%; background: var(--ink); color: var(--paper);">APC · 19.8%</span>
+          <span style="width: 14.7%; background: var(--paper-3); color: var(--ink-2);">APGA · 14.7%</span>
+          <span style="width: 9.1%; background: var(--orange-soft); color: var(--ink-2);">PDP · 9.1%</span>
+          <span style="width: 3%; background: var(--paper-2); color: var(--ink-3);">·</span>
+        </div>
+        <div class="out-foot">
+          <span class="conf">Confidence <span class="conf-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span> Medium-high</span>
+          <span class="conf">Delta vs baseline <strong style="color: var(--forest-700);">+ 6.2 pt</strong></span>
+          <span class="ts">model · solon-2026-05a · n=412 PU</span>
+        </div>
+      </div>
+
+      <div class="levers-h">
+        <div class="h">Levers</div>
+        <div class="sub">— scrub a lever to re-run; saved scenarios snapshot the state.</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">Soludo–LP alignment</div><div class="sub">coalition / endorsement weight</div></div>
+        <div class="track">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 40%; left: 50%;"></div>
+          <div class="knob" style="left: 90%;"></div>
+        </div>
+        <div class="val up">Strong</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">Overall turnout</div><div class="sub">baseline: 41.3% (2023)</div></div>
+        <div class="track">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 18%; left: 50%;"></div>
+          <div class="knob" style="left: 68%;"></div>
+        </div>
+        <div class="val up">+ 5.4</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">Youth turnout · 18–34</div><div class="sub">cohort A · most volatile</div></div>
+        <div class="track">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 25%; left: 50%;"></div>
+          <div class="knob" style="left: 75%;"></div>
+        </div>
+        <div class="val up">+ 8.0</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">APGA candidate strength</div><div class="sub">opposition weakening · Umeh demob</div></div>
+        <div class="track">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 22%; left: 28%;"></div>
+          <div class="knob" style="left: 28%;"></div>
+        </div>
+        <div class="val warn">weak</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">BVAS failure</div><div class="sub">% of PU failing to record</div></div>
+        <div class="track warn">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 12%; left: 50%;"></div>
+          <div class="knob" style="left: 62%;"></div>
+        </div>
+        <div class="val warn">3.6%</div>
+      </div>
+
+      <div class="lever">
+        <div><div class="name">Issue shock · cost of living</div><div class="sub">severity 1–5 · decay 14d</div></div>
+        <div class="track warn">
+          <div class="center-mark"></div>
+          <div class="fill" style="width: 18%; left: 50%;"></div>
+          <div class="knob" style="left: 68%;"></div>
+        </div>
+        <div class="val warn">sev 3</div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 14px 18px; background: var(--paper-2); border: 1px solid var(--hair); border-radius: var(--r-card); font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; line-height: 1.55;">
+        <strong style="font-style: normal; color: var(--ink-2); font-weight: 500;">Solon refuses</strong> any lever combination that would model voter suppression in opposition wards. The block applies even if you construct it indirectly through demographic-cohort dampening.
+      </div>
+    </main>
+
+    <!-- RIGHT: AI copilot -->
+    <aside class="rhs">
+      <div class="head">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span class="h">Solon analyst</span>
+        <span class="gap"></span>
+        <span class="mode">NEUTRAL</span>
+      </div>
+
+      <div class="conv">
+        <div class="you-q">What happens in Anambra Central if Soludo backs the LP candidate and APGA fields a weak alternative?</div>
+
+        <div class="solon-a">
+          <div class="body">
+            The model attributes Labour Party's 6.2-point lift in Anambra Central — from the 47.2% baseline to 53.4% under this scenario — to two reinforcing forces. First, a turnout rebound in the 18–34 cohort, which has been the constituency's most volatile slice across 2019 and 2023<sup>[1]</sup>. Second, a weakening of APGA's ground operation following the Soludo–Obi alignment signal, which historically carried 41% of his personal vote into the next vehicle he endorsed<sup>[2]</sup>. The model also notes that BVAS-failure risk in Onitsha North remains a tail factor; if more than 12% of polling units fail to record, the band widens by roughly 1.4 points<sup>[3]</sup>.
+          </div>
+
+          <div class="conf-line">
+            <span>Confidence</span>
+            <span><span class="conf-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span>
+            <span>Medium-high · n=412 PU</span>
+          </div>
+
+          <div class="foot">
+            <strong>Sources</strong>
+            <br/>[1] Anambra Central PU-level turnout reconciliation, 18–34 cohort, 2019 & 2023.
+            <br/>[2] Coalition-carry model · governorship endorsements, south-east, 2007–2023.
+            <br/>[3] BVAS audit log · INEC, 2023 senate run · 412 PU.
+          </div>
+        </div>
+      </div>
+
+      <div class="composer">
+        <textarea placeholder="Ask a follow-up… e.g. 'what would it take to flip this race?'"></textarea>
+        <div class="row">
+          <span class="hint">Solon refuses voter-suppression queries; activity is logged for audit.</span>
+          <button class="b b-primary b-sm">Ask</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+</body>
+</html>

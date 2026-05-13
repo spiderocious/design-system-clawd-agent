@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Branch day-book</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1140px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .crumb .cur { color: var(--ink); }
+
+  .doc-head { padding: 36px 0 24px; }
+  .doc-head .h { font-family: var(--serif); font-size: 44px; font-weight: 600; letter-spacing: -0.024em; line-height: 1.04; margin: 0; }
+  .doc-head .sub { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3); margin-top: 8px; max-width: 60ch; }
+  .doc-head .row-meta { display: flex; gap: 24px; margin-top: 18px; }
+  .doc-head .row-meta .item { display: flex; flex-direction: column; gap: 2px; }
+  .doc-head .row-meta .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .doc-head .row-meta .v { font-family: var(--serif); font-size: 15px; font-weight: 500; }
+
+  /* Day timeline — sections */
+  .section { margin-top: 36px; }
+  .section .lbl-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+  .section .lbl-row .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; }
+  .section .lbl-row .time { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; }
+  .section .lbl-row .right { margin-left: auto; }
+
+  /* entry — generic */
+  .entry { display: grid; grid-template-columns: 90px 1fr 140px 100px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hair); gap: 16px; }
+  .entry .time { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; padding-top: 2px; }
+  .entry .body-t .head-l { font-family: var(--serif); font-size: 15px; font-weight: 500; }
+  .entry .body-t .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; margin-top: 2px; }
+  .entry .body-t .note { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); margin-top: 6px; line-height: 1.45; max-width: 56ch; }
+  .entry .fig { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; font-size: 14px; }
+  .entry .who-r { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; text-align: right; }
+
+  .entry.short .fig { color: var(--short); font-weight: 600; }
+  .entry.posted .fig { color: var(--emerald-700); }
+  .entry.expense .fig { color: var(--ink-2); }
+  .entry.delivery .fig { color: var(--emerald-700); }
+  .entry.delivery .body-t .head-l::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--emerald-600); border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+  .entry.shift .body-t .head-l::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--ink); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  .entry.expense .body-t .head-l::before { content: "−"; display: inline-block; width: 8px; margin-right: 8px; font-family: var(--mono); color: var(--watch); }
+  .entry.price .body-t .head-l::before { content: "₦"; display: inline-block; width: 8px; margin-right: 8px; font-family: var(--mono); color: var(--info); }
+
+  /* day total */
+  .day-total { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 36px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+  .day-total .c { padding: 18px 22px; border-right: 1px solid var(--hair); }
+  .day-total .c:last-child { border-right: 0; }
+  .day-total .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .day-total .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 28px; margin-top: 6px; line-height: 1; letter-spacing: -0.018em; }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span>Mokola</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Day-book · Tue 14 May</span></div>
+    <div style="flex: 1;"></div>
+    <button class="b b-ghost b-sm">← Mon 13</button>
+    <button class="b b-ghost b-sm">Wed 15 →</button>
+  </div>
+
+  <div class="doc-head">
+    <div class="overline">DAY-BOOK · TUE 14 MAY · MOKOLA STATION</div>
+    <h1 class="h">A full day, in order.</h1>
+    <p class="sub">Every entry made today, in the order it happened. Opening dip at the top, closing dip at the bottom. Expenses, shifts, deliveries, price changes all in one column — the way the cashier's exercise book reads.</p>
+    <div class="row-meta">
+      <div class="item"><span class="k">MANAGER</span><span class="v">Adeola Bakare</span></div>
+      <div class="item"><span class="k">PUMPS ACTIVE</span><span class="v">4 of 6</span></div>
+      <div class="item"><span class="k">PRICE · PMS</span><span class="v">₦196 / L</span></div>
+      <div class="item"><span class="k">PRICE · AGO</span><span class="v">₦880 / L</span></div>
+    </div>
+  </div>
+
+  <!-- Morning -->
+  <div class="section">
+    <div class="lbl-row">
+      <span class="time">06:00 — 14:00</span>
+      <span class="h">Morning shift.</span>
+      <span class="right pill pill-ok"><span class="dot"></span>Posted · 14:02</span>
+    </div>
+
+    <div class="entry shift">
+      <span class="time">06:15</span>
+      <div class="body-t">
+        <div class="head-l">Opening dip — three tanks</div>
+        <div class="sub">PMS · 22,388 L &nbsp;·&nbsp; AGO · 10,972 L &nbsp;·&nbsp; DPK · 1,560 L</div>
+      </div>
+      <span class="fig">—</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry shift">
+      <span class="time">06:30</span>
+      <div class="body-t">
+        <div class="head-l">Open pumps for morning shift</div>
+        <div class="sub">P-01 Aisha · P-02 Chidera · P-03 Femi · P-05 Yusuf</div>
+      </div>
+      <span class="fig">—</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry posted shift">
+      <span class="time">14:02</span>
+      <div class="body-t">
+        <div class="head-l">Morning shift posted</div>
+        <div class="sub">4 attendants · 1,852 L · ₦362,392 · BALANCED</div>
+      </div>
+      <span class="fig">+ ₦0.00</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+  </div>
+
+  <!-- Afternoon -->
+  <div class="section">
+    <div class="lbl-row">
+      <span class="time">14:00 — 22:00</span>
+      <span class="h">Evening shift.</span>
+      <span class="right pill pill-info"><span class="dot"></span>2 open · 2 closed</span>
+    </div>
+
+    <div class="entry shift">
+      <span class="time">14:00</span>
+      <div class="body-t">
+        <div class="head-l">Open evening — same attendants</div>
+      </div>
+      <span class="fig">—</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry expense">
+      <span class="time">16:12</span>
+      <div class="body-t">
+        <div class="head-l">Generator diesel — 20L</div>
+        <div class="sub">EXP-014 · paid to Mama Risi (supplier)</div>
+      </div>
+      <span class="fig">₦18,000.00</span>
+      <span class="who-r">FEMI</span>
+    </div>
+
+    <div class="entry expense">
+      <span class="time">17:30</span>
+      <div class="body-t">
+        <div class="head-l">Pump 04 belt replacement</div>
+        <div class="sub">EXP-015 · paid to Engr. Yemi · pump back online 18:00</div>
+        <div class="note">"Belt snapped mid-shift. Yemi was 15 mins away. Pump back online same hour."</div>
+      </div>
+      <span class="fig">₦8,500.00</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry expense">
+      <span class="time">18:02</span>
+      <div class="body-t">
+        <div class="head-l">NUPENG monthly dues</div>
+        <div class="sub">EXP-016 · paid to union representative</div>
+      </div>
+      <span class="fig">₦5,000.00</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry posted shift">
+      <span class="time">18:34</span>
+      <div class="body-t">
+        <div class="head-l">P-01 closed — Aisha</div>
+        <div class="sub">502 L · ₦98,392 · BALANCED</div>
+      </div>
+      <span class="fig">+ ₦0.00</span>
+      <span class="who-r">AISHA</span>
+    </div>
+
+    <div class="entry short shift">
+      <span class="time">18:47</span>
+      <div class="body-t">
+        <div class="head-l">P-02 closed — Chidera <span class="pill pill-short" style="margin-left: 8px;"><span class="dot"></span>Short</span></div>
+        <div class="sub">612 L · expected ₦119,952 · declared ₦117,552</div>
+        <div class="note">"Customer left without paying after a phone call. CCTV review awaiting owner."</div>
+      </div>
+      <span class="fig">− ₦2,400.00</span>
+      <span class="who-r">CHIDERA</span>
+    </div>
+
+    <div class="entry shift">
+      <span class="time">18:51</span>
+      <div class="body-t">
+        <div class="head-l">P-03 — Femi still on shift</div>
+        <div class="sub">814 L so far · balanced at last check</div>
+      </div>
+      <span class="fig" style="color: var(--ink-3);">in progress</span>
+      <span class="who-r">FEMI</span>
+    </div>
+
+    <div class="entry price">
+      <span class="time">19:00</span>
+      <div class="body-t">
+        <div class="head-l">PMS price held at ₦196 / L</div>
+        <div class="sub">No change. Logged for audit.</div>
+      </div>
+      <span class="fig" style="color: var(--info);">₦196 / L</span>
+      <span class="who-r">ADEOLA</span>
+    </div>
+
+    <div class="entry expense">
+      <span class="time">19:14</span>
+      <div class="body-t">
+        <div class="head-l">Drinks for forecourt staff</div>
+        <div class="sub">EXP-017 · Adekola corner shop</div>
+      </div>
+      <span class="fig">₦2,400.00</span>
+      <span class="who-r">FEMI</span>
+    </div>
+  </div>
+
+  <!-- Pending -->
+  <div class="section">
+    <div class="lbl-row">
+      <span class="time">EXPECTED</span>
+      <span class="h">Still to come.</span>
+    </div>
+    <div class="entry delivery">
+      <span class="time">WED 06:30</span>
+      <div class="body-t">
+        <div class="head-l">DPK tanker offload — A-44218</div>
+        <div class="sub">NIPCO · 11,000 L · waybill confirmed</div>
+        <div class="note">"Driver Sani Ibrahim, truck LSR-4421-AA. Witness: Adeola."</div>
+      </div>
+      <span class="fig">+ 11,000 L</span>
+      <span class="who-r">PENDING</span>
+    </div>
+  </div>
+
+  <div class="day-total">
+    <div class="c"><div class="k">Sold so far</div><div class="v">2,966 L</div></div>
+    <div class="c"><div class="k">Cash collected</div><div class="v">₦580,440</div></div>
+    <div class="c"><div class="k">Expenses</div><div class="v">₦33,900</div></div>
+    <div class="c"><div class="k">Variance</div><div class="v read-short">− ₦2,400</div></div>
+  </div>
+
+  <p class="dictated" style="margin: 20px 0 0; max-width: 60ch; font-size: 13px;">— The day-book is read top to bottom like a paper logbook. Closed sections are stamped at the right, open sections show the live indicator. Every entry carries the initials of who recorded it.</p>
+
+</div>
+</body>
+</html>

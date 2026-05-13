@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Modals · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body {
+    background: var(--paper-deep);
+    padding: 56px 64px 96px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 40px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin: 24px 0 14px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  /* simulated page background behind modal */
+  .stage {
+    position: relative;
+    background:
+      linear-gradient(rgba(28,27,25,0.45), rgba(28,27,25,0.45)),
+      var(--paper);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    padding: 60px 24px;
+    min-height: 480px;
+    display: grid; place-items: center;
+    overflow: hidden;
+  }
+  .stage::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--paper), var(--paper)),
+      linear-gradient(var(--hair), var(--hair));
+    opacity: 0.08;
+  }
+
+  .modal {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    box-shadow: var(--shade-modal);
+    width: 100%;
+    max-width: 460px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+  .modal.wide { max-width: 560px; }
+  .modal .body { padding: 28px 28px 8px; }
+  .modal .body h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.014em; margin: 0 0 8px; }
+  .modal .body p { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin: 0 0 14px; }
+  .modal .body p:last-of-type { margin-bottom: 0; }
+  .modal .foot {
+    padding: 16px 28px;
+    border-top: 1px solid var(--hair);
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  }
+  .modal .foot .sp { flex: 1; }
+
+  /* glyph for critical */
+  .glyph-warn, .glyph-crit, .glyph-good {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: inline-grid; place-items: center; margin-bottom: 14px;
+  }
+  .glyph-warn { background: var(--warn-bg); color: var(--warn-deep); }
+  .glyph-crit { background: var(--crit-bg); color: var(--crit); }
+  .glyph-good { background: var(--accent-tint); color: var(--accent); }
+
+  .modal.crit .body { padding-top: 24px; }
+  .modal.crit .pre {
+    background: var(--crit-bg); color: var(--crit-deep);
+    border-bottom: 1px solid var(--crit-edge);
+    padding: 10px 28px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: var(--track-overline); font-weight: 500;
+  }
+
+  /* confirm input */
+  .confirm-input {
+    margin-top: 14px; padding: 10px 12px;
+    border: 1px solid var(--hair); border-radius: var(--r-soft);
+    background: var(--paper);
+    font-family: var(--sans); font-size: 13.5px;
+  }
+  .confirm-input:focus { outline: none; border-color: var(--crit); }
+
+  .meta-list { font-size: 13px; color: var(--ink-2); margin: 0 0 14px; padding: 0; list-style: none; }
+  .meta-list li { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--hair); }
+  .meta-list li:first-child { border-top: 0; }
+  .meta-list li .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Modals</h1>
+  <p>Three modals every system needs: <em>confirm</em>, <em>data input</em>, and <em>the critical, irreversible one</em>. Always centred, never full-screen, always with an obvious dismiss.</p>
+</header>
+
+<!-- Confirm -->
+<div class="scene-h"><span class="roman">01</span><span class="ttl">Confirm · the everyday one</span></div>
+<div class="stage">
+  <div class="modal">
+    <div class="body">
+      <div class="glyph-good">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M3 12h13"/><path d="M12 7l5 5-5 5"/></svg>
+      </div>
+      <h2>Publish this analysis to Twitter?</h2>
+      <p>This will post the optimised version of your draft to <strong>@adewale</strong>. The analysis report stays in your library either way.</p>
+      <ul class="meta-list">
+        <li><span>Optimised draft</span><span class="v">231 chars · 37 words</span></li>
+        <li><span>Predicted engagement</span><span class="v t-accent">+62%</span></li>
+        <li><span>Scheduled for</span><span class="v">In 5 min · 9:00 AM</span></li>
+      </ul>
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost">Cancel</button>
+      <div class="sp"></div>
+      <button class="btn btn-secondary">Schedule later</button>
+      <button class="btn btn-primary">Publish now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Data input -->
+<div class="scene-h"><span class="roman">02</span><span class="ttl">Data input · save analysis to a collection</span></div>
+<div class="stage">
+  <div class="modal wide">
+    <div class="body">
+      <h2>Save to a collection</h2>
+      <p>Organise this analysis with others — collections live in your library and can be shared with your team.</p>
+
+      <label class="label">Collection name</label>
+      <input class="input" value="Build-in-public · week 12" />
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+        <div>
+          <label class="label">Visibility</label>
+          <div class="input" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Just me</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div>
+          <label class="label">Default platform</label>
+          <div class="input" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Twitter / X</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <label class="label" style="margin-top:14px;">Tags</label>
+      <div style="border:1px solid var(--hair); border-radius:var(--r-soft); padding:8px; background:var(--paper); display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="pill pill-accent">build-in-public</span>
+        <span class="pill pill-accent">creators</span>
+        <span class="pill pill-accent">ai</span>
+        <input style="flex:1;border:0;background:transparent;outline:none;font-size:13px;color:var(--ink);padding:4px;min-width:120px;" placeholder="Add tag…" />
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost">Cancel</button>
+      <div class="sp"></div>
+      <button class="btn btn-primary">Save collection</button>
+    </div>
+  </div>
+</div>
+
+<!-- CRITICAL · MANDATORY -->
+<div class="scene-h"><span class="roman">03</span><span class="ttl">Critical · irreversible · the mandatory modal</span></div>
+<div class="stage">
+  <div class="modal crit">
+    <div class="pre">⚠ Critical · irreversible action</div>
+    <div class="body">
+      <div class="glyph-crit">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.01"/></svg>
+      </div>
+      <h2 style="color:var(--crit-deep);">Delete your account?</h2>
+      <p><strong>This action cannot be undone.</strong> The following data will be permanently removed and is <em>not</em> recoverable, even by support:</p>
+      <ul style="margin:0 0 16px 0;padding-left:20px;font-size:13.5px;color:var(--ink-2);line-height:1.7;">
+        <li>231 analyses across 4 platforms</li>
+        <li>12 drafts in your library, including pinned items</li>
+        <li>3 shared collections (your collaborators lose access)</li>
+        <li>Your API keys and webhook endpoints</li>
+      </ul>
+      <p style="font-size:13px;color:var(--ink-2);">To confirm, type <code style="background:var(--paper-deep);padding:2px 6px;border-radius:3px;font-family:Inter;color:var(--crit-deep);font-weight:500;">DELETE adenijiadewale12</code> below.</p>
+      <input class="confirm-input" placeholder="Type DELETE adenijiadewale12 to confirm" />
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost">Cancel · keep my account</button>
+      <div class="sp"></div>
+      <button class="btn btn-danger" disabled style="opacity:0.4;pointer-events:none;">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 4h4l1 3H9z"/><path d="M6 7l1 13h10l1-13"/></svg>
+        Permanently delete account
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

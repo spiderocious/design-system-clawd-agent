@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Charts</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .chart-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .chart-card .head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); }
+  .chart-card .head .h { font-family: var(--serif); font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .chart-card .head .right { margin-left: auto; }
+  .legend { display: flex; gap: 18px; }
+  .legend .item { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+  .legend .sw { width: 8px; height: 8px; border-radius: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">23.</div>
+    <div class="ttl">Charts — lines, bars, share.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Charts here are working drawings, not decoration. One emerald line, one ink axis, hairlines for grid, an oxblood reference for thresholds. No tooltips with shadows. The user reads the chart like a graph in a logbook.
+  </p>
+
+  <!-- Daily sales line, multi-branch -->
+  <div class="chart-card">
+    <div class="head">
+      <span class="overline">DAILY SALES · LAST 14 DAYS</span>
+      <span class="h">All branches — PMS</span>
+      <div class="right legend">
+        <span class="item"><span class="sw" style="background: var(--emerald-600);"></span>Mokola</span>
+        <span class="item"><span class="sw" style="background: var(--ink);"></span>Surulere</span>
+        <span class="item"><span class="sw" style="background: var(--ago);"></span>PH-Rumuola</span>
+      </div>
+    </div>
+    <svg viewBox="0 0 720 240" style="width: 100%; height: 240px;">
+      <defs>
+        <pattern id="g1" width="60" height="40" patternUnits="userSpaceOnUse"><path d="M0 40h60M0 0v240" fill="none" stroke="#E5DECC"/></pattern>
+      </defs>
+      <rect width="720" height="240" fill="url(#g1)"/>
+      <line x1="0" y1="200" x2="720" y2="200" stroke="#1A1714"/>
+      <!-- y labels -->
+      <g font-family="IBM Plex Mono" font-size="9" fill="#6E665B" letter-spacing="0.1em">
+        <text x="0" y="14">8,000 L</text>
+        <text x="0" y="54">6,000 L</text>
+        <text x="0" y="94">4,000 L</text>
+        <text x="0" y="134">2,000 L</text>
+        <text x="0" y="174">  500 L</text>
+      </g>
+      <!-- mokola -->
+      <path d="M 60 90 L 110 85 L 160 75 L 210 95 L 260 60 L 310 70 L 360 55 L 410 80 L 460 65 L 510 50 L 560 70 L 610 60 L 660 45 L 710 55"
+        fill="none" stroke="#0E5C3A" stroke-width="2"/>
+      <!-- surulere -->
+      <path d="M 60 130 L 110 120 L 160 140 L 210 110 L 260 120 L 310 100 L 360 130 L 410 115 L 460 105 L 510 130 L 560 110 L 610 95 L 660 120 L 710 100"
+        fill="none" stroke="#1A1714" stroke-width="1.5"/>
+      <!-- ph -->
+      <path d="M 60 160 L 110 165 L 160 155 L 210 170 L 260 150 L 310 160 L 360 145 L 410 155 L 460 140 L 510 160 L 560 145 L 610 150 L 660 135 L 710 145"
+        fill="none" stroke="#8E5A0E" stroke-width="1.5" stroke-dasharray="0"/>
+      <!-- dots on last -->
+      <circle cx="710" cy="55" r="3" fill="#0E5C3A"/>
+      <circle cx="710" cy="100" r="3" fill="#1A1714"/>
+      <circle cx="710" cy="145" r="3" fill="#8E5A0E"/>
+      <!-- x labels -->
+      <g font-family="IBM Plex Mono" font-size="9" fill="#6E665B" letter-spacing="0.12em">
+        <text x="60" y="218">MAY 01</text>
+        <text x="210" y="218">MAY 05</text>
+        <text x="360" y="218">MAY 08</text>
+        <text x="510" y="218">MAY 11</text>
+        <text x="660" y="218">MAY 14</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="break"><span class="lbl">Bar — variance per branch</span></div>
+  <div class="chart-card">
+    <div class="head">
+      <span class="overline">VARIANCE · LAST 7 DAYS · NAIRA</span>
+      <span class="h">Where the money is leaking</span>
+      <div class="right rec">NEGATIVE = SHORT</div>
+    </div>
+    <svg viewBox="0 0 720 200" style="width: 100%; height: 200px;">
+      <!-- zero line -->
+      <line x1="0" y1="100" x2="720" y2="100" stroke="#1A1714"/>
+      <text x="0" y="96" font-family="IBM Plex Mono" font-size="9" fill="#1A1714" letter-spacing="0.1em">₦0</text>
+
+      <!-- bars (8 days x 3 branches) -->
+      <!-- Mokola: mostly negative -->
+      <g>
+        <rect x="60"  y="100" width="22" height="36" fill="#9A1F18"/>
+        <rect x="150" y="100" width="22" height="20" fill="#9A1F18"/>
+        <rect x="240" y="100" width="22" height="48" fill="#9A1F18"/>
+        <rect x="330" y="86"  width="22" height="14" fill="#0E5C3A"/>
+        <rect x="420" y="100" width="22" height="12" fill="#9A1F18"/>
+        <rect x="510" y="100" width="22" height="28" fill="#9A1F18"/>
+        <rect x="600" y="100" width="22" height="40" fill="#9A1F18"/>
+      </g>
+      <!-- Surulere -->
+      <g>
+        <rect x="84"  y="92"  width="22" height="8"  fill="#0E5C3A"/>
+        <rect x="174" y="100" width="22" height="10" fill="#9A1F18"/>
+        <rect x="264" y="100" width="22" height="18" fill="#9A1F18"/>
+        <rect x="354" y="100" width="22" height="22" fill="#9A1F18"/>
+        <rect x="444" y="80"  width="22" height="20" fill="#0E5C3A"/>
+        <rect x="534" y="100" width="22" height="8"  fill="#9A1F18"/>
+        <rect x="624" y="100" width="22" height="6"  fill="#9A1F18"/>
+      </g>
+      <!-- PH -->
+      <g>
+        <rect x="108" y="100" width="22" height="14" fill="#9A1F18"/>
+        <rect x="198" y="86"  width="22" height="14" fill="#0E5C3A"/>
+        <rect x="288" y="100" width="22" height="8"  fill="#9A1F18"/>
+        <rect x="378" y="100" width="22" height="20" fill="#9A1F18"/>
+        <rect x="468" y="100" width="22" height="32" fill="#9A1F18"/>
+        <rect x="558" y="92"  width="22" height="8"  fill="#0E5C3A"/>
+        <rect x="648" y="100" width="22" height="16" fill="#9A1F18"/>
+      </g>
+      <!-- x labels -->
+      <g font-family="IBM Plex Mono" font-size="9" fill="#6E665B" letter-spacing="0.12em">
+        <text x="80" y="180">MAY 08</text>
+        <text x="170" y="180">MAY 09</text>
+        <text x="260" y="180">MAY 10</text>
+        <text x="350" y="180">MAY 11</text>
+        <text x="440" y="180">MAY 12</text>
+        <text x="530" y="180">MAY 13</text>
+        <text x="620" y="180">MAY 14</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="break"><span class="lbl">Share — product mix today</span></div>
+  <div class="split split-3">
+    <div class="chart-card">
+      <div class="head"><span class="h">Mokola</span><span class="right rec">1,928 L · PMS-LED</span></div>
+      <svg viewBox="0 0 200 32" style="width: 100%; height: 32px;">
+        <rect x="0"   y="6" width="160" height="20" fill="#0E5C3A"/>
+        <rect x="160" y="6" width="32"  height="20" fill="#8E5A0E"/>
+        <rect x="192" y="6" width="8"   height="20" fill="#6B4E8E"/>
+      </svg>
+      <div class="row" style="margin-top: 10px; gap: 18px;">
+        <span class="prod prod-pms">PMS · 83%</span>
+        <span class="prod prod-ago">AGO · 14%</span>
+        <span class="prod prod-dpk">DPK · 3%</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="head"><span class="h">Surulere</span><span class="right rec">2,140 L · BALANCED</span></div>
+      <svg viewBox="0 0 200 32" style="width: 100%; height: 32px;">
+        <rect x="0"   y="6" width="120" height="20" fill="#0E5C3A"/>
+        <rect x="120" y="6" width="60"  height="20" fill="#8E5A0E"/>
+        <rect x="180" y="6" width="20"  height="20" fill="#6B4E8E"/>
+      </svg>
+      <div class="row" style="margin-top: 10px; gap: 18px;">
+        <span class="prod prod-pms">PMS · 60%</span>
+        <span class="prod prod-ago">AGO · 30%</span>
+        <span class="prod prod-dpk">DPK · 10%</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="head"><span class="h">PH-Rumuola</span><span class="right rec">3,610 L · AGO-LED</span></div>
+      <svg viewBox="0 0 200 32" style="width: 100%; height: 32px;">
+        <rect x="0"   y="6" width="74"  height="20" fill="#0E5C3A"/>
+        <rect x="74"  y="6" width="116" height="20" fill="#8E5A0E"/>
+        <rect x="190" y="6" width="10"  height="20" fill="#6B4E8E"/>
+      </svg>
+      <div class="row" style="margin-top: 10px; gap: 18px;">
+        <span class="prod prod-pms">PMS · 37%</span>
+        <span class="prod prod-ago">AGO · 58%</span>
+        <span class="prod prod-dpk">DPK · 5%</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -29,6 +29,66 @@
       "thumb": "projects/irisi/thumb.html",
       "createdAt": "2026-05-10",
       "surfaceCount": 33
+    },
+    {
+      "slug": "tutorly",
+      "name": "Tutorly",
+      "tagline": "A tutor-meets-student marketplace where parents pay a one-time connection fee to message verified tutors — identities masked, contact kept on-platform.",
+      "type": "Consumer · education marketplace",
+      "style": "Soft Scandinavian",
+      "stylePrinciples": "Warm oat paper, single forest accent #3BB75E, hairlines instead of shadows, generous radii, Fraunces serif for tutor names + thinking, Inter for chrome, JetBrains Mono for prices. Spacious lists, light only, no gamification. Multi-country in data, Naira in design.",
+      "accent": "#3BB75E",
+      "paper": "#F7F5F0",
+      "ink": "#1F231C",
+      "entry": "projects/tutorly/index.html",
+      "thumb": "projects/tutorly/thumb.html",
+      "createdAt": "2026-05-11",
+      "surfaceCount": 17
+    },
+    {
+      "slug": "buffbyte",
+      "name": "BuffByte",
+      "tagline": "A redesign of buffbyteai.xyz — AI content analysis for creators, with a teleprompter for video scripts and a live trending board.",
+      "type": "Consumer · creator tools",
+      "style": "Warm coach",
+      "stylePrinciples": "Warm-paper canvas with graphite ink, violet-blue as the single product accent (cool against the warm canvas), semantic-only amber + oxblood for warn and critical. Inter only, tabular numerals, hairlines instead of shadows. The AI speaks as a coach — second-person, constructive, never first-person.",
+      "accent": "#533AFD",
+      "paper": "#FAF7F2",
+      "ink": "#1C1B19",
+      "entry": "projects/buffbyte/index.html",
+      "thumb": "projects/buffbyte/thumb.html",
+      "createdAt": "2026-05-11",
+      "surfaceCount": 17
+    },
+    {
+      "slug": "dipstick",
+      "name": "Dipstick",
+      "tagline": "A digital station logbook for Nigerian filling-station owners with multiple branches — pump readings, tank dips, deliveries, expenses, staff shifts, all signed and auditable.",
+      "type": "SMB · operations SaaS",
+      "style": "Ledger broadsheet",
+      "stylePrinciples": "Warm cream paper, ink-near-black, deep emerald as the one accent. Source Serif 4 + Inter + IBM Plex Mono. Tabular numerals everywhere money or litres live. Hairlines instead of shadows. Oxblood reserved for shortages and voids; the CRITICAL idiom requires typing the literal word VOID. PMS / AGO / DPK distinction is a tiny inline mark, never a chromatic fill.",
+      "accent": "#0E5C3A",
+      "paper": "#F2EDE2",
+      "ink": "#1A1714",
+      "entry": "projects/dipstick/index.html",
+      "thumb": "projects/dipstick/thumb.html",
+      "createdAt": "2026-05-11",
+      "surfaceCount": 28
+    },
+    {
+      "slug": "solon",
+      "name": "Solon",
+      "tagline": "A political intelligence and campaign platform for Nigeria — flagship election simulator plus operational stack for voter data, agents, finance, and an election-day war room with citizen reporting.",
+      "type": "Civic · political intelligence",
+      "style": "Parliamentary order paper",
+      "stylePrinciples": "Cream order-paper canvas with warm ink, deep forest as the single interactive accent, burnt orange reserved for warn, oxblood reserved for irreversible. Fraunces + Inter + JetBrains Mono. The semantic rule that does real work: MONO is record (counts, IDs, expenses), SERIF is projection (modelled %, confidence). INEC-official idiom on exports — stamps, drop-cap intro, signed signature blocks. Solon speaks as a neutral analyst with citations; voter-suppression queries are blocked at the model layer.",
+      "accent": "#1B4332",
+      "paper": "#F5EFE0",
+      "ink": "#1A1714",
+      "entry": "projects/solon/index.html",
+      "thumb": "projects/solon/thumb.html",
+      "createdAt": "2026-05-11",
+      "surfaceCount": 27
     }
   ]
 }

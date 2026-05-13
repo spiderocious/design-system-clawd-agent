@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · geometry</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .grid-step { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 10px 0; border-top: 1px solid var(--hair-soft); align-items: center; }
+  .grid-step .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .bar { height: 14px; background: var(--ink); border-radius: 1px; }
+
+  .corner-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 14px; }
+  .corner {
+    height: 100px;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3);
+  }
+
+  .rule-row { display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding: 14px 0; align-items: center; }
+  .rule-row .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .rule-row .demo { display: flex; gap: 14px; align-items: center; }
+
+  .hr-hair { border: 0; border-top: 1px solid var(--hair); width: 220px; }
+  .hr-rule { border: 0; border-top: 1px solid var(--ink); width: 220px; }
+  .hr-double { border: 0; border-top: 3px double var(--ink); width: 220px; }
+  .hr-orange { border: 0; border-top: 2px solid var(--orange); width: 220px; }
+  .hr-forest { border: 0; border-top: 2px solid var(--forest-600); width: 220px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">03 / FOUNDATION</div>
+    <div class="ttl">Spacing & geometry</div>
+    <div class="sub">— 4-pixel grid, 4-pixel corners, hairlines first.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Solon's grid is 4px. Controls and sheets carry a single softening — a 4-pixel corner — borrowed from the editorial-warm variant. Everything else is sharp. We draw lines, not shadows; shadows live only on popovers and modals.
+  </p>
+
+  <div class="break"><span class="lbl">Spacing step</span></div>
+
+  <div class="grid-step"><div class="meta">4 px · 1u</div><div class="bar" style="width: 4px;"></div></div>
+  <div class="grid-step"><div class="meta">8 px · 2u</div><div class="bar" style="width: 8px;"></div></div>
+  <div class="grid-step"><div class="meta">12 px · 3u</div><div class="bar" style="width: 12px;"></div></div>
+  <div class="grid-step"><div class="meta">16 px · 4u</div><div class="bar" style="width: 16px;"></div></div>
+  <div class="grid-step"><div class="meta">24 px · 6u</div><div class="bar" style="width: 24px;"></div></div>
+  <div class="grid-step"><div class="meta">32 px · 8u</div><div class="bar" style="width: 32px;"></div></div>
+  <div class="grid-step"><div class="meta">48 px · 12u</div><div class="bar" style="width: 48px;"></div></div>
+  <div class="grid-step"><div class="meta">64 px · 16u · gutter</div><div class="bar" style="width: 64px;"></div></div>
+
+  <div class="break"><span class="lbl">Corner radius</span></div>
+
+  <div class="corner-row">
+    <div class="corner" style="border-radius: 0;">0 · rules · hairlines</div>
+    <div class="corner" style="border-radius: 2px;">2 · stamps · footnote chips</div>
+    <div class="corner" style="border-radius: 4px;">4 · buttons · inputs · sheets</div>
+    <div class="corner" style="border-radius: 6px;">6 · modal frames only</div>
+  </div>
+
+  <div class="break"><span class="lbl">Line weights</span></div>
+
+  <div class="rule-row">
+    <div class="lbl">Hair · 1px hair</div>
+    <div class="demo"><hr class="hr-hair" /><span class="mono" style="font-size: 11px; color: var(--ink-3);">Table divider · sheet edge</span></div>
+  </div>
+  <div class="rule-row">
+    <div class="lbl">Rule · 1px ink</div>
+    <div class="demo"><hr class="hr-rule" /><span class="mono" style="font-size: 11px; color: var(--ink-3);">Section underline · stamp</span></div>
+  </div>
+  <div class="rule-row">
+    <div class="lbl">Double · 3px ink</div>
+    <div class="demo"><hr class="hr-double" /><span class="mono" style="font-size: 11px; color: var(--ink-3);">Masthead only</span></div>
+  </div>
+  <div class="rule-row">
+    <div class="lbl">Forest · 2px</div>
+    <div class="demo"><hr class="hr-forest" /><span class="mono" style="font-size: 11px; color: var(--ink-3);">AI copilot top stripe</span></div>
+  </div>
+  <div class="rule-row">
+    <div class="lbl">Orange · 2px</div>
+    <div class="demo"><hr class="hr-orange" /><span class="mono" style="font-size: 11px; color: var(--ink-3);">Warn banner top stripe</span></div>
+  </div>
+
+  <div class="break"><span class="lbl">Density</span></div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13.5px; max-width: 70ch; line-height: 1.6;">
+    Two densities: <strong style="color: var(--ink-2); font-style: normal; font-weight: 500;">editorial</strong> for the Simulator, briefing pages, and exports — wide gutters, more whitespace, the AI copilot card spaced like a newspaper column. <strong style="color: var(--ink-2); font-style: normal; font-weight: 500;">Instrument</strong> for the War Room and the constituency map — rows tightened to 36px, mono-prefix inputs, the right-rail incident feed on a 12px gutter. Both share the same tokens; only the gutter and the row height change.
+  </p>
+
+  <div class="split-2" style="margin-top: 18px;">
+    <div class="sheet sheet-md">
+      <div class="mark">Editorial · 20/24 px row · 24 px gutter</div>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 14px 0; border-top: 1px solid var(--hair);"><span>St. Mary's Primary, Onitsha North</span><span class="rec-num rec-sm tabular">1,284</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 14px 0; border-top: 1px solid var(--hair);"><span>Onitsha Town Hall, ward 4</span><span class="rec-num rec-sm tabular">2,041</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 14px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);"><span>Nkpor Civic Centre, ward 5</span><span class="rec-num rec-sm tabular">896</span></div>
+      </div>
+    </div>
+    <div class="sheet sheet-md">
+      <div class="mark">Instrument · 12 px row · 12 px gutter</div>
+      <div style="display: flex; flex-direction: column; gap: 0; margin-top: 12px; font-size: 12.5px;">
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-top: 1px solid var(--hair);"><span class="mono" style="font-size: 11px;">PU 008-04-02 · St. Mary's</span><span class="mono tabular" style="font-size: 12px;">1,284</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-top: 1px solid var(--hair);"><span class="mono" style="font-size: 11px;">PU 008-04-09 · Onitsha Hall</span><span class="mono tabular" style="font-size: 12px;">2,041</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);"><span class="mono" style="font-size: 11px;">PU 008-05-11 · Nkpor</span><span class="mono tabular" style="font-size: 12px;">896</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-bottom: 1px solid var(--hair);"><span class="mono" style="font-size: 11px;">PU 008-05-12 · Nkpor 2</span><span class="mono tabular" style="font-size: 12px;">1,114</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-bottom: 1px solid var(--hair);"><span class="mono" style="font-size: 11px;">PU 008-05-13 · Iyiowa</span><span class="mono tabular" style="font-size: 12px;">722</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

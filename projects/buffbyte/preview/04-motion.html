@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Motion · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .demo { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .demo h2 { font-size: 14px; font-weight: 600; margin: 0; }
+  .demo p { font-size: 12.5px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+  .demo .stage { background: var(--paper); border: 1px solid var(--hair); border-radius: var(--r-soft); padding: 22px; display: grid; place-items: center; min-height: 140px; }
+
+  /* Score tick — values count up on first render */
+  .tickv {
+    font-size: 56px; font-weight: 600; letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--accent);
+  }
+
+  /* Fade + 4px */
+  .fade-target {
+    opacity: 0; transform: translateY(4px);
+    transition: opacity 240ms ease-out, transform 240ms ease-out;
+  }
+  .fade-target.in { opacity: 1; transform: translateY(0); }
+
+  /* Bar grow */
+  .bar-anim > i { width: 0; animation: grow 700ms cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes grow { to { width: 86%; } }
+
+  /* Ring draw */
+  .ring-anim .fill {
+    stroke-dasharray: 251.3;
+    stroke-dashoffset: 251.3;
+    animation: drawRing 900ms ease-out forwards;
+  }
+  @keyframes drawRing { to { stroke-dashoffset: 65; } }
+
+  button.replay {
+    align-self: flex-start;
+    font-size: 12px; padding: 6px 10px;
+    border: 1px solid var(--hair); border-radius: var(--r-soft);
+    background: var(--paper); color: var(--ink-2); cursor: pointer;
+  }
+  button.replay:hover { background: var(--paper-deep); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Motion</h1>
+  <p>Slow, deliberate. Fade plus a 4-pixel rise. No springs, no bounce. Scores tick in on first render — never re-animate when a tab returns.</p>
+</header>
+
+<div class="grid">
+
+  <div class="demo">
+    <h2>Fade + 4 px rise · 240 ms · ease-out</h2>
+    <p>The default reveal for any element that arrives after a state change — score cards, modal contents, search results.</p>
+    <div class="stage">
+      <div class="fade-target in" id="fade1" style="border:1px solid var(--hair);background:var(--paper);padding:14px 18px;border-radius:var(--r-soft);font-size:13px;">A coach's note has arrived.</div>
+    </div>
+    <button class="replay" onclick="document.getElementById('fade1').classList.remove('in'); setTimeout(()=>document.getElementById('fade1').classList.add('in'), 60);">Replay</button>
+  </div>
+
+  <div class="demo">
+    <h2>Score tick · count up · 700 ms</h2>
+    <p>Numbers count from 0 to value on first render. Tabular Inter figures keep the column width stable as they climb.</p>
+    <div class="stage">
+      <div class="tickv" id="tick1">0<span style="font-size:18px;color:var(--ink-3);">%</span></div>
+    </div>
+    <button class="replay" onclick="runTick()">Replay</button>
+  </div>
+
+  <div class="demo">
+    <h2>Bar grow · 700 ms · ease-out</h2>
+    <p>Score bars extend from 0 to value. Eased in, never linear.</p>
+    <div class="stage" style="display:block; padding: 32px 32px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);letter-spacing:var(--track-overline);text-transform:uppercase;margin-bottom:8px;">
+        <span>Engagement</span><span>86%</span>
+      </div>
+      <div class="bar bar-anim" id="bar1"><i></i></div>
+    </div>
+    <button class="replay" onclick="runBar()">Replay</button>
+  </div>
+
+  <div class="demo">
+    <h2>Ring draw · 900 ms · ease-out</h2>
+    <p>The score ring draws from 12 o'clock clockwise. Once. Then it sits there.</p>
+    <div class="stage">
+      <div class="ring ring-anim" id="ring1">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle class="track" cx="44" cy="44" r="40" stroke-width="6"></circle>
+          <circle class="fill" cx="44" cy="44" r="40" stroke-width="6"></circle>
+        </svg>
+        <span class="v">74%</span>
+      </div>
+    </div>
+    <button class="replay" onclick="runRing()">Replay</button>
+  </div>
+
+</div>
+
+<script>
+  function runTick() {
+    const el = document.getElementById('tick1');
+    let v = 0; const t = 89;
+    const start = performance.now();
+    const dur = 700;
+    function frame(now) {
+      const p = Math.min(1, (now-start)/dur);
+      const eased = 1 - Math.pow(1-p, 3);
+      v = Math.round(eased * t);
+      el.innerHTML = v + '<span style="font-size:18px;color:var(--ink-3);">%</span>';
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  function runBar() {
+    const el = document.getElementById('bar1');
+    el.classList.remove('bar-anim');
+    void el.offsetWidth;
+    el.classList.add('bar-anim');
+  }
+  function runRing() {
+    const el = document.getElementById('ring1');
+    el.classList.remove('ring-anim');
+    void el.offsetWidth;
+    el.classList.add('ring-anim');
+  }
+  runTick();
+</script>
+
+</body>
+</html>

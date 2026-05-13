@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Profile card</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+  /* B-style profile card on A's oat paper — locked from variations */
+  .pcard {
+    background: var(--paper);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 24px;
+    padding: 28px;
+  }
+  .pcard h2 { font-family: var(--sans); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; margin: 14px 0 6px; color: var(--ink); }
+  .pcard .role { font-size: 13px; color: var(--ink-3); margin-bottom: 18px; }
+  .pcard .blurb { font-size: 14px; line-height: 1.65; color: var(--ink-2); margin: 0 0 20px; }
+  .pcard .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-bottom: 22px; }
+  .pcard .meta-grid .label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); margin-bottom: 3px; }
+  .pcard .meta-grid .val { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .pcard .row-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">21 / DATA &amp; STATE</span>
+    <h1 class="ttl">Tutor profile card</h1>
+    <span class="meta">B-style card · locked in Act III</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">The profile card is calm and sans-only by deliberate decision. The list row uses Fraunces serif to feel editorial; the profile card uses Inter to feel like a faculty page — the same person, two different registers. The card is shown three ways here: in the search hover-preview, in a sidebar comparison, and as the entry to the full profile.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · hover-preview · the peek</div>
+    <h3>Hover a row · see the card</h3>
+    <p class="blurb">A row hover surfaces the card without leaving the page. Same data the full profile carries, in the shape a parent can scan in three seconds.</p>
+
+    <div class="pcard" style="max-width: 460px;">
+      <span class="verified">Identity verified</span>
+      <h2>Marcus K.</h2>
+      <div class="role">Further Mathematics &amp; Physics tutor · Lekki, Lagos</div>
+      <p class="blurb">I teach mathematics the way I wish I'd been taught — slowly, with the why before the how. Eight years working with students preparing for WAEC, SAT and Cambridge A-Levels.</p>
+      <div class="meta-grid">
+        <div><span class="label">Teaching</span><span class="val">8 years</span></div>
+        <div><span class="label">Students</span><span class="val">142</span></div>
+        <div><span class="label">Rate</span><span class="val">₦12,000 / hour</span></div>
+        <div><span class="label">Connect fee</span><span class="val">₦2,500</span></div>
+      </div>
+      <div class="row-buttons">
+        <button class="b b-primary">Connect with Marcus</button>
+        <button class="b b-secondary">View profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · side-by-side · "compare these two"</div>
+    <h3>Two profile cards on the canvas</h3>
+    <p class="blurb">Some parents land on Tutorly with a shortlist already. The card layout makes side-by-side comparison work — the meta-grid lines up, the rate lines up.</p>
+
+    <div class="row">
+      <div class="pcard">
+        <span class="verified">Identity verified</span>
+        <h2>Marcus K.</h2>
+        <div class="role">Further Maths &amp; Physics · Lekki, Lagos</div>
+        <p class="blurb">Slowly, with the why before the how. Eight years preparing students for A-Level and SAT.</p>
+        <div class="meta-grid">
+          <div><span class="label">Teaching</span><span class="val">8 years</span></div>
+          <div><span class="label">Students</span><span class="val">142</span></div>
+          <div><span class="label">Rate</span><span class="val">₦12,000</span></div>
+          <div><span class="label">Connect fee</span><span class="val">₦2,500</span></div>
+        </div>
+        <div class="row-buttons"><button class="b b-primary">Connect</button></div>
+      </div>
+      <div class="pcard">
+        <span class="verified">Identity verified</span>
+        <h2>Aisha O.</h2>
+        <div class="role">Further Maths · Victoria Island, Lagos</div>
+        <p class="blurb">Patient explainer. Six years of WAEC and Cambridge results; one Schmidt scholar in 2025.</p>
+        <div class="meta-grid">
+          <div><span class="label">Teaching</span><span class="val">6 years</span></div>
+          <div><span class="label">Students</span><span class="val">87</span></div>
+          <div><span class="label">Rate</span><span class="val">₦9,500</span></div>
+          <div><span class="label">Connect fee</span><span class="val">₦2,500</span></div>
+        </div>
+        <div class="row-buttons"><button class="b b-primary">Connect</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · gallery · saved-for-later</div>
+    <h3>Three cards in the parent's saved list</h3>
+    <p class="blurb">Cards survive at smaller widths. Three across is the cap; more than that pushes the layout toward grid-feel, which the brief rejects.</p>
+
+    <div class="row-3">
+      <div class="pcard">
+        <span class="verified">Identity verified</span>
+        <h2>Marcus K.</h2>
+        <div class="role">Further Maths · Lekki</div>
+        <p class="blurb" style="font-size: 13px;">Slowly, with the why before the how.</p>
+        <div class="meta-grid" style="grid-template-columns: 1fr;">
+          <div><span class="label">Rate</span><span class="val">₦12,000 / hr</span></div>
+        </div>
+        <div class="row-buttons"><button class="b b-primary b-sm">Connect</button></div>
+      </div>
+      <div class="pcard">
+        <span class="verified">Identity verified</span>
+        <h2>Aisha O.</h2>
+        <div class="role">Further Maths · VI</div>
+        <p class="blurb" style="font-size: 13px;">Patient explainer. Six years of results.</p>
+        <div class="meta-grid" style="grid-template-columns: 1fr;">
+          <div><span class="label">Rate</span><span class="val">₦9,500 / hr</span></div>
+        </div>
+        <div class="row-buttons"><button class="b b-primary b-sm">Connect</button></div>
+      </div>
+      <div class="pcard">
+        <span class="verified">Identity verified</span>
+        <h2>Tunde A.</h2>
+        <div class="role">Further Maths · Yaba</div>
+        <p class="blurb" style="font-size: 13px;">Twelve years of patient drill before insight.</p>
+        <div class="meta-grid" style="grid-template-columns: 1fr;">
+          <div><span class="label">Rate</span><span class="val">₦15,000 / hr</span></div>
+        </div>
+        <div class="row-buttons"><button class="b b-primary b-sm">Connect</button></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

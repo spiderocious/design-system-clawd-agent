@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · cards</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  /* Scenario card */
+  .scn {
+    border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+    padding: 18px 20px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    cursor: pointer; transition: border-color 120ms var(--ease), transform 200ms var(--ease);
+  }
+  .scn:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .scn .hd { display: flex; align-items: baseline; justify-content: space-between; }
+  .scn .hd .when { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+  .scn .hd .lvl { font-family: var(--mono); font-size: 10.5px; color: var(--forest-700); letter-spacing: 0.08em; }
+  .scn .ttl { font-family: var(--serif); font-weight: 600; font-size: 18px; line-height: 1.25; font-variation-settings: "opsz" 36; }
+  .scn .ttl em { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-weight: 500; }
+  .scn .lede { font-family: var(--serif); font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  .scn .out { display: flex; align-items: baseline; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--hair); }
+  .scn .out .v { font-family: var(--serif); font-weight: 600; font-size: 22px; color: var(--forest-700); font-variation-settings: "opsz" 36; }
+  .scn .out .band { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-left: 4px; }
+
+  /* PU card — drill-in */
+  .pu-card {
+    border: 1px solid var(--ink); border-radius: var(--r-card); background: var(--sheet);
+    padding: 0;
+    overflow: hidden;
+  }
+  .pu-card .hd { padding: 16px 20px; border-bottom: 1px solid var(--ink); background: var(--paper-2); }
+  .pu-card .hd .h { font-family: var(--serif); font-weight: 600; font-size: 18px; }
+  .pu-card .hd .sub { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+  .pu-card .hd .rec-id { margin-top: 4px; display: inline-block; }
+  .pu-card .body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .pu-card .kv { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--hair-soft); }
+  .pu-card .kv:first-of-type { border-top: 0; }
+  .pu-card .kv .k { font-family: var(--sans); font-size: 12.5px; color: var(--ink-3); }
+  .pu-card .kv .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 13.5px; }
+  .pu-card .kv .v.proj { font-family: var(--serif); font-weight: 600; color: var(--forest-700); }
+  .pu-card .foot { padding: 12px 20px; border-top: 1px solid var(--hair); background: var(--paper); display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* Briefing card (the AI copilot output as a card) */
+  .brief-card {
+    border: 1px solid var(--ink); border-radius: var(--r-card); background: var(--sheet);
+    padding: 22px 26px;
+  }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page page-wide">
+
+  <div class="stamp">
+    <div class="num">26 / DATA & STATE</div>
+    <div class="ttl">Cards</div>
+    <div class="sub">— scenario card, polling-unit drill-in, briefing.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Saved scenarios · gallery</div>
+    <div class="grid-3">
+
+      <div class="scn">
+        <div class="hd"><span class="when">SAVED · MAY 11</span><span class="lvl">HIGH CONF.</span></div>
+        <div class="ttl">Baseline <em>— Anambra Central · senate</em></div>
+        <div class="lede">No-shock projection using INEC 2023 turnout, current candidate set, no coalition adjustment.</div>
+        <div class="out"><span class="serif-it" style="font-size: 13px; color: var(--ink-3);">LP projection</span><span><span class="v">47.2%</span><span class="band">± 3.1</span></span></div>
+      </div>
+
+      <div class="scn">
+        <div class="hd"><span class="when">SAVED · MAY 11</span><span class="lvl">MED CONF.</span></div>
+        <div class="ttl">Soludo backs LP <em>— +8pt youth turnout</em></div>
+        <div class="lede">Coalition signal applied at strong weight; youth-turnout adjusted +8pt; APGA candidate weakened.</div>
+        <div class="out"><span class="serif-it" style="font-size: 13px; color: var(--ink-3);">LP projection</span><span><span class="v">53.4%</span><span class="band">± 3.8</span></span></div>
+      </div>
+
+      <div class="scn">
+        <div class="hd"><span class="when">SAVED · MAY 10</span><span class="lvl">LOW CONF.</span></div>
+        <div class="ttl">Security incident in Onitsha <em>— severity 4 shock</em></div>
+        <div class="lede">Shock applied with 14-day decay; localised turnout suppression in Onitsha N. and S.; redistribution model active.</div>
+        <div class="out"><span class="serif-it" style="font-size: 13px; color: var(--ink-3);">LP projection</span><span><span class="v" style="color: var(--orange);">42.1%</span><span class="band">± 5.4</span></span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Polling-unit drill-in</div>
+    <div class="grid-2">
+      <div class="pu-card">
+        <div class="hd">
+          <div class="h">St. Mary's Primary</div>
+          <div class="sub">Onitsha North · ward 4</div>
+          <div class="rec-id">PU 008-04-02 · LGA-008</div>
+        </div>
+        <div class="body">
+          <div class="kv"><span class="k">Registered voters</span><span class="v">1,284</span></div>
+          <div class="kv"><span class="k">2023 turnout · accredited</span><span class="v">412 <span style="color: var(--ink-3); font-family: var(--sans);">· 32%</span></span></div>
+          <div class="kv"><span class="k">2023 result · winner</span><span class="v">LP · 51.3%</span></div>
+          <div class="kv"><span class="k">2027 projection</span><span class="v proj">LP 52.1% <span class="serif-it" style="font-size: 11.5px; color: var(--ink-3);">± 2.4</span></span></div>
+          <div class="kv"><span class="k">Tier</span><span><span class="chip chip-hold-strong">Strong hold</span></span></div>
+          <hr class="hair" />
+          <div class="overline">Top 3 drivers</div>
+          <div style="font-family: var(--serif); font-size: 13.5px; line-height: 1.55;">
+            <ol style="margin: 6px 0 0 18px; padding: 0; color: var(--ink-2);">
+              <li>Incumbent advantage <span class="mono" style="font-size: 11px; color: var(--ink-3);">+ 14.8 pt</span></li>
+              <li>2023 turnout pattern <span class="mono" style="font-size: 11px; color: var(--ink-3);">+ 6.2 pt</span></li>
+              <li>Ethnoreligious composition <span class="mono" style="font-size: 11px; color: var(--ink-3);">+ 3.4 pt</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="foot">
+          <button class="b b-quiet b-sm">Add to watchlist</button>
+          <button class="b b-secondary b-sm">View on map</button>
+          <button class="b b-primary b-sm">Run scenario here</button>
+        </div>
+      </div>
+
+      <div class="brief-card">
+        <div class="ai-head">
+          <span class="ai-tag">SOLON · ANALYST</span>
+          <span class="ai-meta">2026-05-11 · 14:08</span>
+        </div>
+        <div class="ai-body">
+          St. Mary's holds robustly for Labour because the model reads three reinforcing signals here: incumbent advantage from the 2023 cycle<sup>[1]</sup>, a stable ward-4 turnout pattern across the last two senate races<sup>[2]</sup>, and ethnoreligious composition that has been a structural LP advantage in Onitsha North since 2019<sup>[3]</sup>. The 2.4-point confidence band is tight — short of a wide-scope shock (security incident in Onitsha, statewide BVAS failure), this PU is unlikely to flip.
+        </div>
+        <div class="ai-foot">
+          <strong>Sources</strong>
+          <br/>[1] INEC senate result tables, Anambra Central, 2023.
+          <br/>[2] PU-level turnout reconciliation, ward 4 senatorial, 2019–2023.
+          <br/>[3] Composition model · 2022 NPC census × 2023 INEC roll cross-walk.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

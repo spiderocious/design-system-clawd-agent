@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cross-record · audit log</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .lbl-stamp { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .lbl-stamp .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .lbl-stamp .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+
+  /* audit log entry */
+  .audit { display: grid; grid-template-columns: 110px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .audit:first-child { border-top: 1px solid var(--ink); }
+  .audit .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; padding-top: 4px; }
+  .audit .when .day { display: block; color: var(--ink); font-weight: 600; letter-spacing: 0.1em; }
+  .audit .body-a .act {
+    font-family: var(--serif); font-size: 15px; line-height: 1.45;
+  }
+  .audit .body-a .act .verb { font-weight: 600; }
+  .audit .body-a .act .who { font-family: var(--serif); font-style: italic; color: var(--emerald-700); }
+  .audit .body-a .act .ref { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .audit .body-a .note {
+    font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; margin-top: 6px;
+    padding-left: 14px; border-left: 1px solid var(--hair);
+  }
+  .audit .body-a .diff { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 8px; font-size: 12px; }
+  .audit .body-a .diff .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+  .audit .body-a .diff .from { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-3); text-decoration: line-through; }
+  .audit .body-a .diff .to   { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+
+  /* mention */
+  .mention {
+    background: var(--emerald-50); color: var(--emerald-700);
+    padding: 1px 5px; border-radius: 2px;
+    font-family: var(--sans); font-weight: 500; font-size: 0.96em;
+  }
+  .mention::before { content: "@"; opacity: 0.7; }
+
+  /* note thread */
+  .note-thread { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .note-thread .head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 14px; }
+  .note-thread .head .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .note-thread .head .ref { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .msg { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--hair-soft); }
+  .msg:last-child { border-bottom: 0; }
+  .msg .av { width: 32px; height: 32px; font-size: 11px; }
+  .msg .head-m { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .msg .nm { font-family: var(--serif); font-size: 14px; font-weight: 600; }
+  .msg .ts { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .msg .body-msg { font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink-2); }
+
+  .compose { display: grid; grid-template-columns: 36px 1fr; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hair); }
+  .compose .av { width: 32px; height: 32px; font-size: 11px; }
+  .compose textarea { width: 100%; min-height: 56px; background: var(--sheet-2); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 9px 12px; font-family: var(--serif); font-size: 14px; color: var(--ink); outline: none; resize: vertical; }
+  .compose textarea:focus { border-color: var(--ink); }
+  .compose .actions { margin-top: 8px; display: flex; gap: 8px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">42.</div>
+    <div class="ttl">Cross-record — audit log, mentions, threads.</div>
+    <div class="meta">OVERLAYS &amp; SYSTEM</div>
+  </div>
+
+  <p class="dictated" style="max-width: 64ch; margin: 0 0 28px;">
+    Every change to a posted entry leaves a trail. Mentions tie a note to a person who needs to see it. Threads attach to a specific shift or expense — they're not a feed, they're a margin annotation on the ledger.
+  </p>
+
+  <!-- Audit log -->
+  <div class="lbl-stamp"><span class="num">01.</span><span class="h">Audit log — who did what, when</span></div>
+
+  <div style="margin-bottom: 48px;">
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>18:51:32 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Adeola Bakare</span> <span class="verb">posted</span> evening shift at Mokola. <span class="ref">SHIFT-MOK-2026-05-14-PM</span></div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>18:47:08 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Adeola Bakare</span> <span class="verb">filed a note</span> on P-02 — Chidera Okoye. <span class="ref">SHIFT-MOK-2026-05-14-PM/P-02</span></div>
+        <div class="note">"Customer left without paying after a phone call. CCTV review awaiting owner."</div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>18:34:42 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Aisha Bello</span> <span class="verb">closed</span> P-01 — 502 L · balanced.</div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>17:30:11 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Adeola Bakare</span> <span class="verb">added expense</span> EXP-015 — pump 04 belt · ₦8,500. <span class="ref">EXPENSE-015</span></div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>16:12:55 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Femi Adekunle</span> <span class="verb">added expense</span> EXP-014 — generator diesel · ₦18,000.</div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>14:02:18 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Adeola Bakare</span> <span class="verb">edited &amp; posted</span> morning shift. <span class="ref">SHIFT-MOK-2026-05-14-AM</span></div>
+        <div class="diff">
+          <span class="k">P-03 · cash declared</span>
+          <span class="k">change</span>
+          <span class="from">₦158,944.00</span>
+          <span class="to">₦159,544.00</span>
+        </div>
+        <div class="note">"Counted again with Femi present — initial typo, real declared is ₦159,544."</div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">TUE · 14 MAY</span>10:08:01 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Segun Olaitan</span> <span class="verb">set price</span> for AGO at ₦880 / L. <span class="ref">PRICE-CHANGE-AGO</span></div>
+        <div class="diff">
+          <span class="k">AGO · price</span>
+          <span class="k">change</span>
+          <span class="from">₦820.00 / L</span>
+          <span class="to">₦880.00 / L</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="when"><span class="day">MON · 13 MAY</span>22:18:47 WAT</div>
+      <div class="body-a">
+        <div class="act"><span class="who">Tunde Salami</span> <span class="verb">VOIDED</span> his own shift entry — Mokola P-04 · ₦39,788. <span class="ref" style="color: var(--short);">VOID · IRREVERSIBLE</span></div>
+        <div class="note">"Entered wrong pump — was actually on P-04 morning, not evening. Re-issued as separate entry."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mentions / thread on a shift -->
+  <div class="lbl-stamp"><span class="num">02.</span><span class="h">Thread — attached to a shift</span></div>
+
+  <div class="note-thread">
+    <div class="head">
+      <span class="overline">NOTES ON</span>
+      <span class="h">P-02 evening — Chidera Okoye, ₦2,400 short</span>
+      <span class="ref" style="margin-left: auto;">SHIFT-MOK-2026-05-14-PM/P-02</span>
+    </div>
+
+    <div class="msg">
+      <span class="av av-mgr">AB</span>
+      <div>
+        <div class="head-m"><span class="nm">Adeola Bakare</span> <span class="ts">TUE 18:47 — MGR</span></div>
+        <div class="body-msg">Chidera says one customer left without paying after a phone call. I've asked her to point out the moment on CCTV when <span class="mention">segun</span> reviews tomorrow. Filing the variance as pending.</div>
+      </div>
+    </div>
+
+    <div class="msg">
+      <span class="av av-att">CO</span>
+      <div>
+        <div class="head-m"><span class="nm">Chidera Okoye</span> <span class="ts">TUE 18:53 — ATT</span></div>
+        <div class="body-msg">The customer in the white Corolla, around 16:20. He said he was coming back with the cash, walked toward the bus stop, never came back. I called <span class="mention">adeola</span> within ten minutes.</div>
+      </div>
+    </div>
+
+    <div class="msg">
+      <span class="av av-owner">SO</span>
+      <div>
+        <div class="head-m"><span class="nm">Segun Olaitan</span> <span class="ts">WED 07:08 — OWNER</span></div>
+        <div class="body-msg">Will check 16:20 CCTV this morning. If the Corolla matches the story, we write it off — not Chidera's loss. <span class="mention">adeola</span> hold the variance flag until I confirm.</div>
+      </div>
+    </div>
+
+    <div class="compose">
+      <span class="av av-mgr">AB</span>
+      <div>
+        <textarea placeholder="Reply… use @name to notify"></textarea>
+        <div class="actions">
+          <button class="b b-ghost b-sm">Attach receipt</button>
+          <button class="b b-primary b-sm">Reply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

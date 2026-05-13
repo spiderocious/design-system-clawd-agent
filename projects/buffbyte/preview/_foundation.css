@@ -2,10 +2,11 @@
    BUFFBYTE — Warm-coach foundation
    One stance, applied everywhere.
 
-   Frame:   a literate friend leaving notes in pencil in the
-            margin of a paperback book.
+   Frame:   a literate friend leaving notes in the margin of a
+            paperback book — but the friend is using a cursor.
    Surface: warm paper canvas, graphite ink, hairlines.
-   Color:   B&W with semantic-only colour (moss / amber / oxblood).
+   Color:   B&W canvas + violet-blue product accent + amber warn
+            + oxblood critical. The warm/cool tension is the point.
    Type:    Inter only — three weights, tabular figures for numbers.
    Voice:   coach. Constructive, direct, second-person.
    ============================================================ */
@@ -23,37 +24,39 @@
   --ink-2:        #3A3835;   /* body */
   --ink-3:        #6B6862;   /* secondary, captions */
   --ink-4:        #9A968D;   /* tertiary, placeholders */
-  --ink-5:        #C7C2B6;   /* quietest, dividers if needed */
+  --ink-5:        #C7C2B6;   /* quietest */
 
   --hair:         #DDD7CB;   /* hairline */
   --hair-soft:    #EAE4D6;   /* quieter divider */
-  --rule:         #1C1B19;   /* heavy rule for emphasis (rare) */
+  --rule:         #1C1B19;   /* heavy rule (rare) */
 
-  /* ---------- Moss — the single positive accent ---------- */
-  --moss-50:   #F2F5EF;
-  --moss-100:  #E2EADC;
-  --moss-200:  #C4D5B9;
-  --moss-300:  #9DB68E;
-  --moss-400:  #7E9C6F;
-  --moss-500:  #6A8F6A;   /* the working accent */
-  --moss-600:  #547157;
-  --moss-700:  #3F5743;
-  --moss-800:  #2C3D2F;
+  /* ---------- Violet-blue — the product accent ----------
+     Cool, digital. Sits against the warm paper for tonal contrast.
+     Used for: primary actions, links, positive scores, the AI's voice. */
+  --accent:        #533AFD;
+  --accent-deep:   #3D27D9;   /* hover / pressed */
+  --accent-press:  #2B17B4;
+  --accent-tint:   #EAE6FF;   /* background tint */
+  --accent-edge:   #C9C0FF;   /* pill / chip border */
+  --accent-ink:    #1A0F86;   /* legible on tint */
 
-  /* ---------- Semantic state (used sparingly, always with copy) ----------
-     Oxblood reserved for irreversible / critical-risk only.
-     Amber is mid-impact warning. Moss is positive. */
-  --warn:       #C28A2C;   /* amber */
+  /* ---------- Semantic state (used sparingly, always with copy) ---------- */
+  --warn:       #C28A2C;       /* amber */
+  --warn-deep:  #8E6112;
   --warn-bg:    #FBF4E5;
   --warn-edge:  #E6D2A1;
 
-  --crit:       #A0413A;   /* oxblood, never bright red */
+  --crit:       #A0413A;       /* oxblood, never bright red */
+  --crit-deep:  #6F2A24;
   --crit-bg:    #F8ECEA;
   --crit-edge:  #DDB8B3;
 
-  --good:       var(--moss-600);
-  --good-bg:    var(--moss-50);
-  --good-edge:  var(--moss-200);
+  /* "good" semantic — folds into accent. Positive scores in BuffByte are
+     interactive, opinionated, AI-signed — so they live in the accent ramp,
+     not a separate green. This is what keeps the palette to 3. */
+  --good:       var(--accent);
+  --good-bg:    var(--accent-tint);
+  --good-edge:  var(--accent-edge);
 
   /* ---------- Type ---------- */
   --sans:   'Inter', system-ui, -apple-system, sans-serif;
@@ -65,7 +68,6 @@
   --track-label:     0.008em;
   --track-overline:  0.20em;
 
-  /* numerals — tabular, lining; Inter does this cleanly */
   --num-feats: "tnum" 1, "lnum" 1;
 
   /* ---------- Geometry ---------- */
@@ -74,14 +76,18 @@
   --r-card:     8px;
   --r-pill:     9999px;
 
-  --gutter:     32px;       /* generous; this is a sparse system */
+  --gutter:     32px;
   --gap:        24px;
 
   /* hairlines, not shadows */
   --line-1: 0 0 0 1px var(--hair);
   --line-2: 0 0 0 1px var(--ink);
   --shade-1: 0 1px 0 rgba(28,27,25,0.03);
-  --shade-pop: 0 8px 24px -8px rgba(28,27,25,0.10), 0 0 0 1px var(--hair);
+  --shade-pop: 0 8px 24px -8px rgba(28,27,25,0.12), 0 0 0 1px var(--hair);
+  --shade-modal: 0 24px 48px -16px rgba(28,27,25,0.22), 0 0 0 1px var(--hair);
+
+  /* focus ring — uses the accent */
+  --focus-ring: 0 0 0 3px rgba(83,58,253,0.22);
 }
 
 /* ----- Reset ----- */
@@ -98,6 +104,9 @@ body {
   font-feature-settings: var(--num-feats);
   text-rendering: optimizeLegibility;
 }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ----- Type primitives ----- */
 .t-display {
@@ -156,6 +165,13 @@ body {
   letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums lining-nums;
 }
+.t-ink   { color: var(--ink); }
+.t-ink-2 { color: var(--ink-2); }
+.t-ink-3 { color: var(--ink-3); }
+.t-ink-4 { color: var(--ink-4); }
+.t-accent { color: var(--accent); }
+.t-warn  { color: var(--warn-deep); }
+.t-crit  { color: var(--crit); }
 
 /* ----- Buttons ----- */
 .btn {
@@ -172,28 +188,55 @@ body {
   border: 1px solid transparent;
   cursor: pointer;
   transition: background 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out;
+  white-space: nowrap;
 }
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
 .btn-primary {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+.btn-primary:hover { background: var(--accent-deep); }
+.btn-primary:active { background: var(--accent-press); }
+
+.btn-ink {
   background: var(--ink);
   color: var(--paper);
 }
-.btn-primary:hover { background: #0F0E0D; }
+.btn-ink:hover { background: #0F0E0D; }
+
 .btn-secondary {
   background: var(--paper);
   color: var(--ink);
   border-color: var(--hair);
 }
 .btn-secondary:hover { background: var(--paper-deep); border-color: var(--ink-4); }
+
 .btn-ghost {
   background: transparent;
   color: var(--ink-2);
 }
 .btn-ghost:hover { background: var(--paper-deep); color: var(--ink); }
+
 .btn-danger {
   background: var(--crit);
-  color: var(--paper);
+  color: #FFFFFF;
 }
-.btn-danger:hover { background: #863732; }
+.btn-danger:hover { background: var(--crit-deep); }
+
+.btn-sm { padding: 7px 12px; font-size: 12.5px; }
+.btn-lg { padding: 13px 20px; font-size: 14px; }
+
+/* icon-only button */
+.btn-icon {
+  width: 32px; height: 32px; padding: 0;
+  border-radius: var(--r-soft);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid transparent; color: var(--ink-2);
+  cursor: pointer;
+  transition: background 160ms ease-out, border-color 160ms ease-out;
+}
+.btn-icon:hover { background: var(--paper-deep); border-color: var(--hair); color: var(--ink); }
 
 /* ----- Inputs ----- */
 .input {
@@ -205,15 +248,23 @@ body {
   border-radius: var(--r-soft);
   padding: 10px 12px;
   width: 100%;
-  transition: border-color 160ms ease-out, background 160ms ease-out;
+  transition: border-color 160ms ease-out, background 160ms ease-out, box-shadow 160ms ease-out;
   font-feature-settings: var(--num-feats);
 }
 .input::placeholder { color: var(--ink-4); }
 .input:hover { border-color: var(--ink-4); }
 .input:focus {
   outline: none;
-  border-color: var(--ink);
+  border-color: var(--accent);
   background: var(--paper);
+  box-shadow: var(--focus-ring);
+}
+.input[aria-invalid="true"] { border-color: var(--crit); }
+.textarea {
+  composes: input;
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
 }
 
 .label {
@@ -241,24 +292,15 @@ body {
   border: 1px solid var(--hair);
   white-space: nowrap;
 }
-.pill-good { background: var(--good-bg); color: var(--good); border-color: var(--good-edge); }
-.pill-warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-edge); }
-.pill-crit { background: var(--crit-bg); color: var(--crit); border-color: var(--crit-edge); }
-.pill-ink  { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pill-accent { background: var(--accent-tint); color: var(--accent-ink); border-color: var(--accent-edge); }
+.pill-warn   { background: var(--warn-bg);    color: var(--warn-deep);   border-color: var(--warn-edge); }
+.pill-crit   { background: var(--crit-bg);    color: var(--crit-deep);   border-color: var(--crit-edge); }
+.pill-ink    { background: var(--ink);        color: var(--paper);       border-color: var(--ink); }
 
 /* ----- Hairlines / rules ----- */
-hr.hair {
-  border: 0;
-  height: 1px;
-  background: var(--hair);
-  margin: 0;
-}
-hr.rule {
-  border: 0;
-  height: 1px;
-  background: var(--ink);
-  margin: 0;
-}
+hr.hair  { border: 0; height: 1px; background: var(--hair); margin: 0; }
+hr.soft  { border: 0; height: 1px; background: var(--hair-soft); margin: 0; }
+hr.rule  { border: 0; height: 1px; background: var(--ink); margin: 0; }
 
 /* ----- Score bars ----- */
 .bar {
@@ -271,14 +313,15 @@ hr.rule {
 .bar > i {
   position: absolute;
   inset: 0 auto 0 0;
-  background: var(--ink);
+  background: var(--accent);
   border-radius: 999px;
+  transition: width 600ms cubic-bezier(.2,.7,.2,1);
 }
-.bar.good > i { background: var(--moss-500); }
 .bar.warn > i { background: var(--warn); }
 .bar.crit > i { background: var(--crit); }
+.bar.ink  > i { background: var(--ink); }
 
-/* ----- Score ring (mono) ----- */
+/* ----- Score ring ----- */
 .ring {
   width: 88px;
   height: 88px;
@@ -288,11 +331,11 @@ hr.rule {
   justify-content: center;
 }
 .ring svg { transform: rotate(-90deg); }
-.ring .track { stroke: var(--hair); }
-.ring .fill { stroke: var(--ink); transition: stroke-dashoffset 600ms ease-out; }
-.ring.good .fill { stroke: var(--moss-500); }
+.ring .track { stroke: var(--hair); fill: none; }
+.ring .fill  { stroke: var(--accent); fill: none; transition: stroke-dashoffset 600ms ease-out; stroke-linecap: round; }
 .ring.warn .fill { stroke: var(--warn); }
 .ring.crit .fill { stroke: var(--crit); }
+.ring.ink  .fill { stroke: var(--ink); }
 .ring .v {
   position: absolute;
   inset: 0;
@@ -304,6 +347,35 @@ hr.rule {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* ----- Icon convention ----- */
-.icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+/* ----- Cards / surfaces ----- */
+.card {
+  background: var(--sheet);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+  padding: 24px;
+}
+.card-flush {
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-card);
+}
+
+/* ----- Icons ----- */
+.icon    { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.icon-sm { width: 14px; height: 14px; stroke-width: 1.5; }
 .icon-lg { width: 20px; height: 20px; stroke-width: 1.5; }
+.icon-xl { width: 28px; height: 28px; stroke-width: 1.5; }
+
+/* ----- Layout helpers ----- */
+.row { display: flex; align-items: center; gap: 8px; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+.spacer { flex: 1; }
+
+/* selection */
+::selection { background: var(--accent-tint); color: var(--accent-ink); }
+
+/* scrollbars — quiet */
+* { scrollbar-width: thin; scrollbar-color: var(--ink-5) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--ink-5); border-radius: 999px; }
+*::-webkit-scrollbar-track { background: transparent; }

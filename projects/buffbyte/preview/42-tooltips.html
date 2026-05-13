@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tooltips & popovers · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 120px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 14px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .stage {
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    padding: 48px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 60px 80px;
+    place-items: center;
+    min-height: 320px;
+  }
+  .stage .anchor {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    background: var(--paper); border: 1px solid var(--hair); border-radius: var(--r-soft);
+    font-size: 13px; font-weight: 500; color: var(--ink);
+  }
+  .stage .anchor .help {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--ink-4); color: var(--paper);
+    display: grid; place-items: center; font-size: 10px; font-weight: 600;
+  }
+
+  /* Tooltip — small, ink, fits in one line */
+  .tip {
+    position: absolute;
+    background: var(--ink); color: var(--paper);
+    font-size: 11.5px; font-weight: 500;
+    padding: 5px 9px; border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: var(--shade-pop);
+  }
+  .tip::after {
+    content: ""; position: absolute;
+    width: 6px; height: 6px;
+    background: var(--ink); transform: rotate(45deg);
+  }
+  .tip.top    { bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px; }
+  .tip.top::after { top: 100%; left: 50%; transform: translateX(-50%) rotate(45deg); margin-top: -3px; }
+  .tip.right  { left: 100%; top: 50%; transform: translateY(-50%); margin-left: 8px; }
+  .tip.right::after { right: 100%; top: 50%; transform: translateY(-50%) rotate(45deg); margin-right: -3px; }
+  .tip.bottom { top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; }
+  .tip.bottom::after { bottom: 100%; left: 50%; transform: translateX(-50%) rotate(45deg); margin-bottom: -3px; }
+
+  /* Hovercard — bigger, paper, multi-line */
+  .hover-stage {
+    background: var(--sheet);
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 32px;
+    display: flex; gap: 28px; flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .hover-anchor { position: relative; display: inline-block; }
+  .hover-anchor .trigger {
+    border: 0; background: var(--paper); color: var(--accent-ink);
+    padding: 4px 8px; border-radius: 3px;
+    background: var(--accent-tint); border: 1px solid var(--accent-edge);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+  .hovercard {
+    position: absolute; top: 100%; left: 0; margin-top: 8px;
+    width: 320px;
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    box-shadow: var(--shade-pop);
+    z-index: 2;
+    overflow: hidden;
+  }
+  .hovercard .body { padding: 16px 18px; }
+  .hovercard h3 { font-size: 14px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .hovercard .meta { font-size: 11.5px; color: var(--ink-3); margin-bottom: 8px; }
+  .hovercard p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; margin: 0; }
+  .hovercard .foot { display: flex; gap: 8px; padding: 10px 18px; background: var(--paper); border-top: 1px solid var(--hair); font-size: 11.5px; }
+
+  /* command palette */
+  .palette {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    box-shadow: var(--shade-modal);
+    width: 560px; max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .palette .search-row { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--hair); }
+  .palette .search-row svg { color: var(--ink-3); }
+  .palette .search-row input { flex: 1; border: 0; outline: none; background: transparent; font-size: 14px; font-family: var(--sans); }
+  .palette .search-row .esc { font-size: 11px; color: var(--ink-3); border: 1px solid var(--hair); border-radius: 4px; padding: 1px 6px; }
+  .palette .results { max-height: 320px; overflow: auto; padding: 6px 0; }
+  .palette .group { padding: 0 8px; }
+  .palette .group-h { font-size: 10.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); padding: 10px 10px 4px; font-weight: 500; }
+  .palette .opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 4px; font-size: 13.5px; cursor: pointer;
+  }
+  .palette .opt:hover, .palette .opt.on { background: var(--accent-tint); color: var(--accent-ink); }
+  .palette .opt:hover svg, .palette .opt.on svg { color: var(--accent); }
+  .palette .opt svg { color: var(--ink-3); }
+  .palette .opt .meta { margin-left: auto; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .palette .opt.on .meta { color: var(--accent); }
+  .palette .foot { padding: 10px 14px; border-top: 1px solid var(--hair); background: var(--paper); display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-3); }
+  .palette .foot kbd { background: var(--sheet); border: 1px solid var(--hair); padding: 1px 5px; border-radius: 3px; font-family: var(--sans); font-size: 10.5px; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Tooltips & popovers</h1>
+  <p>Three sizes: <em>tooltip</em> (single line, ink), <em>hovercard</em> (paper, multi-line), <em>command palette</em> (the keyboard layer). Tooltips are pointer-only; hovercards delay on hover; palette is ⌘ K.</p>
+</header>
+
+<!-- Tooltips -->
+<div class="scene-h"><span class="roman">01</span><span class="ttl">Tooltips · single-line, ink</span></div>
+<div class="stage">
+  <span class="anchor">Hook strength <span class="help">?</span><span class="tip top">How clearly the first six words pull the reader in</span></span>
+  <span class="anchor">Risk score <span class="help">?</span><span class="tip top">Probability of compliance or claim issues</span></span>
+  <span class="anchor">Confidence <span class="help">?</span><span class="tip top">How sure the coach is, 0–100</span></span>
+  <span class="anchor">⌘ S <span class="tip bottom">Save draft</span></span>
+  <span class="anchor">↑↓ <span class="tip bottom">Navigate results</span></span>
+  <span class="anchor">⌘ ⏎ <span class="tip right">Run analysis</span></span>
+</div>
+
+<!-- Hovercards -->
+<div class="scene-h"><span class="roman">02</span><span class="ttl">Hovercards · paper, multi-line</span></div>
+<div class="hover-stage">
+  <div class="hover-anchor">
+    <span class="trigger">@adewale</span>
+    <div class="hovercard">
+      <div class="body">
+        <h3>Adewale Adeniji</h3>
+        <div class="meta">Building BuffByte AI · Lagos, NG</div>
+        <p>Indie founder, writes weekly on building-in-public. Twelve drafts in your shared collection.</p>
+      </div>
+      <div class="foot">
+        <span>231 analyses · avg score 82</span>
+        <a href="#" style="margin-left:auto;color:var(--accent);">View profile</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hover-anchor" style="margin-left:180px;">
+    <span class="trigger">#HildaBaci</span>
+    <div class="hovercard" style="left:-180px;">
+      <div class="body">
+        <h3>#HildaBaci</h3>
+        <div class="meta">Trending 3 days · NG · 58.0K posts</div>
+        <p>Large-scale-cooking + record-attempt content is converging into a single repeatable format on TikTok + Instagram.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+          <span class="pill">jollof_rice</span>
+          <span class="pill">behind_the_scenes</span>
+          <span class="pill">25-34</span>
+        </div>
+      </div>
+      <div class="foot">
+        <span>★ Matches your niche</span>
+        <a href="#" style="margin-left:auto;color:var(--accent);">Draft from this</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Command palette -->
+<div class="scene-h"><span class="roman">03</span><span class="ttl">Command palette · ⌘ K</span></div>
+<div class="palette">
+  <div class="search-row">
+    <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><path d="M21 21l-7-7"/></svg>
+    <input value="anal" placeholder="Search drafts, hashtags, actions…" />
+    <span class="esc">ESC</span>
+  </div>
+  <div class="results">
+    <div class="group">
+      <div class="group-h">Actions</div>
+      <div class="opt on">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/></svg>
+        Start a new <b>anal</b>ysis
+        <span class="meta">⌘ N</span>
+      </div>
+      <div class="opt">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 5h14v14H4z"/></svg>
+        Re-<b>anal</b>yse the current draft
+        <span class="meta">⌘ R</span>
+      </div>
+    </div>
+    <div class="group">
+      <div class="group-h">Drafts</div>
+      <div class="opt">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg>
+        Spent some time last month building BuffByte AI…
+        <span class="meta">87</span>
+      </div>
+      <div class="opt">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg>
+        Striking the right balance between shipping…
+        <span class="meta">72</span>
+      </div>
+    </div>
+    <div class="group">
+      <div class="group-h">Navigation</div>
+      <div class="opt">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>
+        Go to Dashboard
+        <span class="meta">G + D</span>
+      </div>
+      <div class="opt">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+        Go to Trending
+        <span class="meta">G + T</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <span><kbd>↑</kbd> <kbd>↓</kbd> Move · <kbd>↵</kbd> Open · <kbd>⌘ ⏎</kbd> Open in new tab</span>
+    <span>The coach is online</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Type</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .specimen { display: grid; grid-template-columns: 180px 1fr; gap: 32px; padding: 28px 0; border-bottom: 1px solid var(--hair); align-items: start; }
+  .specimen .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); line-height: 1.7; letter-spacing: 0.04em; }
+  .specimen .demo { min-width: 0; }
+  .display-1 { font-family: var(--serif); font-size: 56px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.02; margin: 0; }
+  .display-2 { font-family: var(--serif); font-size: 38px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.06; margin: 0; }
+  .h1 { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.1; margin: 0; }
+  .h2 { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.15; margin: 0; }
+  .h3 { font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0.005em; margin: 0; }
+  .body { font-family: var(--serif); font-size: 16px; line-height: 1.55; color: var(--ink-2); margin: 0; max-width: 56ch; }
+  .body-sans { font-family: var(--sans); font-size: 14px; line-height: 1.55; color: var(--ink-2); margin: 0; max-width: 60ch; }
+  .label { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.01em; color: var(--ink-2); }
+  .figure-table { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .figure-table .row { display: contents; }
+  .figure-table .k { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; padding: 6px 0; border-bottom: 1px solid var(--hair); }
+  .figure-table .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; padding: 6px 0; border-bottom: 1px solid var(--hair); text-align: right; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">02.</div>
+    <div class="ttl">Type — serif thinks, sans labels, mono counts.</div>
+    <div class="meta">FOUNDATION</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 8px;">
+    Three families. <em>Source Serif 4</em> for everything we want the reader to think about — page titles, branch names, attendant names, daily-summary leads. <em>Inter</em> for chrome — labels, buttons, navigation, helper text. <em>IBM Plex Mono</em> for every number on every screen, with tabular figures on by default. Italic serif is the manager's voice — notes, attributions, why-this-happened.
+  </p>
+
+  <div class="specimen">
+    <div class="meta">
+      Source Serif 4<br>
+      56px / 1.02<br>
+      −2.5% tracking<br>
+      weight 600
+    </div>
+    <div class="demo">
+      <h1 class="display-1">14,820 litres sold yesterday.</h1>
+      <div class="overline" style="margin-top: 16px;">DISPLAY-1 — owner morning, daily lead</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      Source Serif 4<br>
+      38px / 1.06<br>
+      −2.0% tracking<br>
+      weight 600
+    </div>
+    <div class="demo">
+      <h2 class="display-2">Mokola Station — Tue 14 May.</h2>
+      <div class="overline" style="margin-top: 16px;">DISPLAY-2 — branch page title</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      Source Serif 4<br>
+      26 / 20 / 1.1<br>
+      page sections
+    </div>
+    <div class="demo" style="display: flex; flex-direction: column; gap: 14px;">
+      <h3 class="h1">Shift close — evening</h3>
+      <h3 class="h2">Tanker offload · waybill A-44218</h3>
+      <h3 class="h3">CLOSING METER · PUMP 03</h3>
+      <div class="overline" style="margin-top: 6px;">H1 (serif) / H2 (serif) / H3 (sans, label-grade)</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      Source Serif 4<br>
+      16px / 1.55<br>
+      ink-2<br>
+      reading body
+    </div>
+    <div class="demo" style="display: flex; flex-direction: column; gap: 12px;">
+      <p class="body">Femi closed at 6:48pm. Meter on pump 3 read 248,317.42 — that's 814 litres dispensed this shift. Cash declared was ₦159,544, which exactly matches at the posted price of ₦196/L. He's balanced. We post.</p>
+      <p class="body-sans">Inter body, 14/1.55 — used in chrome and dense tables where the serif feels too literary. The serif version above is for narrative summaries; the sans is for working text.</p>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      Source Serif 4 italic<br>
+      manager's voice
+    </div>
+    <div class="demo">
+      <p class="dictated" style="font-size: 16px;">— "Pump 2 was short ₦2,400 — Chidera says one customer left without paying after a phone call. Filed a note, awaiting CCTV review from owner."</p>
+      <div class="overline" style="margin-top: 12px;">DICTATED — attached to entries; never standalone</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      IBM Plex Mono<br>
+      tabular-nums<br>
+      every figure<br>
+      every record id
+    </div>
+    <div class="demo">
+      <div class="figure-table">
+        <div class="row"><div class="k">PUMP 03 — OPENING METER</div><div class="v">247,503.42</div></div>
+        <div class="row"><div class="k">PUMP 03 — CLOSING METER</div><div class="v">248,317.42</div></div>
+        <div class="row"><div class="k">LITRES DISPENSED</div><div class="v">  814.00</div></div>
+        <div class="row"><div class="k">PRICE / LITRE</div><div class="v">  ₦196.00</div></div>
+        <div class="row"><div class="k">EXPECTED GROSS</div><div class="v">159,544.00</div></div>
+        <div class="row"><div class="k">CASH DECLARED</div><div class="v">159,544.00</div></div>
+        <div class="row"><div class="k">VARIANCE</div><div class="v" style="color: var(--emerald-700);">+    0.00</div></div>
+      </div>
+      <div class="overline" style="margin-top: 14px;">MONO 11–14 — the working column</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta">
+      Big readouts<br>
+      Plex Mono<br>
+      40–56px<br>
+      −2% tracking
+    </div>
+    <div class="demo" style="display: flex; align-items: baseline; gap: 32px; flex-wrap: wrap;">
+      <div>
+        <div class="overline">PMS SOLD TODAY</div>
+        <div class="read read-xl">14,820<span class="u">L</span></div>
+      </div>
+      <div>
+        <div class="overline">GROSS</div>
+        <div class="read read-lg naira">2,904,720</div>
+      </div>
+      <div>
+        <div class="overline">VARIANCE</div>
+        <div class="read read-md read-short">− ₦4,800</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="specimen" style="border-bottom: 0;">
+    <div class="meta">
+      Tracking & cases<br>
+      Inter labels<br>
+      overline +18%<br>
+      record-id uppercase
+    </div>
+    <div class="demo" style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="overline">OVERLINE · UPPERCASE · +18% TRACKING</div>
+      <div class="label">SENTENCE-CASE LABEL · INTER 11 / 600</div>
+      <div class="rec">SHIFT-MOK-2026-05-14-PM · REC-00482</div>
+      <p class="body-sans" style="margin-top: 6px; max-width: 60ch;">Overlines are generous — they're chart-stamps, not decorations. Labels stay sentence-cased and tight. Record IDs are uppercase mono — they're filing references, not reading text.</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

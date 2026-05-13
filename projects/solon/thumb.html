@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Solon · thumb</title>
+<style>
+  /* Self-contained thumbnail. Renders inside an iframe in the gallery.
+     Shows the signature: a polling-unit row with tier chip + a projection number with confidence band. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #F5EFE0; font-family: 'Inter', system-ui, sans-serif; color: #1A1714; overflow: hidden; }
+
+  .frame {
+    height: 100%; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  /* Masthead-ish */
+  .top {
+    display: flex; align-items: baseline; gap: 6px;
+    padding-bottom: 6px; border-bottom: 2px double #1A1714;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; line-height: 1; font-variation-settings: "opsz" 144; letter-spacing: -0.012em; }
+  .brand .dot { color: #C7522A; }
+  .tag { font-family: 'Fraunces', serif; font-style: italic; font-size: 8px; color: #6B6555; padding-left: 4px; padding-bottom: 1px; }
+  .meta { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #6B6555; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* PU rows */
+  .row {
+    background: #FBF6E7;
+    border: 1px solid #C9BE9F;
+    border-radius: 4px;
+    padding: 6px 9px;
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px;
+  }
+  .row .nm { font-family: 'Fraunces', serif; font-weight: 600; font-size: 10.5px; line-height: 1.1; font-variation-settings: "opsz" 36; }
+  .row .code { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #6B6555; letter-spacing: 0.06em; margin-top: 1px; }
+  .row .proj { font-family: 'Fraunces', serif; font-style: italic; font-size: 8.5px; color: #1B4332; font-weight: 600; text-align: right; line-height: 1.1; }
+  .row .proj .band { font-style: italic; font-weight: 400; color: #6B6555; font-size: 7px; }
+  .row .chip { font-family: 'JetBrains Mono', monospace; font-size: 7px; padding: 2px 5px; border-radius: 3px; letter-spacing: 0.04em; }
+  .row.hold .chip { background: #14342A; color: #F5EFE0; }
+  .row.lean .chip { background: #1B4332; color: #F5EFE0; }
+  .row.toss .chip { background: #C7522A; color: #F5EFE0; }
+
+  /* Projection block (the brief) */
+  .proj-block {
+    background: #FBF6E7;
+    border: 1px solid #1A1714;
+    border-radius: 4px;
+    padding: 9px 11px;
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 8px;
+  }
+  .proj-block .cap { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #1B4332; }
+  .proj-block .big { font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px; line-height: 1; font-variation-settings: "opsz" 144; color: #1B4332; margin-top: 1px; letter-spacing: -0.018em; }
+  .proj-block .big .band { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 8px; color: #6B6555; margin-left: 4px; }
+  .proj-block .who { font-family: 'Fraunces', serif; font-style: italic; font-size: 8px; color: #6B6555; }
+  .proj-block .confbar { display: flex; gap: 1.5px; }
+  .proj-block .confbar i { width: 8px; height: 3px; background: #C9BE9F; display: inline-block; border-radius: 1px; }
+  .proj-block .confbar i.on { background: #1B4332; }
+  .proj-block .conflbl { font-family: 'JetBrains Mono', monospace; font-size: 6.5px; color: #6B6555; letter-spacing: 0.08em; margin-top: 3px; text-transform: uppercase; }
+
+  .bottom-meta {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6.5px; color: #6B6555;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <div class="top">
+    <span class="brand">Solon<span class="dot">.</span></span>
+    <span class="tag">order paper</span>
+    <span class="meta">ANAMBRA C. · SENATE</span>
+  </div>
+
+  <div class="row hold">
+    <div>
+      <div class="nm">St. Mary's Primary</div>
+      <div class="code">PU 008-04-02 · WARD 4</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end;">
+      <span class="chip">STRONG HOLD</span>
+      <span class="proj">LP 52.1% <span class="band">± 2.4</span></span>
+    </div>
+  </div>
+
+  <div class="row toss">
+    <div>
+      <div class="nm">Nkpor Civic Centre</div>
+      <div class="code">PU 008-05-11 · WARD 5</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end;">
+      <span class="chip">TOSS-UP</span>
+      <span class="proj" style="color: #C7522A;">LP 38.6% <span class="band">± 4.0</span></span>
+    </div>
+  </div>
+
+  <div class="proj-block">
+    <div>
+      <div class="cap">PROJECTION · BASELINE</div>
+      <div class="big">47.2%<span class="band">± 3.1</span></div>
+      <div class="who">— Labour Party · senate</div>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+      <div class="confbar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <div class="conflbl">CONF · MED</div>
+    </div>
+  </div>
+
+  <div class="bottom-meta">
+    <span>27 surfaces</span>
+    <span>v 0.1 · order paper</span>
+  </div>
+
+</div>
+
+</body>
+</html>

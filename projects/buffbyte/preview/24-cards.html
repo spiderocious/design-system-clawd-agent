@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Cards · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 14px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  /* signature analysis card */
+  .analysis-card {
+    border: 1px solid var(--hair); background: var(--sheet);
+    border-radius: var(--r-card);
+    overflow: hidden;
+  }
+  .analysis-card .body {
+    padding: 24px 26px;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px;
+  }
+  .analysis-card .body .ring-block { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .analysis-card .body .ring-block .ring { width: 132px; height: 132px; }
+  .analysis-card .body .ring-block .ring svg { width: 100%; height: 100%; }
+  .analysis-card .body .ring-block .ring .v {
+    font-size: 32px; font-weight: 600; letter-spacing: -0.02em;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .analysis-card .body .ring-block .label {
+    font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline);
+  }
+  .analysis-card .body .summary h2 {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.014em; margin: 0 0 6px;
+  }
+  .analysis-card .body .summary .meta { font-size: 12.5px; color: var(--ink-3); margin-bottom: 16px; }
+  .analysis-card .body .summary .quote {
+    border-left: 2px solid var(--accent); padding-left: 12px;
+    font-size: 14px; color: var(--ink-2); line-height: 1.55;
+  }
+  .analysis-card .foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 26px; border-top: 1px solid var(--hair);
+    background: var(--paper); font-size: 12.5px; color: var(--ink-3);
+  }
+  .analysis-card .foot .actions { display: flex; gap: 8px; }
+
+  /* dashboard quick-action cards */
+  .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .quick {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 22px; display: flex; flex-direction: column; gap: 14px;
+    cursor: pointer; transition: border-color 160ms ease-out, transform 200ms ease-out;
+  }
+  .quick:hover { border-color: var(--ink-4); transform: translateY(-1px); }
+  .quick .row-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .quick h3 { font-size: 14px; font-weight: 600; margin: 0; }
+  .quick .delta { font-size: 11.5px; color: var(--accent); }
+  .quick .body { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+  .quick .stat { display: flex; align-items: baseline; gap: 8px; }
+  .quick .stat .n { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .quick .stat .u { font-size: 12.5px; color: var(--ink-3); }
+  .quick.lead { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .quick.lead h3, .quick.lead .stat .n { color: var(--paper); }
+  .quick.lead .body { color: rgba(255,255,255,0.65); }
+  .quick.lead .delta { color: var(--accent-edge); }
+
+  /* trending topic card */
+  .topic-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .topic {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 22px;
+  }
+  .topic .row-1 { display: flex; align-items: flex-start; justify-content: space-between; }
+  .topic .rank {
+    width: 26px; height: 26px; background: var(--ink); color: var(--paper);
+    border-radius: 5px; display: grid; place-items: center; font-size: 11px; font-weight: 500;
+  }
+  .topic .rank.lead { background: var(--accent); }
+  .topic h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.014em; margin: 12px 0 2px; }
+  .topic .sub { font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+  .topic .ring-wrap { display: flex; align-items: center; gap: 16px; margin: 14px 0; }
+  .topic .ring-wrap .ring { width: 64px; height: 64px; }
+  .topic .ring-wrap .ring svg { width: 100%; height: 100%; }
+  .topic .ring-wrap .ring .v { font-size: 13px; font-weight: 600; }
+  .topic .ring-wrap .col-text { flex: 1; }
+  .topic .ring-wrap .col-text .label { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); margin-bottom: 4px; }
+  .topic .ring-wrap .col-text .n { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .topic .demo-row { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--hair); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Cards</h1>
+  <p>One radius (8 px), one border (hairline), no shadow. Four card types: <em>analysis</em>, <em>quick-action</em>, <em>topic</em>, <em>insight</em>. Each carries its own anatomy; they don't pretend to be the same component.</p>
+</header>
+
+<div class="scene-h"><span class="roman">01</span><span class="ttl">Analysis card · the signature</span></div>
+<div class="analysis-card">
+  <div class="body">
+    <div class="summary">
+      <h2>Spent some time last month building BuffByte AI</h2>
+      <div class="meta">231 characters · 37 words · TikTok + Instagram · analysed 4 min ago</div>
+      <div class="quote">
+        Your hook lands in the first six words. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns. Move the call-to-action up; right now it's the last thing.
+      </div>
+      <div style="display:flex;gap:6px;margin-top:14px;">
+        <span class="pill pill-accent">Strong hook</span>
+        <span class="pill pill-warn">Tighten middle</span>
+        <span class="pill">37 words · 12 s read</span>
+      </div>
+    </div>
+    <div class="ring-block">
+      <div class="ring">
+        <svg viewBox="0 0 132 132">
+          <circle cx="66" cy="66" r="58" stroke="var(--hair)" stroke-width="6" fill="none"/>
+          <circle cx="66" cy="66" r="58" stroke="var(--accent)" stroke-width="6" fill="none"
+                  stroke-dasharray="364.4" stroke-dashoffset="80.2" stroke-linecap="round" transform="rotate(-90 66 66)"/>
+        </svg>
+        <div class="v" style="position:absolute;">87<span style="font-size:14px;color:var(--ink-3);">%</span></div>
+      </div>
+      <div class="label">Overall score</div>
+      <div class="t-caption">Confidence · 85%</div>
+    </div>
+  </div>
+  <div class="foot">
+    <span>Last updated 4 min ago · Sources: twitter_api, tiktok_analytics, instagram_insights</span>
+    <div class="actions">
+      <button class="btn btn-ghost btn-sm">Share</button>
+      <button class="btn btn-secondary btn-sm">Open</button>
+    </div>
+  </div>
+</div>
+
+<div class="scene-h"><span class="roman">02</span><span class="ttl">Quick-action cards · dashboard</span></div>
+<div class="quick-grid">
+  <div class="quick lead">
+    <div class="row-top">
+      <h3>Analyze content</h3>
+      <span class="delta">+12% accuracy</span>
+    </div>
+    <div class="stat"><div class="n">54%</div><div class="u">avg lift</div></div>
+    <div class="body">Get instant engagement predictions and tone recommendations for any draft you paste.</div>
+  </div>
+  <div class="quick">
+    <div class="row-top">
+      <h3>Optimise script</h3>
+      <span class="delta">+8%</span>
+    </div>
+    <div class="stat"><div class="n">87%</div><div class="u">script ready</div></div>
+    <div class="body">Pace, hook strength, breath points — every variable a teleprompter cares about.</div>
+  </div>
+  <div class="quick">
+    <div class="row-top">
+      <h3>Teleprompter</h3>
+      <span class="delta">2,100 cues</span>
+    </div>
+    <div class="stat"><div class="n">68 wpm</div></div>
+    <div class="body">Practice your script with a paced reader. Adjustable speed and per-paragraph cues.</div>
+  </div>
+</div>
+
+<div class="scene-h"><span class="roman">03</span><span class="ttl">Topic cards · trending board</span></div>
+<div class="topic-grid">
+  <div class="topic">
+    <div class="row-1">
+      <span class="rank lead">1</span>
+      <span class="status live"><span class="pip"></span>Rising</span>
+    </div>
+    <h3>Hilda Baci</h3>
+    <div class="sub">
+      <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+      Trending for 3 days · NG
+    </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="28" stroke="var(--hair)" stroke-width="5" fill="none"/>
+          <circle cx="32" cy="32" r="28" stroke="var(--accent)" stroke-width="5" fill="none"
+                  stroke-dasharray="175.9" stroke-dashoffset="16" stroke-linecap="round" transform="rotate(-90 32 32)"/>
+        </svg>
+        <div class="v" style="position:absolute;color:var(--accent);">91%</div>
+      </div>
+      <div class="col-text">
+        <div class="label">Engagement</div>
+        <div class="n">58.0K <span class="t-caption">volume</span></div>
+      </div>
+    </div>
+    <div class="demo-row">
+      <span class="pill">25-34</span>
+      <span class="pill">35-44</span>
+      <span class="pill">Video</span>
+      <span class="pill">Text</span>
+      <span class="pill">Image</span>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="row-1">
+      <span class="rank">2</span>
+      <span class="status"><span class="pip"></span>Stable</span>
+    </div>
+    <h3>Tottenham</h3>
+    <div class="sub">
+      <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+      Trending for hours · NG
+    </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="28" stroke="var(--hair)" stroke-width="5" fill="none"/>
+          <circle cx="32" cy="32" r="28" stroke="var(--ink)" stroke-width="5" fill="none"
+                  stroke-dasharray="175.9" stroke-dashoffset="39" stroke-linecap="round" transform="rotate(-90 32 32)"/>
+        </svg>
+        <div class="v" style="position:absolute;">78%</div>
+      </div>
+      <div class="col-text">
+        <div class="label">Engagement</div>
+        <div class="n">35.0K <span class="t-caption">volume</span></div>
+      </div>
+    </div>
+    <div class="demo-row">
+      <span class="pill">18-24</span>
+      <span class="pill">25-34</span>
+      <span class="pill">Text</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

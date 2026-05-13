@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · palette</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 1px solid var(--ink); margin: 8px 0 28px; }
+  .sw { aspect-ratio: 1.1 / 1; padding: 14px 14px 12px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--hair); position: relative; }
+  .sw:last-child { border-right: 0; }
+  .sw .h { font-family: var(--serif); font-weight: 600; font-size: 16px; font-variation-settings: "opsz" 36; line-height: 1; }
+  .sw .v { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; }
+  .sw.dark { color: var(--paper); }
+  .sw.dark .v { color: rgba(245,239,224,0.7); }
+  .sw.light .v { color: var(--ink-3); }
+
+  .row-cap {
+    font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13.5px;
+    max-width: 70ch; line-height: 1.6; margin: 0 0 10px;
+  }
+
+  .rule-block {
+    display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+    padding: 18px 0; border-top: 1px solid var(--hair);
+  }
+  .rule-block:last-of-type { border-bottom: 1px solid var(--hair); }
+  .rule-block .rl-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: var(--track-overline); text-transform: uppercase; color: var(--ink-3); padding-top: 4px; }
+  .rule-block .rl-b { font-family: var(--serif); font-size: 16px; line-height: 1.55; max-width: 60ch; font-variation-settings: "opsz" 18; }
+  .rule-block .rl-b em { font-style: italic; color: var(--ink-3); }
+
+  .demo-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+  .demo-tile {
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    background: var(--sheet); padding: 14px;
+  }
+  .demo-tile .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">01 / FOUNDATION</div>
+    <div class="ttl">Palette</div>
+    <div class="sub">— cream paper, forest ink, orange reserved.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p class="row-cap">Solon runs on a single canvas — a cream order-paper warmer than office white, with a near-black warm ink. Forest green is the one interactive accent: links, primary CTAs, focus, charted hold-tier rows. Burnt orange is reserved for warnings; oxblood is reserved for irreversible critical. Nothing else is allowed to colour the chrome.</p>
+
+  <div class="break"><span class="lbl">Paper · ink</span></div>
+
+  <div class="swatches">
+    <div class="sw light" style="background: #FBF6E7"><span class="h">Sheet</span><span class="v">#FBF6E7</span></div>
+    <div class="sw light" style="background: #F5EFE0"><span class="h">Paper</span><span class="v">#F5EFE0 · canvas</span></div>
+    <div class="sw light" style="background: #EFE7D2"><span class="h">Paper 2</span><span class="v">#EFE7D2</span></div>
+    <div class="sw light" style="background: #E6DCC1"><span class="h">Paper 3</span><span class="v">#E6DCC1</span></div>
+    <div class="sw light" style="background: #C9BE9F"><span class="h">Hair</span><span class="v">#C9BE9F</span></div>
+  </div>
+
+  <div class="swatches">
+    <div class="sw dark" style="background: #1A1714"><span class="h">Ink</span><span class="v">#1A1714 · type</span></div>
+    <div class="sw dark" style="background: #3C362C"><span class="h">Ink 2</span><span class="v">#3C362C · body</span></div>
+    <div class="sw light" style="background: #F5EFE0; color: #6B6555;"><span class="h">Ink 3</span><span class="v">#6B6555 · secondary</span></div>
+    <div class="sw light" style="background: #F5EFE0; color: #9A937F;"><span class="h">Ink 4</span><span class="v">#9A937F · tertiary</span></div>
+    <div class="sw light" style="background: #F5EFE0"><span class="h">—</span><span class="v">type stack</span></div>
+  </div>
+
+  <div class="break"><span class="lbl">Forest · the one accent</span></div>
+
+  <div class="swatches">
+    <div class="sw light" style="background: #EAF1EC"><span class="h">50</span><span class="v">#EAF1EC</span></div>
+    <div class="sw light" style="background: #D2E0D6"><span class="h">100</span><span class="v">#D2E0D6</span></div>
+    <div class="sw light" style="background: #A8C2B0"><span class="h">200</span><span class="v">#A8C2B0</span></div>
+    <div class="sw light" style="background: #7AA386"><span class="h">300</span><span class="v">#7AA386</span></div>
+    <div class="sw light" style="background: #4F8460; color: #fff"><span class="h">400</span><span class="v" style="color: rgba(255,255,255,0.7)">#4F8460</span></div>
+  </div>
+  <div class="swatches">
+    <div class="sw dark" style="background: #2D5A3D"><span class="h">500</span><span class="v">#2D5A3D · brand 2</span></div>
+    <div class="sw dark" style="background: #1B4332"><span class="h">600</span><span class="v">#1B4332 · CTA · PRIMARY</span></div>
+    <div class="sw dark" style="background: #14342A"><span class="h">700</span><span class="v">#14342A · hover</span></div>
+    <div class="sw dark" style="background: #0D2A1E"><span class="h">800</span><span class="v">#0D2A1E</span></div>
+    <div class="sw dark" style="background: #061A12"><span class="h">900</span><span class="v">#061A12</span></div>
+  </div>
+
+  <div class="break"><span class="lbl">Reserved · warn · critical</span></div>
+
+  <div class="swatches" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="sw dark" style="background: #C7522A"><span class="h">Orange</span><span class="v">#C7522A · WARN only</span></div>
+    <div class="sw light" style="background: #F4DDD0"><span class="h">Orange soft</span><span class="v">#F4DDD0</span></div>
+    <div class="sw dark" style="background: #8B1A1A"><span class="h">Crit</span><span class="v">#8B1A1A · IRREVERSIBLE only</span></div>
+    <div class="sw light" style="background: #F6E1DE"><span class="h">Crit bg</span><span class="v">#F6E1DE</span></div>
+  </div>
+
+  <div class="break"><span class="lbl">Rules of use</span></div>
+
+  <div class="rule-block">
+    <div class="rl-h">Forest</div>
+    <div class="rl-b">Every interactive element. Primary buttons, links, focus rings, the active state on a polling-unit tier (<em>hold</em>), the AI copilot's first letter, charted lines for the candidate the user follows.</div>
+  </div>
+  <div class="rule-block">
+    <div class="rl-h">Orange</div>
+    <div class="rl-b">Warnings. Toss-up tier on the polling-unit list, severity 3–4 incidents in the War Room, spend that crossed 75% of its INEC sub-cap, donor risk flagged high. <em>Never used as a CTA or as decoration.</em></div>
+  </div>
+  <div class="rule-block">
+    <div class="rl-h">Oxblood / Crit</div>
+    <div class="rl-b">Irreversible. Candidate withdrawal, ballot void, account suspension, severity-5 election-day incidents. Triggers a confirmation pattern that requires the user to type a literal token (CONFIRM / VOID). <em>Reserved so it keeps its meaning.</em></div>
+  </div>
+  <div class="rule-block">
+    <div class="rl-h">Greys</div>
+    <div class="rl-b">Cool slate is banned. Every neutral here is warm, sat on top of the cream paper. If a surface looks blue-cold next to the paper, the wrong neutral is in the slot.</div>
+  </div>
+
+  <div class="break"><span class="lbl">Forest in use</span></div>
+
+  <div class="demo-tiles">
+    <div class="demo-tile">
+      <div class="lbl">Primary button</div>
+      <button class="b b-primary">Run scenario</button>
+    </div>
+    <div class="demo-tile">
+      <div class="lbl">Secondary</div>
+      <button class="b b-secondary">Save draft</button>
+    </div>
+    <div class="demo-tile">
+      <div class="lbl">Warn</div>
+      <button class="b b-warn">Withdraw candidate</button>
+    </div>
+    <div class="demo-tile">
+      <div class="lbl">Critical</div>
+      <button class="b b-crit">Void result</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

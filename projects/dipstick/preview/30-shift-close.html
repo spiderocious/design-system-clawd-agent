@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shift close — scene</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1240px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+
+  /* Header bar */
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .hdr .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .hdr .crumb .cur { color: var(--ink); }
+  .hdr .gap { flex: 1; }
+  .hdr a.b { text-decoration: none; }
+
+  /* Big day title */
+  .day-title { padding: 32px 0 24px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; align-items: end; }
+  .day-title .lead { font-family: var(--serif); font-size: 44px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; margin: 0; }
+  .day-title .sub { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-3); margin: 8px 0 0; max-width: 56ch; }
+  .day-title .totals-mini { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .day-title .totals-mini .c { padding: 12px 14px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); }
+  .day-title .totals-mini .c .k { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+  .day-title .totals-mini .c .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 22px; margin-top: 4px; line-height: 1; letter-spacing: -0.012em; }
+
+  /* Pump matrix */
+  .pumps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden; margin-top: 8px; }
+  .pump {
+    padding: 16px; border-right: 1px solid var(--hair); position: relative;
+    display: flex; flex-direction: column; gap: 6px; min-height: 130px;
+    background: var(--sheet);
+  }
+  .pump:last-child { border-right: 0; }
+  .pump.live { background: var(--sheet); }
+  .pump.posted { background: var(--emerald-50); }
+  .pump.short  { background: var(--short-bg); }
+  .pump.idle   { background: var(--paper-deep); }
+  .pump .top { display: flex; align-items: baseline; gap: 6px; }
+  .pump .id { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; }
+  .pump .pulse { margin-left: auto; }
+  .pump .prod { margin-top: 2px; }
+  .pump .att { font-family: var(--serif); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  .pump .figs { margin-top: auto; }
+  .pump .figs .l { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 15px; }
+  .pump .figs .r { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.08em; }
+  .pump .figs .r.short { color: var(--short); font-weight: 600; }
+  .pump .figs .r.ok    { color: var(--emerald-700); font-weight: 600; }
+
+  /* Reconciliation table block */
+  .recon { margin-top: 32px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 24px 28px; }
+  .recon .h-row { display: flex; align-items: baseline; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 4px; }
+  .recon .h-row .h { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.018em; }
+  .recon .h-row .right { margin-left: auto; }
+
+  .ledger-wide { grid-template-columns: 1fr 70px 110px 130px 140px 28px; }
+
+  .recon .footer {
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--ink);
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .recon .footer .signed { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 56ch; }
+
+  /* Right side panel */
+  .body { display: grid; grid-template-columns: 1fr 320px; gap: 24px; margin-top: 32px; }
+  .side-panel { display: flex; flex-direction: column; gap: 16px; }
+  .side-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 18px 20px; }
+  .side-card .h { font-family: var(--serif); font-size: 16px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--hair); }
+  .side-card .row-l { display: grid; grid-template-columns: 1fr auto; gap: 6px; padding: 5px 0; font-size: 12px; }
+  .side-card .row-l .k { color: var(--ink-3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; }
+  .side-card .row-l .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+
+  .note-log { display: flex; flex-direction: column; gap: 12px; }
+  .note { padding: 10px 0; border-bottom: 1px solid var(--hair-soft); }
+  .note:last-child { border-bottom: 0; }
+  .note .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .note .body-t { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span>Mokola</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span>Day-book</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Evening shift</span></div>
+    <div class="gap"></div>
+    <button class="b b-ghost b-sm">Yesterday</button>
+    <button class="b b-secondary b-sm">Print page</button>
+    <button class="b b-secondary b-sm">Add an expense</button>
+  </div>
+
+  <div class="day-title">
+    <div>
+      <div class="overline">EVENING SHIFT · 14:00 — 22:00 · WAT</div>
+      <h1 class="lead">Mokola Station — Tuesday, 14 May.</h1>
+      <p class="sub">Four pumps active. Two posted, one balanced and open, one short by ₦2,400. Adeola is the manager on duty.</p>
+    </div>
+    <div class="totals-mini">
+      <div class="c"><div class="k">Litres so far</div><div class="v">2,340 L</div></div>
+      <div class="c"><div class="k">Cash declared</div><div class="v">₦738,488</div></div>
+      <div class="c"><div class="k">Variance</div><div class="v read-short">− ₦1,960</div></div>
+    </div>
+  </div>
+
+  <!-- Pump matrix -->
+  <div class="pumps">
+    <div class="pump posted">
+      <div class="top"><span class="id">P-01</span></div>
+      <span class="prod prod-pms">PMS</span>
+      <div class="att">Aisha Bello</div>
+      <div class="figs">
+        <div class="l">502.0 L</div>
+        <div class="r ok">POSTED · BALANCED</div>
+      </div>
+    </div>
+    <div class="pump short">
+      <div class="top"><span class="id">P-02</span><span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--short);font-weight:600;">!</span></div>
+      <span class="prod prod-pms">PMS</span>
+      <div class="att">Chidera Okoye</div>
+      <div class="figs">
+        <div class="l">612.0 L</div>
+        <div class="r short">SHORT − ₦2,400</div>
+      </div>
+    </div>
+    <div class="pump live">
+      <div class="top"><span class="id">P-03</span><span class="pulse"></span></div>
+      <span class="prod prod-pms">PMS</span>
+      <div class="att">Femi Adekunle</div>
+      <div class="figs">
+        <div class="l">814.0 L</div>
+        <div class="r ok">BALANCED · OPEN</div>
+      </div>
+    </div>
+    <div class="pump idle">
+      <div class="top"><span class="id">P-04</span></div>
+      <span class="prod prod-pms">PMS</span>
+      <div class="att" style="color: var(--ink-3);">— idle —</div>
+      <div class="figs">
+        <div class="l" style="color: var(--ink-3);">0 L</div>
+        <div class="r">NO SHIFT</div>
+      </div>
+    </div>
+    <div class="pump live">
+      <div class="top"><span class="id">P-05</span><span class="pulse"></span></div>
+      <span class="prod prod-ago">AGO</span>
+      <div class="att">Yusuf Lawal</div>
+      <div class="figs">
+        <div class="l">412.0 L</div>
+        <div class="r" style="color: var(--watch);">OVER + ₦440</div>
+      </div>
+    </div>
+    <div class="pump idle">
+      <div class="top"><span class="id">P-06</span></div>
+      <span class="prod prod-dpk">DPK</span>
+      <div class="att" style="color: var(--short);">— fault —</div>
+      <div class="figs">
+        <div class="l" style="color: var(--short);">offline</div>
+        <div class="r" style="color: var(--short);">REPAIR REQ.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="recon">
+      <div class="h-row">
+        <span class="overline">RECONCILIATION</span>
+        <span class="h">Sign off the evening</span>
+        <div class="right row" style="gap: 8px;">
+          <button class="b b-ghost b-sm">Filter</button>
+          <button class="b b-secondary b-sm">Edit a row</button>
+        </div>
+      </div>
+
+      <div class="ledger ledger-wide">
+        <div class="who"><div class="nm">Aisha Bello</div><div class="sub">P-01 · PMS</div></div>
+        <div class="rec" style="text-align: right; padding-top: 6px;">P-01</div>
+        <div class="fig">502.0 L</div>
+        <div class="fig">₦98,392.00</div>
+        <div class="var-ok">+ ₦0.00 · balanced</div>
+        <div class="mk ok">✓</div>
+      </div>
+      <div class="ledger ledger-wide">
+        <div class="who"><div class="nm">Chidera Okoye</div><div class="sub">P-02 · PMS · note attached</div></div>
+        <div class="rec" style="text-align: right; padding-top: 6px;">P-02</div>
+        <div class="fig">612.0 L</div>
+        <div class="fig">₦117,552.00</div>
+        <div class="var-short">− ₦2,400.00 · short</div>
+        <div class="mk bad">!</div>
+      </div>
+      <div class="ledger ledger-wide">
+        <div class="who"><div class="nm">Femi Adekunle</div><div class="sub">P-03 · PMS · still open</div></div>
+        <div class="rec" style="text-align: right; padding-top: 6px;">P-03</div>
+        <div class="fig">814.0 L</div>
+        <div class="fig">₦159,544.00</div>
+        <div class="var-ok">+ ₦0.00 · balanced</div>
+        <div class="mk" style="color: var(--emerald-700);">●</div>
+      </div>
+      <div class="ledger ledger-wide">
+        <div class="who"><div class="nm">Yusuf Lawal</div><div class="sub">P-05 · AGO</div></div>
+        <div class="rec" style="text-align: right; padding-top: 6px;">P-05</div>
+        <div class="fig">412.0 L</div>
+        <div class="fig">₦363,000.00</div>
+        <div class="var-over">+ ₦440.00 · over</div>
+        <div class="mk" style="color: var(--watch);">∼</div>
+      </div>
+
+      <div class="ledger ledger-wide is-total">
+        <div class="who"><div class="nm" style="font-family: var(--serif); font-weight: 600;">Evening total</div><div class="sub">4 attendants · 2 posted · 2 open</div></div>
+        <div class="rec" style="text-align: right; padding-top: 6px;">SUM</div>
+        <div class="fig">2,340.0 L</div>
+        <div class="fig">₦738,488.00</div>
+        <div class="var-short">− ₦1,960.00</div>
+        <div class="mk"></div>
+      </div>
+
+      <div class="footer">
+        <div class="signed">— Awaiting <strong style="color: var(--ink); font-style: normal; font-family: var(--serif);">Adeola Bakare</strong> · branch manager · sign off after Chidera's note is filed and Yusuf is reviewed.</div>
+        <div class="row" style="margin-left: auto; gap: 8px;">
+          <button class="b b-secondary">Save as draft</button>
+          <button class="b b-primary">Post evening shift &nbsp;→</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+
+      <div class="side-card">
+        <div class="h">Closing dip</div>
+        <div class="row-l"><span class="k">T-01 · PMS</span><span class="v">20,460 L</span></div>
+        <div class="row-l"><span class="k">T-02 · AGO</span><span class="v">10,440 L</span></div>
+        <div class="row-l"><span class="k">T-03 · DPK</span><span class="v" style="color: var(--short);">1,320 L</span></div>
+        <hr class="hair-soft" style="margin: 8px 0;">
+        <div class="row-l"><span class="k">Variance · PMS</span><span class="v read-ok">+ 0 L</span></div>
+        <div class="row-l"><span class="k">Variance · AGO</span><span class="v" style="color: var(--watch);">− 120 L</span></div>
+      </div>
+
+      <div class="side-card">
+        <div class="h">Notes filed today</div>
+        <div class="note-log">
+          <div class="note">
+            <div class="meta">ADEOLA · 18:47 — RE: P-02</div>
+            <div class="body-t">"Chidera says one customer left without paying after a phone call. Filed a note, awaiting CCTV review from owner."</div>
+          </div>
+          <div class="note">
+            <div class="meta">ADEOLA · 17:30 — RE: P-04</div>
+            <div class="body-t">"Pump 04 belt snapped at 17:30. Engr. Yemi replaced. ₦8,500 expense filed."</div>
+          </div>
+          <div class="note">
+            <div class="meta">FEMI · 16:12 — EXPENSE</div>
+            <div class="body-t">"Generator diesel 20L from Mama Risi · ₦18,000."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="h">Tanker en route</div>
+        <div class="row-l"><span class="k">Product</span><span class="v">DPK · 11,000 L</span></div>
+        <div class="row-l"><span class="k">Supplier</span><span class="v">NIPCO</span></div>
+        <div class="row-l"><span class="k">ETA</span><span class="v">Wed · 06:30</span></div>
+        <div class="row-l"><span class="k">Waybill</span><span class="v">A-44218</span></div>
+        <button class="b b-secondary b-sm b-block" style="margin-top: 10px;">Confirm offload window</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

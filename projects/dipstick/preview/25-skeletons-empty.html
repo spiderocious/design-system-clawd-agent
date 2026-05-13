@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Skeletons & empty</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .head-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .head-row .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .head-row .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+
+  .skel { background: var(--paper-deep); border-radius: 2px; height: 12px; }
+  .skel-lg { height: 22px; }
+  .skel-sm { height: 8px; }
+  .skel-row { display: grid; grid-template-columns: 1fr 90px 130px 130px 28px; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .skel-row:first-child { border-top: 1px solid var(--ink); }
+
+  /* empty */
+  .empty {
+    text-align: center; padding: 56px 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .empty .glyph { width: 64px; height: 64px; color: var(--ink-3); }
+  .empty .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; }
+  .empty p { font-family: var(--serif); font-style: italic; color: var(--ink-3); max-width: 44ch; font-size: 14px; line-height: 1.5; margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">25.</div>
+    <div class="ttl">Skeletons &amp; empty.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Loading is a faint paper-tone rectangle — no shimmer waltz. Empty states are written like a ledger note: "no entries yet, here is what to do." They never apologize.
+  </p>
+
+  <!-- skeleton -->
+  <div class="scene">
+    <div class="head-row">
+      <span class="h">Loading — day-book</span>
+      <span class="meta">14 MAY · WAITING</span>
+    </div>
+    <div>
+      <div class="skel-row">
+        <div><div class="skel skel-lg" style="width: 60%;"></div><div class="skel skel-sm" style="width: 30%; margin-top: 6px;"></div></div>
+        <div class="skel" style="width: 60px; margin-left: auto;"></div>
+        <div class="skel" style="width: 90px; margin-left: auto;"></div>
+        <div class="skel" style="width: 80px; margin-left: auto;"></div>
+        <div class="skel" style="width: 12px; margin-left: auto;"></div>
+      </div>
+      <div class="skel-row">
+        <div><div class="skel skel-lg" style="width: 50%;"></div><div class="skel skel-sm" style="width: 28%; margin-top: 6px;"></div></div>
+        <div class="skel" style="width: 60px; margin-left: auto;"></div>
+        <div class="skel" style="width: 90px; margin-left: auto;"></div>
+        <div class="skel" style="width: 70px; margin-left: auto;"></div>
+        <div class="skel" style="width: 12px; margin-left: auto;"></div>
+      </div>
+      <div class="skel-row">
+        <div><div class="skel skel-lg" style="width: 70%;"></div><div class="skel skel-sm" style="width: 24%; margin-top: 6px;"></div></div>
+        <div class="skel" style="width: 60px; margin-left: auto;"></div>
+        <div class="skel" style="width: 90px; margin-left: auto;"></div>
+        <div class="skel" style="width: 80px; margin-left: auto;"></div>
+        <div class="skel" style="width: 12px; margin-left: auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Empty — fresh branch</span></div>
+  <div class="scene">
+    <div class="empty">
+      <svg class="glyph" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+        <path d="M14 12h36v40H14z"/>
+        <path d="M22 24h20M22 32h20M22 40h12"/>
+      </svg>
+      <div class="h">No shifts yet today.</div>
+      <p>Today is fresh. Open a pump shift when the first attendant clocks in — the day-book will start filling from the top.</p>
+      <div class="row" style="margin-top: 8px; gap: 10px;">
+        <button class="b b-primary">Open morning shift</button>
+        <button class="b b-secondary">Carry over from yesterday</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Empty — no variances</span></div>
+  <div class="scene">
+    <div class="empty">
+      <svg class="glyph" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="32" cy="32" r="22"/>
+        <path d="M22 32l7 7 14-14"/>
+      </svg>
+      <div class="h">Every shift balanced this week.</div>
+      <p>Twelve shifts posted across Mokola, all variance at zero. This is rare — note it in the owner's review.</p>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Empty — no search results</span></div>
+  <div class="scene">
+    <div class="empty">
+      <svg class="glyph" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="28" cy="28" r="14"/>
+        <path d="M40 40l12 12"/>
+      </svg>
+      <div class="h">Nothing matches "tunde 2024".</div>
+      <p>Try Tunde Salami without the year, or open the staff page to find archived attendants.</p>
+      <button class="b b-secondary" style="margin-top: 4px;">Clear search</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

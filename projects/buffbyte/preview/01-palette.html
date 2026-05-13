@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Palette · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink);
+    margin-bottom: 36px;
+  }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .section { margin-top: 40px; }
+  .section-h {
+    display: flex; align-items: baseline; gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  .section-h .roman {
+    font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline);
+    text-transform: uppercase; font-weight: 500;
+  }
+  .section-h .ttl { font-size: 17px; font-weight: 600; letter-spacing: -0.012em; }
+  .section-h .l { flex: 1; height: 1px; background: var(--hair); }
+
+  .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .sw {
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--sheet);
+  }
+  .sw .chip { height: 96px; }
+  .sw .meta { padding: 12px 14px 14px; }
+  .sw .name { font-size: 13px; font-weight: 500; }
+  .sw .hex { font-size: 11.5px; color: var(--ink-3); letter-spacing: 0.02em; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .scene {
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    background: var(--sheet);
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .scene .label { color: var(--ink-3); }
+  .scene .quote {
+    font-size: 14px; color: var(--ink-2); line-height: 1.55;
+    padding: 0 0 0 12px;
+    border-left: 2px solid var(--accent);
+  }
+  .scene .row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .scene .big {
+    font-size: 36px; font-weight: 600; letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .reserved {
+    margin-top: 32px;
+    padding: 18px 22px;
+    border: 1px solid var(--crit-edge);
+    background: var(--crit-bg);
+    border-radius: var(--r-card);
+    color: var(--crit-deep);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .reserved b { color: var(--crit); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Palette</h1>
+  <p>Warm paper, warm-graphite ink, one cool product accent. Semantic colour only when meaning demands it.</p>
+</header>
+
+<!-- Paper & ink -->
+<section class="section">
+  <div class="section-h"><span class="roman">01</span><span class="ttl">Paper & ink</span><span class="l"></span></div>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#FAF7F2;"></div><div class="meta"><div class="name">Paper</div><div class="hex">#FAF7F2 · canvas</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F2EEE6;"></div><div class="meta"><div class="name">Paper deep</div><div class="hex">#F2EEE6 · recessed</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFDF8;"></div><div class="meta"><div class="name">Sheet</div><div class="hex">#FFFDF8 · raised</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ECE6DA;"></div><div class="meta"><div class="name">Edge</div><div class="hex">#ECE6DA · divider</div></div></div>
+    <div class="sw"><div class="chip" style="background:#DDD7CB;"></div><div class="meta"><div class="name">Hair</div><div class="hex">#DDD7CB · hairline</div></div></div>
+  </div>
+  <div class="swatches" style="margin-top:14px;">
+    <div class="sw"><div class="chip" style="background:#1C1B19;"></div><div class="meta"><div class="name" style="color:var(--ink);">Ink</div><div class="hex">#1C1B19 · headings</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3A3835;"></div><div class="meta"><div class="name">Ink 2</div><div class="hex">#3A3835 · body</div></div></div>
+    <div class="sw"><div class="chip" style="background:#6B6862;"></div><div class="meta"><div class="name">Ink 3</div><div class="hex">#6B6862 · captions</div></div></div>
+    <div class="sw"><div class="chip" style="background:#9A968D;"></div><div class="meta"><div class="name">Ink 4</div><div class="hex">#9A968D · placeholder</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C7C2B6;"></div><div class="meta"><div class="name">Ink 5</div><div class="hex">#C7C2B6 · quietest</div></div></div>
+  </div>
+</section>
+
+<!-- Accent -->
+<section class="section">
+  <div class="section-h"><span class="roman">02</span><span class="ttl">Violet — the product accent</span><span class="l"></span></div>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#EAE6FF;"></div><div class="meta"><div class="name">Tint</div><div class="hex">#EAE6FF · pill bg</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C9C0FF;"></div><div class="meta"><div class="name">Edge</div><div class="hex">#C9C0FF · chip border</div></div></div>
+    <div class="sw"><div class="chip" style="background:#533AFD;"></div><div class="meta"><div class="name" style="color:var(--accent);">Accent</div><div class="hex">#533AFD · the colour</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3D27D9;"></div><div class="meta"><div class="name">Deep</div><div class="hex">#3D27D9 · hover</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1A0F86;"></div><div class="meta"><div class="name">Ink (on tint)</div><div class="hex">#1A0F86</div></div></div>
+  </div>
+</section>
+
+<!-- Semantic -->
+<section class="section">
+  <div class="section-h"><span class="roman">03</span><span class="ttl">Semantic state</span><span class="l"></span></div>
+  <div class="swatches" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="sw"><div class="chip" style="background:#C28A2C;"></div><div class="meta"><div class="name">Amber</div><div class="hex">#C28A2C · warn</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FBF4E5;"></div><div class="meta"><div class="name">Amber bg</div><div class="hex">#FBF4E5</div></div></div>
+    <div class="sw"><div class="chip" style="background:#A0413A;"></div><div class="meta"><div class="name">Oxblood</div><div class="hex">#A0413A · critical</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F8ECEA;"></div><div class="meta"><div class="name">Oxblood bg</div><div class="hex">#F8ECEA</div></div></div>
+  </div>
+  <div class="reserved">
+    <b>Reserved.</b> Oxblood is for irreversible actions and high-risk content findings only — never as decoration. Amber for mid-impact warnings. Positive scores fold into the violet ramp — a single accent for "good" and "primary" keeps the palette to three.
+  </div>
+</section>
+
+<!-- The colour in scenes -->
+<section class="section">
+  <div class="section-h"><span class="roman">04</span><span class="ttl">In scenes</span><span class="l"></span></div>
+  <div class="scenes">
+    <div class="scene">
+      <div class="t-overline">The coach's note</div>
+      <p class="quote">Your hook lands in the first six words. The middle drags around line 12 — cut <em>“for those who don't know”</em> and the energy returns.</p>
+      <div class="row">
+        <span class="pill pill-accent">Strong hook</span>
+        <span class="pill pill-warn">Tighten middle</span>
+        <span class="pill pill-crit">Compliance flag</span>
+      </div>
+    </div>
+    <div class="scene">
+      <div class="t-overline">The shout</div>
+      <div class="row">
+        <div>
+          <div class="big" style="color:var(--accent);">89<span style="font-size:18px;color:var(--ink-3);">%</span></div>
+          <div class="t-caption">Success rate · TikTok + Instagram</div>
+        </div>
+        <button class="btn btn-primary">Analyze again</button>
+      </div>
+      <hr class="hair" />
+      <div class="row">
+        <span class="t-caption">Hook</span>
+        <span class="t-num t-ink" style="font-weight:500;">76</span>
+      </div>
+      <div class="bar"><i style="width:76%;"></i></div>
+      <div class="row">
+        <span class="t-caption">Sentiment</span>
+        <span class="t-num t-ink" style="font-weight:500;">82</span>
+      </div>
+      <div class="bar"><i style="width:82%;"></i></div>
+      <div class="row">
+        <span class="t-caption">Risk</span>
+        <span class="t-num t-crit" style="font-weight:500;">14</span>
+      </div>
+      <div class="bar crit"><i style="width:14%;"></i></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

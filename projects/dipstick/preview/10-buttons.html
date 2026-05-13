@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Buttons</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .scene .head-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 16px; }
+  .scene .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .scene .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+
+  .grid-mini { display: grid; grid-template-columns: 90px 1fr; column-gap: 16px; row-gap: 10px; align-items: center; }
+  .grid-mini .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">10.</div>
+    <div class="ttl">Buttons — three voices.</div>
+    <div class="meta">PRIMITIVES</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Three voices, used in scenes. Primary is the emerald commitment — <em>post</em>, <em>save</em>, <em>confirm offload</em>. Secondary is the ink-outline acknowledgement — <em>cancel</em>, <em>edit</em>, <em>back</em>. Danger is oxblood and reserved for voids and irreversible actions, where it lives next to the critical-modal idiom.
+  </p>
+
+  <!-- SCENE 1: shift close action bar -->
+  <div class="scene">
+    <div class="head-row">
+      <span class="h">End of shift — Pump 03 / evening</span>
+      <span class="meta">SHIFT-MOK-2026-05-14-PM · SCENE</span>
+    </div>
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <div class="overline" style="margin-bottom: 4px;">VARIANCE</div>
+        <div class="read read-md read-ok">+ ₦0.00</div>
+        <div class="rec" style="margin-top: 4px;">FEMI · 814 L · BALANCED</div>
+      </div>
+      <div class="row" style="gap: 10px;">
+        <button class="b b-quiet">Save draft</button>
+        <button class="b b-secondary">Edit entry</button>
+        <button class="b b-primary">Post shift &nbsp;→</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 2: void / critical -->
+  <div class="scene" style="margin-top: 24px;">
+    <div class="head-row">
+      <span class="h">Posted shift · viewing</span>
+      <span class="meta">REC-00482 · POSTED TUE 18:51</span>
+    </div>
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <div class="overline" style="margin-bottom: 4px;">SIGNED BY</div>
+        <div style="font-family: var(--serif); font-size: 16px;">Adeola, branch manager · Tue 18:51</div>
+        <div class="rec" style="margin-top: 4px;">EDITS LEAVE AUDIT TRAIL</div>
+      </div>
+      <div class="row" style="gap: 10px;">
+        <button class="b b-secondary">Add note</button>
+        <button class="b b-secondary">Print / export</button>
+        <button class="b b-danger">Void this shift</button>
+      </div>
+    </div>
+    <p class="dictated" style="margin: 18px 0 0; font-size: 13px;">— "Void" opens a CRITICAL modal. The user types <span class="mono">VOID</span> to confirm. Voids are auditable, never silent.</p>
+  </div>
+
+  <!-- SCENE 3: forms (buttons in a real form) -->
+  <div class="scene" style="margin-top: 24px;">
+    <div class="head-row">
+      <span class="h">Inline — record an expense</span>
+      <span class="meta">DAY-BOOK · EXPENSE LINE</span>
+    </div>
+    <div class="row" style="gap: 10px; align-items: flex-end;">
+      <div class="field-row" style="flex: 1; min-width: 0;">
+        <span class="lbl">What was paid</span>
+        <input class="f" placeholder="e.g. Generator diesel — 20L">
+      </div>
+      <div class="field-row" style="width: 180px;">
+        <span class="lbl">Amount</span>
+        <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" placeholder="0.00"></div>
+      </div>
+      <button class="b b-primary">Add line</button>
+      <button class="b b-quiet">Cancel</button>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Reference grid — variants, sizes, states</span></div>
+  <div class="grid-mini">
+    <span class="k">PRIMARY</span>
+    <div class="row"><button class="b b-primary b-sm">Save</button><button class="b b-primary">Post shift</button><button class="b b-primary b-lg">Confirm offload</button><button class="b b-primary" aria-disabled="true">Disabled</button></div>
+
+    <span class="k">SECONDARY</span>
+    <div class="row"><button class="b b-secondary b-sm">Edit</button><button class="b b-secondary">Cancel</button><button class="b b-secondary b-lg">Open shift</button></div>
+
+    <span class="k">QUIET</span>
+    <div class="row"><button class="b b-quiet b-sm">Skip</button><button class="b b-quiet">Save draft</button><button class="b b-quiet">Dismiss</button></div>
+
+    <span class="k">GHOST</span>
+    <div class="row"><button class="b b-ghost">Filter</button><button class="b b-ghost">Sort</button><button class="b b-ghost">Export</button></div>
+
+    <span class="k">DANGER</span>
+    <div class="row"><button class="b b-danger b-sm">Remove</button><button class="b b-danger">Void this shift</button><button class="b b-danger">Delete branch</button></div>
+  </div>
+
+</div>
+</body>
+</html>

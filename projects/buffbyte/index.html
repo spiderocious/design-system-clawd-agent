@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuffByte — warm-coach</title>
+<link rel="stylesheet" href="preview/_foundation.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--paper); }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+  }
+
+  .toc {
+    background: var(--paper);
+    border-right: 1px solid var(--hair);
+    padding: 32px 28px 20px;
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .brand-mark {
+    width: 26px; height: 26px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px;
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px; letter-spacing: -0.02em;
+  }
+  .brand-mark .b { color: var(--accent); }
+  .ttl {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+  }
+  .vol {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 6px;
+    line-height: 1.45;
+  }
+  .meta {
+    font-size: 10.5px;
+    color: var(--ink-3);
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--hair);
+    line-height: 1.7;
+    text-transform: uppercase;
+    letter-spacing: var(--track-overline);
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+
+  .toc-search {
+    margin: 22px 0 8px;
+  }
+  .toc-search input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--hair);
+    height: 28px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    padding: 0 0 4px;
+  }
+  .toc-search input:focus { border-bottom-color: var(--accent); }
+  .toc-search input::placeholder { color: var(--ink-4); letter-spacing: var(--track-label); font-size: 12px; }
+
+  .nav { flex: 1; padding: 0; margin: 0; list-style: none; }
+
+  .group { margin-top: 22px; }
+  .group:first-child { margin-top: 8px; }
+  .group-h {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: var(--track-overline);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  .group-h .n { color: var(--accent); }
+  .group-h .l { flex: 1; height: 1px; background: var(--hair); }
+
+  .item {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 5px 0;
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .item .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: transparent; border: 1px solid var(--ink-4);
+    flex-shrink: 0; transform: translateY(-3px);
+  }
+  .item:hover { color: var(--ink); }
+  .item.on { color: var(--ink); font-weight: 500; }
+  .item.on .dot { background: var(--accent); border-color: var(--accent); }
+
+  .stage {
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: var(--paper);
+  }
+
+  .head {
+    flex-shrink: 0;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--hair);
+    display: flex; align-items: baseline; gap: 16px;
+    background: var(--paper);
+  }
+  .crumb {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: var(--track-overline);
+  }
+  .crumb .cur { color: var(--ink); }
+  .head .gap { flex: 1; }
+  .head a {
+    font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: var(--track-overline);
+    text-decoration: none;
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .head a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .frame {
+    flex: 1;
+    min-height: 0;
+    background: var(--paper-deep);
+  }
+  .frame iframe {
+    width: 100%; height: 100%; border: 0; display: block;
+    background: var(--paper);
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="toc">
+    <div class="brand">
+      <span class="brand-mark"><span class="b">B</span></span>
+      <h1 class="ttl">BuffByte</h1>
+    </div>
+    <div class="vol">AI content analysis for creators · vol. 1 · warm-coach</div>
+
+    <div class="toc-search">
+      <input id="filter" placeholder="Search specimens…" autocomplete="off">
+    </div>
+
+    <nav id="nav" class="nav"></nav>
+
+    <div class="meta">
+      <strong>Stance</strong><br>
+      Warm coach · violet accent<br>
+      Hairlines · semantic-only colour
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="head">
+      <div class="crumb" id="crumb">
+        <span>Part I · Foundation</span>
+        <span style="margin: 0 8px; color: var(--ink-4)">/</span>
+        <span class="cur">Palette</span>
+      </div>
+      <div class="gap"></div>
+      <a href="../../index.html">← Playground</a>
+      <a href="README.md" target="_blank">Readme</a>
+      <a id="popout" href="#" target="_blank">Open ↗</a>
+    </div>
+    <div class="frame">
+      <iframe id="preview" title="BuffByte specimen"></iframe>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const PARTS = [
+    { id: "I",   title: "Foundation", items: [
+        { name: "Palette",              file: "preview/01-palette.html" },
+        { name: "Type",                 file: "preview/02-type.html" },
+        { name: "Geometry & spacing",   file: "preview/03-geometry.html" },
+        { name: "Motion",               file: "preview/04-motion.html" },
+        { name: "Iconography",          file: "preview/05-icons.html" },
+    ]},
+    { id: "II",  title: "Primitives", items: [
+        { name: "Buttons",              file: "preview/10-buttons.html" },
+        { name: "Inputs",               file: "preview/11-inputs.html" },
+        { name: "Selection",            file: "preview/12-selection.html" },
+        { name: "Pills & tags",         file: "preview/13-pills.html" },
+    ]},
+    { id: "III", title: "Data & state", items: [
+        { name: "Score ring · the signature", file: "preview/20-ring.html" },
+        { name: "Bars · meters",        file: "preview/21-bars.html" },
+        { name: "Tables · ranked lists",file: "preview/22-tables.html" },
+        { name: "Charts",               file: "preview/23-charts.html" },
+        { name: "Cards",                file: "preview/24-cards.html" },
+        { name: "Skeletons & empty",    file: "preview/25-empty.html" },
+    ]},
+    { id: "IV",  title: "Surfaces", items: [
+        { name: "Dashboard",            file: "preview/30-dashboard.html" },
+        { name: "Analysis result",      file: "preview/31-analysis.html" },
+        { name: "Script analysis",      file: "preview/32-script.html" },
+        { name: "Content library",      file: "preview/33-library.html" },
+        { name: "Trending board",       file: "preview/34-trending.html" },
+    ]},
+    { id: "V",   title: "Overlays & performance", items: [
+        { name: "Modals · incl. critical", file: "preview/40-modals.html" },
+        { name: "Toasts · banners",     file: "preview/41-feedback.html" },
+        { name: "Tooltips · popovers",  file: "preview/42-tooltips.html" },
+        { name: "Teleprompter",         file: "preview/43-teleprompter.html" },
+    ]},
+  ];
+
+  const nav = document.getElementById('nav');
+  const filter = document.getElementById('filter');
+  const iframe = document.getElementById('preview');
+  const crumb = document.getElementById('crumb');
+  const popout = document.getElementById('popout');
+
+  let currentFile = null;
+
+  function render(query = "") {
+    nav.innerHTML = "";
+    const q = query.trim().toLowerCase();
+    PARTS.forEach(part => {
+      const items = part.items.filter(it => !q || it.name.toLowerCase().includes(q));
+      if (!items.length) return;
+      const g = document.createElement('div');
+      g.className = 'group';
+      g.innerHTML = `<div class="group-h"><span class="n">${part.id}</span><span>${part.title}</span><span class="l"></span></div>`;
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.className = 'item' + (it.file === currentFile ? ' on' : '');
+        a.innerHTML = `<span class="dot"></span><span>${it.name}</span>`;
+        a.addEventListener('click', e => { e.preventDefault(); load(it, part); });
+        g.appendChild(a);
+      });
+      nav.appendChild(g);
+    });
+  }
+
+  function load(item, part) {
+    currentFile = item.file;
+    iframe.src = item.file;
+    popout.href = item.file;
+    crumb.innerHTML = `<span>Part ${part.id} · ${part.title}</span><span style="margin:0 8px;color:var(--ink-4)">/</span><span class="cur">${item.name}</span>`;
+    render(filter.value);
+    location.hash = encodeURIComponent(item.file);
+  }
+
+  filter.addEventListener('input', e => render(e.target.value));
+  filter.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { filter.value = ''; render(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== filter) {
+      e.preventDefault(); filter.focus();
+    }
+  });
+
+  const hash = decodeURIComponent(location.hash.slice(1));
+  let booted = false;
+  if (hash) {
+    PARTS.forEach(p => p.items.forEach(it => {
+      if (it.file === hash) { load(it, p); booted = true; }
+    }));
+  }
+  if (!booted) {
+    load(PARTS[0].items[0], PARTS[0]);
+  }
+</script>
+
+</body>
+</html>

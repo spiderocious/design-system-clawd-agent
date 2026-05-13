@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · inputs</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  .form-card {
+    background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 22px 26px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .hint { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+  /* Search bar (with mono prefix) */
+  .searchbar {
+    display: flex; align-items: stretch;
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    background: var(--paper);
+    height: 42px;
+  }
+  .searchbar .pre { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); padding: 0 14px; background: var(--paper-2); border-right: 1px solid var(--hair); display: inline-flex; align-items: center; border-radius: var(--r-card) 0 0 var(--r-card); }
+  .searchbar input { flex: 1; border: 0; background: transparent; padding: 0 14px; font-family: var(--sans); font-size: 14px; outline: none; color: var(--ink); }
+  .searchbar .mock { font-family: var(--mono); font-size: 11px; color: var(--ink-4); padding: 0 14px; display: inline-flex; align-items: center; border-left: 1px solid var(--hair); }
+
+  /* Specialized: lever scrubber */
+  .lever {
+    display: grid; grid-template-columns: 180px 1fr 64px; gap: 16px; align-items: center;
+    padding: 10px 14px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+  }
+  .lever .name { font-family: var(--serif); font-size: 14px; font-weight: 500; font-variation-settings: "opsz" 18; }
+  .lever .sub { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); }
+  .lever .track {
+    position: relative;
+    height: 4px;
+    background: var(--hair);
+    border-radius: 2px;
+  }
+  .lever .track .center { position: absolute; left: 50%; top: -3px; height: 10px; width: 1px; background: var(--ink); }
+  .lever .track .fill { position: absolute; left: 50%; top: 0; height: 4px; background: var(--forest-600); border-radius: 2px; }
+  .lever .track.warn .fill { background: var(--orange); }
+  .lever .track .knob { position: absolute; top: -6px; width: 16px; height: 16px; background: var(--paper); border: 2px solid var(--forest-600); border-radius: 50%; transform: translateX(-50%); }
+  .lever .track.warn .knob { border-color: var(--orange); }
+  .lever .val { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 14px; font-weight: 500; text-align: right; }
+  .lever .val.up { color: var(--forest-600); }
+  .lever .val.down { color: var(--orange); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">11 / PRIMITIVES</div>
+    <div class="ttl">Inputs</div>
+    <div class="sub">— instrument prefix on the chrome, plain box on forms.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <p style="font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 14px; max-width: 70ch; line-height: 1.6;">
+    Two input idioms. The <strong style="color: var(--ink-2); font-style: normal; font-weight: 500;">instrument</strong> input — mono uppercase prefix on a paper-2 cell — is used wherever the input is part of the chrome (the global search, the race picker, the constituency selector). The <strong style="color: var(--ink-2); font-style: normal; font-weight: 500;">plain</strong> input is used inside forms, where every label is already spoken aloud by a field above it.
+  </p>
+
+  <div class="scene">
+    <div class="scene-h">Scene · global search<span class="ttl">instrument bar, the ⌘K of Solon</span></div>
+    <div class="searchbar">
+      <span class="pre">SOLON ▸</span>
+      <input placeholder="Race, constituency, candidate, polling-unit code, or 'simulate Anambra Central with Soludo backing LP'" />
+      <span class="mock">⌘K</span>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · race picker<span class="ttl">two instrument inputs side by side</span></div>
+    <div class="form-grid">
+      <div class="field">
+        <label class="f-label">Constituency</label>
+        <div class="f-wrap">
+          <span class="f-prefix">CON ▸</span>
+          <input class="f" value="Anambra Central" />
+        </div>
+      </div>
+      <div class="field">
+        <label class="f-label">Office</label>
+        <select class="f-select"><option>Senate</option><option>Governor</option><option>House of Reps</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · candidate add form<span class="ttl">plain inputs, label above</span></div>
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="field">
+          <label class="f-label">Full name</label>
+          <input class="f-plain" placeholder="e.g. Soludo, Charles" />
+        </div>
+        <div class="field">
+          <label class="f-label">Party</label>
+          <select class="f-select"><option>APGA</option><option>APC</option><option>LP</option><option>PDP</option></select>
+        </div>
+        <div class="field">
+          <label class="f-label">State of origin</label>
+          <input class="f-plain" placeholder="Anambra" />
+        </div>
+        <div class="field">
+          <label class="f-label">LGA of origin</label>
+          <input class="f-plain" placeholder="Aguata" />
+        </div>
+        <div class="field">
+          <label class="f-label">Age</label>
+          <input class="f-plain f-mono" value="61" style="max-width: 80px;" />
+        </div>
+        <div class="field">
+          <label class="f-label">Religion · ethnicity tag</label>
+          <input class="f-plain" placeholder="Catholic · Igbo" />
+        </div>
+        <div class="field full">
+          <label class="f-label">Issue platform</label>
+          <input class="f-plain" placeholder="Security · Education · Manufacturing revival" />
+          <div class="hint">Comma-separated. The simulator uses these to match the candidate against issue-shock scenarios.</div>
+        </div>
+        <div class="field full">
+          <label class="f-label">Notes</label>
+          <textarea class="f-plain" style="height: 64px; padding: 10px 12px; font-family: var(--sans); resize: vertical;" placeholder="Free notes — incumbency length, godfather affiliations, defection history…"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · lever panel<span class="ttl">structural scrubbers for the simulator</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="lever">
+        <div>
+          <div class="name">Overall turnout</div>
+          <div class="sub">baseline: 41.3% (2023 actual)</div>
+        </div>
+        <div class="track">
+          <div class="center"></div>
+          <div class="fill" style="width: 18%; left: 50%;"></div>
+          <div class="knob" style="left: 68%;"></div>
+        </div>
+        <div class="val up">+ 5.4 pts</div>
+      </div>
+      <div class="lever">
+        <div>
+          <div class="name">Youth turnout (18–34)</div>
+          <div class="sub">baseline: 38% — cohort-specific</div>
+        </div>
+        <div class="track">
+          <div class="center"></div>
+          <div class="fill" style="width: 25%; left: 50%;"></div>
+          <div class="knob" style="left: 75%;"></div>
+        </div>
+        <div class="val up">+ 8.0 pts</div>
+      </div>
+      <div class="lever">
+        <div>
+          <div class="name">BVAS failure</div>
+          <div class="sub">% of PU failing to record</div>
+        </div>
+        <div class="track warn">
+          <div class="center"></div>
+          <div class="fill" style="width: 12%; left: 50%;"></div>
+          <div class="knob" style="left: 62%;"></div>
+        </div>
+        <div class="val down">+ 3.6%</div>
+      </div>
+      <div class="lever">
+        <div>
+          <div class="name">Soludo–LP alignment</div>
+          <div class="sub">coalition / endorsement weight</div>
+        </div>
+        <div class="track">
+          <div class="center"></div>
+          <div class="fill" style="width: 32%; left: 50%;"></div>
+          <div class="knob" style="left: 82%;"></div>
+        </div>
+        <div class="val up">strong</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">States · reference</span></div>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="field">
+        <label class="f-label">Default</label>
+        <div class="f-wrap"><span class="f-prefix">CON ▸</span><input class="f" placeholder="Anambra Central" /></div>
+      </div>
+      <div class="field">
+        <label class="f-label">Filled</label>
+        <div class="f-wrap"><span class="f-prefix">CON ▸</span><input class="f" value="Anambra Central" /></div>
+      </div>
+      <div class="field">
+        <label class="f-label">Focus (click into it)</label>
+        <div class="f-wrap"><span class="f-prefix">CON ▸</span><input class="f" value="Anambra Central" autofocus /></div>
+      </div>
+      <div class="field">
+        <label class="f-label">Disabled</label>
+        <div class="f-wrap" style="opacity: 0.5; pointer-events: none;"><span class="f-prefix">CON ▸</span><input class="f" value="—" disabled /></div>
+      </div>
+      <div class="field">
+        <label class="f-label">Plain · text</label>
+        <input class="f-plain" placeholder="Full name" />
+      </div>
+      <div class="field">
+        <label class="f-label">Plain · number</label>
+        <input class="f-plain f-mono" value="1,284" />
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

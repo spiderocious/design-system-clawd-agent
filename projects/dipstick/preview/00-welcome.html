@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dipstick — welcome</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; padding-top: 24px; }
+  .hero .lead { font-family: var(--serif); font-size: 38px; font-weight: 600; line-height: 1.08; letter-spacing: -0.022em; margin: 0 0 18px; }
+  .hero .lead em { font-style: italic; color: var(--emerald-700); }
+  .hero p { font-family: var(--serif); font-size: 16px; line-height: 1.55; color: var(--ink-2); margin: 0 0 14px; max-width: 56ch; }
+  .hero .figures {
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card);
+    padding: 24px 28px;
+  }
+  .hero .figures .grp { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .hero .figures .grp:last-child { border-bottom: 0; }
+  .hero .figures .grp .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .hero .figures .grp .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 24px; color: var(--ink); letter-spacing: -0.015em; }
+  .hero .figures .grp .sub { font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
+  .principles { margin-top: 56px; }
+  .principles .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
+  .principles .item { padding-top: 18px; border-top: 1px solid var(--ink); }
+  .principles .item .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .principles .item .h { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 8px 0 6px; letter-spacing: -0.015em; }
+  .principles .item p { font-size: 13px; color: var(--ink-2); line-height: 1.55; margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">VOL.01</div>
+    <div class="ttl">Dipstick. A station logbook, made disciplined.</div>
+    <div class="meta">LEDGER PAPERBACK · TUE 14 MAY 26</div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h2 class="lead">For the Nigerian filling-station owner who counts <em>every drop and every naira</em>, in two, four, or ten branches.</h2>
+      <p>Dipstick is a clean digital logbook. The manager records the day — opening dip, attendant sales, deliveries, expenses, closing dip. The owner sees every branch from one screen, every morning. No POS integrations, no hardware. Just the paper-book the cashier was already keeping, made shared, signed, and unable to be tampered with after the fact.</p>
+      <p class="dictated">— Built for the moment the owner asks <em>"why is this short by ₦2,400?"</em> and someone has to know.</p>
+    </div>
+    <aside class="figures">
+      <div class="grp">
+        <div class="k">Sold yesterday — all branches</div>
+        <div class="v">14,820 L</div>
+        <div class="sub">PMS · 3 branches · ₦2.9m gross</div>
+      </div>
+      <div class="grp">
+        <div class="k">Variance</div>
+        <div class="v" style="color: var(--short)">− ₦4,800</div>
+        <div class="sub">2 shifts open · Mokola, Surulere</div>
+      </div>
+      <div class="grp">
+        <div class="k">PMS in tanks</div>
+        <div class="v">38,210 L</div>
+        <div class="sub">Reorder due: Surulere (4,200 L)</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="principles">
+    <div class="overline" style="letter-spacing: var(--track-overline)">Principles of the system</div>
+    <div class="grid">
+      <div class="item">
+        <div class="num">01</div>
+        <div class="h">Numbers are the loudest object</div>
+        <p>Litres, naira, meter readings — all tabular monospace. The page should read like a clean ledger column, not a dashboard. Big totals are big. Variance is colour-coded only when it matters.</p>
+      </div>
+      <div class="item">
+        <div class="num">02</div>
+        <div class="h">Hairlines, not shadows</div>
+        <p>Sheets sit on the desk with a 1px paper-edge. No drop-shadows, no cards-on-cards. When separation is loud, we draw an ink rule — never a gradient, never a glow.</p>
+      </div>
+      <div class="item">
+        <div class="num">03</div>
+        <div class="h">Green is for posted entries only</div>
+        <p>The one accent is deep emerald. It marks: <em>signed</em>, <em>balanced</em>, <em>confirmed</em>. Red is reserved for shortages and voids. Everything else stays ink.</p>
+      </div>
+      <div class="item">
+        <div class="num">04</div>
+        <div class="h">Scenes, not catalogues</div>
+        <p>The shift-close, the morning roll-up, the tanker offload — these are the surfaces that matter. State variants live inside real situations, not five-up grids.</p>
+      </div>
+      <div class="item">
+        <div class="num">05</div>
+        <div class="h">Posted is final</div>
+        <p>When a shift is posted, it's signed. Edits leave a visible audit trail. Voiding requires the critical-modal idiom — irreversible, explicit, typed-confirmation. Trust is built on this discipline.</p>
+      </div>
+      <div class="item">
+        <div class="num">06</div>
+        <div class="h">Nigerian by default</div>
+        <p>Naira, litres, NUPENG, AGO/PMS/DPK, NNPC, tanker waybills. The vocabulary is local because the work is. No internationalisation theatre.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

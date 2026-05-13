@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Expenses ledger</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .crumb .cur { color: var(--ink); }
+
+  .doc-head { padding: 36px 0 24px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; align-items: end; }
+  .doc-head .h { font-family: var(--serif); font-size: 40px; font-weight: 600; letter-spacing: -0.024em; line-height: 1.04; margin: 6px 0 0; }
+  .doc-head .sub { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-3); margin-top: 8px; max-width: 60ch; }
+  .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .summary .c { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 14px 16px; }
+  .summary .c .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .summary .c .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 22px; line-height: 1; margin-top: 4px; }
+
+  /* Add expense form */
+  .add { margin-top: 28px; background: var(--sheet-2); border: 1px solid var(--ink); border-radius: var(--r-card); padding: 18px 20px; }
+  .add .row-add { display: grid; grid-template-columns: 110px 1fr 1.4fr 180px 100px; gap: 12px; align-items: end; }
+
+  /* category strip */
+  .cat-strip { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: 28px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+  .cat { padding: 14px 16px; border-right: 1px solid var(--hair); }
+  .cat:last-child { border-right: 0; }
+  .cat .k { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .cat .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 18px; line-height: 1; margin-top: 4px; letter-spacing: -0.012em; }
+  .cat .b-fill { height: 4px; background: var(--paper-deep); margin-top: 8px; border-radius: 1px; overflow: hidden; }
+  .cat .b-fill .fill { height: 100%; background: var(--ink); }
+
+  /* expense rows */
+  .ex-row { display: grid; grid-template-columns: 90px 90px 1fr 1fr 130px 60px; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--hair); align-items: baseline; }
+  .ex-row:first-child { border-top: 1px solid var(--ink); }
+  .ex-row .rec-id { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+  .ex-row .time { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; }
+  .ex-row .what { font-family: var(--serif); font-size: 14px; }
+  .ex-row .what .cat-tag { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; margin-left: 8px; padding: 1px 5px; background: var(--paper-deep); border-radius: 2px; }
+  .ex-row .who { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .ex-row .fig { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; text-align: right; }
+  .ex-row .mk { text-align: right; font-family: var(--mono); color: var(--ink-3); }
+
+  /* total */
+  .total-row { display: grid; grid-template-columns: 90px 90px 1fr 1fr 130px 60px; gap: 14px; padding: 14px 0; border-top: 1px solid var(--ink); border-bottom: 2px solid var(--ink); background: var(--sheet-2); align-items: baseline; }
+  .total-row .l { font-family: var(--serif); font-weight: 600; font-size: 15px; grid-column: 1 / span 4; padding-left: 0; }
+  .total-row .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 18px; text-align: right; }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span>Mokola</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span class="cur">Expenses · Tue 14 May</span></div>
+    <div style="flex: 1;"></div>
+    <button class="b b-ghost b-sm">Last week</button>
+    <button class="b b-secondary b-sm">Export</button>
+  </div>
+
+  <div class="doc-head">
+    <div>
+      <div class="overline">EXPENSES · MOKOLA · DAY</div>
+      <h1 class="h">Money out — ₦33,900 across four lines.</h1>
+      <p class="sub">Every naira spent from the till today. Categorised, signed, time-stamped. Generator diesel is the largest line — typical for a Tuesday in May.</p>
+    </div>
+    <div class="summary">
+      <div class="c">
+        <div class="k">Today</div>
+        <div class="v">₦33,900</div>
+      </div>
+      <div class="c">
+        <div class="k">This week</div>
+        <div class="v">₦184,200</div>
+      </div>
+      <div class="c">
+        <div class="k">This month</div>
+        <div class="v">₦468,400</div>
+      </div>
+      <div class="c">
+        <div class="k">vs last month</div>
+        <div class="v" style="color: var(--watch);">+ ₦62,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- inline add -->
+  <div class="add">
+    <div class="overline" style="margin-bottom: 10px;">RECORD AN EXPENSE — INLINE</div>
+    <div class="row-add">
+      <div class="field-row">
+        <span class="lbl">Time</span>
+        <input class="f f-mono f-sm" value="19:42">
+      </div>
+      <div class="field-row">
+        <span class="lbl">Category</span>
+        <input class="f f-sm" value="Maintenance">
+      </div>
+      <div class="field-row">
+        <span class="lbl">What</span>
+        <input class="f f-sm" placeholder="e.g. Pump 3 nozzle replacement">
+      </div>
+      <div class="field-row">
+        <span class="lbl">Amount</span>
+        <div class="f-affix" style="height: 28px;"><span class="pre" style="padding: 0 9px;">₦</span><input class="f f-mono f-sm" placeholder="0.00"></div>
+      </div>
+      <button class="b b-primary b-sm">Add line</button>
+    </div>
+  </div>
+
+  <!-- category strip -->
+  <div class="cat-strip">
+    <div class="cat">
+      <div class="k">Diesel · gen</div>
+      <div class="v">₦18,000</div>
+      <div class="b-fill"><div class="fill" style="width: 54%;"></div></div>
+    </div>
+    <div class="cat">
+      <div class="k">Maintenance</div>
+      <div class="v">₦8,500</div>
+      <div class="b-fill"><div class="fill" style="width: 25%;"></div></div>
+    </div>
+    <div class="cat">
+      <div class="k">Union · NUPENG</div>
+      <div class="v">₦5,000</div>
+      <div class="b-fill"><div class="fill" style="width: 15%;"></div></div>
+    </div>
+    <div class="cat">
+      <div class="k">Forecourt sundry</div>
+      <div class="v">₦2,400</div>
+      <div class="b-fill"><div class="fill" style="width: 7%;"></div></div>
+    </div>
+    <div class="cat">
+      <div class="k">Cash advances</div>
+      <div class="v">₦0</div>
+      <div class="b-fill"></div>
+    </div>
+    <div class="cat">
+      <div class="k">Other</div>
+      <div class="v">₦0</div>
+      <div class="b-fill"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 24px;">
+    <div class="ex-row">
+      <span class="rec-id">EXP-014</span>
+      <span class="time">16:12</span>
+      <span class="what">Generator diesel — 20L from Mama Risi <span class="cat-tag">Diesel</span></span>
+      <span class="who">FEMI · WITNESS: ADEOLA</span>
+      <span class="fig">₦18,000.00</span>
+      <span class="mk">⋯</span>
+    </div>
+    <div class="ex-row">
+      <span class="rec-id">EXP-015</span>
+      <span class="time">17:30</span>
+      <span class="what">Pump 04 belt replacement — Engr. Yemi <span class="cat-tag">Maintenance</span></span>
+      <span class="who">ADEOLA · WITNESS: FEMI</span>
+      <span class="fig">₦8,500.00</span>
+      <span class="mk">⋯</span>
+    </div>
+    <div class="ex-row">
+      <span class="rec-id">EXP-016</span>
+      <span class="time">18:02</span>
+      <span class="what">NUPENG monthly dues <span class="cat-tag">Union</span></span>
+      <span class="who">ADEOLA · WITNESS: —</span>
+      <span class="fig">₦5,000.00</span>
+      <span class="mk">⋯</span>
+    </div>
+    <div class="ex-row">
+      <span class="rec-id">EXP-017</span>
+      <span class="time">19:14</span>
+      <span class="what">Drinks for forecourt staff — Adekola corner shop <span class="cat-tag">Sundry</span></span>
+      <span class="who">FEMI · WITNESS: AISHA</span>
+      <span class="fig">₦2,400.00</span>
+      <span class="mk">⋯</span>
+    </div>
+
+    <div class="total-row">
+      <span class="l">Day total · 4 lines</span>
+      <span class="v">₦33,900.00</span>
+      <span class="mk"></span>
+    </div>
+  </div>
+
+  <p class="dictated" style="margin-top: 24px; max-width: 60ch; font-size: 13px;">— Witnesses are not mandatory but expenses without witnesses count as "single-source" — the owner sees them flagged at the month's audit.</p>
+
+</div>
+</body>
+</html>

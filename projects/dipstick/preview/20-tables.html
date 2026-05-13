@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tables</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  table.dt { width: 100%; border-collapse: collapse; }
+  table.dt thead th {
+    text-align: left; font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    padding: 12px 14px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); white-space: nowrap;
+  }
+  table.dt thead th.num { text-align: right; }
+  table.dt tbody td { padding: 13px 14px; border-bottom: 1px solid var(--hair); font-size: 13px; vertical-align: middle; }
+  table.dt tbody tr:hover { background: var(--sheet); }
+  table.dt tbody td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  table.dt tbody td.who { font-family: var(--serif); font-weight: 500; font-size: 14px; }
+  table.dt tbody td.rec { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; text-transform: uppercase; }
+  table.dt tfoot td { padding: 13px 14px; border-top: 2px solid var(--ink); font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+  table.dt tfoot td.who { font-family: var(--serif); font-weight: 600; }
+  .short-cell { color: var(--short); font-weight: 600; }
+  .ok-cell { color: var(--emerald-700); }
+  .voided td { color: var(--ink-4); text-decoration: line-through; }
+  .voided td.rec { text-decoration: none; }
+  .voided .stamp-void { display: inline-block; padding: 1px 6px; font-family: var(--mono); font-size: 10px; color: var(--short); border: 1px solid var(--short); border-radius: 2px; letter-spacing: 0.1em; text-decoration: none; vertical-align: middle; margin-left: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">20.</div>
+    <div class="ttl">Tables — the ledger column.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Tables are this product's bread and butter. The headers are uppercase mono, the body alternates between serif (for names of people and places) and mono (for every number). Totals are double-ruled. Voided rows are struck through but kept visible — never deleted from sight.
+  </p>
+
+  <!-- Shift close table -->
+  <div class="sheet sheet-lg">
+    <div class="row" style="justify-content: space-between; align-items: baseline; padding-bottom: 16px;">
+      <div>
+        <div class="overline" style="margin-bottom: 4px;">SHIFTS · MOKOLA · TUE 14 MAY</div>
+        <div class="serif" style="font-size: 22px; font-weight: 600; letter-spacing: -0.018em;">Day-book — evening close</div>
+      </div>
+      <div class="row" style="gap: 8px;">
+        <button class="b b-ghost b-sm">Sort</button>
+        <button class="b b-secondary b-sm">Export</button>
+        <button class="b b-primary b-sm">Post all balanced</button>
+      </div>
+    </div>
+
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Attendant · pump</th>
+          <th>Product</th>
+          <th class="num">Litres</th>
+          <th class="num">Price / L</th>
+          <th class="num">Expected</th>
+          <th class="num">Declared</th>
+          <th class="num">Variance</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="who">Aisha Bello <span class="rec" style="margin-left: 6px;">P-01</span></td>
+          <td><span class="prod prod-pms">PMS</span></td>
+          <td class="num">502.00</td>
+          <td class="num">196.00</td>
+          <td class="num">98,392.00</td>
+          <td class="num">98,392.00</td>
+          <td class="num ok-cell">+ 0.00</td>
+          <td><span class="pill pill-ok"><span class="dot"></span>Balanced</span></td>
+        </tr>
+        <tr>
+          <td class="who">Chidera Okoye <span class="rec" style="margin-left: 6px;">P-02</span></td>
+          <td><span class="prod prod-pms">PMS</span></td>
+          <td class="num">612.00</td>
+          <td class="num">196.00</td>
+          <td class="num">119,952.00</td>
+          <td class="num">117,552.00</td>
+          <td class="num short-cell">− 2,400.00</td>
+          <td><span class="pill pill-short"><span class="dot"></span>Short</span></td>
+        </tr>
+        <tr>
+          <td class="who">Femi Adekunle <span class="rec" style="margin-left: 6px;">P-03</span></td>
+          <td><span class="prod prod-pms">PMS</span></td>
+          <td class="num">814.00</td>
+          <td class="num">196.00</td>
+          <td class="num">159,544.00</td>
+          <td class="num">159,544.00</td>
+          <td class="num ok-cell">+ 0.00</td>
+          <td><span class="pill pill-ok"><span class="dot"></span>Balanced</span></td>
+        </tr>
+        <tr>
+          <td class="who">Yusuf Lawal <span class="rec" style="margin-left: 6px;">P-05</span></td>
+          <td><span class="prod prod-ago">AGO</span></td>
+          <td class="num">412.00</td>
+          <td class="num">880.00</td>
+          <td class="num">362,560.00</td>
+          <td class="num">363,000.00</td>
+          <td class="num" style="color: var(--watch);">+ 440.00</td>
+          <td><span class="pill pill-watch"><span class="dot"></span>Over</span></td>
+        </tr>
+        <tr class="voided">
+          <td class="who">Tunde Salami <span class="rec" style="margin-left: 6px;">P-04</span></td>
+          <td><span class="prod prod-pms">PMS</span></td>
+          <td class="num">203.00</td>
+          <td class="num">196.00</td>
+          <td class="num">39,788.00</td>
+          <td class="num">39,788.00</td>
+          <td class="num">+ 0.00</td>
+          <td><span class="stamp-void">VOIDED</span></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="who" colspan="2">Evening total — 4 active</td>
+          <td class="num">2,340.00</td>
+          <td></td>
+          <td class="num">740,448.00</td>
+          <td class="num">738,488.00</td>
+          <td class="num short-cell">− 1,960.00</td>
+          <td><span class="rec">2 OPEN · 2 POSTED · 1 VOID</span></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="break"><span class="lbl">Compact — expense ledger</span></div>
+  <div class="sheet sheet-md">
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Ref</th>
+          <th>What</th>
+          <th>Paid to</th>
+          <th>By</th>
+          <th class="num">Amount</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="rec">EXP-014</td><td>Generator diesel — 20L</td><td class="who">Mama Risi (supplier)</td><td>Adeola</td><td class="num">18,000.00</td><td class="rec">16:12</td></tr>
+        <tr><td class="rec">EXP-015</td><td>Pump 04 belt replacement</td><td class="who">Engr. Yemi</td><td>Adeola</td><td class="num">8,500.00</td><td class="rec">17:30</td></tr>
+        <tr><td class="rec">EXP-016</td><td>NUPENG monthly dues</td><td class="who">Union — branch</td><td>Adeola</td><td class="num">5,000.00</td><td class="rec">18:02</td></tr>
+        <tr><td class="rec">EXP-017</td><td>Drinks for forecourt staff</td><td class="who">Adekola corner shop</td><td>Femi</td><td class="num">2,400.00</td><td class="rec">19:14</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="rec">TOTAL · 4 ITEMS</td>
+          <td colspan="3"></td>
+          <td class="num">33,900.00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

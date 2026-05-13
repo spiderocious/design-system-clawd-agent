@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Toasts &amp; banners</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  .stack > * + * { margin-top: 12px; }
+
+  /* Toast */
+  .toast {
+    display: grid; grid-template-columns: 22px 1fr auto auto; gap: 14px;
+    background: var(--sheet); border: 1px solid var(--sheet-edge);
+    border-radius: 14px;
+    padding: 14px 18px;
+    align-items: center;
+    max-width: 540px;
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.18);
+  }
+  .toast svg { width: 20px; height: 20px; stroke-width: 1.5; }
+  .toast .nm { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.008em; line-height: 1.25; color: var(--ink); }
+  .toast .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
+  .toast .undo { color: var(--green-700); font-family: var(--sans); font-size: 12.5px; font-weight: 600; cursor: pointer; background: transparent; border: 0; }
+  .toast .close { background: transparent; border: 0; color: var(--ink-3); cursor: pointer; }
+  .toast .close svg { width: 16px; height: 16px; }
+
+  .toast.success { background: var(--green-50); border-color: var(--green-200); }
+  .toast.success svg { color: var(--green-700); }
+  .toast.success .nm { color: var(--green-900); }
+  .toast.success .sub { color: var(--green-800); }
+
+  .toast.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+  .toast.warn svg { color: var(--warn); }
+  .toast.warn .nm { color: var(--warn); }
+
+  .toast.crit { background: var(--crit-bg); border-color: var(--crit-edge); }
+  .toast.crit svg { color: var(--crit); }
+  .toast.crit .nm { color: var(--crit); }
+
+  /* Banner (top-of-page) */
+  .banner {
+    display: grid; grid-template-columns: 24px 1fr auto; gap: 16px;
+    padding: 14px 22px;
+    border-radius: 14px;
+    align-items: center;
+  }
+  .banner svg { width: 22px; height: 22px; stroke-width: 1.5; }
+  .banner .h { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.008em; }
+  .banner .b { font-size: 13px; color: var(--ink-2); margin-top: 2px; line-height: 1.5; }
+  .banner .acts { display: flex; gap: 8px; }
+  .banner.info { background: var(--info-bg); border: 1px solid var(--info-edge); color: var(--info); }
+  .banner.info svg { color: var(--info); }
+  .banner.info .h { color: var(--ink); }
+  .banner.warn { background: var(--warn-bg); border: 1px solid var(--warn-edge); color: var(--warn); }
+  .banner.warn svg { color: var(--warn); }
+  .banner.warn .h { color: var(--ink); }
+
+  /* In-context toast stage */
+  .stage {
+    background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 18px;
+    padding: 32px; position: relative; min-height: 360px;
+  }
+  .stage::before {
+    content: "";
+    position: absolute; inset: 28px;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 22px, var(--hair) 22px 23px);
+    opacity: 0.4; pointer-events: none;
+    border-radius: 12px;
+  }
+  .stage-toasts {
+    position: absolute; right: 28px; bottom: 28px;
+    display: flex; flex-direction: column; gap: 12px;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">42 / OVERLAYS</span>
+    <h1 class="ttl">Toasts &amp; banners</h1>
+    <span class="meta">Calm feedback · always specific</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Toasts are small, single-line confirmations after an action. Banners persist at the top of a surface to communicate state of play (system status, safety guidance). Both follow the same colour rules as the rest of the system — sage for success, amber for warn, brick-red for critical, slate-teal for info.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · toasts · bottom-right stage</div>
+    <h3>Where they live</h3>
+    <p class="blurb">Toasts appear in the bottom-right corner of the screen, stacked, and auto-dismiss in 5 seconds. Critical toasts persist until the user closes them.</p>
+
+    <div class="stage">
+      <div class="stage-toasts">
+        <div class="toast success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7 9 18l-5-5"/></svg>
+          <div>
+            <div class="nm">You're connected with Marcus</div>
+            <div class="sub">Conversation is open. ₦2,750 charged.</div>
+          </div>
+          <button class="undo">Open</button>
+          <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="toast">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" color="var(--ink-3)"><path d="M5 12h14"/></svg>
+          <div>
+            <div class="nm">Saved to your shortlist</div>
+            <div class="sub">Marcus is in your shortlist alongside Aisha and Tunde.</div>
+          </div>
+          <button class="undo">Undo</button>
+          <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · toasts · variants</div>
+    <h3>The four toast tones</h3>
+
+    <div class="stack">
+      <div class="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" color="var(--ink-3)"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div>
+          <div class="nm">Filter updated · 14 tutors now match</div>
+          <div class="sub">Showing tutors within 12 km of Lekki, ₦4–14k / hour.</div>
+        </div>
+        <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+
+      <div class="toast success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7 9 18l-5-5"/></svg>
+        <div>
+          <div class="nm">Document verified</div>
+          <div class="sub">Your Cambridge BSc certificate is now on file.</div>
+        </div>
+        <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+
+      <div class="toast warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M3 17.5 12 3l9 14.5z"/></svg>
+        <div>
+          <div class="nm">Marcus hasn't replied in 4 days</div>
+          <div class="sub">You can request a refund of the ₦2,500 connection fee.</div>
+        </div>
+        <button class="undo">Request refund</button>
+        <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+
+      <div class="toast crit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div>
+          <div class="nm">Your card was declined</div>
+          <div class="sub">Your bank turned the ₦2,500 charge away. Try a different card or pay by bank transfer.</div>
+        </div>
+        <button class="undo">Try again</button>
+        <button class="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · top-of-page banners</div>
+    <h3>The safety banner · always above the conversation</h3>
+    <p class="blurb">Banners are not toasts — they persist while the state persists. The safety banner above every conversation thread is the most important one; it never goes away while contact info is masked.</p>
+
+    <div class="stack">
+      <div class="banner info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.5 3.5 7 8 8 4.5-1 8-3.5 8-8V7l-8-4Z"/></svg>
+        <div>
+          <div class="h">Contact information is hidden until you both agree to share it.</div>
+          <div class="b">Phone numbers, emails and WhatsApp links are redacted automatically. Tap "Share contact" once you've both met and are comfortable.</div>
+        </div>
+        <div class="acts"><button class="b b-secondary b-sm">How it works</button></div>
+      </div>
+
+      <div class="banner warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M3 17.5 12 3l9 14.5z"/></svg>
+        <div>
+          <div class="h">Tutorly is in low-bandwidth mode tonight</div>
+          <div class="b">We're seeing a brief network issue affecting message delivery in Lagos. Messages will be delivered as soon as the issue clears.</div>
+        </div>
+        <div class="acts"><button class="b b-quiet b-sm">Dismiss</button></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

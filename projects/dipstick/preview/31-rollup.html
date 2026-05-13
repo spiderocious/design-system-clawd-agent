@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Owner roll-up</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  body { padding: 0; background: var(--paper-deep); }
+  .scene-page { max-width: 1240px; margin: 0 auto; padding: 32px 40px 80px; background: var(--paper); min-height: 100vh; border-left: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+
+  .hdr { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .hdr .crumb { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.16em; text-transform: uppercase; }
+  .hdr .crumb .cur { color: var(--ink); }
+  .hdr .gap { flex: 1; }
+
+  .lead-wrap { padding: 32px 0 12px; }
+  .lead-wrap .date { font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .lead-wrap .lead { font-family: var(--serif); font-size: 52px; font-weight: 600; letter-spacing: -0.026em; line-height: 1.04; margin: 8px 0 0; max-width: 24ch; }
+  .lead-wrap .lead em { font-style: italic; color: var(--emerald-700); }
+  .lead-wrap .sub { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink-3); margin: 12px 0 0; max-width: 70ch; line-height: 1.5; }
+
+  .strip { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 28px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+  .strip .c { padding: 18px 22px; border-right: 1px solid var(--hair); }
+  .strip .c:last-child { border-right: 0; }
+  .strip .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; }
+  .strip .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 34px; line-height: 1; letter-spacing: -0.02em; margin-top: 8px; }
+  .strip .sub { font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+
+  .body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; margin-top: 32px; }
+  .section-h { display: flex; align-items: baseline; gap: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--hair); margin-bottom: 14px; }
+  .section-h .h { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em; }
+
+  /* Branch row — owner reads each branch */
+  .b-row { display: grid; grid-template-columns: 1.4fr 1fr 1.2fr 1fr 80px; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--hair); align-items: center; }
+  .b-row:first-child { border-top: 1px solid var(--ink); }
+  .b-row .name { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.012em; }
+  .b-row .loc { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px; }
+  .b-row .fig-big { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 22px; letter-spacing: -0.012em; }
+  .b-row .fig-sm { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .b-row .stat-pill .pill { margin-right: 4px; }
+  .b-row .progress {
+    height: 8px; border: 1px solid var(--sheet-edge); border-radius: 2px; background: var(--paper-deep); position: relative; overflow: hidden;
+  }
+  .b-row .progress .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--emerald-600); }
+  .b-row .progress .fill.warn { background: var(--watch); }
+  .b-row .progress .target { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--ink); }
+  .b-row .arrow { font-family: var(--mono); font-size: 18px; color: var(--ink-3); text-align: right; cursor: pointer; }
+
+  /* call list */
+  .call-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 18px 20px; }
+  .call-item { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--hair-soft); }
+  .call-item:last-child { border-bottom: 0; }
+  .call-item .marker { font-family: var(--mono); font-size: 11px; color: var(--ink); padding-top: 2px; }
+  .call-item .marker.short { color: var(--short); }
+  .call-item .marker.watch { color: var(--watch); }
+  .call-item .title { font-family: var(--serif); font-size: 14px; font-weight: 500; line-height: 1.35; }
+  .call-item .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; margin-top: 2px; }
+  .call-item .b-sm { white-space: nowrap; }
+
+  .trend-card { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 18px 20px; }
+</style>
+</head>
+<body>
+<div class="scene-page">
+
+  <div class="hdr">
+    <div class="crumb"><span class="cur">All branches</span> <span style="color: var(--ink-4); margin: 0 8px;">/</span> <span>Morning roll-up</span></div>
+    <div class="gap"></div>
+    <span class="rec">SEGUN OLAITAN · OWNER · 07:12</span>
+    <button class="b b-secondary b-sm">Yesterday</button>
+    <button class="b b-secondary b-sm">Export PDF</button>
+  </div>
+
+  <div class="lead-wrap">
+    <div class="date">WEDNESDAY · 15 MAY 2026 · 07:12</div>
+    <h1 class="lead">Yesterday you sold <em>14,820 litres</em> across three branches. Two shifts left short.</h1>
+    <p class="sub">PH-Rumuola is the one to call this morning — tank below reorder and a ₦2,400 short on Tanko's shift. Surulere balanced clean. Mokola short ₦2,400 — Chidera, CCTV review pending. Otherwise a normal day.</p>
+  </div>
+
+  <div class="strip">
+    <div class="c">
+      <div class="k">Litres sold</div>
+      <div class="v">14,820 <span style="font-family: var(--sans); font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em;">L</span></div>
+      <div class="sub">PMS · 3 branches · 12 attendants</div>
+    </div>
+    <div class="c">
+      <div class="k">Gross</div>
+      <div class="v">₦2,904,720</div>
+      <div class="sub">at avg ₦196/L</div>
+    </div>
+    <div class="c">
+      <div class="k">Variance</div>
+      <div class="v read-short">− ₦4,800</div>
+      <div class="sub">2 shifts · awaiting review</div>
+    </div>
+    <div class="c">
+      <div class="k">In tanks (PMS)</div>
+      <div class="v">38,090 L</div>
+      <div class="sub">10 days at current pace · 1 reorder due</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div>
+      <div class="section-h">
+        <span class="overline">YOUR BRANCHES</span>
+        <span class="h">Three forecourts.</span>
+        <div style="margin-left: auto;" class="row">
+          <button class="b b-ghost b-sm">Sort by variance</button>
+        </div>
+      </div>
+
+      <div class="b-row">
+        <div>
+          <div class="name">Mokola</div>
+          <div class="loc">IBADAN · BRANCH 01 · ADEOLA · MANAGER</div>
+        </div>
+        <div>
+          <div class="fig-big">1,928 L</div>
+          <div class="fig-sm">₦377,888 gross</div>
+        </div>
+        <div class="progress">
+          <div class="fill" style="width: 64%;"></div>
+          <div class="target" style="left: 80%;"></div>
+        </div>
+        <div class="stat-pill"><span class="pill pill-short"><span class="dot"></span>Short ₦2,400</span></div>
+        <div class="arrow">→</div>
+      </div>
+
+      <div class="b-row">
+        <div>
+          <div class="name">Surulere</div>
+          <div class="loc">LAGOS · BRANCH 02 · TUNDE · MANAGER</div>
+        </div>
+        <div>
+          <div class="fig-big">2,140 L</div>
+          <div class="fig-sm">₦419,440 gross</div>
+        </div>
+        <div class="progress">
+          <div class="fill" style="width: 85%;"></div>
+          <div class="target" style="left: 80%;"></div>
+        </div>
+        <div class="stat-pill"><span class="pill pill-ok"><span class="dot"></span>Posted clean</span></div>
+        <div class="arrow">→</div>
+      </div>
+
+      <div class="b-row">
+        <div>
+          <div class="name">PH-Rumuola</div>
+          <div class="loc">RIVERS · BRANCH 03 · NWAKAEGO · MANAGER</div>
+        </div>
+        <div>
+          <div class="fig-big">1,140 L</div>
+          <div class="fig-sm">₦223,440 gross</div>
+        </div>
+        <div class="progress">
+          <div class="fill warn" style="width: 38%;"></div>
+          <div class="target" style="left: 80%;"></div>
+        </div>
+        <div class="stat-pill"><span class="pill pill-short"><span class="dot"></span>Reorder · ₦2.4k short</span></div>
+        <div class="arrow">→</div>
+      </div>
+
+      <div class="trend-card" style="margin-top: 28px;">
+        <div class="row" style="justify-content: space-between; margin-bottom: 12px;">
+          <span class="overline">7-DAY TREND · LITRES PER BRANCH</span>
+          <span class="rec">EMERALD MOKOLA · INK SURULERE · AMBER PH</span>
+        </div>
+        <svg viewBox="0 0 720 180" style="width: 100%; height: 180px;">
+          <defs>
+            <pattern id="g2" width="100" height="36" patternUnits="userSpaceOnUse"><path d="M0 36h100M0 0v180" fill="none" stroke="#E5DECC"/></pattern>
+          </defs>
+          <rect width="720" height="180" fill="url(#g2)"/>
+          <line x1="0" y1="150" x2="720" y2="150" stroke="#1A1714"/>
+          <path d="M0 80 L 100 70 L 200 90 L 300 60 L 400 75 L 500 50 L 600 45 L 700 55" fill="none" stroke="#0E5C3A" stroke-width="2"/>
+          <path d="M0 120 L 100 110 L 200 100 L 300 105 L 400 95 L 500 88 L 600 92 L 700 80" fill="none" stroke="#1A1714" stroke-width="1.5"/>
+          <path d="M0 140 L 100 130 L 200 145 L 300 132 L 400 138 L 500 125 L 600 130 L 700 120" fill="none" stroke="#8E5A0E" stroke-width="1.5"/>
+          <circle cx="700" cy="55" r="3" fill="#0E5C3A"/>
+          <circle cx="700" cy="80" r="3" fill="#1A1714"/>
+          <circle cx="700" cy="120" r="3" fill="#8E5A0E"/>
+          <g font-family="IBM Plex Mono" font-size="9" fill="#6E665B" letter-spacing="0.12em">
+            <text x="0" y="170">WED</text><text x="100" y="170">THU</text><text x="200" y="170">FRI</text><text x="300" y="170">SAT</text>
+            <text x="400" y="170">SUN</text><text x="500" y="170">MON</text><text x="600" y="170">TUE</text><text x="690" y="170">WED</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">
+        <span class="overline">THIS MORNING</span>
+        <span class="h">Three calls.</span>
+      </div>
+      <div class="call-card">
+        <div class="call-item">
+          <span class="marker short">01.</span>
+          <div>
+            <div class="title">Call Nwakaego at PH-Rumuola.</div>
+            <div class="sub">DPK below reorder (1,320 L). Confirm if NIPCO offload at 06:30 happened. ₦2,400 short on Tanko's shift — ask for the CCTV.</div>
+          </div>
+          <button class="b b-primary b-sm">Open</button>
+        </div>
+        <div class="call-item">
+          <span class="marker short">02.</span>
+          <div>
+            <div class="title">Review Chidera's note at Mokola.</div>
+            <div class="sub">Customer-left claim — CCTV pending. ₦2,400 short. Decide: forgive, deduct, escalate.</div>
+          </div>
+          <button class="b b-secondary b-sm">View</button>
+        </div>
+        <div class="call-item">
+          <span class="marker watch">03.</span>
+          <div>
+            <div class="title">Tunde, Surulere — say thank you.</div>
+            <div class="sub">12 balanced shifts in a row. Note for next quarter's review.</div>
+          </div>
+          <button class="b b-quiet b-sm">Note</button>
+        </div>
+      </div>
+
+      <div class="trend-card" style="margin-top: 18px;">
+        <div class="overline" style="margin-bottom: 10px;">VARIANCE — LAST 30 DAYS</div>
+        <div class="row" style="gap: 18px; align-items: baseline;">
+          <div>
+            <div class="read read-lg read-short">− ₦68,400</div>
+            <div class="rec" style="margin-top: 6px;">SHORT · 18 SHIFTS</div>
+          </div>
+          <div style="margin-left: auto; text-align: right;">
+            <div class="rec">OF ₦150K MONTHLY BUDGET</div>
+            <div class="read read-sm" style="margin-top: 4px;">45%</div>
+          </div>
+        </div>
+        <hr class="hair-soft" style="margin: 14px 0;">
+        <div class="dictated" style="font-size: 13px;">— Mokola accounts for ₦42k of the month's shortage. Two attendants account for ₦38k of that.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

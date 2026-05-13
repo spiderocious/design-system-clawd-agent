@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorly — soft Scandinavian</title>
+<link rel="stylesheet" href="preview/_foundation.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--paper); }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+  }
+
+  .toc {
+    background: var(--paper);
+    border-right: 1px solid var(--sheet-edge);
+    padding: 32px 28px 20px;
+    overflow: auto;
+    display: flex; flex-direction: column;
+  }
+  .ttl {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: var(--track-display);
+    line-height: 1;
+    margin: 0;
+  }
+  .vol {
+    font-family: var(--sans); font-size: 11px;
+    color: var(--ink-3); margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+  .meta {
+    font-family: var(--sans); font-size: 10px; color: var(--ink-3);
+    margin-top: 24px; padding-top: 18px;
+    border-top: 1px solid var(--hair);
+    line-height: 1.7;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  .toc-search { margin: 22px 0 8px; }
+  .toc-search input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--ink-3);
+    height: 30px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    padding: 0 0 4px;
+  }
+  .toc-search input:focus { border-bottom-color: var(--green-500); }
+  .toc-search input::placeholder { color: var(--ink-4); letter-spacing: 0.06em; font-size: 12px; }
+
+  .nav { flex: 1; padding: 0; margin: 0; list-style: none; }
+
+  .group { margin-top: 22px; }
+  .group:first-child { margin-top: 8px; }
+  .group-h {
+    display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--sans);
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .group-h .n { color: var(--ink); }
+  .group-h .l { flex: 1; height: 1px; background: var(--hair); }
+
+  .item {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 5px 0;
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.45;
+  }
+  .item .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: transparent; border: 1px solid var(--ink-4);
+    flex-shrink: 0; transform: translateY(-3px);
+  }
+  .item:hover { color: var(--ink); }
+  .item.on { color: var(--ink); font-weight: 600; }
+  .item.on .dot { background: var(--green-500); border-color: var(--green-500); }
+
+  .stage {
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: var(--paper);
+  }
+  .head {
+    flex-shrink: 0;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--sheet-edge);
+    display: flex; align-items: baseline; gap: 16px;
+    background: var(--paper);
+  }
+  .crumb {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+  }
+  .crumb .cur { color: var(--ink); }
+  .head .gap { flex: 1; }
+  .head a {
+    font-family: var(--sans); font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.16em; text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .head a:hover { color: var(--ink); border-bottom-color: var(--green-500); }
+
+  .frame {
+    flex: 1;
+    min-height: 0;
+    background: var(--paper-deep);
+  }
+  .frame iframe {
+    width: 100%; height: 100%; border: 0; display: block;
+    background: var(--paper);
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="toc">
+    <h1 class="ttl">Tutorly</h1>
+    <div class="vol">A tutor-meets-student marketplace · vol. 1 · soft Scandinavian</div>
+
+    <div class="toc-search">
+      <input id="filter" placeholder="Search…" autocomplete="off">
+    </div>
+
+    <nav id="nav" class="nav"></nav>
+
+    <div class="meta">
+      Multi-country<br>
+      v 0.1
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="head">
+      <div class="crumb" id="crumb">
+        <span>Part I · Foundation</span>
+        <span style="margin: 0 8px; color: var(--ink-4)">/</span>
+        <span class="cur">Palette</span>
+      </div>
+      <div class="gap"></div>
+      <a href="../../index.html">← Playground</a>
+      <a href="README.md" target="_blank">Readme</a>
+      <a id="popout" href="#" target="_blank">Open ↗</a>
+    </div>
+    <div class="frame">
+      <iframe id="preview" title="Tutorly specimen"></iframe>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const PARTS = [
+    { id: "I",   title: "Foundation", items: [
+        { name: "Palette",                    file: "preview/01-palette.html" },
+        { name: "Type",                       file: "preview/02-type.html" },
+        { name: "Spacing & geometry",         file: "preview/03-geometry.html" },
+        { name: "Motion",                     file: "preview/04-motion.html" },
+        { name: "Iconography",                file: "preview/05-icons.html" },
+    ]},
+    { id: "II",  title: "Primitives", items: [
+        { name: "Buttons",                    file: "preview/10-buttons.html" },
+        { name: "Inputs",                     file: "preview/11-inputs.html" },
+        { name: "Selection",                  file: "preview/12-selection.html" },
+        { name: "Tutor-specific inputs",      file: "preview/13-tutor-inputs.html" },
+    ]},
+    { id: "III", title: "Data & state", items: [
+        { name: "List row · the directory",   file: "preview/20-list-row.html" },
+        { name: "Tutor profile card",         file: "preview/21-profile-card.html" },
+        { name: "Credentials & evidence",     file: "preview/22-credentials.html" },
+        { name: "Price · connect-fee",        file: "preview/23-price.html" },
+        { name: "Avatars, chips, verified",   file: "preview/24-avatars-chips.html" },
+        { name: "Empty, loading, error",      file: "preview/25-empty-loading.html" },
+    ]},
+    { id: "IV",  title: "Surfaces", items: [
+        { name: "Search results",             file: "preview/30-search-results.html" },
+        { name: "Tutor profile",              file: "preview/31-tutor-profile.html" },
+        { name: "Conversation (post-connect)", file: "preview/32-conversation.html" },
+    ]},
+    { id: "V",   title: "Overlays & system", items: [
+        { name: "Connect-confirm · critical", file: "preview/40-connect-modal.html" },
+        { name: "Report a tutor · safety",    file: "preview/41-report-modal.html" },
+        { name: "Toasts & banners",           file: "preview/42-toasts.html" },
+    ]},
+  ];
+
+  const nav = document.getElementById('nav');
+  const filter = document.getElementById('filter');
+  const iframe = document.getElementById('preview');
+  const crumb = document.getElementById('crumb');
+  const popout = document.getElementById('popout');
+
+  let currentFile = null;
+
+  function render(query = "") {
+    nav.innerHTML = "";
+    const q = query.trim().toLowerCase();
+    PARTS.forEach(part => {
+      const items = part.items.filter(it => !q || it.name.toLowerCase().includes(q));
+      if (!items.length) return;
+      const g = document.createElement('div');
+      g.className = 'group';
+      g.innerHTML = `<div class="group-h"><span class="n">${part.id}</span><span>${part.title}</span><span class="l"></span></div>`;
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.className = 'item' + (it.file === currentFile ? ' on' : '');
+        a.innerHTML = `<span class="dot"></span><span>${it.name}</span>`;
+        a.addEventListener('click', e => { e.preventDefault(); load(it, part); });
+        g.appendChild(a);
+      });
+      nav.appendChild(g);
+    });
+  }
+
+  function load(item, part) {
+    currentFile = item.file;
+    iframe.src = item.file;
+    popout.href = item.file;
+    crumb.innerHTML = `<span>Part ${part.id} · ${part.title}</span><span style="margin:0 8px;color:var(--ink-4)">/</span><span class="cur">${item.name}</span>`;
+    document.querySelectorAll('.item').forEach(el => el.classList.toggle('on', false));
+    [...document.querySelectorAll('.item')].forEach(el => {
+      if (el.querySelector('span:last-child')?.textContent.trim() === item.name) el.classList.add('on');
+    });
+    location.hash = encodeURIComponent(item.file);
+  }
+
+  filter.addEventListener('input', e => render(e.target.value));
+  filter.addEventListener('keydown', e => {
+    const items = [...document.querySelectorAll('.item')];
+    const idx = items.findIndex(a => a.classList.contains('on'));
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[Math.min(idx+1, items.length-1)]?.click(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); items[Math.max(idx-1, 0)]?.click(); }
+    else if (e.key === 'Enter') { items.find(a => a.classList.contains('on'))?.click(); }
+    else if (e.key === 'Escape') { filter.value = ''; render(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== filter) {
+      e.preventDefault(); filter.focus();
+    }
+  });
+
+  const hash = decodeURIComponent(location.hash.slice(1));
+  let booted = false;
+  if (hash) {
+    PARTS.forEach(p => p.items.forEach(it => {
+      if (it.file === hash) { render(); load(it, p); booted = true; }
+    }));
+  }
+  if (!booted) { render(); load(PARTS[0].items[0], PARTS[0]); }
+</script>
+
+</body>
+</html>

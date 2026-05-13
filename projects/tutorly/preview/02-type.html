@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Type</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .specimen { padding: 32px 36px; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 16px; margin-bottom: 24px; }
+  .specimen .role { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 18px; }
+  .specimen .role span { color: var(--ink); }
+  .spec-row { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hair-soft); }
+  .spec-row:last-child { border-bottom: 0; }
+  .spec-row .meta { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+  .spec-row .meta strong { display: block; color: var(--ink); margin-bottom: 4px; font-family: var(--sans); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; }
+  .editorial { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+  .editorial blockquote {
+    margin: 0;
+    font-family: var(--serif); font-style: italic;
+    font-size: 22px; line-height: 1.4;
+    color: var(--ink); letter-spacing: -0.012em;
+    border-left: 2px solid var(--green-500);
+    padding-left: 18px;
+  }
+  .editorial .body p {
+    font-size: 15px; line-height: 1.7; color: var(--ink-2);
+    margin: 0 0 14px;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">02 / FOUNDATION</span>
+    <h1 class="ttl">Type</h1>
+    <span class="meta">Fraunces · Inter · JetBrains Mono</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Three families, three jobs. <strong>Fraunces</strong> serif for thinking — tutor names, headlines, teaching philosophy pulled out as italic quotes. <strong>Inter</strong> sans for chrome and body — labels, navigation, paragraphs of running copy. <strong>JetBrains Mono</strong> for figures — prices, hours, dates, anything tabular.</p>
+
+  <div class="specimen">
+    <div class="role">Family · <span>Fraunces</span> · serif · for thinking</div>
+    <div class="spec-row">
+      <div class="meta"><strong>Display</strong>56 / 1.02<br>letter -0.024em</div>
+      <div class="serif" style="font-size: 56px; line-height: 1.02; letter-spacing: -0.024em;">Find a tutor who teaches the way you wish you'd been taught.</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Headline</strong>32 / 1.1<br>letter -0.018em</div>
+      <div class="serif" style="font-size: 32px; line-height: 1.1; letter-spacing: -0.018em;">Marcus K. · Further Maths</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Sub</strong>22 / 1.2</div>
+      <div class="serif" style="font-size: 22px; line-height: 1.2;">Eight years preparing students for WAEC, SAT and A-Levels</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Name (row)</strong>17 / 1.15</div>
+      <div class="serif" style="font-size: 17px; line-height: 1.15; letter-spacing: -0.012em;">Aisha O.</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Italic · pull-quote</strong>22 / 1.4</div>
+      <div class="serif-i" style="font-size: 22px; line-height: 1.4; letter-spacing: -0.012em;">"I teach mathematics the way I wish I'd been taught — slowly, with the why before the how."</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="role">Family · <span>Inter</span> · sans · for chrome &amp; body</div>
+    <div class="spec-row">
+      <div class="meta"><strong>Body</strong>14 / 1.65</div>
+      <div class="body">Marcus has been teaching A-Level Mathematics in Lekki for eight years. He prepares roughly fifteen students a year, with a focus on building intuition before drill — most of them go on to engineering or economics at Lagos, Ibadan, or abroad. He writes a Sunday note for parents at the end of each term.</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Label</strong>11 / 0.14em<br>uppercase 600</div>
+      <div class="overline">Identity verified · document on file</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Eyebrow</strong>10.5 / 0.22em<br>uppercase 600</div>
+      <div class="eyebrow">Step 2 of 3 · Confirm connection</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Button</strong>14 / 600</div>
+      <div style="font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: -0.005em;">Connect with Marcus — ₦2,500</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Caption</strong>12 / muted</div>
+      <div class="tiny">Lekki, Lagos · 12 km from your location</div>
+    </div>
+  </div>
+
+  <div class="specimen">
+    <div class="role">Family · <span>JetBrains Mono</span> · monospace · for figures</div>
+    <div class="spec-row">
+      <div class="meta"><strong>Price · large</strong>28 / tabular</div>
+      <div class="price price-lg tabular">₦12,000<span class="price-unit" style="margin-left: 6px;">per hour</span></div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Price · row</strong>14 / tabular</div>
+      <div class="price price-sm tabular">₦8,500</div>
+    </div>
+    <div class="spec-row">
+      <div class="meta"><strong>Profile no.</strong>11 / 0</div>
+      <div class="mono" style="font-size: 11px; color: var(--ink-3);">profile · 00142 · joined Mar 2024</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Type doing work</span></div>
+
+  <div class="editorial">
+    <blockquote>"I never speak first about marks. I ask the student what they think the question is about. Most of them have never been asked that before."</blockquote>
+    <div class="body">
+      <p>Marcus has been teaching A-Level Mathematics in Lekki for eight years. His students come up through King's College and Greensprings, and he sees roughly fifteen a year — small enough that he writes individually to every parent at the end of each term.</p>
+      <p>He keeps a Sunday note on the site where he explains one problem from the week in plain language: <em>why it matters, where it shows up later, what a careful student would notice on first reading.</em> Parents read these to their younger children at the kitchen table.</p>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

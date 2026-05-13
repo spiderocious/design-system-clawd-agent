@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tank · dip readout</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .tank-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .tank-card {
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card);
+    padding: 20px 22px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .tank-card .head { display: flex; align-items: baseline; gap: 10px; }
+  .tank-card .head .id { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .tank-card .head .h { font-family: var(--serif); font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .tank-card .head .right { margin-left: auto; }
+  .tank-card .visual {
+    display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: stretch; min-height: 140px;
+  }
+  .tank-card .stick { width: 36px; border: 1px solid var(--ink); border-radius: 3px; background: var(--paper-deep); position: relative; }
+  .tank-card .stick .fill { position: absolute; left: 0; right: 0; bottom: 0; background: var(--emerald-600); border-radius: 0 0 3px 3px; }
+  .tank-card .stick.ago .fill { background: var(--ago); }
+  .tank-card .stick.dpk .fill { background: var(--dpk); }
+  .tank-card .stick.low .fill { background: var(--short); }
+  .tank-card .read-col { display: flex; flex-direction: column; justify-content: space-between; }
+  .tank-card .read-col .total { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 32px; line-height: 1; letter-spacing: -0.018em; }
+  .tank-card .read-col .total .u { font-family: var(--sans); font-size: 12px; color: var(--ink-3); margin-left: 4px; letter-spacing: 0.04em; }
+  .tank-card .lines { display: grid; grid-template-columns: 90px 1fr; gap: 8px 12px; font-size: 12px; }
+  .tank-card .lines .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; align-self: center; }
+  .tank-card .lines .v { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .tank-card .footer { padding-top: 10px; border-top: 1px solid var(--hair-soft); display: flex; align-items: baseline; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">22.</div>
+    <div class="ttl">Tank · dip readout.</div>
+    <div class="meta">DATA &amp; STATE</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Three underground tanks at Mokola — PMS, AGO, DPK. The dipstick fill shows what's physically in the ground; the panel beside shows the trail (opening, sold, delivered, closing, variance). Reorder thresholds are marked. Low tanks get the oxblood treatment without needing a separate alert.
+  </p>
+
+  <div class="tank-row">
+
+    <div class="tank-card">
+      <div class="head">
+        <span class="id">T-01</span>
+        <span class="h">PMS</span>
+        <span class="right pill pill-ok"><span class="dot"></span>Healthy</span>
+      </div>
+      <div class="visual">
+        <div class="stick"><div class="fill" style="height: 62%;"></div></div>
+        <div class="read-col">
+          <div>
+            <div class="overline">IN TANK NOW</div>
+            <div class="total">20,460<span class="u">L</span></div>
+            <div class="rec" style="margin-top: 2px;">62% OF 33,000</div>
+          </div>
+          <div class="lines">
+            <span class="k">OPEN</span><span class="v">22,388 L</span>
+            <span class="k">SOLD</span><span class="v">−1,928 L</span>
+            <span class="k">DELIVERED</span><span class="v">+ 0 L</span>
+            <span class="k">CLOSE (DIP)</span><span class="v" style="color: var(--emerald-700);">20,460 L</span>
+            <span class="k">VARIANCE</span><span class="v read-ok">+ 0 L</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="rec">REORDER AT 4,000 L</span>
+        <span class="dictated" style="margin-left: auto; font-size: 12px;">— 8 days at current pace</span>
+      </div>
+    </div>
+
+    <div class="tank-card">
+      <div class="head">
+        <span class="id">T-02</span>
+        <span class="h">AGO</span>
+        <span class="right pill pill-ok"><span class="dot"></span>Healthy</span>
+      </div>
+      <div class="visual">
+        <div class="stick ago"><div class="fill" style="height: 48%;"></div></div>
+        <div class="read-col">
+          <div>
+            <div class="overline">IN TANK NOW</div>
+            <div class="total">10,560<span class="u">L</span></div>
+            <div class="rec" style="margin-top: 2px;">48% OF 22,000</div>
+          </div>
+          <div class="lines">
+            <span class="k">OPEN</span><span class="v">10,972 L</span>
+            <span class="k">SOLD</span><span class="v">−412 L</span>
+            <span class="k">DELIVERED</span><span class="v">+ 0 L</span>
+            <span class="k">CLOSE (DIP)</span><span class="v" style="color: var(--watch);">10,440 L</span>
+            <span class="k">VARIANCE</span><span class="v" style="color: var(--watch);">− 120 L</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="rec">REORDER AT 3,000 L</span>
+        <span class="dictated" style="margin-left: auto; font-size: 12px; color: var(--watch);">— wet-stock 120L short, investigate</span>
+      </div>
+    </div>
+
+    <div class="tank-card">
+      <div class="head">
+        <span class="id">T-03</span>
+        <span class="h">DPK</span>
+        <span class="right pill pill-short"><span class="dot"></span>Reorder</span>
+      </div>
+      <div class="visual">
+        <div class="stick low"><div class="fill" style="height: 12%; background: var(--short);"></div></div>
+        <div class="read-col">
+          <div>
+            <div class="overline">IN TANK NOW</div>
+            <div class="total read-short">1,320<span class="u">L</span></div>
+            <div class="rec" style="margin-top: 2px;">12% OF 11,000</div>
+          </div>
+          <div class="lines">
+            <span class="k">OPEN</span><span class="v">1,560 L</span>
+            <span class="k">SOLD</span><span class="v">−240 L</span>
+            <span class="k">DELIVERED</span><span class="v">+ 0 L</span>
+            <span class="k">CLOSE (DIP)</span><span class="v">1,320 L</span>
+            <span class="k">VARIANCE</span><span class="v read-ok">+ 0 L</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="rec" style="color: var(--short);">REORDER AT 2,000 L · BELOW</span>
+        <button class="b b-primary b-sm" style="margin-left: auto;">Order DPK</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="break"><span class="lbl">Wet stock — 7-day trail</span></div>
+  <div class="sheet sheet-md">
+    <div class="row" style="justify-content: space-between; margin-bottom: 14px;">
+      <div class="overline">PMS · TANK 01 · DIP READINGS</div>
+      <span class="rec">22,000 L OPEN · 19,200 SOLD · 18,000 DELIVERED · 20,460 CLOSE</span>
+    </div>
+    <svg viewBox="0 0 600 140" style="width: 100%; height: 140px;">
+      <defs>
+        <pattern id="grid" width="60" height="35" patternUnits="userSpaceOnUse">
+          <path d="M0 35h60M0 0v140" fill="none" stroke="#E5DECC" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="600" height="140" fill="url(#grid)"/>
+      <!-- reorder line -->
+      <line x1="0" y1="120" x2="600" y2="120" stroke="#9A1F18" stroke-dasharray="4 4" stroke-width="1"/>
+      <text x="6" y="116" font-family="IBM Plex Mono" font-size="9" fill="#9A1F18" letter-spacing="0.14em">REORDER 4,000 L</text>
+      <!-- delivery jump on day 5 -->
+      <path d="M 0 30 L 100 50 L 200 70 L 300 95 L 380 110 L 400 35 L 500 55 L 600 70"
+            fill="none" stroke="#0E5C3A" stroke-width="2" stroke-linejoin="round"/>
+      <!-- delivery marker -->
+      <circle cx="390" cy="72" r="4" fill="#F2EDE2" stroke="#0E5C3A" stroke-width="1.5"/>
+      <text x="396" y="68" font-family="IBM Plex Mono" font-size="9" fill="#0E5C3A">+18,000 L</text>
+      <!-- x-axis labels -->
+      <g font-family="IBM Plex Mono" font-size="9" fill="#6E665B" letter-spacing="0.1em">
+        <text x="0" y="138">WED</text>
+        <text x="100" y="138">THU</text>
+        <text x="200" y="138">FRI</text>
+        <text x="300" y="138">SAT</text>
+        <text x="380" y="138">SUN</text>
+        <text x="460" y="138">MON</text>
+        <text x="560" y="138">TUE</text>
+      </g>
+    </svg>
+  </div>
+
+</div>
+</body>
+</html>

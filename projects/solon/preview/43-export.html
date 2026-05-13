@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · INEC export sheet</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 36px 28px 56px; background: var(--paper-2); }
+  .sheet-stage {
+    max-width: 880px; margin: 0 auto;
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-card);
+    padding: 48px 54px;
+    box-shadow: var(--shade-pop);
+  }
+
+  .doc-head {
+    display: grid; grid-template-columns: 1fr auto; gap: 24px;
+    padding-bottom: 18px; border-bottom: 3px double var(--ink); margin-bottom: 24px;
+  }
+  .doc-head .seal { font-family: var(--serif); font-weight: 700; font-size: 38px; font-variation-settings: "opsz" 144; line-height: 1; letter-spacing: -0.012em; }
+  .doc-head .seal .dot { color: var(--orange); }
+  .doc-head .ttl { font-family: var(--serif); font-weight: 600; font-size: 22px; font-variation-settings: "opsz" 72; margin-top: 6px; }
+  .doc-head .ttl em { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-weight: 500; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; line-height: 1.7; }
+  .doc-head .meta strong { color: var(--ink); font-weight: 500; }
+
+  .lede {
+    font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-2);
+    line-height: 1.7; margin-bottom: 28px;
+  }
+  .lede::first-letter {
+    font-family: var(--serif); font-weight: 700; font-size: 42px; line-height: 0.9;
+    float: left; margin: 4px 8px 0 0; color: var(--forest-600);
+    font-variation-settings: "opsz" 144;
+  }
+
+  .sec { margin: 28px 0; }
+  .sec-h {
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--ink);
+  }
+  .sec-h .n { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; }
+  .sec-h .t { font-family: var(--serif); font-weight: 600; font-size: 18px; font-variation-settings: "opsz" 36; flex: 1; }
+
+  /* Tables */
+  table.report { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13px; }
+  table.report th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ink); font-weight: 500; }
+  table.report th.num { text-align: right; }
+  table.report td { padding: 10px; border-bottom: 1px solid var(--hair-soft); font-family: var(--sans); }
+  table.report td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  table.report td .nm { font-family: var(--serif); font-weight: 500; font-size: 14px; }
+  table.report tfoot td { border-top: 2px solid var(--ink); border-bottom: 0; padding-top: 12px; font-weight: 500; }
+  table.report tfoot td.num { font-size: 14px; }
+
+  /* Footnote / disclosure block */
+  .disclosure {
+    margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--ink);
+    font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); line-height: 1.6;
+    column-count: 2; column-gap: 28px;
+  }
+  .disclosure strong { font-family: var(--serif); font-style: normal; font-weight: 500; color: var(--ink-2); }
+
+  /* Signature block */
+  .sig {
+    margin-top: 36px;
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 32px; align-items: end;
+  }
+  .sig .col { display: flex; flex-direction: column; gap: 4px; }
+  .sig .col .line { border-bottom: 1px solid var(--ink); padding: 4px 0; font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 13px; min-height: 32px; }
+  .sig .col .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+
+  .doc-foot {
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--hair);
+    display: flex; gap: 18px; align-items: center;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-3);
+  }
+  .doc-foot .gap { flex: 1; }
+</style>
+</head>
+<body>
+<div class="sheet-stage">
+
+  <div class="doc-head">
+    <div>
+      <div class="seal">Solon<span class="dot">.</span></div>
+      <div class="ttl">INEC compliance return <em>— senate, Anambra Central</em></div>
+    </div>
+    <div class="meta">
+      <strong>Filing draft</strong><br/>
+      Candidate: Charles C. Soludo (LP)<br/>
+      Period: 25 Feb — 11 May 2026<br/>
+      Statutory cap: ₦ 4,000,000,000<br/>
+      Generated: 2026-05-11 14:08 WAT
+    </div>
+  </div>
+
+  <p class="lede">
+    This statement of expenditure is prepared by the candidate's campaign in accordance with § 88–90 of the Electoral Act, 2022, and is filed with the Independent National Electoral Commission under the obligations attaching to the seat sought. The figures below reflect <strong>actual disbursements</strong> across the reporting period; the disclosures section that follows describes the model, source data, and confidence limits applicable to any projected figures in this document.
+  </p>
+
+  <div class="sec">
+    <div class="sec-h"><span class="n">§ 01</span><span class="t">Statement of expenditure · by INEC category</span></div>
+    <table class="report">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Sub-cap</th>
+          <th class="num">Spent</th>
+          <th class="num">% sub-cap</th>
+          <th class="num">Headroom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="nm">Media · advertising</span></td><td>₦ 1,200,000,000</td><td class="num">936,000,000</td><td class="num" style="color: var(--orange);">78%</td><td class="num">264,000,000</td></tr>
+        <tr><td><span class="nm">Personnel · stipends</span></td><td>₦ 600,000,000</td><td class="num">384,000,000</td><td class="num">64%</td><td class="num">216,000,000</td></tr>
+        <tr><td><span class="nm">Transport · logistics</span></td><td>₦ 800,000,000</td><td class="num">328,000,000</td><td class="num">41%</td><td class="num">472,000,000</td></tr>
+        <tr><td><span class="nm">Materials · printing</span></td><td>₦ 400,000,000</td><td class="num">112,000,000</td><td class="num">28%</td><td class="num">288,000,000</td></tr>
+        <tr><td><span class="nm">Convention · events</span></td><td>₦ 500,000,000</td><td class="num">260,000,000</td><td class="num">52%</td><td class="num">240,000,000</td></tr>
+        <tr><td><span class="nm">Miscellaneous</span></td><td>₦ 500,000,000</td><td class="num">50,000,000</td><td class="num">10%</td><td class="num">450,000,000</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" style="font-family: var(--serif); font-weight: 600;">Total · against ₦ 4.0 bn statutory cap</td>
+          <td class="num">2,070,000,000</td>
+          <td class="num">52%</td>
+          <td class="num">1,930,000,000</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><span class="n">§ 02</span><span class="t">Donor register · period summary</span></div>
+    <table class="report">
+      <thead>
+        <tr>
+          <th>Donor type</th>
+          <th class="num">Count</th>
+          <th class="num">Total received</th>
+          <th class="num">High-risk flagged</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="nm">Individual</span></td><td class="num">22</td><td class="num">14,650,000</td><td class="num" style="color: var(--orange);">1</td></tr>
+        <tr><td><span class="nm">Corporate</span></td><td class="num">5</td><td class="num">9,200,000</td><td class="num">0</td></tr>
+        <tr><td><span class="nm">Affiliated body</span></td><td class="num">1</td><td class="num">600,000</td><td class="num">0</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><span style="font-family: var(--serif); font-weight: 600;">Total</span></td>
+          <td class="num">28</td>
+          <td class="num">24,450,000</td>
+          <td class="num">1</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><span class="n">§ 03</span><span class="t">Anomaly resolutions</span></div>
+    <table class="report">
+      <thead>
+        <tr><th>Anomaly</th><th>Status</th><th>Resolved by</th><th class="num">Date</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="nm">Duplicate invoice — vendor VND-0412</span></td><td>Action taken · invoices voided</td><td>Finance Officer @F.Okeke</td><td class="num">2026-05-09</td></tr>
+        <tr><td><span class="nm">Stipend claim diverges from peers</span></td><td>Under review</td><td>Campaign Manager @C.Obi</td><td class="num">2026-05-07</td></tr>
+        <tr><td><span class="nm">Single-use high-value vendor (₦ 4.2m)</span></td><td>Dismissed · documentation verified</td><td>Finance Officer @F.Okeke</td><td class="num">2026-05-05</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="disclosure">
+    <strong>§ 04 · Mandatory disclosures.</strong>
+    <br/>This document is generated by the Solon platform from records maintained by the named campaign. All actual-spend and donor figures are sourced from the campaign's own ledger as of the timestamp on this report, and have been countersigned by the named Campaign Manager and Finance Officer. The platform performs anomaly screening but does not independently audit the underlying records.
+    <br/><br/>
+    <strong>Confidence and limits.</strong> Where this document contains projected figures (such as projected final spend or projected breach of any sub-cap), those projections are generated by the Solon model v 2026-05a. The model carries a confidence band, which is stated where projections appear. Projections are not predictions; they are conditional estimates given current spend trajectory and the reporting period to date.
+    <br/><br/>
+    <strong>Voter data note.</strong> No individually identifiable voter data was used in the preparation of any figure in this document.
+    <br/><br/>
+    <strong>Audit log.</strong> Every action that produced this document — record creation, edit, approval, anomaly resolution — is preserved in the platform's audit log under NDPR-aligned retention, accessible to the named candidate's authorised representatives and, on lawful request, to INEC.
+  </div>
+
+  <div class="sig">
+    <div class="col">
+      <span class="line">Chinwe Obi</span>
+      <span class="lbl">Campaign Manager · sig. on file</span>
+    </div>
+    <span class="stamp-official signed">SOLON-VERIFIED · 2026-05-11</span>
+    <div class="col">
+      <span class="line">Funmi Okeke</span>
+      <span class="lbl">Finance Officer · sig. on file</span>
+    </div>
+  </div>
+
+  <div class="doc-foot">
+    <span>Solon platform · solon.ng · NDPR-aligned</span>
+    <span class="gap"></span>
+    <span>Page 1 of 8 · INEC FORM CE-01R · v 2026.1</span>
+  </div>
+
+</div>
+</body>
+</html>

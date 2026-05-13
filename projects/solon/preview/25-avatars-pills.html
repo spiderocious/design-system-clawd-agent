@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · avatars · pills · status</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  .row-block { padding: 16px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .row-block .gap { width: 1px; height: 20px; background: var(--hair); }
+
+  /* Person card */
+  .person {
+    display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center;
+    padding: 12px 16px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet);
+  }
+  .person .nm { font-family: var(--serif); font-weight: 600; font-size: 15px; font-variation-settings: "opsz" 18; }
+  .person .role { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+
+  /* Stamps */
+  .stamp-row { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; padding: 24px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">25 / DATA & STATE</div>
+    <div class="ttl">Avatars · pills · stamps</div>
+    <div class="sub">— sober initials, hairlined pills, parliamentary stamps.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Avatars</div>
+    <div class="row-block">
+      <span class="av av-sm">AO</span>
+      <span class="av av-md">CK</span>
+      <span class="av av-lg">CS</span>
+      <span class="av av-xl">PE</span>
+      <span class="gap"></span>
+      <span class="av av-forest">SO</span>
+      <span class="av av-orange">??</span>
+      <span class="av av-ink">JS</span>
+      <span class="gap"></span>
+      <span class="mono" style="font-size: 11px; color: var(--ink-3);">Initials only. No stock photos. Role tints used for verified/flagged/admin.</span>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Person cards · campaign team</div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="person">
+        <span class="av av-lg av-forest">CO</span>
+        <div><div class="nm">Chinwe Obi</div><div class="role">Campaign Manager · Anambra Central · verified</div></div>
+        <span class="pill pill-ok"><span class="dot"></span> Verified</span>
+      </div>
+      <div class="person">
+        <span class="av av-lg">EM</span>
+        <div><div class="nm">Emeka Mbachu</div><div class="role">Ward Coordinator · ward 4 · pending stipend</div></div>
+        <span class="pill pill-warn"><span class="dot"></span> Pending</span>
+      </div>
+      <div class="person">
+        <span class="av av-lg av-orange">??</span>
+        <div><div class="nm">Anonymous agent</div><div class="role">PU 008-04-09 · selfie verification failed</div></div>
+        <span class="pill pill-crit"><span class="dot"></span> Blocked</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Pills · status idioms</div>
+    <div class="row-block">
+      <span class="pill pill-ok"><span class="dot"></span> Verified</span>
+      <span class="pill pill-warn"><span class="dot"></span> Flagged</span>
+      <span class="pill pill-crit"><span class="dot"></span> Voided</span>
+      <span class="pill pill-info"><span class="dot"></span> Citizen-source</span>
+      <span class="pill pill-ink"><span class="dot"></span> Admin</span>
+      <span class="pill pill-quiet"><span class="dot"></span> Draft</span>
+      <span class="gap"></span>
+      <span class="chip chip-hold-strong">Strong hold</span>
+      <span class="chip chip-hold">Lean hold</span>
+      <span class="chip chip-toss">Toss-up</span>
+      <span class="chip chip-opp">Lean opp.</span>
+      <span class="chip chip-opp-strong">Strong opp.</span>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Stamps · used on signed exports and audit lines</div>
+    <div class="stamp-row">
+      <span class="stamp-official signed">VERIFIED · 008-04-02</span>
+      <span class="stamp-official">SOLON SIM · 2026-05-11</span>
+      <span class="stamp-official void">VOID · audit #4421</span>
+      <span class="stamp-official" style="border-color: var(--info); color: var(--info);">CITIZEN-SOURCED</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

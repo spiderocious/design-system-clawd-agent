@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Selection · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 28px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .tabs { display: inline-flex; align-items: center; gap: 0; padding: 6px; background: var(--paper-deep); border: 1px solid var(--hair); border-radius: var(--r-pill); }
+  .tabs button {
+    border: 0; background: transparent; padding: 8px 16px;
+    font-size: 13px; font-weight: 500; color: var(--ink-3);
+    border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--sans);
+  }
+  .tabs button.on { background: var(--sheet); color: var(--ink); box-shadow: var(--shade-1); }
+  .tabs button svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+
+  /* underline tabs — analysis result style */
+  .utabs { display: flex; gap: 24px; border-bottom: 1px solid var(--hair); }
+  .utabs a {
+    padding: 12px 0; font-size: 13.5px; color: var(--ink-3); font-weight: 500;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .utabs a.on { color: var(--accent); border-bottom-color: var(--accent); }
+  .utabs a:hover:not(.on) { color: var(--ink); }
+  .utabs a .count {
+    font-size: 11px; padding: 1px 6px; border-radius: 999px;
+    background: var(--paper-deep); color: var(--ink-3); border: 1px solid var(--hair);
+    font-variant-numeric: tabular-nums;
+  }
+  .utabs a.on .count { background: var(--accent-tint); color: var(--accent-ink); border-color: var(--accent-edge); }
+
+  /* toggle */
+  .toggle { width: 36px; height: 20px; border-radius: 999px; background: var(--ink-5); position: relative; cursor: pointer; transition: background 160ms ease-out; }
+  .toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); transition: left 160ms ease-out; }
+  .toggle.on { background: var(--accent); }
+  .toggle.on::after { left: 18px; }
+
+  .row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .platform-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .plat {
+    border: 1px solid var(--hair);
+    background: var(--paper); border-radius: var(--r-soft);
+    padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;
+    font-size: 13px; transition: border-color 160ms, background 160ms;
+  }
+  .plat .glyph { width: 28px; height: 28px; background: var(--ink); border-radius: 6px; color: var(--paper); display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+  .plat.on { border-color: var(--accent); background: var(--accent-tint); }
+  .plat.on .glyph { background: var(--accent); }
+  .plat:hover:not(.on) { border-color: var(--ink-4); }
+
+  /* dropdown rendered open */
+  .dropdown {
+    border: 1px solid var(--hair);
+    border-radius: var(--r-card);
+    background: var(--sheet);
+    box-shadow: var(--shade-pop);
+    padding: 6px;
+    width: 280px;
+  }
+  .dropdown .opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 4px;
+    font-size: 13px; cursor: pointer;
+  }
+  .dropdown .opt:hover { background: var(--paper-deep); }
+  .dropdown .opt.on { background: var(--accent-tint); color: var(--accent-ink); }
+  .dropdown .opt .meta { color: var(--ink-3); font-size: 11.5px; margin-left: auto; }
+  .dropdown hr { border: 0; height: 1px; background: var(--hair); margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Selection</h1>
+  <p>Tabs, segmented controls, toggles, multi-select platform pickers. The violet accent is the "this is on" signal everywhere.</p>
+</header>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">01</span><span class="ttl">Underline tabs · analysis result</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">The seven dimensions of an analysis. The active tab carries the accent both in colour and in the underline.</p>
+  <div class="utabs">
+    <a>Overview</a>
+    <a class="on">Sentiment <span class="count">87%</span></a>
+    <a>Virality <span class="count">72%</span></a>
+    <a>Brand <span class="count">74%</span></a>
+    <a>Platform</a>
+    <a>Timing <span class="count">3</span></a>
+    <a>Risk <span class="count">Low</span></a>
+    <a>Tips <span class="count">6</span></a>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">02</span><span class="ttl">Pill tabs · top-level nav</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">The main app nav floats as a single pill — Dashboard, Content, Script, Teleprompter.</p>
+  <div class="tabs">
+    <button><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg> Dashboard</button>
+    <button class="on"><svg viewBox="0 0 24 24"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/></svg> Content analysis</button>
+    <button><svg viewBox="0 0 24 24"><path d="M4 5h14v14H4z"/><path d="M8 9h6M8 13h6M8 17h4"/></svg> Script analysis</button>
+    <button><svg viewBox="0 0 24 24"><path d="M5 7h14v10H5z"/><circle cx="12" cy="12" r="3"/></svg> Teleprompter</button>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">03</span><span class="ttl">Platform picker · multi-select</span></div>
+  <p style="margin:0 0 14px;font-size:12.5px;color:var(--ink-3);">The creator picks one or more target platforms before an analysis runs. Selected ones light the violet tint.</p>
+  <div class="platform-grid">
+    <div class="plat on"><span class="glyph">𝕏</span>Twitter</div>
+    <div class="plat on"><span class="glyph">In</span>Instagram</div>
+    <div class="plat"><span class="glyph">Tk</span>TikTok</div>
+    <div class="plat"><span class="glyph">Yt</span>YouTube</div>
+    <div class="plat"><span class="glyph">Li</span>LinkedIn</div>
+    <div class="plat"><span class="glyph">Fb</span>Facebook</div>
+    <div class="plat"><span class="glyph">Th</span>Threads</div>
+    <div class="plat" style="border-style:dashed; color:var(--ink-3);"><span class="glyph" style="background:transparent;color:var(--ink-3);border:1px dashed var(--ink-4);">+</span>Add custom</div>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="scene-h"><span class="roman">04</span><span class="ttl">Toggles & dropdown</span></div>
+  <div class="grid">
+    <div>
+      <div class="row" style="justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--hair);">
+        <div><div style="font-size:13px;font-weight:500;">Auto-analyse on paste</div><div class="t-caption">Run a quick scan the moment you paste content over 80 words.</div></div>
+        <div class="toggle on" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" style="justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--hair);">
+        <div><div style="font-size:13px;font-weight:500;">Save drafts every 30 s</div><div class="t-caption">Drafts live in your library indefinitely.</div></div>
+        <div class="toggle on" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" style="justify-content:space-between;padding:14px 0;">
+        <div><div style="font-size:13px;font-weight:500;">Share analysis with team</div><div class="t-caption">Off · only you can see your scores.</div></div>
+        <div class="toggle" role="switch" aria-checked="false"></div>
+      </div>
+    </div>
+
+    <div style="padding-left:18px;border-left:1px solid var(--hair);">
+      <div class="t-overline" style="margin-bottom:10px;">Region picker · open</div>
+      <div class="dropdown">
+        <div class="opt on">🇳🇬 Nigeria <span class="meta">Current</span></div>
+        <div class="opt">🇿🇦 South Africa</div>
+        <div class="opt">🇰🇪 Kenya</div>
+        <div class="opt">🇬🇭 Ghana</div>
+        <hr />
+        <div class="opt">🇺🇸 United States</div>
+        <div class="opt">🇬🇧 United Kingdom</div>
+        <div class="opt">🇨🇦 Canada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

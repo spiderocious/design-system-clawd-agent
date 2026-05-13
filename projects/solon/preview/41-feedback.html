@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · toasts · banners · feedback</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+
+  /* Banner */
+  .bnr {
+    display: grid; grid-template-columns: 24px 1fr auto; gap: 14px;
+    padding: 14px 18px; border-radius: var(--r-card);
+    background: var(--paper-2); border: 1px solid var(--hair); border-left: 3px solid var(--ink);
+    margin-bottom: 10px;
+  }
+  .bnr.warn { background: var(--orange-soft); border-color: var(--orange-edge); border-left-color: var(--orange); }
+  .bnr.crit { background: var(--crit-bg); border-color: var(--crit-edge); border-left-color: var(--crit); }
+  .bnr.ok { background: var(--forest-50); border-color: var(--forest-200); border-left-color: var(--forest-600); }
+  .bnr.info { background: var(--info-bg); border-color: var(--info-edge); border-left-color: var(--info); }
+  .bnr .ic svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.4; fill: none; }
+  .bnr .body { font-family: var(--serif); font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+  .bnr .body strong { font-style: normal; font-weight: 600; color: var(--ink); }
+  .bnr.warn .body strong { color: var(--orange-deep); }
+  .bnr.crit .body strong { color: var(--crit); }
+  .bnr.ok .body strong { color: var(--forest-700); }
+  .bnr.info .body strong { color: var(--info); }
+  .bnr .actions { display: flex; gap: 6px; align-self: center; }
+
+  /* Toasts */
+  .toast-stage { padding: 22px; background: var(--paper-2); border-radius: var(--r-card); display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+  .toast {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 16px; border-radius: var(--r-card);
+    display: grid; grid-template-columns: 18px 1fr auto; gap: 12px; align-items: center;
+    min-width: 340px; max-width: 460px;
+    border-left: 3px solid var(--forest-600);
+  }
+  .toast.warn { border-left-color: var(--orange); }
+  .toast.crit { border-left-color: var(--crit); }
+  .toast .ic svg { width: 16px; height: 16px; stroke: var(--paper); stroke-width: 1.4; fill: none; }
+  .toast .nm { font-family: var(--sans); font-size: 13.5px; font-weight: 500; }
+  .toast .sub { font-family: var(--serif); font-style: italic; font-size: 12px; color: rgba(245,239,224,0.7); display: block; margin-top: 2px; }
+  .toast .undo { font-family: var(--mono); font-size: 11px; color: rgba(245,239,224,0.8); cursor: pointer; }
+  .toast .undo:hover { color: var(--paper); text-decoration: underline; }
+
+  /* Status pills (footer) */
+  .status-bar {
+    display: flex; align-items: center; gap: 14px; padding: 8px 14px;
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r-card);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  }
+  .status-bar .ok { color: #7AA386; }
+  .status-bar .warn { color: var(--orange); }
+  .status-bar .gap { flex: 1; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">41 / OVERLAYS</div>
+    <div class="ttl">Toasts · banners · status</div>
+    <div class="sub">— compact, citation-aware, no decorative emoji.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Banners · in-flow notifications</div>
+
+    <div class="bnr ok">
+      <span class="ic" style="color: var(--forest-700);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <div class="body"><strong>Form EC8A reconciled</strong> at PU 008-04-02 — two independent sources match within tolerance. The polling unit's result is now Confirmed.</div>
+      <div class="actions"><button class="b b-quiet b-sm">View</button></div>
+    </div>
+
+    <div class="bnr warn">
+      <span class="ic" style="color: var(--orange-deep);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17v.5"/></svg></span>
+      <div class="body"><strong>Spend approaching cap</strong> — your media sub-cap is at 78%. At the current ₦ 18m/day burn, you'll cross the 90% threshold in 6 days.</div>
+      <div class="actions"><button class="b b-quiet b-sm">Forecast</button><button class="b b-warn b-sm">Pause spend</button></div>
+    </div>
+
+    <div class="bnr crit">
+      <span class="ic" style="color: var(--crit);"><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3z"/><path d="M12 10v5M12 18v.5"/></svg></span>
+      <div class="body"><strong>Severity-5 incident · BVAS lockdown</strong> — three polling units in Idemili North have reported BVAS authentication failure. Legal team has been dispatched.</div>
+      <div class="actions"><button class="b b-secondary b-sm">War Room</button></div>
+    </div>
+
+    <div class="bnr info">
+      <span class="ic" style="color: var(--info);"><svg viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5z"/></svg></span>
+      <div class="body"><strong>Weekly issue digest is ready</strong> — top 10 issues in Anambra Central this week, with source breakdown and suggested talking points.</div>
+      <div class="actions"><button class="b b-secondary b-sm">Open digest</button></div>
+    </div>
+
+    <div class="bnr">
+      <span class="ic" style="color: var(--ink);"><svg viewBox="0 0 24 24"><path d="M3 4l9 8-9 8z"/></svg></span>
+      <div class="body"><strong>Soludo–LP scenario was saved</strong> as a draft 4 minutes ago. Auto-save runs every 90 seconds.</div>
+      <div class="actions"><button class="b b-link" style="font-size: 12px;">Restore</button></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Toasts · stack from the bottom-right</div>
+    <div class="toast-stage">
+      <div class="toast">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <div><span class="nm">Scenario saved</span><span class="sub">Soludo–LP coalition · +8pt youth · synced to your team</span></div>
+        <span class="undo">Undo · 8s</span>
+      </div>
+      <div class="toast warn">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17v.5"/></svg></span>
+        <div><span class="nm">Donor flagged · ₦ 5m cash</span><span class="sub">Acknowledge before this entry is accepted into the books.</span></div>
+        <span class="undo">Open</span>
+      </div>
+      <div class="toast crit">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3z"/><path d="M12 10v5"/></svg></span>
+        <div><span class="nm">Sev-5 incident · PU 008-05-19</span><span class="sub">BVAS lockdown. Legal team paged.</span></div>
+        <span class="undo">War Room</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Status bar · footer of every long-running session</div>
+    <div class="status-bar">
+      <span><span class="ok">●</span> AGENT MOBILE: 263 / 412 ONLINE</span>
+      <span><span class="warn">●</span> 14 OPEN INCIDENTS</span>
+      <span>SOLON MODEL · v 2026-05a</span>
+      <span class="gap"></span>
+      <span>UPTIME 11:42:08</span>
+      <span>FEED LATENCY 1.4s</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

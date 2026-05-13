@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tables · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 0; margin-top: 24px; overflow: hidden; }
+  .scene-h { padding: 22px 28px; display: flex; align-items: baseline; gap: 10px; justify-content: space-between; }
+  .scene-h .left { display: flex; align-items: baseline; gap: 10px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .scene-h .tools { display: flex; gap: 8px; }
+  .scene-h .tools input { width: 220px; padding: 6px 10px; font-size: 12.5px; border: 1px solid var(--hair); border-radius: var(--r-soft); background: var(--paper); }
+  .scene-h .tools .btn-sm { padding: 6px 10px; font-size: 12px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 14px 28px; border-top: 1px solid var(--hair); font-size: 13px; vertical-align: middle; }
+  th { font-size: 10.5px; color: var(--ink-3); font-weight: 500; text-transform: uppercase; letter-spacing: var(--track-overline); background: var(--paper); }
+  th { border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+  tbody tr:hover { background: var(--paper); }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  th.num { text-align: right; }
+  td .title { font-weight: 500; }
+  td .sub { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+
+  .score-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 500;
+    background: var(--accent-tint); color: var(--accent-ink); border: 1px solid var(--accent-edge);
+    font-variant-numeric: tabular-nums;
+  }
+  .score-pill.warn { background: var(--warn-bg); color: var(--warn-deep); border-color: var(--warn-edge); }
+  .score-pill.crit { background: var(--crit-bg); color: var(--crit-deep); border-color: var(--crit-edge); }
+
+  .glyph { width: 22px; height: 22px; border-radius: 5px; display: inline-grid; place-items: center; font-size: 10px; font-weight: 600; color: var(--paper); background: var(--ink); margin-right: 8px; vertical-align: middle; }
+
+  .empty {
+    padding: 64px 28px; text-align: center; color: var(--ink-3);
+  }
+  .empty h3 { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 4px; }
+  .empty p { font-size: 12.5px; margin: 0; }
+
+  /* tiny sparkline */
+  .spark { display: inline-block; width: 64px; height: 16px; vertical-align: middle; }
+  .spark path { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+  .spark path.flat { stroke: var(--ink-3); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Tables</h1>
+  <p>Tables are rule-bound: hairline above the header, hairline above each row, no vertical lines. Numbers sit right, tabular. The hover row is just paper-deep — no zebra striping.</p>
+</header>
+
+<!-- Previous analyses list -->
+<section class="scene">
+  <div class="scene-h">
+    <div class="left"><span class="roman">01</span><span class="ttl">Previous analyses</span></div>
+    <div class="tools">
+      <input placeholder="Search your analyses…" />
+      <button class="btn btn-secondary btn-sm">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+        Filter
+      </button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:42%;">Title</th>
+        <th>Platforms</th>
+        <th>Date</th>
+        <th class="num">Score</th>
+        <th class="num">Trend</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="title">Spent some time last month building BuffByte AI</div>
+          <div class="sub">37 words · 231 characters</div>
+        </td>
+        <td><span class="glyph">𝕏</span><span class="glyph" style="background:var(--ink-2);">In</span></td>
+        <td>Aug 22 · 09:14</td>
+        <td class="num"><span class="score-pill">87</span></td>
+        <td class="num">
+          <svg class="spark" viewBox="0 0 64 16"><path d="M0 12 L12 10 L24 8 L36 4 L48 6 L64 2"/></svg>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Open</button></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="title">Striking the right balance between shipping new features…</div>
+          <div class="sub">150 words · 942 characters</div>
+        </td>
+        <td><span class="glyph">𝕏</span></td>
+        <td>Aug 12 · 18:02</td>
+        <td class="num"><span class="score-pill">72</span></td>
+        <td class="num">
+          <svg class="spark" viewBox="0 0 64 16"><path d="M0 8 L12 9 L24 7 L36 8 L48 7 L64 5"/></svg>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Open</button></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="title">New Buffer posting streak leaderboard, featuring m…</div>
+          <div class="sub">25 words · 158 characters · auto-saved</div>
+        </td>
+        <td><span class="glyph" style="background:var(--ink-2);">Tk</span></td>
+        <td>Aug 12 · 17:48</td>
+        <td class="num"><span class="score-pill warn">54</span></td>
+        <td class="num">
+          <svg class="spark" viewBox="0 0 64 16"><path class="flat" d="M0 9 L12 8 L24 10 L36 9 L48 11 L64 10"/></svg>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Open</button></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="title">If you've ever wondered how some creators work full…</div>
+          <div class="sub">75 words · 468 characters</div>
+        </td>
+        <td><span class="glyph">𝕏</span><span class="glyph" style="background:var(--ink-2);">In</span><span class="glyph" style="background:var(--ink-2);">Tk</span></td>
+        <td>Aug 10 · 11:21</td>
+        <td class="num"><span class="score-pill">78</span></td>
+        <td class="num">
+          <svg class="spark" viewBox="0 0 64 16"><path d="M0 10 L12 8 L24 9 L36 6 L48 7 L64 4"/></svg>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Open</button></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="title">Why the “productivity tax” argument actually works for…</div>
+          <div class="sub">94 words · 612 characters</div>
+        </td>
+        <td><span class="glyph" style="background:var(--ink-2);">Li</span></td>
+        <td>Aug 08 · 07:55</td>
+        <td class="num"><span class="score-pill crit">38</span></td>
+        <td class="num">
+          <svg class="spark" viewBox="0 0 64 16"><path class="flat" d="M0 4 L12 6 L24 8 L36 9 L48 11 L64 13"/></svg>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Open</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Empty state -->
+<section class="scene">
+  <div class="scene-h">
+    <div class="left"><span class="roman">02</span><span class="ttl">Empty state</span></div>
+  </div>
+  <div class="empty">
+    <svg class="icon icon-xl" viewBox="0 0 24 24" style="color:var(--ink-4);margin-bottom:14px;"><path d="M6 4h9l5 5v11H6z"/><path d="M15 4v5h5"/><path d="M9 14h6M9 17h4"/></svg>
+    <h3>No analyses yet</h3>
+    <p>Paste a draft into the composer to start. Your coach is ready when you are.</p>
+    <div style="margin-top:18px;"><button class="btn btn-primary btn-sm">Start a new analysis</button></div>
+  </div>
+</section>
+
+</body>
+</html>

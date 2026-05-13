@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Score ring · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 32px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 22px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  /* Hero ring */
+  .hero-ring {
+    width: 220px; height: 220px;
+    position: relative;
+  }
+  .hero-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+  .hero-ring .v {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .hero-ring .v .n {
+    font-size: 64px; font-weight: 600; letter-spacing: -0.04em; line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .hero-ring .v .u { font-size: 14px; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; letter-spacing: var(--track-overline); }
+
+  .ring-row { display: flex; align-items: center; gap: 40px; }
+  .ring-row .col-text { flex: 1; }
+  .ring-row .col-text h2 {
+    font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px;
+  }
+  .ring-row .col-text p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.55; max-width: 50ch; }
+  .ring-row .col-text .quote {
+    border-left: 2px solid var(--accent);
+    padding: 0 0 0 12px; margin-top: 16px;
+    font-size: 14px; color: var(--ink-2); line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  /* Score row of small rings */
+  .small-rings { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .sr {
+    border: 1px solid var(--hair); border-radius: var(--r-card);
+    padding: 18px; background: var(--paper);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .sr .ring { width: 72px; height: 72px; }
+  .sr .ring svg { width: 100%; height: 100%; }
+  .sr .ring .v { font-size: 16px; }
+  .sr .meta .label { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); margin-bottom: 4px; }
+  .sr .meta .h { font-size: 14px; font-weight: 500; }
+
+  /* gauge — for sentiment */
+  .gauge { width: 100%; max-width: 380px; }
+  .gauge svg { width: 100%; height: 100px; }
+  .gauge-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Score ring</h1>
+  <p>The ring is the signature data device. One number, large and tabular, ringed by an arc. Used at three sizes: hero (220 px), card (88 px), inline (32 px). Colour follows meaning.</p>
+</header>
+
+<!-- Hero ring -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">01</span><span class="ttl">The hero ring · 220 px · analysis result</span></div>
+  <div class="ring-row">
+    <div class="hero-ring">
+      <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="52" stroke="var(--hair)" stroke-width="6" fill="none"></circle>
+        <circle cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="6" fill="none"
+                stroke-dasharray="326.7" stroke-dashoffset="65.34" stroke-linecap="round"></circle>
+      </svg>
+      <div class="v">
+        <div class="n">80<span style="font-size:24px;color:var(--ink-3);">%</span></div>
+        <div class="u">Overall score</div>
+      </div>
+    </div>
+    <div class="col-text">
+      <h2>Ready to publish</h2>
+      <p>This script scores in the top quartile for TikTok and Instagram audiences in NG. The pace is right; the hook lands in the first six words.</p>
+      <div class="quote">Cut <em>“for those who don't know”</em> in line 12. The middle drags around there — without it, you're at 89 %.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 88px rings, four dimensions -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">02</span><span class="ttl">Dimension rings · 72 px</span></div>
+  <div class="small-rings">
+    <div class="sr">
+      <div class="ring">
+        <svg viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="40" stroke="var(--hair)" stroke-width="6" fill="none"></circle>
+          <circle cx="44" cy="44" r="40" stroke="var(--accent)" stroke-width="6" fill="none"
+                  stroke-dasharray="251.3" stroke-dashoffset="65" stroke-linecap="round" transform="rotate(-90 44 44)"></circle>
+        </svg>
+        <span class="v">74%</span>
+      </div>
+      <div class="meta">
+        <div class="label">Engagement</div>
+        <div class="h">Strong on TikTok</div>
+      </div>
+    </div>
+    <div class="sr">
+      <div class="ring">
+        <svg viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="40" stroke="var(--hair)" stroke-width="6" fill="none"></circle>
+          <circle cx="44" cy="44" r="40" stroke="var(--accent)" stroke-width="6" fill="none"
+                  stroke-dasharray="251.3" stroke-dashoffset="80" stroke-linecap="round" transform="rotate(-90 44 44)"></circle>
+        </svg>
+        <span class="v">68%</span>
+      </div>
+      <div class="meta">
+        <div class="label">Brand fit</div>
+        <div class="h">Voice consistent</div>
+      </div>
+    </div>
+    <div class="sr">
+      <div class="ring">
+        <svg viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="40" stroke="var(--hair)" stroke-width="6" fill="none"></circle>
+          <circle cx="44" cy="44" r="40" stroke="var(--warn)" stroke-width="6" fill="none"
+                  stroke-dasharray="251.3" stroke-dashoffset="140" stroke-linecap="round" transform="rotate(-90 44 44)"></circle>
+        </svg>
+        <span class="v" style="color:var(--warn-deep);">44%</span>
+      </div>
+      <div class="meta">
+        <div class="label">Shareability</div>
+        <div class="h">Medium impact</div>
+      </div>
+    </div>
+    <div class="sr">
+      <div class="ring">
+        <svg viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="40" stroke="var(--hair)" stroke-width="6" fill="none"></circle>
+          <circle cx="44" cy="44" r="40" stroke="var(--crit)" stroke-width="6" fill="none"
+                  stroke-dasharray="251.3" stroke-dashoffset="216" stroke-linecap="round" transform="rotate(-90 44 44)"></circle>
+        </svg>
+        <span class="v" style="color:var(--crit);">14%</span>
+      </div>
+      <div class="meta">
+        <div class="label">Risk</div>
+        <div class="h">Compliance flag</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sentiment gauge -->
+<section class="scene">
+  <div class="scene-h"><span class="roman">03</span><span class="ttl">Sentiment · half-ring gauge</span></div>
+  <p style="margin:0 0 16px;font-size:12.5px;color:var(--ink-3);">When the metric is bipolar (negative ↔ positive), the gauge replaces the ring.</p>
+  <div class="gauge">
+    <svg viewBox="0 0 200 110">
+      <path d="M 20 100 A 80 80 0 0 1 180 100" stroke="var(--hair)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M 20 100 A 80 80 0 0 1 158 38" stroke="var(--accent)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <circle cx="158" cy="38" r="6" fill="var(--accent)"/>
+      <text x="100" y="80" text-anchor="middle" fill="var(--ink)" font-family="Inter" font-size="38" font-weight="600" letter-spacing="-1">0.78</text>
+      <text x="100" y="100" text-anchor="middle" fill="var(--ink-3)" font-family="Inter" font-size="9" letter-spacing="2" text-transform="uppercase">POSITIVE · 87% CONFIDENCE</text>
+    </svg>
+    <div class="gauge-meta">
+      <span>−1 · Negative</span>
+      <span>0 · Neutral</span>
+      <span>+1 · Positive</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

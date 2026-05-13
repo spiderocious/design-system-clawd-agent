@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Geometry · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .blk { margin-top: 40px; }
+  .blk h2 { font-size: 16px; font-weight: 600; margin: 0 0 16px; letter-spacing: -0.012em; }
+  .blk .l { height: 1px; background: var(--hair); margin-bottom: 18px; }
+
+  .radii { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .radii .item { background: var(--sheet); border: 1px solid var(--hair); padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .radii .item.r2  { border-radius: 2px; }
+  .radii .item.r6  { border-radius: 6px; }
+  .radii .item.r8  { border-radius: 8px; }
+  .radii .item.rp  { border-radius: 9999px; }
+  .radii .blk-shape { width: 48px; height: 48px; background: var(--ink); }
+  .radii .item.r2 .blk-shape { border-radius: 2px; }
+  .radii .item.r6 .blk-shape { border-radius: 6px; }
+  .radii .item.r8 .blk-shape { border-radius: 8px; }
+  .radii .item.rp .blk-shape { border-radius: 9999px; }
+  .radii .label { font-size: 13px; font-weight: 500; }
+  .radii .use { font-size: 11.5px; color: var(--ink-3); text-align: center; line-height: 1.4; }
+
+  .spacing-ladder { display: grid; grid-template-columns: 80px 1fr 80px; gap: 16px; align-items: center; }
+  .spacing-ladder .row { display: contents; }
+  .spacing-ladder .role { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--track-overline); }
+  .spacing-ladder .bar  { background: var(--accent-tint); height: 8px; }
+  .spacing-ladder .px   { text-align: right; font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  .rules-demo { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 8px; }
+  .rules-demo .col { background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); padding: 22px; }
+  .rules-demo .col h3 { font-size: 13px; font-weight: 500; margin: 0 0 10px; }
+  .rules-demo .col p { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; margin: 0 0 14px; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Geometry & spacing</h1>
+  <p>Tight radii, generous gaps. Hairlines do the work that shadows usually do — the system only shadows when a thing must float above another (popovers, modals).</p>
+</header>
+
+<section class="blk">
+  <h2>Corner radii</h2>
+  <div class="l"></div>
+  <div class="radii">
+    <div class="item r2"><div class="blk-shape"></div><div class="label">2 px · sharp</div><div class="use">Data cells, table chips, the rare “editor’s memo” block.</div></div>
+    <div class="item r6"><div class="blk-shape"></div><div class="label">6 px · soft</div><div class="use">Buttons, inputs, pills, tabs, most controls.</div></div>
+    <div class="item r8"><div class="blk-shape"></div><div class="label">8 px · card</div><div class="use">Cards, surfaces, score containers.</div></div>
+    <div class="item rp"><div class="blk-shape"></div><div class="label">∞ · pill</div><div class="use">Status pills, score rings, avatars.</div></div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2>Spacing ladder</h2>
+  <div class="l"></div>
+  <div class="spacing-ladder">
+    <div class="row"><div class="role">2</div><div class="bar" style="width:2px;"></div><div class="px">2 px</div></div>
+    <div class="row"><div class="role">4</div><div class="bar" style="width:4px;"></div><div class="px">4 px</div></div>
+    <div class="row"><div class="role">8</div><div class="bar" style="width:8px;"></div><div class="px">8 px</div></div>
+    <div class="row"><div class="role">12</div><div class="bar" style="width:12px;"></div><div class="px">12 px</div></div>
+    <div class="row"><div class="role">16</div><div class="bar" style="width:16px;"></div><div class="px">16 px</div></div>
+    <div class="row"><div class="role">24</div><div class="bar" style="width:24px;"></div><div class="px">24 px</div></div>
+    <div class="row"><div class="role">32</div><div class="bar" style="width:32px;"></div><div class="px">32 px</div></div>
+    <div class="row"><div class="role">48</div><div class="bar" style="width:48px;"></div><div class="px">48 px · section gap</div></div>
+    <div class="row"><div class="role">64</div><div class="bar" style="width:64px;"></div><div class="px">64 px · page gutter</div></div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2>Hairlines, not shadows</h2>
+  <div class="l"></div>
+  <div class="rules-demo">
+    <div class="col">
+      <h3>Hairline · 1 px ·  default</h3>
+      <p>Separates surfaces. 1 px <code>#DDD7CB</code> against the warm canvas.</p>
+      <div style="height:80px; border:1px solid var(--hair); border-radius:var(--r-card); display:grid;place-items:center; color:var(--ink-3); font-size:12px;">A card</div>
+    </div>
+    <div class="col">
+      <h3>Heavy rule · 1 px ink · rare</h3>
+      <p>Used to mark a hard section change — like the rule below a page title. Never on a card.</p>
+      <div style="padding-bottom:14px; border-bottom:1px solid var(--ink);">
+        <div style="font-size:18px;font-weight:600;">Analysis results</div>
+        <div style="font-size:12.5px;color:var(--ink-3); margin-top:2px;">251 characters · analysed 4 min ago</div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>Soft pop · for popovers</h3>
+      <p>The only shadow in the system. Subtle — the popover still has a hairline.</p>
+      <div style="padding:14px; background:var(--sheet); border:1px solid var(--hair); border-radius:var(--r-card); box-shadow: var(--shade-pop); font-size:12.5px;">A floating popover</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

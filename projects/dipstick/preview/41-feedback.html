@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Toasts & banners</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .lbl-stamp { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .lbl-stamp .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.18em; }
+  .lbl-stamp .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+
+  /* toast */
+  .toast {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 4px;
+    box-shadow: 0 16px 48px -24px rgba(26,23,20,0.4);
+    font-family: var(--sans); font-size: 13px;
+    max-width: 480px;
+  }
+  .toast .mk { font-family: var(--mono); font-weight: 600; }
+  .toast .mk.ok { color: var(--emerald-200); }
+  .toast .mk.bad { color: #F5BAB3; }
+  .toast .undo { margin-left: 12px; font-family: var(--mono); font-size: 11px; color: var(--paper); border: 1px solid rgba(255,255,255,0.25); padding: 3px 8px; border-radius: 2px; cursor: pointer; letter-spacing: 0.06em; }
+
+  /* banner */
+  .banner {
+    border-radius: var(--r-card);
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px;
+    font-family: var(--sans);
+  }
+  .banner .mk { font-family: var(--mono); font-weight: 600; letter-spacing: 0.16em; font-size: 11px; flex-shrink: 0; }
+  .banner .body-b { font-family: var(--serif); font-size: 14px; line-height: 1.45; }
+  .banner .body-b strong { font-weight: 600; }
+  .banner .right { margin-left: auto; flex-shrink: 0; }
+  .banner-ok    { background: var(--emerald-50);  border: 1px solid var(--emerald-200);  color: var(--emerald-700); }
+  .banner-watch { background: var(--watch-bg);    border: 1px solid var(--watch-edge);   color: var(--watch); }
+  .banner-short { background: var(--short-bg);    border: 1px solid var(--short-edge);   color: var(--short); }
+  .banner-info  { background: var(--info-bg);     border: 1px solid var(--info-edge);    color: var(--info); }
+  .banner-ink   { background: var(--ink);         border: 1px solid var(--ink);          color: var(--paper); }
+  .banner .body-b { color: var(--ink-2); }
+  .banner-ink .body-b { color: var(--paper); }
+
+  /* inline alert (in a row) */
+  .row-alert {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--sheet); border: 1px solid var(--sheet-edge); border-left: 3px solid var(--short);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-family: var(--sans); font-size: 13px;
+  }
+  .row-alert .mk { font-family: var(--mono); font-weight: 600; color: var(--short); letter-spacing: 0.14em; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">41.</div>
+    <div class="ttl">Toasts &amp; banners.</div>
+    <div class="meta">OVERLAYS &amp; SYSTEM</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Toasts are dark ink rectangles in the bottom corner — they announce successful actions and disappear. Banners are page-level sheets carrying state — reorder warnings, tanker arrivals, price-change pending. Inline alerts live inside the row they describe.
+  </p>
+
+  <div class="lbl-stamp"><span class="num">01.</span><span class="h">Toasts — momentary</span></div>
+  <div class="col" style="gap: 14px; margin-bottom: 36px;">
+    <div class="toast"><span class="mk ok">✓ POSTED</span> <span>Evening shift signed off — Mokola. <span class="undo">UNDO · 6s</span></span></div>
+    <div class="toast"><span class="mk ok">✓ ADDED</span> <span>Expense EXP-018 — pump 04 belt · ₦8,500 <span class="undo">UNDO · 4s</span></span></div>
+    <div class="toast"><span class="mk bad">! FAILED</span> <span>Couldn't reach server — entry saved locally, will sync.</span></div>
+    <div class="toast" style="background: var(--emerald-700); color: var(--sheet);"><span class="mk" style="color: var(--emerald-200);">✓ DELIVERED</span> <span>Tanker A-44218 confirmed — 33,000 L PMS at Mokola.</span></div>
+  </div>
+
+  <div class="lbl-stamp"><span class="num">02.</span><span class="h">Banners — page-level state</span></div>
+  <div class="col" style="gap: 14px; margin-bottom: 36px;">
+
+    <div class="banner banner-ok">
+      <span class="mk">POSTED</span>
+      <span class="body-b">Yesterday's books are <strong>closed and signed</strong>. Variance ₦0 across three branches — a clean day.</span>
+      <button class="b b-quiet b-sm right">Dismiss</button>
+    </div>
+
+    <div class="banner banner-watch">
+      <span class="mk">REORDER</span>
+      <span class="body-b">DPK at <strong>Mokola — 1,320 L (12% of tank)</strong>. NIPCO offload pending tomorrow 06:30.</span>
+      <button class="b b-secondary b-sm right">View delivery</button>
+    </div>
+
+    <div class="banner banner-short">
+      <span class="mk">SHORTAGE</span>
+      <span class="body-b">Chidera Okoye — <strong>P-02 short ₦2,400</strong>. Note attached, awaiting your review.</span>
+      <button class="b b-danger b-sm right">Open shift</button>
+    </div>
+
+    <div class="banner banner-info">
+      <span class="mk">PRICE CHANGE</span>
+      <span class="body-b">PMS new price <strong>₦210 / L</strong> set by Segun · effective Wed 15 May 06:00.</span>
+      <button class="b b-secondary b-sm right">Review</button>
+    </div>
+
+    <div class="banner banner-ink">
+      <span class="mk">SYSTEM</span>
+      <span class="body-b">Daily backup ran at 02:14 — 3 branches, 4,820 entries archived.</span>
+    </div>
+
+  </div>
+
+  <div class="lbl-stamp"><span class="num">03.</span><span class="h">Inline alerts — at the row level</span></div>
+  <div class="col" style="gap: 12px;">
+    <div class="row-alert">
+      <span class="mk">SHORT</span>
+      <span>P-02 · Chidera Okoye · expected ₦119,952, declared ₦117,552 — variance <strong style="font-family: var(--mono); color: var(--short);">− ₦2,400.00</strong>.</span>
+      <button class="b b-ghost b-sm" style="margin-left: auto;">Open shift</button>
+      <button class="b b-danger b-sm">Void</button>
+    </div>
+    <div class="row-alert" style="border-left-color: var(--watch);">
+      <span class="mk" style="color: var(--watch);">OVER</span>
+      <span>P-05 · Yusuf Lawal · expected ₦362,560, declared ₦363,000 — over <strong style="font-family: var(--mono); color: var(--watch);">+ ₦440.00</strong>. Likely a tip.</span>
+      <button class="b b-ghost b-sm" style="margin-left: auto;">Accept &amp; close</button>
+    </div>
+    <div class="row-alert" style="border-left-color: var(--info);">
+      <span class="mk" style="color: var(--info);">INFO</span>
+      <span>Pump 04 belt replaced at 17:30 by Engr. Yemi. ₦8,500 expense filed.</span>
+      <button class="b b-ghost b-sm" style="margin-left: auto;">View receipt</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

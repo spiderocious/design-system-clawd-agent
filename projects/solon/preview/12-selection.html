@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · selection</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  /* Checkbox */
+  .cb { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .cb input { display: none; }
+  .cb .box { width: 16px; height: 16px; border: 1px solid var(--ink); background: var(--paper); border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; }
+  .cb input:checked + .box { background: var(--forest-600); border-color: var(--forest-600); }
+  .cb .box svg { width: 11px; height: 11px; stroke: var(--paper); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .cb input:checked + .box svg { opacity: 1; }
+  .cb .lbl { font-family: var(--sans); font-size: 14px; }
+
+  /* Radio */
+  .rd { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+  .rd input { display: none; }
+  .rd .dot { width: 16px; height: 16px; border: 1px solid var(--ink); background: var(--paper); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+  .rd input:checked + .dot::after { content: ""; width: 8px; height: 8px; background: var(--forest-600); border-radius: 50%; }
+
+  /* Toggle */
+  .tg { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; }
+  .tg input { display: none; }
+  .tg .track { width: 36px; height: 20px; background: var(--paper-3); border: 1px solid var(--hair); border-radius: 10px; position: relative; transition: background 120ms var(--ease), border-color 120ms var(--ease); }
+  .tg .track::after { content: ""; position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: left 160ms var(--ease); }
+  .tg input:checked + .track { background: var(--forest-600); border-color: var(--forest-600); }
+  .tg input:checked + .track::after { left: 17px; }
+
+  /* Segment */
+  .seg { display: inline-flex; border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden; background: var(--paper); }
+  .seg button { font-family: var(--sans); font-size: 12px; padding: 6px 12px; border: 0; background: transparent; cursor: pointer; color: var(--ink-2); border-right: 1px solid var(--hair); }
+  .seg button:last-child { border-right: 0; }
+  .seg button.on { background: var(--ink); color: var(--paper); }
+
+  /* Party card selection */
+  .party-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+  .party-card { border: 1px solid var(--hair); border-radius: var(--r-card); padding: 14px 14px 12px; background: var(--sheet); cursor: pointer; position: relative; transition: border-color 120ms var(--ease); }
+  .party-card.on { border-color: var(--ink); background: var(--paper); }
+  .party-card .abv { font-family: var(--serif); font-weight: 700; font-size: 22px; font-variation-settings: "opsz" 72; letter-spacing: -0.02em; }
+  .party-card .nm { font-family: var(--sans); font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .party-card .pct { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 8px; }
+  .party-card .check { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 50%; background: var(--forest-600); display: none; align-items: center; justify-content: center; }
+  .party-card.on .check { display: inline-flex; }
+  .party-card .check svg { width: 11px; height: 11px; stroke: var(--paper); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  .row-list { display: flex; flex-direction: column; gap: 10px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">12 / PRIMITIVES</div>
+    <div class="ttl">Selection</div>
+    <div class="sub">— checkboxes, radios, toggles, segments, party-card.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · scenario filter<span class="ttl">checkboxes inside a lever panel</span></div>
+    <div class="row-list">
+      <label class="cb"><input type="checkbox" checked /><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span class="lbl">Include candidate withdrawal modelling</span></label>
+      <label class="cb"><input type="checkbox" checked /><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span class="lbl">Apply BVAS-failure adjustment</span></label>
+      <label class="cb"><input type="checkbox" /><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span class="lbl">Re-distribute second-preference votes</span></label>
+      <label class="cb"><input type="checkbox" /><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span class="lbl">Apply pending ward delimitation</span></label>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · party selection<span class="ttl">card-radio for the candidate the user follows</span></div>
+    <div class="party-grid">
+      <div class="party-card on">
+        <span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>
+        <div class="abv" style="color: var(--forest-600);">LP</div>
+        <div class="nm">Labour Party</div>
+        <div class="pct">model: 47.2%</div>
+      </div>
+      <div class="party-card">
+        <div class="abv">APC</div>
+        <div class="nm">All Progressives Congress</div>
+        <div class="pct">model: 22.1%</div>
+      </div>
+      <div class="party-card">
+        <div class="abv">APGA</div>
+        <div class="nm">All Progressives Grand Alliance</div>
+        <div class="pct">model: 18.4%</div>
+      </div>
+      <div class="party-card">
+        <div class="abv">PDP</div>
+        <div class="nm">Peoples Democratic Party</div>
+        <div class="pct">model: 9.8%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · output filter<span class="ttl">segment + toggles in the constituency map header</span></div>
+    <div style="display: flex; gap: 24px; align-items: center;">
+      <div class="seg">
+        <button class="on">All PU</button>
+        <button>Strong hold</button>
+        <button>Lean hold</button>
+        <button>Toss-up</button>
+        <button>Lean opp.</button>
+        <button>Strong opp.</button>
+      </div>
+      <label class="tg"><input type="checkbox" checked /><span class="track"></span><span style="font-family: var(--sans); font-size: 13px;">Show 2023 baseline overlay</span></label>
+      <label class="tg"><input type="checkbox" /><span class="track"></span><span style="font-family: var(--sans); font-size: 13px;">Show confidence-band shading</span></label>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · language choice<span class="ttl">radio group for message generation</span></div>
+    <div style="display: flex; gap: 22px; flex-wrap: wrap;">
+      <label class="rd"><input type="radio" name="lang" checked /><span class="dot"></span><span class="lbl" style="font-family: var(--sans); font-size: 13px;">English</span></label>
+      <label class="rd"><input type="radio" name="lang" /><span class="dot"></span><span class="lbl" style="font-family: var(--sans); font-size: 13px;">Hausa</span></label>
+      <label class="rd"><input type="radio" name="lang" /><span class="dot"></span><span class="lbl" style="font-family: var(--sans); font-size: 13px;">Yoruba</span></label>
+      <label class="rd"><input type="radio" name="lang" /><span class="dot"></span><span class="lbl" style="font-family: var(--sans); font-size: 13px;">Igbo</span></label>
+      <label class="rd"><input type="radio" name="lang" /><span class="dot"></span><span class="lbl" style="font-family: var(--sans); font-size: 13px;">Pidgin</span></label>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

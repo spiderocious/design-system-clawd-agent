@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Empty, loading, error</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  /* skeleton */
+  .skeleton { background: linear-gradient(90deg, var(--paper-deep), var(--hair), var(--paper-deep)); background-size: 200% 100%; animation: shimmer 1800ms linear infinite; border-radius: 8px; }
+  @keyframes shimmer { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+  .sk-row { background: var(--paper); border: 1px solid var(--sheet-edge); border-radius: 14px; padding: 14px 18px; display: grid; grid-template-columns: 44px 1fr 80px; gap: 14px; align-items: center; }
+  .sk-circle { width: 44px; height: 44px; border-radius: 50%; }
+  .sk-text { display: grid; gap: 8px; }
+  .sk-line { height: 12px; }
+  .sk-price { height: 14px; }
+  .stack > * + * { margin-top: 10px; }
+
+  /* empty state */
+  .empty {
+    background: var(--paper); border: 1px solid var(--sheet-edge);
+    border-radius: 18px; padding: 56px 40px; text-align: center;
+  }
+  .empty .icon { width: 64px; height: 64px; color: var(--ink-3); margin: 0 auto 18px; display: block; stroke-width: 1.2; }
+  .empty h4 { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.018em; margin: 0 0 10px; }
+  .empty p { font-size: 14px; line-height: 1.65; color: var(--ink-3); max-width: 44ch; margin: 0 auto 24px; }
+  .empty .actions { display: flex; gap: 10px; justify-content: center; }
+
+  /* inline error */
+  .err {
+    background: var(--crit-bg); border: 1px solid var(--crit-edge);
+    border-radius: 14px; padding: 18px 22px;
+    display: grid; grid-template-columns: 36px 1fr auto; gap: 16px; align-items: center;
+    color: var(--crit);
+  }
+  .err svg { width: 26px; height: 26px; stroke-width: 1.5; }
+  .err .nm { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
+  .err .sub { font-size: 13px; color: var(--crit); margin-top: 3px; line-height: 1.5; }
+
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">25 / DATA &amp; STATE</span>
+    <h1 class="ttl">Empty · loading · error</h1>
+    <span class="meta">The off-states · still calm</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Most products treat empty / loading / error as afterthoughts. In Tutorly they are scenes too — the parent reading "no tutors yet" is the parent we are most likely to lose. We write to them in plain language and offer one next step, not five.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · loading · the search just submitted</div>
+    <h3>Five row-shaped silhouettes</h3>
+    <p class="blurb">A skeleton that matches the row's exact shape. No spinning wheels, no "Loading…" text. The page feels mid-step, not stalled.</p>
+    <div class="stack">
+      <div class="sk-row">
+        <div class="skeleton sk-circle"></div>
+        <div class="sk-text">
+          <div class="skeleton sk-line" style="width: 35%;"></div>
+          <div class="skeleton sk-line" style="width: 65%;"></div>
+        </div>
+        <div class="skeleton sk-price"></div>
+      </div>
+      <div class="sk-row">
+        <div class="skeleton sk-circle"></div>
+        <div class="sk-text">
+          <div class="skeleton sk-line" style="width: 28%;"></div>
+          <div class="skeleton sk-line" style="width: 72%;"></div>
+        </div>
+        <div class="skeleton sk-price"></div>
+      </div>
+      <div class="sk-row">
+        <div class="skeleton sk-circle"></div>
+        <div class="sk-text">
+          <div class="skeleton sk-line" style="width: 30%;"></div>
+          <div class="skeleton sk-line" style="width: 50%;"></div>
+        </div>
+        <div class="skeleton sk-price"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · empty · no tutors yet</div>
+    <h3>"We don't have anyone teaching Yoruba in Calabar — yet."</h3>
+    <p class="blurb">Empty is honest. We never invent fake results, we never tell the parent "try widening your search" without an action attached.</p>
+
+    <div class="empty">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <h4>No tutors for Yoruba in Calabar — yet</h4>
+      <p>We have 27 Yoruba tutors elsewhere in Nigeria. You can open the search to all of Nigeria, or we'll let you know the moment a Yoruba tutor joins in Calabar.</p>
+      <div class="actions">
+        <button class="b b-primary">Search all of Nigeria</button>
+        <button class="b b-secondary">Notify me when one joins</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · empty · inbox · before the first connect</div>
+    <h3>The parent's empty inbox</h3>
+    <p class="blurb">After they sign in but before they've connected with anyone. The empty state explains the rule of the room.</p>
+
+    <div class="empty">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16v10H7l-3 3z"/>
+      </svg>
+      <h4>Your conversations will appear here</h4>
+      <p>When you connect with a tutor, the conversation opens here. Contact information stays hidden — Tutorly delivers every message until you both agree to share details.</p>
+      <div class="actions">
+        <button class="b b-primary">Find a tutor</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · error · payment failed</div>
+    <h3>The connect-fee charge didn't go through</h3>
+    <p class="blurb">Errors are warm brick-red on cream — never alarming, always specific about what went wrong and what to do next.</p>
+
+    <div class="err">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div>
+        <div class="nm">Your card was declined</div>
+        <div class="sub">Your bank turned the ₦2,500 connection fee away. You can try a different card, or pay with bank transfer.</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="b b-secondary b-sm">Try again</button>
+        <button class="b b-primary b-sm">Use transfer</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

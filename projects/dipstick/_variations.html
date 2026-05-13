@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dipstick — variations · A / B / C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #E8E4DC;
+    color: #181613;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 32px 24px 80px;
+  }
+  .page-head {
+    max-width: 1400px;
+    margin: 0 auto 24px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+  }
+  .page-head h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 22px; font-weight: 600; margin: 0;
+    letter-spacing: -0.015em;
+  }
+  .page-head p { margin: 0; color: #6E665B; font-size: 12px; max-width: 56ch; }
+  .grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .col {
+    border-radius: 4px;
+    padding: 28px 24px;
+    min-height: 600px;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+  .col-head {
+    display: flex; align-items: baseline; gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid currentColor;
+    opacity: 1;
+  }
+  .col-head .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+  }
+  .col-head .name { font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+  .col-head .caption { margin-left: auto; font-size: 11px; opacity: 0.7; }
+  .section-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.18em; opacity: 0.55;
+    padding-bottom: 6px;
+    border-bottom: 1px solid currentColor;
+  }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ============== VARIATION A — "Ledger paperback" ==============
+     Warm cream paper, deep emerald accent, Source Serif 4 + Inter + IBM Plex Mono.
+     Tight 4px geometry. Hairlines. Densest. */
+  .v-a {
+    background: #F2EDE2;
+    color: #1A1714;
+  }
+  .v-a .serif { font-family: 'Source Serif 4', Georgia, serif; }
+  .v-a .mono  { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+  .v-a .accent { color: #0E5C3A; }
+  .v-a .hair { background: #D6CDB8; }
+  .v-a .btn-primary {
+    background: #0E5C3A; color: #F4F0E4;
+    border: none; border-radius: 3px;
+    padding: 10px 16px; font: 500 13px/1 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .v-a .btn-primary:hover { background: #0A4A2E; }
+  .v-a .btn-secondary {
+    background: transparent; color: #1A1714;
+    border: 1px solid #1A1714; border-radius: 3px;
+    padding: 9px 15px; font: 500 13px/1 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .v-a .btn-danger {
+    background: transparent; color: #9A1F18;
+    border: 1px solid #9A1F18; border-radius: 3px;
+    padding: 9px 15px; font: 500 13px/1 'Inter', sans-serif;
+  }
+  .v-a .input {
+    background: #FBF7EC; color: #1A1714;
+    border: 1px solid #D6CDB8; border-radius: 2px;
+    padding: 9px 12px;
+    font: 400 13px/1.2 'Inter', sans-serif;
+    width: 100%;
+  }
+  .v-a .input.mono { font-family: 'IBM Plex Mono', monospace; }
+  .v-a .input-label {
+    font-size: 11px; font-weight: 500; color: #6E665B;
+    letter-spacing: 0.01em;
+    display: block; margin-bottom: 4px;
+  }
+  .v-a .ledger-row {
+    display: grid;
+    grid-template-columns: 1fr 70px 90px 110px 24px;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #D6CDB8;
+  }
+  .v-a .ledger-row:first-child { border-top: 1px solid #1A1714; }
+  .v-a .ledger-row .pump-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #6E665B;
+  }
+  .v-a .ledger-row .attendant {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px; font-weight: 500;
+  }
+  .v-a .ledger-row .small { font-size: 11px; color: #6E665B; }
+  .v-a .ledger-row .figure {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500; font-size: 13px;
+    text-align: right;
+  }
+  .v-a .ledger-row .variance.short {
+    color: #9A1F18; font-weight: 600;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .v-a .ledger-row .variance.ok {
+    color: #0E5C3A;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .v-a .ledger-row .check { color: #0E5C3A; text-align: right; }
+  .v-a .branch-card {
+    background: #FBF7EC;
+    border: 1px solid #D6CDB8;
+    border-radius: 3px;
+    padding: 16px 18px;
+  }
+  .v-a .branch-card .branch-name {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px; font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 2px;
+  }
+  .v-a .branch-card .branch-loc {
+    font-size: 11px; color: #6E665B;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .v-a .branch-card hr { border: 0; border-top: 1px solid #D6CDB8; margin: 12px 0; }
+  .v-a .branch-card .figure-big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .v-a .branch-card .unit { font-size: 12px; color: #6E665B; margin-left: 4px; }
+  .v-a .branch-card .row-2 { display: flex; gap: 18px; margin-top: 10px; }
+  .v-a .branch-card .row-2 .k { font-size: 10px; color: #6E665B; text-transform: uppercase; letter-spacing: 0.14em; }
+  .v-a .branch-card .row-2 .v { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; font-size: 13px; }
+
+  /* ============== VARIATION B — "Money green broadsheet" ==============
+     Brighter near-paper, classic newsprint serif, deeper editorial layout.
+     Newsreader serif, JetBrains Mono. 6px radii. Medium density. */
+  .v-b {
+    background: #FBFAF5;
+    color: #14110E;
+  }
+  .v-b .serif { font-family: 'Newsreader', Georgia, serif; }
+  .v-b .mono  { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  .v-b .accent { color: #0F6B47; }
+  .v-b .btn-primary {
+    background: #0F6B47; color: #FBFAF5;
+    border: none; border-radius: 6px;
+    padding: 11px 18px; font: 500 13px/1 'Inter', sans-serif;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.18);
+  }
+  .v-b .btn-primary:hover { background: #0C5638; }
+  .v-b .btn-secondary {
+    background: #FFFFFF; color: #14110E;
+    border: 1px solid #D6D1C2; border-radius: 6px;
+    padding: 10px 17px; font: 500 13px/1 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .v-b .btn-danger {
+    background: #FFFFFF; color: #A8201A;
+    border: 1px solid #E6BFBC; border-radius: 6px;
+    padding: 10px 17px; font: 500 13px/1 'Inter', sans-serif;
+  }
+  .v-b .input {
+    background: #FFFFFF; color: #14110E;
+    border: 1px solid #D6D1C2; border-radius: 6px;
+    padding: 10px 13px;
+    font: 400 13px/1.2 'Inter', sans-serif;
+    width: 100%;
+  }
+  .v-b .input.mono { font-family: 'JetBrains Mono', monospace; }
+  .v-b .input-label {
+    font-family: 'Newsreader', serif;
+    font-size: 13px; font-weight: 500; color: #14110E;
+    display: block; margin-bottom: 5px;
+  }
+  .v-b .input-help { font-size: 11px; color: #6E665B; margin-top: 4px; }
+  .v-b .ledger-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 130px 30px;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 14px;
+    background: #FFFFFF;
+    border: 1px solid #E5E0CF;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .v-b .ledger-row .attendant {
+    font-family: 'Newsreader', serif;
+    font-size: 15px; font-weight: 500;
+  }
+  .v-b .ledger-row .pump-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: #6E665B;
+    letter-spacing: 0.04em;
+  }
+  .v-b .ledger-row .figure {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500; font-size: 13px;
+    text-align: right;
+  }
+  .v-b .ledger-row .variance.short {
+    text-align: right;
+    color: #A8201A; font-weight: 600;
+    background: #FCEEEC;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
+  .v-b .ledger-row .variance.ok {
+    text-align: right;
+    color: #0F6B47; font-weight: 600;
+    background: #E7F4ED;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
+  .v-b .ledger-row .check { color: #0F6B47; text-align: right; }
+  .v-b .branch-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E0CF;
+    border-radius: 8px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 0 rgba(20,17,14,.03);
+  }
+  .v-b .branch-card .branch-name {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 20px; font-weight: 600;
+    letter-spacing: -0.018em;
+    margin: 0 0 4px;
+  }
+  .v-b .branch-card .branch-loc {
+    font-size: 12px; color: #6E665B;
+  }
+  .v-b .branch-card hr { border: 0; border-top: 1px solid #E5E0CF; margin: 14px 0; }
+  .v-b .branch-card .figure-big {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 32px; font-weight: 500;
+    letter-spacing: -0.015em; line-height: 1;
+    color: #0F6B47;
+  }
+  .v-b .branch-card .unit { font-size: 12px; color: #6E665B; margin-left: 4px; font-family: 'Inter', sans-serif; }
+  .v-b .branch-card .row-2 { display: flex; gap: 22px; margin-top: 12px; }
+  .v-b .branch-card .row-2 .k { font-size: 11px; color: #6E665B; }
+  .v-b .branch-card .row-2 .v { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 14px; }
+
+  /* ============== VARIATION C — "Standard Chartered private bank" ==============
+     Cooler off-white, near-black ink, oxblood-deep green that reads as money.
+     Fraunces display serif (high-contrast), Inter body, IBM Plex Mono.
+     Tighter geometry (2px), heavier rules, most ledger-leaning. */
+  .v-c {
+    background: #F4F2EC;
+    color: #11110F;
+  }
+  .v-c .serif { font-family: 'Fraunces', Georgia, serif; }
+  .v-c .mono  { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+  .v-c .accent { color: #0A4B33; }
+  .v-c .btn-primary {
+    background: #11110F; color: #F4F2EC;
+    border: none; border-radius: 2px;
+    padding: 11px 18px; font: 600 12px/1 'Inter', sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .v-c .btn-primary:hover { background: #0A4B33; }
+  .v-c .btn-secondary {
+    background: transparent; color: #11110F;
+    border: 1px solid #11110F; border-radius: 2px;
+    padding: 10px 17px; font: 600 12px/1 'Inter', sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .v-c .btn-danger {
+    background: transparent; color: #7A1410;
+    border: 1px solid #7A1410; border-radius: 2px;
+    padding: 10px 17px; font: 600 12px/1 'Inter', sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .v-c .input {
+    background: transparent; color: #11110F;
+    border: 0; border-bottom: 1px solid #11110F;
+    border-radius: 0;
+    padding: 8px 0;
+    font: 400 14px/1.2 'Inter', sans-serif;
+    width: 100%;
+  }
+  .v-c .input.mono { font-family: 'IBM Plex Mono', monospace; }
+  .v-c .input:focus { outline: none; border-bottom-color: #0A4B33; border-bottom-width: 2px; padding-bottom: 7px; }
+  .v-c .input-label {
+    font-size: 10px; font-weight: 600; color: #11110F;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    display: block; margin-bottom: 4px;
+  }
+  .v-c .ledger-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 110px 110px;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #D1CCBC;
+  }
+  .v-c .ledger-row:first-child { border-top: 2px solid #11110F; }
+  .v-c .ledger-row .attendant {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15px; font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .v-c .ledger-row .pump-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: #6E665B;
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .v-c .ledger-row .figure {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 400; font-size: 13px;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+  .v-c .ledger-row .variance.short {
+    text-align: right;
+    color: #7A1410; font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    border-bottom: 1px solid #7A1410;
+    padding-bottom: 1px;
+    width: max-content; margin-left: auto;
+  }
+  .v-c .ledger-row .variance.ok {
+    text-align: right;
+    color: #0A4B33; font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+  }
+  .v-c .branch-card {
+    background: transparent;
+    border: 0;
+    border-top: 2px solid #11110F;
+    border-bottom: 1px solid #11110F;
+    padding: 20px 0;
+  }
+  .v-c .branch-card .branch-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 26px; font-weight: 500;
+    letter-spacing: -0.025em;
+    margin: 0 0 2px;
+  }
+  .v-c .branch-card .branch-loc {
+    font-size: 10px; color: #6E665B;
+    letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .v-c .branch-card hr { border: 0; border-top: 1px solid #D1CCBC; margin: 14px 0; }
+  .v-c .branch-card .figure-big {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 42px; font-weight: 400;
+    letter-spacing: -0.03em; line-height: 1;
+  }
+  .v-c .branch-card .unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: #6E665B;
+    margin-left: 6px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .v-c .branch-card .row-2 { display: flex; gap: 28px; margin-top: 14px; }
+  .v-c .branch-card .row-2 .k { font-size: 9px; color: #6E665B; text-transform: uppercase; letter-spacing: 0.22em; margin-bottom: 2px; }
+  .v-c .branch-card .row-2 .v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums; font-size: 14px;
+  }
+
+  /* shared utility */
+  .input-group { width: 100%; }
+  .wordmark {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px; font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .v-b .wordmark { font-family: 'Newsreader', Georgia, serif; }
+  .v-c .wordmark { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.025em; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Dipstick — three variations of one stance</h1>
+  <p>All three are <em>Ledger broadsheet</em>. They vary in paper warmth, the exact green, the serif family, geometry, and density. Pick A, B, or C — or "B but with the type from A."</p>
+</header>
+
+<div class="grid">
+
+  <!-- ============ A ============ -->
+  <section class="col v-a">
+    <div class="col-head">
+      <span class="tag">A</span>
+      <span class="name">Ledger paperback</span>
+      <span class="caption">Warm cream · deep emerald · Source Serif + Plex Mono · tight 3px</span>
+    </div>
+
+    <div class="row" style="justify-content: space-between;">
+      <span class="wordmark accent">Dipstick</span>
+      <span class="mono" style="font-size: 10px; color: #6E665B; letter-spacing: 0.18em;">IBADAN — MOKOLA · TUE 14 MAY</span>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Buttons</div>
+      <div class="row">
+        <button class="btn-primary">Post shift</button>
+        <button class="btn-secondary">Save draft</button>
+        <button class="btn-danger">Void entry</button>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Inputs</div>
+      <div class="input-group">
+        <label class="input-label">Closing meter — Pump 03</label>
+        <input class="input mono" value="248,317.42" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Attendant on shift</label>
+        <input class="input" value="Adekunle, Femi" />
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Shift close — Pump 03 / Tue PM</div>
+      <div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Adekunle, Femi</div>
+            <div class="small">Litres 814 · ₦196/L</div>
+          </div>
+          <div class="pump-id">P-03</div>
+          <div class="figure">159,544.00</div>
+          <div class="variance ok">+ 0</div>
+          <div class="check">✓</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Okoye, Chidera</div>
+            <div class="small">Litres 612 · ₦196/L</div>
+          </div>
+          <div class="pump-id">P-02</div>
+          <div class="figure">119,952.00</div>
+          <div class="variance short">− 2,400</div>
+          <div class="check" style="color:#9A1F18;">!</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Bello, Aisha</div>
+            <div class="small">Litres 502 · ₦196/L</div>
+          </div>
+          <div class="pump-id">P-01</div>
+          <div class="figure">98,392.00</div>
+          <div class="variance ok">+ 0</div>
+          <div class="check">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Branch summary</div>
+      <div class="branch-card">
+        <div class="branch-name">Mokola Station</div>
+        <div class="branch-loc">IBADAN · BRANCH 01</div>
+        <hr />
+        <div>
+          <span class="figure-big accent">1,928</span>
+          <span class="unit">L PMS sold today</span>
+        </div>
+        <div class="row-2">
+          <div><div class="k">In tank</div><div class="v">12,440 L</div></div>
+          <div><div class="k">Variance</div><div class="v" style="color:#9A1F18;">− 2,400</div></div>
+          <div><div class="k">Cash in</div><div class="v">₦377,888</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ B ============ -->
+  <section class="col v-b">
+    <div class="col-head">
+      <span class="tag">B</span>
+      <span class="name">Money green</span>
+      <span class="caption">Cream-white · forest #0F6B47 · Newsreader + JetBrains Mono · soft 6–8px cards</span>
+    </div>
+
+    <div class="row" style="justify-content: space-between;">
+      <span class="wordmark accent">Dipstick</span>
+      <span class="mono" style="font-size: 11px; color: #6E665B;">Mokola · Tue 14 May</span>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Buttons</div>
+      <div class="row">
+        <button class="btn-primary">Post shift</button>
+        <button class="btn-secondary">Save draft</button>
+        <button class="btn-danger">Void entry</button>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Inputs</div>
+      <div class="input-group">
+        <label class="input-label">Closing meter — Pump 03</label>
+        <input class="input mono" value="248,317.42" />
+        <div class="input-help">Litres dispensed this shift, from the pump head.</div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Attendant on shift</label>
+        <input class="input" value="Femi Adekunle" />
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Shift close — Pump 03 / Tue PM</div>
+      <div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Femi Adekunle</div>
+            <div class="pump-id">P-03 · 814 L · ₦196/L</div>
+          </div>
+          <div class="figure">159,544.00</div>
+          <div class="variance ok">balanced</div>
+          <div class="check">✓</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Chidera Okoye</div>
+            <div class="pump-id">P-02 · 612 L · ₦196/L</div>
+          </div>
+          <div class="figure">119,952.00</div>
+          <div class="variance short">− ₦2,400</div>
+          <div class="check" style="color:#A8201A;">!</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Aisha Bello</div>
+            <div class="pump-id">P-01 · 502 L · ₦196/L</div>
+          </div>
+          <div class="figure">98,392.00</div>
+          <div class="variance ok">balanced</div>
+          <div class="check">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Branch summary</div>
+      <div class="branch-card">
+        <div class="branch-name">Mokola Station</div>
+        <div class="branch-loc">Ibadan · Branch 01</div>
+        <hr />
+        <div>
+          <span class="figure-big">1,928</span>
+          <span class="unit">L PMS sold today</span>
+        </div>
+        <div class="row-2">
+          <div><div class="k">In tank</div><div class="v">12,440 L</div></div>
+          <div><div class="k">Variance</div><div class="v" style="color:#A8201A;">− ₦2,400</div></div>
+          <div><div class="k">Cash in</div><div class="v">₦377,888</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ C ============ -->
+  <section class="col v-c">
+    <div class="col-head">
+      <span class="tag">C</span>
+      <span class="name">Private bank ledger</span>
+      <span class="caption">Cool stone · ink + oxblood-deep green · Fraunces display + Inter · 2px / heavy rules</span>
+    </div>
+
+    <div class="row" style="justify-content: space-between;">
+      <span class="wordmark">Dipstick</span>
+      <span class="mono" style="font-size: 10px; color: #6E665B; letter-spacing: 0.22em;">MOKOLA — TUE 14 MAY 26</span>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Buttons</div>
+      <div class="row">
+        <button class="btn-primary">Post shift</button>
+        <button class="btn-secondary">Save draft</button>
+        <button class="btn-danger">Void</button>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Inputs</div>
+      <div class="input-group">
+        <label class="input-label">Closing meter — P-03</label>
+        <input class="input mono" value="248,317.42" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Attendant</label>
+        <input class="input" value="Femi Adekunle" />
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Shift close · P-03 · TUE PM</div>
+      <div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Femi Adekunle</div>
+            <div class="pump-id">P-03 — 814 L</div>
+          </div>
+          <div class="pump-id" style="text-align:right;">₦196/L</div>
+          <div class="figure">159,544.00</div>
+          <div class="variance ok">— BALANCED —</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Chidera Okoye</div>
+            <div class="pump-id">P-02 — 612 L</div>
+          </div>
+          <div class="pump-id" style="text-align:right;">₦196/L</div>
+          <div class="figure">119,952.00</div>
+          <div class="variance short">− 2,400.00</div>
+        </div>
+        <div class="ledger-row">
+          <div>
+            <div class="attendant">Aisha Bello</div>
+            <div class="pump-id">P-01 — 502 L</div>
+          </div>
+          <div class="pump-id" style="text-align:right;">₦196/L</div>
+          <div class="figure">98,392.00</div>
+          <div class="variance ok">— BALANCED —</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="section-label">Branch summary</div>
+      <div class="branch-card">
+        <div class="branch-loc">Branch 01 — Ibadan</div>
+        <div class="branch-name">Mokola Station</div>
+        <hr />
+        <div>
+          <span class="figure-big accent">1,928</span>
+          <span class="unit">L · PMS · TUE</span>
+        </div>
+        <div class="row-2">
+          <div><div class="k">In tank</div><div class="v">12,440 L</div></div>
+          <div><div class="k">Variance</div><div class="v" style="color:#7A1410;">− ₦2,400</div></div>
+          <div><div class="k">Cash in</div><div class="v">₦377,888</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer style="max-width:1400px;margin:48px auto 0;color:#6E665B;font-size:11px;letter-spacing:.04em;">
+  Pick one — reply with <strong style="color:#181613">A</strong>, <strong style="color:#181613">B</strong>, or <strong style="color:#181613">C</strong>. Tweaks welcome ("B but with C's wordmark," etc.).
+</footer>
+
+</body>
+</html>

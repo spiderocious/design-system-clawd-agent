@@ -16,7 +16,7 @@ The app is **a literate friend who has read your draft and is leaving notes in p
 
 - **Frame** — paperback margin annotation; coach reading over your shoulder
 - **Surface** — warm paper `#FAF7F2`, never bluish-white
-- **Color** — graphite ink `#1C1B19`; semantic-only: moss `#6A8F6A` (good), amber `#C28A2C` (warn), oxblood `#A0413A` (critical). Never bright red. Never decorative tint.
+- **Color** — graphite ink `#1C1B19`; semantic-only: violet-blue `#533AFD` (primary / positive / interactive), amber `#C28A2C` (warn), oxblood `#A0413A` (critical / irreversible). Never bright red. Never decorative tint. The warm canvas + cool violet creates intentional tonal contrast — the accent should feel *digital*, against the *editorial* paper.
 - **Type** — Inter only. Three weights: 400 / 500 / 600. Numbers in Inter tabular figures (not mono — non-technical user, mono reads "engineering"). Tracking-led hierarchy (display tighter, overline opened).
 - **Motion** — slow fade + 4px translate; 240ms ease-out; no springs. Scores tick into place on first render, never re-animate.
 - **Geometry** — hairlines (1px graphite-at-12%) replace cards. Corners 6px on controls, 4px on data containers. Generous whitespace — at least 32px between sections at desktop, never less.

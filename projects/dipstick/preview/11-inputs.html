@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Inputs — litres & naira</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 22px 26px; }
+  .head-row { display: flex; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .h { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+  .meter-row { display: grid; grid-template-columns: 1fr 1fr 200px; gap: 20px; align-items: end; }
+  .computed { background: var(--sheet-2); border-left: 2px solid var(--emerald-600); padding: 14px 16px; border-radius: 2px; }
+  .computed .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); }
+  .computed .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 24px; letter-spacing: -0.015em; line-height: 1.1; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">11.</div>
+    <div class="ttl">Inputs — litres, naira, meters, attendants.</div>
+    <div class="meta">PRIMITIVES</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    Every input that holds a number uses tabular monospace. The right affix carries the unit — L, /L, ₦ — in a quieter recessed pane. Computed values appear in a small emerald-edged panel beside the inputs, so the manager can see the maths happen as they type.
+  </p>
+
+  <!-- pump close form -->
+  <div class="scene">
+    <div class="head-row">
+      <span class="h">Close pump 03 — evening shift</span>
+      <span class="meta">PUMP-03 · PMS · FEMI ADEKUNLE</span>
+    </div>
+
+    <div class="meter-row" style="margin-bottom: 18px;">
+      <div class="field-row">
+        <span class="lbl">Opening meter <span class="rec" style="font-size: 10px; margin-left: 4px;">FROM MORNING</span></span>
+        <div class="f-affix"><input class="f f-mono" value="247,503.42" disabled><span class="post">L</span></div>
+        <span class="hlp">Carried over from the morning shift sign-off.</span>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Closing meter</span>
+        <div class="f-affix"><input class="f f-mono" value="248,317.42"><span class="post">L</span></div>
+        <span class="hlp">Read the pump head once. Don't round.</span>
+      </div>
+      <div class="computed">
+        <div class="k">Dispensed this shift</div>
+        <div class="v">814.00 <span style="font-size: 11px; font-family: var(--sans); color: var(--ink-3); letter-spacing: 0.04em;">L</span></div>
+      </div>
+    </div>
+
+    <div class="meter-row">
+      <div class="field-row">
+        <span class="lbl">Pump price tonight</span>
+        <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" value="196.00"><span class="post">/L</span></div>
+        <span class="hlp">From the price-change log. Tap to override for this shift.</span>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Cash declared by Femi</span>
+        <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" value="159,544.00"></div>
+        <span class="hlp">What he physically handed the cashier.</span>
+      </div>
+      <div class="computed">
+        <div class="k">Variance</div>
+        <div class="v read-ok">+ ₦0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Field families</span></div>
+
+  <div class="scene">
+    <div class="split split-3" style="gap: 24px;">
+      <div class="field-row">
+        <span class="lbl">Default</span>
+        <input class="f" placeholder="Attendant full name">
+      </div>
+      <div class="field-row">
+        <span class="lbl">With unit (litres)</span>
+        <div class="f-affix"><input class="f f-mono" value="1,928.00"><span class="post">L</span></div>
+      </div>
+      <div class="field-row">
+        <span class="lbl">With prefix (naira)</span>
+        <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" value="377,888.00"></div>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Both (₦ / L)</span>
+        <div class="f-affix"><span class="pre">₦</span><input class="f f-mono" value="196.00"><span class="post">/L</span></div>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Disabled (carried over)</span>
+        <div class="f-affix"><input class="f f-mono" value="247,503.42" disabled><span class="post">L</span></div>
+        <span class="hlp">Read-only — flows in from previous shift.</span>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Error — out of range</span>
+        <div class="f-affix" style="border-color: var(--short);"><input class="f f-mono is-error" value="247,003.42"><span class="post">L</span></div>
+        <span class="err">Closing must be higher than opening (247,503.42).</span>
+      </div>
+      <div class="field-row">
+        <span class="lbl">Large — primary entry</span>
+        <input class="f f-lg" placeholder="What was paid?">
+      </div>
+      <div class="field-row">
+        <span class="lbl">Small — inline filter</span>
+        <input class="f f-sm" placeholder="Search shifts…">
+      </div>
+      <div class="field-row">
+        <span class="lbl">Multiline note</span>
+        <textarea class="f" style="height: 72px; padding: 8px 11px;" placeholder="Add a manager's note…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Single-line entry — the inline cashier row</span></div>
+  <div class="scene" style="padding: 14px 18px;">
+    <div class="row" style="gap: 10px; align-items: center;">
+      <span class="rec" style="white-space: nowrap;">EXP-014</span>
+      <input class="f" style="flex: 2;" value="Generator diesel — 20L from Mama Risi" />
+      <div class="f-affix" style="width: 160px;"><span class="pre">₦</span><input class="f f-mono" value="18,000.00"></div>
+      <input class="f" style="width: 140px;" value="Tue · 4:12pm" />
+      <button class="b b-primary b-sm">Add</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

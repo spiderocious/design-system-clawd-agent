@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · modals</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 28px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 18px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  /* Modal-on-paper */
+  .modal-stage {
+    background: var(--paper-2);
+    padding: 36px;
+    border-radius: var(--r-card);
+    border: 1px solid var(--hair-soft);
+    display: flex; justify-content: center;
+  }
+
+  .modal {
+    background: var(--sheet);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-soft);
+    width: 540px; max-width: 100%;
+    box-shadow: var(--shade-pop);
+  }
+  .modal .body { padding: 24px 28px 18px; }
+  .modal .body .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+  .modal .body .h { font-family: var(--serif); font-weight: 600; font-size: 22px; margin: 0 0 8px; font-variation-settings: "opsz" 36; }
+  .modal .body .p { font-family: var(--serif); font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
+  .modal .body .p strong { font-style: normal; font-weight: 500; color: var(--ink); }
+  .modal .foot {
+    padding: 14px 18px;
+    border-top: 1px solid var(--hair);
+    background: var(--paper);
+    display: flex; justify-content: flex-end; gap: 10px;
+    border-radius: 0 0 var(--r-soft) var(--r-soft);
+  }
+
+  /* Critical variant */
+  .modal.crit { border-color: var(--crit); border-top: 4px solid var(--crit); }
+  .modal.crit .body .cap { color: var(--crit); }
+  .modal.crit .body .h { color: var(--crit); }
+  .modal.crit .body .p { color: var(--ink); }
+
+  .reveal-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; padding: 14px 16px; background: var(--crit-bg); border: 1px solid var(--crit-edge); border-radius: var(--r-card); }
+  .reveal-list .item { font-family: var(--serif); font-size: 13.5px; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+  .reveal-list .item::before { content: "•"; color: var(--crit); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">40 / OVERLAYS</div>
+    <div class="ttl">Modals</div>
+    <div class="sub">— routine confirmation, model-blocked, critical irreversible.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Save scenario<span class="ttl">routine · primary action lives on the right</span></div>
+    <div class="modal-stage">
+      <div class="modal">
+        <div class="body">
+          <div class="cap">SAVE TO ANAMBRA CENTRAL · SENATE</div>
+          <h2 class="h">Save this scenario</h2>
+          <p class="p">Saved scenarios appear in the left rail and can be compared four at a time. Anyone on your strategist team can open them; only you can edit.</p>
+          <div style="margin-top: 16px;">
+            <label class="f-label">Name</label>
+            <input class="f-plain" value="Soludo–LP coalition · +8pt youth" />
+          </div>
+          <div style="margin-top: 12px;">
+            <label class="f-label">Notes (optional)</label>
+            <textarea class="f-plain" style="height: 64px; padding: 10px 12px; font-family: var(--sans); resize: vertical;" placeholder="What does this scenario test?"></textarea>
+          </div>
+        </div>
+        <div class="foot">
+          <button class="b b-quiet">Cancel</button>
+          <button class="b b-secondary">Save & close</button>
+          <button class="b b-primary">Save & re-run</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Solon refused this query<span class="ttl">model-blocked · orange, not red</span></div>
+    <div class="modal-stage">
+      <div class="modal" style="border-color: var(--orange); border-top: 4px solid var(--orange);">
+        <div class="body">
+          <div class="cap" style="color: var(--orange-deep);">QUERY BLOCKED · LOGGED FOR AUDIT</div>
+          <h2 class="h" style="color: var(--orange-deep);">This scenario is not allowed</h2>
+          <p class="p">You asked Solon to model how turnout in opposition wards could be depressed. Voter-suppression scenarios are blocked under Solon's <strong>ethical guardrails</strong>. The query is not run, and this attempt is logged against the audit record for your account.</p>
+          <p class="p" style="margin-top: 10px; font-style: italic; color: var(--ink-3);">If you believe this was triggered in error — for example, you intended a counterfactual analysis of historical suppression patterns — contact Solon platform admin.</p>
+        </div>
+        <div class="foot">
+          <button class="b b-quiet">Read policy</button>
+          <button class="b b-secondary">Edit scenario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Void a polling-unit result<span class="ttl">critical · irreversible · type-to-confirm</span></div>
+    <div class="modal-stage">
+      <div class="modal crit">
+        <div class="body">
+          <div class="cap">CRITICAL · IRREVERSIBLE</div>
+          <h2 class="h">Void result · PU 008-04-09</h2>
+          <p class="p">Voiding a polling-unit submission has the following effects:</p>
+          <div class="reveal-list">
+            <span class="item">The vote tally for this PU is removed from the live War Room.</span>
+            <span class="item">The audit entry is signed with <strong>your account</strong> and the current timestamp.</span>
+            <span class="item">If public mode is enabled, the void is visible to the public feed.</span>
+            <span class="item">A formal notification is sent to the campaign manager and the platform admin.</span>
+          </div>
+          <p class="p" style="margin-top: 14px;">To proceed, type the word <strong>VOID</strong> below.</p>
+          <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+            <input class="f-plain" style="max-width: 200px; border-color: var(--crit-edge);" placeholder="type VOID to confirm" />
+            <span class="serif-it" style="font-size: 12px; color: var(--ink-3);">case sensitive</span>
+          </div>
+        </div>
+        <div class="foot" style="background: var(--crit-bg);">
+          <button class="b b-quiet">Cancel</button>
+          <button class="b b-crit" style="opacity: 0.45;" disabled>Void result</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Convert aspirant → candidate<span class="ttl">routine but consequential</span></div>
+    <div class="modal-stage">
+      <div class="modal">
+        <div class="body">
+          <div class="cap">UPGRADE · MODULE 1 ACCESS</div>
+          <h2 class="h">Become a verified candidate</h2>
+          <p class="p">Your current Aspirant account becomes a Candidate account. You'll keep all twelve saved scenarios and your Anambra Central baseline. You'll be asked to complete <strong>candidate verification</strong> next — INEC receipt or valid NIN required.</p>
+          <p class="p" style="margin-top: 10px;">Once verified, you'll gain access to <strong>polling-unit-level voter data</strong>, the Module 2 agent roster, the Module 3 finance ledger, and the Module 4 War Room. These come with the full <strong>NDPR Data Use Agreement</strong>.</p>
+        </div>
+        <div class="foot">
+          <button class="b b-quiet">Not yet</button>
+          <button class="b b-primary">Begin verification</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

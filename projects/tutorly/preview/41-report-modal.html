@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Report a tutor</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  body { background: var(--paper); }
+
+  .modal-stage {
+    background: rgba(31, 35, 28, 0.42);
+    border-radius: 18px;
+    padding: 56px 48px;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 720px;
+  }
+
+  .modal {
+    background: var(--paper);
+    border: 1px solid var(--sheet-edge);
+    border-radius: 24px;
+    width: 100%; max-width: 580px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,.35), 0 8px 24px -12px rgba(0,0,0,.18);
+  }
+  .modal-head {
+    padding: 28px 32px 18px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .modal-eye { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--crit); font-weight: 600; margin-bottom: 8px; }
+  .modal h2 { font-family: var(--serif); font-size: 28px; font-weight: 500; letter-spacing: -0.018em; margin: 0; line-height: 1.18; }
+  .modal-sub { font-size: 14px; color: var(--ink-3); margin-top: 8px; line-height: 1.55; }
+
+  .modal-body { padding: 22px 32px 8px; }
+  .modal-body p { font-size: 14px; line-height: 1.65; color: var(--ink-2); margin: 0 0 16px; }
+
+  .reasons { display: grid; gap: 10px; margin: 8px 0 18px; }
+  .reason {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px;
+    background: var(--sheet); border: 1px solid var(--sheet-edge);
+    border-radius: 12px; cursor: pointer;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1), background 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .reason:hover { border-color: var(--crit-edge); }
+  .reason.on { border-color: var(--crit); background: var(--crit-bg); }
+  .reason .ck {
+    appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid var(--sheet-edge-2); background: #fff;
+    display: inline-grid; place-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .reason.on .ck { border-color: var(--crit); }
+  .reason.on .ck::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--crit); }
+  .reason .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.008em; line-height: 1.2; }
+  .reason .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; line-height: 1.5; }
+  .reason.on .nm { color: var(--crit); }
+
+  textarea.f-crit {
+    width: 100%;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge-2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: var(--sans); font-size: 14px; line-height: 1.55;
+    color: var(--ink); outline: none; resize: vertical;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1), box-shadow 120ms cubic-bezier(.4,0,.2,1);
+  }
+  textarea.f-crit:focus { border-color: var(--crit); box-shadow: 0 0 0 3px rgba(178,58,42,0.14); }
+
+  .what-happens {
+    margin: 18px 0 4px;
+    background: var(--info-bg); border: 1px solid var(--info-edge); color: var(--info);
+    border-radius: 12px; padding: 14px 18px;
+  }
+  .what-happens .h { font-family: var(--serif); font-size: 15px; font-weight: 500; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.008em; }
+  .what-happens ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: var(--info); }
+
+  .modal-foot {
+    padding: 18px 32px 24px;
+    display: flex; gap: 12px; justify-content: flex-end; align-items: center;
+    border-top: 1px solid var(--hair);
+  }
+  .modal-foot .note { flex: 1; font-size: 11.5px; color: var(--ink-3); line-height: 1.5; }
+</style>
+</head>
+<body>
+<main class="page page-wide">
+
+  <div class="stamp">
+    <span class="num">41 / OVERLAYS</span>
+    <h1 class="ttl">Report a tutor · safety</h1>
+    <span class="meta">The escape hatch · destructive</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">The report flow is the parent's safety lever. We make it loud enough to be findable, calm enough not to be feared, and we tell them exactly what happens after they hit the button. The conversation closes the moment they submit — there is no "are you sure?" page after this one. The decision is made <em>inside</em> this modal.</p>
+
+  <div class="modal-stage">
+    <div class="modal">
+
+      <div class="modal-head">
+        <div class="modal-eye">Safety · this cannot be undone</div>
+        <h2>Report Marcus K.</h2>
+        <p class="modal-sub">Reports go to Tutorly's trust team within minutes. The conversation closes immediately when you submit, and Marcus is hidden from your search results.</p>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-family: var(--sans); font-weight: 600; font-size: 13px; color: var(--ink); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 12px;">What's wrong?</p>
+
+        <div class="reasons">
+          <label class="reason on">
+            <input class="ck" type="radio" name="r" checked hidden>
+            <div>
+              <div class="nm">Inappropriate behaviour toward me or my child</div>
+              <div class="sub">Anything from offensive language to overstepping personal boundaries.</div>
+            </div>
+          </label>
+          <label class="reason">
+            <input class="ck" type="radio" name="r" hidden>
+            <div>
+              <div class="nm">Tried to take the conversation off Tutorly</div>
+              <div class="sub">They asked for WhatsApp, email, or to meet without booking through us.</div>
+            </div>
+          </label>
+          <label class="reason">
+            <input class="ck" type="radio" name="r" hidden>
+            <div>
+              <div class="nm">Asked for payment outside Tutorly</div>
+              <div class="sub">They asked to be paid by transfer for the lessons themselves.</div>
+            </div>
+          </label>
+          <label class="reason">
+            <input class="ck" type="radio" name="r" hidden>
+            <div>
+              <div class="nm">Their profile doesn't match the person</div>
+              <div class="sub">The credentials, photo, or experience don't seem real.</div>
+            </div>
+          </label>
+          <label class="reason">
+            <input class="ck" type="radio" name="r" hidden>
+            <div>
+              <div class="nm">Something else I want to tell you about</div>
+              <div class="sub">A trust team member will read this within an hour.</div>
+            </div>
+          </label>
+        </div>
+
+        <p style="font-family: var(--sans); font-weight: 600; font-size: 13px; color: var(--ink); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 10px;">Tell us what happened</p>
+        <textarea class="f-crit" rows="4" placeholder="Optional, but the more we know the faster we can act. Quotes from the conversation are helpful."></textarea>
+
+        <div class="what-happens">
+          <div class="h">What happens when you tap "Report &amp; close"</div>
+          <ul>
+            <li>The conversation closes immediately. Marcus can no longer message you.</li>
+            <li>The trust team reads the full thread within an hour during the working day.</li>
+            <li>You are refunded the ₦2,500 connection fee within 1–3 working days.</li>
+            <li>Marcus's profile is hidden from your searches forever, regardless of the outcome.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <span class="note">If a child is in danger, please call your local emergency number first.</span>
+        <button class="b b-quiet">Cancel</button>
+        <button class="b b-danger">Report &amp; close conversation</button>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

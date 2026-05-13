@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Selection</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .scene { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; }
+  .scene .ctx { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 14px; }
+  .scene h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.012em; margin: 0 0 4px; }
+  .scene .blurb { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; max-width: 60ch; line-height: 1.6; }
+
+  /* checkbox */
+  .check {
+    appearance: none; -webkit-appearance: none;
+    width: 20px; height: 20px; border: 1.5px solid var(--sheet-edge-2);
+    border-radius: 6px; background: var(--sheet);
+    display: inline-grid; place-content: center;
+    cursor: pointer; flex-shrink: 0;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1), background 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .check:checked { background: var(--green-500); border-color: var(--green-500); }
+  .check:checked::after {
+    content: ""; width: 10px; height: 6px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .check:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(59,183,94,0.22); }
+
+  /* radio */
+  .radio {
+    appearance: none; -webkit-appearance: none;
+    width: 20px; height: 20px; border: 1.5px solid var(--sheet-edge-2);
+    border-radius: 50%; background: var(--sheet);
+    cursor: pointer; flex-shrink: 0;
+    display: inline-grid; place-content: center;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .radio:checked { border-color: var(--green-500); }
+  .radio:checked::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--green-500); }
+  .radio:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(59,183,94,0.22); }
+
+  /* toggle */
+  .toggle { position: relative; width: 40px; height: 24px; border-radius: 999px; background: var(--sheet-edge-2); cursor: pointer; transition: background 220ms cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+  .toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--sheet); transition: transform 220ms cubic-bezier(.4,0,.2,1); }
+  .toggle.on { background: var(--green-500); }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* checkbox row context */
+  .check-list { display: grid; gap: 10px; max-width: 460px; }
+  .check-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--sheet-edge); background: var(--paper); border-radius: 12px; cursor: pointer; transition: border-color 120ms cubic-bezier(.4,0,.2,1); }
+  .check-row.on { border-color: var(--green-500); background: var(--green-50); }
+  .check-row label { cursor: pointer; }
+  .check-row .nm { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+  .check-row .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; line-height: 1.45; }
+
+  .radio-pill-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid var(--sheet-edge); background: var(--paper);
+    border-radius: 999px; cursor: pointer;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    transition: border-color 120ms cubic-bezier(.4,0,.2,1), background 120ms cubic-bezier(.4,0,.2,1);
+  }
+  .radio-pill.on { border-color: var(--green-500); background: var(--green-50); color: var(--green-800); }
+
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--sheet-edge); border-radius: 12px; max-width: 540px; }
+  .toggle-row .lbl-stack .h { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: -0.008em; }
+  .toggle-row .lbl-stack .d { font-size: 12.5px; color: var(--ink-3); margin-top: 3px; line-height: 1.5; }
+
+  .ref-block { background: var(--paper-deep); border: 1px solid var(--hair); border-radius: 14px; padding: 22px; }
+  .ref-block .ref-h { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); margin-bottom: 12px; }
+  .ref-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hair-soft); align-items: center; }
+  .ref-row:last-child { border-bottom: 0; }
+  .ref-row .ref-name { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">12 / PRIMITIVES</span>
+    <h1 class="ttl">Selection</h1>
+    <span class="meta">Checkbox · radio · toggle · pill</span>
+  </div>
+
+  <p class="body muted" style="max-width: 64ch;">Selection controls borrow the brand green only when they're <em>chosen</em>. Otherwise they sit quietly in sheet-edge grey. The pill is the workhorse for filter chips — large enough to read, soft enough to feel like paper.</p>
+
+  <div class="scene">
+    <div class="ctx">Scene · search filters · subjects</div>
+    <h3>Pill-radio for "what do you want learned?"</h3>
+    <p class="blurb">A parent picks one subject at a time. Pills are friendly without being cartoonish; they read as printed labels, not buttons.</p>
+    <div class="radio-pill-group">
+      <label class="radio-pill on"><input type="radio" name="s" class="radio" checked hidden /> Further Maths</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> English Literature</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Chemistry</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Physics</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Biology</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Economics</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Government</label>
+      <label class="radio-pill"><input type="radio" name="s" class="radio" hidden /> Yoruba</label>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · search filters · level</div>
+    <h3>Multi-checkbox for "exam they're sitting"</h3>
+    <p class="blurb">A student may be preparing for two exams at once. Checked rows tint pale sage so the choice is felt, not just seen.</p>
+    <div class="check-list">
+      <label class="check-row on"><input class="check" type="checkbox" checked>
+        <div><div class="nm">WAEC · West African Examinations</div><div class="sub">May/June and Nov/Dec sittings. Most Lagos tutors focus here.</div></div>
+      </label>
+      <label class="check-row on"><input class="check" type="checkbox" checked>
+        <div><div class="nm">A-Level · Cambridge / Edexcel</div><div class="sub">For students applying to UK and Commonwealth universities.</div></div>
+      </label>
+      <label class="check-row"><input class="check" type="checkbox">
+        <div><div class="nm">SAT · College Board</div><div class="sub">For students applying to US universities.</div></div>
+      </label>
+      <label class="check-row"><input class="check" type="checkbox">
+        <div><div class="nm">JAMB · UTME</div><div class="sub">For Nigerian university admission.</div></div>
+      </label>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="ctx">Scene · tutor settings · availability</div>
+    <h3>Toggle for "show me in search results"</h3>
+    <p class="blurb">Used in tutor settings. Toggles never carry meaning beyond on/off — anything more complex becomes a radio set.</p>
+    <div class="toggle-row">
+      <div class="lbl-stack">
+        <div class="h">Show me in search results</div>
+        <div class="d">When off, your profile is hidden from search. Existing conversations stay open.</div>
+      </div>
+      <div class="toggle on"></div>
+    </div>
+    <div class="toggle-row" style="margin-top: 12px;">
+      <div class="lbl-stack">
+        <div class="h">Email me when a parent reads my profile</div>
+        <div class="d">A daily digest, not per-view. We will never email you more than once a day.</div>
+      </div>
+      <div class="toggle"></div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Reference</span></div>
+
+  <div class="ref-block">
+    <div class="ref-h">Variants · states</div>
+    <div class="ref-row"><span class="ref-name">checkbox · off</span><input class="check" type="checkbox"></div>
+    <div class="ref-row"><span class="ref-name">checkbox · on</span><input class="check" type="checkbox" checked></div>
+    <div class="ref-row"><span class="ref-name">radio · off</span><input class="radio" type="radio" name="r1"></div>
+    <div class="ref-row"><span class="ref-name">radio · on</span><input class="radio" type="radio" name="r1" checked></div>
+    <div class="ref-row"><span class="ref-name">toggle · off</span><div class="toggle"></div></div>
+    <div class="ref-row"><span class="ref-name">toggle · on</span><div class="toggle on"></div></div>
+    <div class="ref-row"><span class="ref-name">pill · off</span><label class="radio-pill">Chemistry</label></div>
+    <div class="ref-row"><span class="ref-name">pill · on</span><label class="radio-pill on">Chemistry</label></div>
+  </div>
+
+</main>
+</body>
+</html>

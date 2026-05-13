@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · date & time</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  .picker {
+    display: grid; grid-template-columns: 280px 1fr; gap: 0;
+    border: 1px solid var(--ink); border-radius: var(--r-card);
+    background: var(--sheet); overflow: hidden;
+    box-shadow: var(--shade-pop);
+  }
+  .picker .left { padding: 16px 18px; border-right: 1px solid var(--hair); background: var(--paper-2); }
+  .picker .left .h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+  .picker .left .preset { font-family: var(--sans); font-size: 13px; padding: 6px 0; cursor: pointer; color: var(--ink-2); display: flex; justify-content: space-between; }
+  .picker .left .preset:hover { color: var(--ink); }
+  .picker .left .preset.on { color: var(--forest-700); font-weight: 500; }
+  .picker .left .preset .d { font-family: var(--mono); font-size: 11px; color: var(--ink-4); }
+
+  .picker .right { padding: 16px 18px; }
+  .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .cal-head .m { font-family: var(--serif); font-weight: 600; font-size: 15px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .cal-grid .w { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-align: center; padding: 4px 0; text-transform: uppercase; letter-spacing: 0.08em; }
+  .cal-grid .d { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; color: var(--ink-2); cursor: pointer; border-radius: 2px; }
+  .cal-grid .d.muted { color: var(--ink-4); }
+  .cal-grid .d.range { background: var(--forest-50); }
+  .cal-grid .d.range-start { background: var(--forest-600); color: var(--paper); }
+  .cal-grid .d.range-end { background: var(--forest-600); color: var(--paper); }
+  .cal-grid .d.today { border: 1px solid var(--ink); }
+
+  .countdown {
+    display: flex; gap: 0;
+    border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden;
+    background: var(--ink); color: var(--paper);
+  }
+  .countdown .unit { padding: 16px 22px; border-right: 1px solid rgba(245,239,224,0.18); text-align: center; min-width: 80px; }
+  .countdown .unit:last-child { border-right: 0; }
+  .countdown .unit .n { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 32px; font-weight: 500; line-height: 1; }
+  .countdown .unit .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,239,224,0.6); margin-top: 6px; }
+
+  .timeline { padding: 18px 22px; border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); }
+  .tl-item { display: grid; grid-template-columns: 110px 12px 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--hair-soft); }
+  .tl-item:first-child { border-top: 0; }
+  .tl-item .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; padding-top: 2px; }
+  .tl-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); margin-top: 7px; justify-self: center; }
+  .tl-item .dot.fut { background: transparent; border: 1px solid var(--ink-3); }
+  .tl-item .what { font-family: var(--serif); font-size: 14px; line-height: 1.45; }
+  .tl-item .what .sub { font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">13 / PRIMITIVES</div>
+    <div class="ttl">Date & time</div>
+    <div class="sub">— calendar, range, countdown, election timeline.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · scenario date range<span class="ttl">presets left, range-pick right</span></div>
+    <div class="picker">
+      <div class="left">
+        <div class="h">Window</div>
+        <div class="preset"><span>Last 7 days</span><span class="d">May 4 – 11</span></div>
+        <div class="preset on"><span>This cycle</span><span class="d">Apr 1 – present</span></div>
+        <div class="preset"><span>Since 2023 election</span><span class="d">Feb 25, 2023 –</span></div>
+        <div class="preset"><span>Custom</span><span class="d">↗</span></div>
+        <div style="border-top: 1px solid var(--hair); margin: 12px 0; padding-top: 12px;" class="h">Election</div>
+        <div class="preset"><span>2027 general</span><span class="d">Feb 27, 2027</span></div>
+        <div class="preset"><span>2027 gubernatorial</span><span class="d">Mar 13, 2027</span></div>
+      </div>
+      <div class="right">
+        <div class="cal-head">
+          <button class="b b-quiet b-sm">‹</button>
+          <span class="m">May 2026</span>
+          <button class="b b-quiet b-sm">›</button>
+        </div>
+        <div class="cal-grid">
+          <span class="w">Mo</span><span class="w">Tu</span><span class="w">We</span><span class="w">Th</span><span class="w">Fr</span><span class="w">Sa</span><span class="w">Su</span>
+          <span class="d muted">28</span><span class="d muted">29</span><span class="d muted">30</span><span class="d">1</span><span class="d">2</span><span class="d">3</span><span class="d range-start">4</span>
+          <span class="d range">5</span><span class="d range">6</span><span class="d range">7</span><span class="d range">8</span><span class="d range">9</span><span class="d range">10</span><span class="d range today">11</span>
+          <span class="d range">12</span><span class="d range">13</span><span class="d range">14</span><span class="d range">15</span><span class="d range">16</span><span class="d range">17</span><span class="d range">18</span>
+          <span class="d range">19</span><span class="d range">20</span><span class="d range">21</span><span class="d range">22</span><span class="d range">23</span><span class="d range">24</span><span class="d range">25</span>
+          <span class="d range">26</span><span class="d range">27</span><span class="d range">28</span><span class="d range">29</span><span class="d range">30</span><span class="d range-end">31</span><span class="d muted">1</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair);">
+          <span class="mono" style="font-size: 11px; color: var(--ink-3);">Apr 1 — May 31, 2026 · 61 days</span>
+          <div class="row">
+            <button class="b b-quiet b-sm">Cancel</button>
+            <button class="b b-primary b-sm">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · countdown to election day<span class="ttl">large mono, on ink</span></div>
+    <div style="display: flex; gap: 18px; align-items: center;">
+      <div>
+        <div class="overline">2027 general election</div>
+        <div class="serif" style="font-size: 26px; font-weight: 600; margin-top: 4px;">Sat, 27 Feb 2027 · 8 am</div>
+      </div>
+      <div style="flex: 1;"></div>
+      <div class="countdown">
+        <div class="unit"><div class="n">291</div><div class="l">days</div></div>
+        <div class="unit"><div class="n">17</div><div class="l">hours</div></div>
+        <div class="unit"><div class="n">42</div><div class="l">min</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · campaign timeline<span class="ttl">past dots filled, future hollow</span></div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="when">Feb 25, 2026</div>
+        <div class="dot"></div>
+        <div class="what">INEC notice of election issued <span class="sub">— statutory campaign window opens; spend cap applies.</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="when">Apr 17, 2026</div>
+        <div class="dot"></div>
+        <div class="what">Candidate verification deadline <span class="sub">— Module 1 access locks for unverified accounts.</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="when">today · May 11</div>
+        <div class="dot" style="background: var(--forest-600);"></div>
+        <div class="what">Mid-cycle compliance check <span class="sub">— first INEC report due Jul 10.</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="when">Jul 10, 2026</div>
+        <div class="dot fut"></div>
+        <div class="what">First spend report due <span class="sub">— draft auto-generated from Module 3.</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="when">Feb 27, 2027</div>
+        <div class="dot fut" style="border-color: var(--orange); width: 12px; height: 12px;"></div>
+        <div class="what" style="color: var(--orange);">Election day <span class="sub" style="color: var(--orange);">— War Room goes live 7am; public mode toggle requires OTP.</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Inputs · BuffByte</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 56px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .specimen-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); margin-bottom: 36px; }
+  .specimen-h h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .specimen-h p { color: var(--ink-3); max-width: 520px; font-size: 13.5px; line-height: 1.55; margin: 0; }
+
+  .scene { border: 1px solid var(--hair); border-radius: var(--r-card); background: var(--sheet); padding: 28px; margin-top: 24px; }
+  .scene-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+  .scene-h .roman { font-size: 11px; color: var(--ink-3); letter-spacing: var(--track-overline); text-transform: uppercase; font-weight: 500; }
+  .scene-h .ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+  .full { grid-column: 1 / -1; }
+
+  .textarea {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-soft);
+    padding: 12px 14px;
+    width: 100%;
+    min-height: 160px;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 160ms ease-out, background 160ms ease-out;
+  }
+  .textarea:focus { outline: none; border-color: var(--accent); background: var(--paper); box-shadow: var(--focus-ring); }
+  .textarea::placeholder { color: var(--ink-4); }
+
+  /* select pretend */
+  .select {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--sheet);
+    border: 1px solid var(--hair);
+    border-radius: var(--r-soft);
+    padding: 10px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .select:hover { border-color: var(--ink-4); }
+  .select .platform { display: flex; align-items: center; gap: 8px; }
+  .select .platform .swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--ink); }
+
+  .check, .radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; }
+  .check input, .radio input { display: none; }
+  .check .box {
+    width: 16px; height: 16px; border: 1px solid var(--ink-4); border-radius: 4px;
+    display: grid; place-items: center; background: var(--paper);
+  }
+  .check input:checked + .box { background: var(--accent); border-color: var(--accent); }
+  .check input:checked + .box::after { content: ""; width: 8px; height: 4px; border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: rotate(-45deg) translate(1px,-1px); display: block; }
+  .radio .dot {
+    width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--ink-4); background: var(--paper);
+    display: grid; place-items: center;
+  }
+  .radio input:checked + .dot { border-color: var(--accent); }
+  .radio input:checked + .dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: block; }
+
+  /* segmented */
+  .seg { display: inline-flex; border: 1px solid var(--hair); border-radius: var(--r-soft); padding: 2px; background: var(--paper-deep); }
+  .seg button {
+    border: 0; background: transparent; padding: 6px 12px;
+    font-size: 12.5px; font-weight: 500; color: var(--ink-3); border-radius: 4px;
+    cursor: pointer; font-family: var(--sans);
+  }
+  .seg button.on { background: var(--sheet); color: var(--ink); box-shadow: var(--shade-1); }
+
+  /* slider */
+  .slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: var(--hair-soft); border-radius: 999px; outline: none; }
+  .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+
+  /* helper */
+  .help { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; }
+  .help.warn { color: var(--warn-deep); }
+  .help.crit { color: var(--crit); }
+
+  /* chips */
+  .chip-input { border: 1px solid var(--hair); border-radius: var(--r-soft); padding: 8px; background: var(--sheet); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chip-input input { flex: 1; min-width: 120px; border: 0; background: transparent; outline: none; font-size: 13px; padding: 4px; color: var(--ink); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-tint); color: var(--accent-ink); border: 1px solid var(--accent-edge);
+    padding: 3px 8px; border-radius: var(--r-pill); font-size: 11.5px; font-weight: 500;
+  }
+  .chip svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 2; fill: none; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header class="specimen-h">
+  <h1>Inputs</h1>
+  <p>Inputs are typed-on paper. The hairline only thickens to ink on hover; focus turns the border violet plus a 3 px tinted ring. Numbers use Inter tabular figures.</p>
+</header>
+
+<!-- Scene 1: New analysis composer -->
+<section class="scene">
+  <div class="scene-h">
+    <span class="roman">Scene · 01</span>
+    <span class="ttl">New analysis</span>
+  </div>
+  <div class="form-grid">
+    <div class="full">
+      <label class="label">Your content</label>
+      <textarea class="textarea" placeholder="Paste your script or post copy here. The longer the draft, the more specific the coach can be — aim for at least 80 words.">Spent some time last month building BuffByte AI. A short note on why I picked AI content analysis as the wedge, and what changed in week three.</textarea>
+      <div class="help">231 of 5,000 characters. Around 40 words — readable in 12 seconds.</div>
+    </div>
+    <div>
+      <label class="label">Target platform</label>
+      <div class="select">
+        <span class="platform"><span class="swatch"></span>Twitter / X</span>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div>
+      <label class="label">Region</label>
+      <div class="select">
+        <span class="platform"><span style="font-size:14px;">🇳🇬</span> Nigeria · NG</span>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div>
+      <label class="label">Tone target</label>
+      <div class="seg">
+        <button>Casual</button>
+        <button class="on">Professional</button>
+        <button>Authoritative</button>
+      </div>
+    </div>
+    <div>
+      <label class="label">Score weight</label>
+      <input type="range" class="slider" value="65" />
+      <div class="help">Default balance · 65 % engagement, 35 % brand-fit</div>
+    </div>
+  </div>
+</section>
+
+<!-- Scene 2: edit profile — chips, checkboxes, radios -->
+<section class="scene">
+  <div class="scene-h">
+    <span class="roman">Scene · 02</span>
+    <span class="ttl">Creator profile</span>
+  </div>
+  <div class="form-grid">
+    <div>
+      <label class="label">Display name</label>
+      <input class="input" value="Adewale Adeniji" />
+    </div>
+    <div>
+      <label class="label">Account handle</label>
+      <input class="input" value="@adewale" />
+      <div class="help">Used in shareable analysis links.</div>
+    </div>
+    <div class="full">
+      <label class="label">Active platforms</label>
+      <div class="chip-input">
+        <span class="chip">Twitter · X <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+        <span class="chip">Instagram <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+        <span class="chip">TikTok <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+        <input placeholder="Add platform…" />
+      </div>
+    </div>
+    <div>
+      <label class="label">Notify me when</label>
+      <div class="col" style="gap:8px;">
+        <label class="check"><input type="checkbox" checked /><span class="box"></span><span>An analysis finishes</span></label>
+        <label class="check"><input type="checkbox" checked /><span class="box"></span><span>A draft scores below 60</span></label>
+        <label class="check"><input type="checkbox" /><span class="box"></span><span>A trending topic matches my niche</span></label>
+      </div>
+    </div>
+    <div>
+      <label class="label">Default analysis depth</label>
+      <div class="col" style="gap:8px;">
+        <label class="radio"><input type="radio" name="d" /><span class="dot"></span><span>Quick · 7 dimensions</span></label>
+        <label class="radio"><input type="radio" name="d" checked /><span class="dot"></span><span>Full · 14 dimensions <span class="t-caption">(recommended)</span></span></label>
+        <label class="radio"><input type="radio" name="d" /><span class="dot"></span><span>Deep · 14 dimensions + competitor scan</span></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scene 3: validation states -->
+<section class="scene">
+  <div class="scene-h">
+    <span class="roman">Scene · 03</span>
+    <span class="ttl">Validation</span>
+  </div>
+  <div class="form-grid">
+    <div>
+      <label class="label">Email</label>
+      <input class="input" value="adenijiadewale12@gmail.com" />
+      <div class="help">Used for shared analysis notifications.</div>
+    </div>
+    <div>
+      <label class="label">New password</label>
+      <input class="input" type="password" value="••••••" aria-invalid="true" />
+      <div class="help crit">Too short. Use at least 10 characters.</div>
+    </div>
+    <div>
+      <label class="label">API key (read-only)</label>
+      <input class="input t-num" value="bb_live_1f7a8c4d…" readonly style="background:var(--paper-deep);color:var(--ink-3);" />
+    </div>
+    <div>
+      <label class="label">Daily analysis limit</label>
+      <input class="input t-num" value="200" />
+      <div class="help warn">Approaching your plan limit (180 / 200 used today).</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

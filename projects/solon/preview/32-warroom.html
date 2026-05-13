@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · scene · election-day war room</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  body { padding: 0; background: var(--paper); }
+
+  .scene-shell { display: grid; grid-template-rows: 56px 1fr; min-height: 100vh; }
+
+  .topbar {
+    display: grid; grid-template-columns: auto auto 1fr auto auto; gap: 22px;
+    align-items: center; padding: 0 28px;
+    background: var(--paper); border-bottom: 1px solid var(--ink);
+  }
+  .topbar .brand { font-family: var(--serif); font-weight: 700; font-size: 22px; font-variation-settings: "opsz" 96; }
+  .topbar .live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); padding: 4px 10px; background: var(--paper-2); border: 1px solid var(--ink); border-radius: 3px; }
+  .topbar .crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); }
+  .topbar .crumb .cur { color: var(--ink); }
+  .topbar .clock { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 13px; color: var(--ink); }
+
+  /* Main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 280px 1fr 360px;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+  }
+
+  /* Top strip — counts banner */
+  .strip {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    background: var(--ink);
+    color: var(--paper);
+    border-bottom: 1px solid var(--ink);
+  }
+  .strip .cell { padding: 16px 22px; border-right: 1px solid rgba(245,239,224,0.12); }
+  .strip .cell:last-child { border-right: 0; }
+  .strip .cell .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,239,224,0.6); }
+  .strip .cell .v { font-family: var(--mono); font-feature-settings: "tnum"; font-size: 32px; font-weight: 500; margin-top: 6px; line-height: 1; }
+  .strip .cell .delta { font-family: var(--mono); font-size: 11px; color: rgba(245,239,224,0.7); margin-top: 6px; }
+  .strip .cell .delta.up { color: #7AA386; }
+  .strip .cell .delta.warn { color: var(--orange); }
+
+  /* LEFT — Tally */
+  .lhs { padding: 22px; border-right: 1px solid var(--hair); background: var(--paper); overflow: auto; }
+  .lhs h2 { font-family: var(--serif); font-weight: 600; font-size: 17px; margin: 0 0 12px; font-variation-settings: "opsz" 36; }
+  .tally-row {
+    display: grid; grid-template-columns: 50px 1fr 80px; gap: 10px; align-items: center;
+    padding: 12px 0; border-top: 1px solid var(--hair-soft);
+  }
+  .tally-row:first-of-type { border-top: 0; }
+  .tally-row .abv { font-family: var(--serif); font-weight: 700; font-size: 20px; font-variation-settings: "opsz" 72; }
+  .tally-row .bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .tally-row .bar { height: 6px; background: var(--paper-3); border-radius: 1px; position: relative; overflow: hidden; }
+  .tally-row .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; }
+  .tally-row .pct-label { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+  .tally-row .delta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: right; }
+
+  /* MAP */
+  .map-area { background: var(--paper-2); position: relative; overflow: hidden; }
+  .map-canvas { width: 100%; height: 100%; min-height: 540px; }
+  .map-svg { width: 100%; height: 100%; }
+  .map-svg .ward {  stroke: var(--ink-3); stroke-width: 0.6; }
+  .map-svg .pu { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+  .map-svg .pu.report { fill: var(--forest-600); }
+  .map-svg .pu.flag { fill: var(--orange); }
+  .map-svg .pu.crit { fill: var(--crit); }
+  .map-svg .pu.outstanding { fill: var(--paper); }
+
+  .map-toolbar {
+    position: absolute; top: 18px; left: 18px; display: flex; gap: 8px;
+  }
+  .map-toolbar .seg {
+    display: inline-flex; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-card); overflow: hidden;
+  }
+  .map-toolbar .seg button { font-family: var(--sans); font-size: 12px; padding: 6px 12px; border: 0; background: transparent; border-right: 1px solid var(--hair); cursor: pointer; }
+  .map-toolbar .seg button:last-child { border-right: 0; }
+  .map-toolbar .seg button.on { background: var(--ink); color: var(--paper); }
+
+  .map-legend {
+    position: absolute; bottom: 16px; left: 18px;
+    background: var(--paper); border: 1px solid var(--ink); padding: 10px 14px;
+    border-radius: var(--r-card); font-family: var(--mono); font-size: 10.5px;
+    display: flex; gap: 14px;
+  }
+  .map-legend .row { display: flex; align-items: center; gap: 6px; }
+  .map-legend .row i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 1px solid var(--ink); }
+
+  /* RHS — Incident feed */
+  .rhs { background: var(--paper); border-left: 1px solid var(--hair); overflow: auto; display: flex; flex-direction: column; }
+  .rhs .head { padding: 14px 22px; border-bottom: 1px solid var(--ink); display: flex; align-items: center; gap: 10px; }
+  .rhs .head .h { font-family: var(--serif); font-weight: 600; font-size: 16px; }
+  .rhs .head .gap { flex: 1; }
+  .rhs .head .pulse { background: var(--orange); }
+  .rhs .feed { padding: 0; overflow: auto; flex: 1; }
+
+  .inc {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--hair-soft);
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 12px;
+  }
+  .inc:hover { background: var(--paper-2); }
+  .inc.sev5 { background: var(--crit-bg); border-left: 3px solid var(--crit); padding-left: 15px; }
+  .inc.sev4 { border-left: 3px solid var(--orange); padding-left: 15px; }
+  .inc.sev3 { border-left: 3px solid var(--orange-soft); padding-left: 15px; }
+  .inc .sev {
+    font-family: var(--mono); font-size: 13px; font-weight: 600;
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--ink); border-radius: var(--r-card);
+    background: var(--paper);
+  }
+  .inc.sev5 .sev { background: var(--crit); color: var(--paper); border-color: var(--crit); }
+  .inc.sev4 .sev { background: var(--orange); color: var(--paper); border-color: var(--orange); }
+  .inc.sev3 .sev { background: var(--paper); color: var(--orange); }
+  .inc.sev2 .sev { background: var(--paper-2); color: var(--ink-3); }
+
+  .inc .hd { display: flex; align-items: baseline; gap: 8px; }
+  .inc .ttl { font-family: var(--serif); font-weight: 600; font-size: 14px; font-variation-settings: "opsz" 18; line-height: 1.3; }
+  .inc .when { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-left: auto; }
+  .inc .where { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .inc .body { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; margin-top: 6px; }
+  .inc .meta { display: flex; gap: 10px; margin-top: 6px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .inc .meta .src { display: inline-flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+<div class="scene-shell">
+
+  <header class="topbar">
+    <div class="brand">Solon<span style="color: var(--orange);">.</span></div>
+    <span class="live"><span class="pulse pulse-warn"></span> LIVE · WAR ROOM</span>
+    <div class="crumb">ELECTION DAY · 27 FEB 2027 <span style="margin: 0 6px; color: var(--ink-4)">/</span> <span class="cur">ANAMBRA CENTRAL · SENATE</span></div>
+    <div class="clock">11:42:08 WAT</div>
+    <div style="display: flex; gap: 8px;">
+      <button class="b b-quiet b-sm">Snapshot</button>
+      <button class="b b-secondary b-sm">Public mode · OFF</button>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <div class="strip">
+      <div class="cell">
+        <div class="l">PU reporting</div>
+        <div class="v">263 <span style="font-size: 18px; color: rgba(245,239,224,0.6);">/ 412</span></div>
+        <div class="delta up">+ 18 last 60s</div>
+      </div>
+      <div class="cell">
+        <div class="l">Coverage</div>
+        <div class="v">63.8%</div>
+        <div class="delta">target 90% by 18:00</div>
+      </div>
+      <div class="cell">
+        <div class="l">Reconciled</div>
+        <div class="v">182 <span style="font-size: 18px; color: rgba(245,239,224,0.6);">/ 263</span></div>
+        <div class="delta up">+ 6 last 60s</div>
+      </div>
+      <div class="cell">
+        <div class="l">Accredited (live)</div>
+        <div class="v">81,402</div>
+        <div class="delta up">+ 1,148 last 60s</div>
+      </div>
+      <div class="cell">
+        <div class="l">Incidents · open</div>
+        <div class="v" style="color: var(--orange);">14</div>
+        <div class="delta warn">2 at sev 4+</div>
+      </div>
+      <div class="cell">
+        <div class="l">Anomaly flags</div>
+        <div class="v" style="color: var(--orange);">3</div>
+        <div class="delta warn">divergence from model</div>
+      </div>
+    </div>
+
+    <!-- LEFT — Tally -->
+    <aside class="lhs">
+      <h2>Live tally · 263 PU</h2>
+
+      <div class="tally-row">
+        <span class="abv" style="color: var(--forest-700);">LP</span>
+        <div class="bar-wrap">
+          <span class="pct-label" style="color: var(--forest-700);">49.8% <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 400;">· 40,538 votes</span></span>
+          <div class="bar"><div class="fill" style="width: 49.8%; background: var(--forest-600);"></div></div>
+        </div>
+        <div class="delta">model: 47.2%<br/><span style="color: var(--forest-700);">+ 2.6 pt</span></div>
+      </div>
+
+      <div class="tally-row">
+        <span class="abv">APC</span>
+        <div class="bar-wrap">
+          <span class="pct-label">21.4% <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 400;">· 17,420 votes</span></span>
+          <div class="bar"><div class="fill" style="width: 21.4%; background: var(--ink);"></div></div>
+        </div>
+        <div class="delta">model: 22.1%<br/><span style="color: var(--ink-3);">– 0.7 pt</span></div>
+      </div>
+
+      <div class="tally-row">
+        <span class="abv">APGA</span>
+        <div class="bar-wrap">
+          <span class="pct-label">17.2% <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 400;">· 14,001 votes</span></span>
+          <div class="bar"><div class="fill" style="width: 17.2%; background: var(--paper-3);"></div></div>
+        </div>
+        <div class="delta">model: 18.4%<br/><span style="color: var(--ink-3);">– 1.2 pt</span></div>
+      </div>
+
+      <div class="tally-row">
+        <span class="abv">PDP</span>
+        <div class="bar-wrap">
+          <span class="pct-label">8.9% <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 400;">· 7,245 votes</span></span>
+          <div class="bar"><div class="fill" style="width: 8.9%; background: var(--orange-soft);"></div></div>
+        </div>
+        <div class="delta">model: 9.8%<br/><span style="color: var(--ink-3);">– 0.9 pt</span></div>
+      </div>
+
+      <div class="tally-row">
+        <span class="abv" style="font-size: 14px; color: var(--ink-3);">Other</span>
+        <div class="bar-wrap">
+          <span class="pct-label">2.7% <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 400;">· 2,198</span></span>
+          <div class="bar"><div class="fill" style="width: 2.7%; background: var(--paper-2);"></div></div>
+        </div>
+        <div class="delta">model: 2.5%</div>
+      </div>
+
+      <div style="margin-top: 16px; padding: 12px 14px; background: var(--forest-50); border: 1px solid var(--forest-200); border-radius: var(--r-card);">
+        <div class="overline" style="color: var(--forest-700);">Projected final margin</div>
+        <div style="font-family: var(--serif); font-weight: 600; font-size: 24px; color: var(--forest-700); margin-top: 4px; font-variation-settings: 'opsz' 72;">LP + 28.4<span class="band" style="font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 12px; color: var(--ink-3); margin-left: 6px;">± 4.2 pts</span></div>
+        <div style="font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3); margin-top: 4px;">Solon expects the gap to widen as Ogbaru and Idemili South complete reporting.</div>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <div class="overline" style="margin-bottom: 6px;">Anomaly flags · 3</div>
+        <div style="font-family: var(--serif); font-size: 13px; line-height: 1.5; color: var(--ink-2);">
+          <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">PU 008-06-04 reports LP 71% — <span style="color: var(--orange); font-style: italic;">divergence + 22pt vs model.</span></div>
+          <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">PU 008-07-09 totals exceed accredited count.</div>
+          <div style="padding: 6px 0; border-top: 1px solid var(--hair-soft);">3 PU in ward 11 marked "Confirmed" by a single source.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAP -->
+    <section class="map-area">
+      <div class="map-toolbar">
+        <div class="seg">
+          <button class="on">Reporting status</button>
+          <button>Live margin</button>
+          <button>Incident heat</button>
+        </div>
+        <div class="seg">
+          <button class="on">Agents + citizens</button>
+          <button>Agents only</button>
+        </div>
+      </div>
+
+      <div class="map-canvas">
+        <svg class="map-svg" viewBox="0 0 700 600" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(26,23,20,0.05)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="700" height="600" fill="url(#grid)"/>
+
+          <!-- Wards -->
+          <polygon class="ward" fill="var(--paper)" points="120,90 260,80 290,160 230,230 130,240 90,170"/>
+          <polygon class="ward" fill="var(--paper)" points="260,80 380,90 420,180 360,250 290,230 290,160"/>
+          <polygon class="ward" fill="var(--paper)" points="380,90 510,110 520,210 420,230 420,180"/>
+          <polygon class="ward" fill="var(--paper)" points="510,110 620,140 620,260 520,290 520,210"/>
+          <polygon class="ward" fill="var(--paper)" points="90,170 130,240 230,230 280,310 240,400 130,390 70,310"/>
+          <polygon class="ward" fill="var(--paper)" points="280,310 360,250 420,230 480,300 470,400 380,450 280,420 240,400"/>
+          <polygon class="ward" fill="var(--paper)" points="480,300 520,290 620,260 600,380 510,410 470,400"/>
+          <polygon class="ward" fill="var(--paper)" points="240,400 280,420 380,450 350,540 250,540 200,470"/>
+          <polygon class="ward" fill="var(--paper)" points="380,450 470,400 510,410 600,380 600,490 480,540 350,540"/>
+
+          <!-- Ward labels -->
+          <text x="190" y="160" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Onitsha N.</text>
+          <text x="330" y="170" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Onitsha S.</text>
+          <text x="450" y="170" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Idemili N.</text>
+          <text x="560" y="200" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Idemili S.</text>
+          <text x="170" y="310" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Anambra E.</text>
+          <text x="360" y="350" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Aguata</text>
+          <text x="540" y="340" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Ogbaru</text>
+          <text x="280" y="480" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Oyi</text>
+          <text x="480" y="465" style="font-family: 'Fraunces', serif; font-style: italic; font-size: 11px; fill: var(--ink-3);">Ihiala</text>
+
+          <!-- PU dots — many reporting, some outstanding/flagged -->
+          <g>
+            <!-- Reporting forest -->
+            <circle cx="160" cy="120" r="4" class="pu report"/>
+            <circle cx="190" cy="155" r="4" class="pu report"/>
+            <circle cx="220" cy="130" r="4" class="pu report"/>
+            <circle cx="250" cy="160" r="4" class="pu report"/>
+            <circle cx="180" cy="200" r="4" class="pu report"/>
+            <circle cx="310" cy="130" r="4" class="pu report"/>
+            <circle cx="340" cy="155" r="4" class="pu report"/>
+            <circle cx="370" cy="190" r="4" class="pu report"/>
+            <circle cx="320" cy="190" r="4" class="pu report"/>
+            <circle cx="420" cy="140" r="4" class="pu report"/>
+            <circle cx="450" cy="170" r="4" class="pu report"/>
+            <circle cx="180" cy="280" r="4" class="pu report"/>
+            <circle cx="160" cy="320" r="4" class="pu report"/>
+            <circle cx="220" cy="330" r="4" class="pu report"/>
+            <circle cx="320" cy="320" r="4" class="pu report"/>
+            <circle cx="360" cy="350" r="4" class="pu report"/>
+            <circle cx="400" cy="320" r="4" class="pu report"/>
+            <circle cx="280" cy="470" r="4" class="pu report"/>
+            <circle cx="310" cy="500" r="4" class="pu report"/>
+
+            <!-- Flag -->
+            <circle cx="540" cy="330" r="5" class="pu flag"/>
+            <circle cx="490" cy="430" r="5" class="pu flag"/>
+            <circle cx="430" cy="490" r="5" class="pu flag"/>
+
+            <!-- Critical -->
+            <circle cx="550" cy="180" r="6" class="pu crit"/>
+
+            <!-- Outstanding (hollow) -->
+            <circle cx="580" cy="220" r="4" class="pu outstanding"/>
+            <circle cx="600" cy="260" r="4" class="pu outstanding"/>
+            <circle cx="560" cy="280" r="4" class="pu outstanding"/>
+            <circle cx="500" cy="510" r="4" class="pu outstanding"/>
+            <circle cx="530" cy="490" r="4" class="pu outstanding"/>
+            <circle cx="470" cy="500" r="4" class="pu outstanding"/>
+            <circle cx="270" cy="510" r="4" class="pu outstanding"/>
+            <circle cx="240" cy="490" r="4" class="pu outstanding"/>
+          </g>
+
+          <!-- Critical callout -->
+          <line x1="550" y1="180" x2="640" y2="120" stroke="var(--crit)" stroke-width="1"/>
+          <rect x="520" y="100" width="170" height="34" fill="var(--crit)" rx="3"/>
+          <text x="530" y="115" style="font-family: var(--mono); font-size: 10px; fill: rgba(245,239,224,0.7); letter-spacing: 0.08em;">SEV 5 · 11:38</text>
+          <text x="530" y="128" style="font-family: 'Fraunces', serif; font-size: 11px; font-style: italic; fill: var(--paper);">BVAS lockdown · PU 008-05-19</text>
+        </svg>
+      </div>
+
+      <div class="map-legend">
+        <div class="row"><i style="background: var(--forest-600); border-color: var(--ink);"></i> Reported</div>
+        <div class="row"><i style="background: var(--paper); border-color: var(--ink);"></i> Outstanding</div>
+        <div class="row"><i style="background: var(--orange); border-color: var(--ink);"></i> Flagged</div>
+        <div class="row"><i style="background: var(--crit); border-color: var(--crit);"></i> Sev 5</div>
+      </div>
+    </section>
+
+    <!-- RHS — incident feed -->
+    <aside class="rhs">
+      <div class="head">
+        <span class="pulse"></span>
+        <span class="h">Incident feed · live</span>
+        <span class="gap"></span>
+        <span class="pill pill-warn"><span class="dot"></span> 2 unread</span>
+      </div>
+      <div class="feed">
+
+        <div class="inc sev5">
+          <span class="sev">5</span>
+          <div>
+            <div class="hd">
+              <span class="ttl">BVAS lockdown across PU cluster</span>
+              <span class="when">2 min</span>
+            </div>
+            <div class="where">PU 008-05-19, -20, -21 · Idemili N.</div>
+            <div class="body">"All three machines refusing to authenticate. Crowd building. Ward chairman requesting INEC intervention." — reported in Igbo, transcribed and confirmed by two citizen reporters.</div>
+            <div class="meta">
+              <span class="src">⚑ AGENT · @CO</span>
+              <span class="src">○ 2 CITIZENS</span>
+              <span class="src">→ LEGAL DISPATCHED</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inc sev4">
+          <span class="sev">4</span>
+          <div>
+            <div class="hd">
+              <span class="ttl">Vote-buying allegation</span>
+              <span class="when">14 min</span>
+            </div>
+            <div class="where">Ogbaru · ward 6 · vicinity PU 008-06-04</div>
+            <div class="body">"Cash being distributed in church car park, 200m from polling unit. Photographic evidence attached." Image is geotagged within 75m of declared PU.</div>
+            <div class="meta">
+              <span class="src">⚑ AGENT</span>
+              <span class="src">📷 1 IMAGE</span>
+              <span class="src">→ ACKNOWLEDGED</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inc sev3">
+          <span class="sev">3</span>
+          <div>
+            <div class="hd">
+              <span class="ttl">Long queues, slow accreditation</span>
+              <span class="when">28 min</span>
+            </div>
+            <div class="where">Onitsha North · ward 4 · PU 008-04-09</div>
+            <div class="body">Voice note in Igbo describing 90-minute queues and an unfamiliar INEC officer. Geotag matches PU.</div>
+            <div class="meta">
+              <span class="src">○ CITIZEN</span>
+              <span class="src">🎙 VOICE 0:42</span>
+              <span class="src">→ MONITORING</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inc sev3">
+          <span class="sev">3</span>
+          <div>
+            <div class="hd">
+              <span class="ttl">Agent late to PU</span>
+              <span class="when">41 min</span>
+            </div>
+            <div class="where">Anambra East · ward 3 · PU 008-03-07</div>
+            <div class="body">Coverage gap reported by ward coordinator; backup agent en route from PU 008-03-06.</div>
+            <div class="meta">
+              <span class="src">⚑ COORDINATOR</span>
+              <span class="src">→ REASSIGNED</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inc sev2">
+          <span class="sev">2</span>
+          <div>
+            <div class="hd">
+              <span class="ttl">Material shortage · ballot books</span>
+              <span class="when">58 min</span>
+            </div>
+            <div class="where">Aguata · ward 8 · PU 008-08-12</div>
+            <div class="body">PU started with 1 book instead of 2; INEC resupply confirmed.</div>
+            <div class="meta">
+              <span class="src">⚑ AGENT</span>
+              <span class="src">→ RESOLVED</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>
+</body>
+</html>

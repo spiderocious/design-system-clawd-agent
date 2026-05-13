@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutorly · Palette</title>
+<link rel="stylesheet" href="_foundation.css">
+<style>
+  .grid { display: grid; gap: 28px; }
+  .row-2 { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .swatch { border-radius: var(--r-card); overflow: hidden; border: 1px solid var(--sheet-edge); }
+  .swatch .face { height: 120px; }
+  .swatch .desc { padding: 14px 16px; background: var(--sheet); }
+  .swatch .desc .name { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.012em; }
+  .swatch .desc .role { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+  .swatch .desc .hex { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; letter-spacing: 0; }
+  .ramp { display: grid; grid-template-columns: repeat(10, 1fr); border-radius: 12px; overflow: hidden; border: 1px solid var(--sheet-edge); }
+  .ramp .cell { height: 64px; display: flex; align-items: flex-end; padding: 6px 8px; font-family: var(--mono); font-size: 10px; }
+  .ramp .cell.light { color: var(--ink-3); }
+  .ramp .cell.dark  { color: rgba(255,255,255,0.85); }
+  .state-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+  }
+  .state-card { border-radius: 14px; padding: 18px 20px; }
+  .state-card .lbl { font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; }
+  .state-card .line { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.4; margin-top: 8px; letter-spacing: -0.01em; }
+  .legend { color: var(--ink-3); font-size: 13px; line-height: 1.6; max-width: 64ch; }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="stamp">
+    <span class="num">01 / FOUNDATION</span>
+    <h1 class="ttl">Palette</h1>
+    <span class="meta">Oat paper · forest accent · sage neutrals</span>
+  </div>
+
+  <p class="legend">One accent. <strong>#3BB75E</strong> carries every primary action — Connect, Send, Save. Sage neutrals (the 100/200 tints) carry quiet status: <em>verified, available, replied.</em> The warm-oat paper and warm-grey ink form a single substance — never pure white, never pure black. Critical-red is reserved for irreversible money or safety moments; warm-amber for everything else warning-level. Slate-teal is the only blue, and only on the safety banner that explains the masked-identity rule.</p>
+
+  <div class="break"><span class="lbl">Canvas</span></div>
+
+  <div class="grid row-2">
+    <div class="swatch">
+      <div class="face" style="background: var(--paper)"></div>
+      <div class="desc">
+        <div class="name">Paper · oat</div>
+        <div class="role">The canvas. Every screen sits on this.</div>
+        <div class="hex">#F7F5F0</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="face" style="background: var(--sheet); border-bottom: 1px solid var(--sheet-edge);"></div>
+      <div class="desc">
+        <div class="name">Sheet · cream</div>
+        <div class="role">A single card on the canvas.</div>
+        <div class="hex">#FFFDF8</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="face" style="background: var(--paper-deep)"></div>
+      <div class="desc">
+        <div class="name">Paper · recessed</div>
+        <div class="role">Behind a card, in the gallery frame.</div>
+        <div class="hex">#EFEBE0</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="face" style="background: var(--ink)"></div>
+      <div class="desc">
+        <div class="name" style="color: #FFFDF8">Ink · warm-near-black</div>
+        <div class="role">Body, headlines. Never pure black.</div>
+        <div class="hex">#1F231C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Forest green · the single accent</span></div>
+
+  <div class="ramp">
+    <div class="cell light" style="background: var(--green-50)">50</div>
+    <div class="cell light" style="background: var(--green-100)">100</div>
+    <div class="cell light" style="background: var(--green-200)">200</div>
+    <div class="cell light" style="background: var(--green-300)">300</div>
+    <div class="cell dark"  style="background: var(--green-400)">400</div>
+    <div class="cell dark"  style="background: var(--green-500)">500</div>
+    <div class="cell dark"  style="background: var(--green-600)">600</div>
+    <div class="cell dark"  style="background: var(--green-700)">700</div>
+    <div class="cell dark"  style="background: var(--green-800)">800</div>
+    <div class="cell dark"  style="background: var(--green-900)">900</div>
+  </div>
+  <p class="legend" style="margin-top: 16px"><strong>500 / #3BB75E</strong> is the brand — it lives on the Connect button and nowhere else as a fill. 600 is hover, 700 is pressed. 100 is the sage chip background used by verified marks and replied-status indicators. Tints above 500 (lighter sages) are paper-status; tints below 500 (deeper forests) are text-on-paper for editorial emphasis.</p>
+
+  <div class="break"><span class="lbl">State · used sparingly</span></div>
+
+  <div class="state-row">
+    <div class="state-card" style="background: var(--crit-bg); color: var(--crit); border: 1px solid var(--crit-edge);">
+      <div class="lbl">Critical · irreversible</div>
+      <div class="line">"₦2,500 will be charged. This cannot be refunded once the conversation begins."</div>
+    </div>
+    <div class="state-card" style="background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-edge);">
+      <div class="lbl">Warning · attention</div>
+      <div class="line">"Marcus hasn't replied in 4 days. You can request a refund."</div>
+    </div>
+    <div class="state-card" style="background: var(--info-bg); color: var(--info); border: 1px solid var(--info-edge);">
+      <div class="lbl">Safety · informational</div>
+      <div class="line">"Contact information is hidden until you both agree to share it."</div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">Ink ramp</span></div>
+
+  <div class="ramp" style="grid-template-columns: repeat(5, 1fr)">
+    <div class="cell dark"  style="background: var(--ink)">ink</div>
+    <div class="cell dark"  style="background: var(--ink-2)">ink-2</div>
+    <div class="cell light" style="background: var(--ink-3)">ink-3</div>
+    <div class="cell light" style="background: var(--ink-4)">ink-4</div>
+    <div class="cell light" style="background: var(--hair)">hair</div>
+  </div>
+  <p class="legend" style="margin-top: 16px">Ink is warm — slightly olive — to feel of-a-piece with the oat paper. The body sits at ink-2 for long-form reading (blog posts, teaching philosophy). Hair is the hairline used for every card edge — never a shadow.</p>
+
+</main>
+</body>
+</html>

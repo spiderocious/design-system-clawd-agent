@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solon · tables</title>
+<link rel="stylesheet" href="_foundation.css" />
+<style>
+  .scene { padding: 22px 0; border-bottom: 1px solid var(--hair); }
+  .scene:last-of-type { border-bottom: 0; }
+  .scene-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+  .scene-h .ttl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 12px; }
+
+  table.t {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--sans); font-size: 13px;
+  }
+  table.t thead th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3); text-align: left; padding: 10px 12px 8px;
+    border-bottom: 1px solid var(--ink); font-weight: 500;
+  }
+  table.t thead th.num { text-align: right; }
+  table.t tbody td {
+    padding: 12px 12px; border-bottom: 1px solid var(--hair); vertical-align: middle;
+  }
+  table.t tbody td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  table.t tbody tr:hover td { background: var(--paper-2); }
+  table.t tbody td .nm { font-family: var(--serif); font-weight: 600; font-size: 14.5px; font-variation-settings: "opsz" 18; }
+  table.t tbody td .sub { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
+  table.t .proj { font-family: var(--serif); font-weight: 600; color: var(--forest-700); }
+  table.t .proj .band { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 11px; color: var(--ink-3); margin-left: 4px; }
+
+  /* INEC compliance table */
+  table.bills tbody tr.flagged td { background: var(--orange-soft); }
+  table.bills tbody tr.flagged td:first-child { border-left: 3px solid var(--orange); padding-left: 9px; }
+
+  .donor-row { display: inline-flex; align-items: center; gap: 10px; }
+</style>
+</head>
+<body class="iframe-page">
+<div class="page page-wide">
+
+  <div class="stamp">
+    <div class="num">20 / DATA & STATE</div>
+    <div class="ttl">Tables</div>
+    <div class="sub">— records below, projections in serif, flagged rows take a left rule.</div>
+    <div class="meta">SOLON · v 0.1</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · cluster table<span class="ttl">voter segmentation, mid-page</span></div>
+    <table class="t">
+      <thead>
+        <tr>
+          <th style="width: 30px;"></th>
+          <th>Cluster</th>
+          <th>Dominant ward</th>
+          <th>Top issue</th>
+          <th>Outreach channel</th>
+          <th class="num">Size</th>
+          <th class="num">Turnout '23</th>
+          <th class="num">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono" style="color: var(--ink-3);">01</td>
+            <td><div class="nm">Persuadable urban youth</div><div class="sub">18–34 · low-turnout · social-first</div></td>
+            <td>Onitsha North · ward 4</td>
+            <td>Youth employment</td>
+            <td>X · Instagram · WhatsApp groups</td>
+            <td class="num">~ 14,200</td>
+            <td class="num" style="color: var(--orange);">26%</td>
+            <td class="num"><span class="chip chip-hold">High</span></td></tr>
+        <tr><td class="mono" style="color: var(--ink-3);">02</td>
+            <td><div class="nm">Rural party-loyal</div><div class="sub">45+ · high-turnout · radio-first</div></td>
+            <td>Ihiala · ward 7</td>
+            <td>Cost of living</td>
+            <td>Radio call-in · ward town hall</td>
+            <td class="num">~ 9,800</td>
+            <td class="num" style="color: var(--forest-700);">71%</td>
+            <td class="num"><span class="chip chip-hold-strong">Hold</span></td></tr>
+        <tr><td class="mono" style="color: var(--ink-3);">03</td>
+            <td><div class="nm">Market-women</div><div class="sub">trader networks · vocal · sceptical</div></td>
+            <td>Onitsha South</td>
+            <td>Naira reform</td>
+            <td>Market association · WhatsApp</td>
+            <td class="num">~ 6,400</td>
+            <td class="num">52%</td>
+            <td class="num"><span class="chip chip-toss">Toss-up</span></td></tr>
+        <tr><td class="mono" style="color: var(--ink-3);">04</td>
+            <td><div class="nm">Civil servants</div><div class="sub">salaried, urban, ABC-issue-driven</div></td>
+            <td>Awka South</td>
+            <td>Pension arrears</td>
+            <td>Email · staff bulletin · radio</td>
+            <td class="num">~ 4,100</td>
+            <td class="num">58%</td>
+            <td class="num"><span class="chip chip-hold">Lean hold</span></td></tr>
+        <tr><td class="mono" style="color: var(--ink-3);">05</td>
+            <td><div class="nm">Diaspora-influenced</div><div class="sub">remittance households · LP-leaning</div></td>
+            <td>Aguata</td>
+            <td>Diaspora bond rate</td>
+            <td>Family WhatsApp · diaspora podcasts</td>
+            <td class="num">~ 2,900</td>
+            <td class="num">48%</td>
+            <td class="num"><span class="chip chip-opp">Watch</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="scene">
+    <div class="scene-h">Scene · donor register<span class="ttl">finance · risk-flagged rows take orange rule</span></div>
+    <table class="t bills">
+      <thead>
+        <tr>
+          <th>Donor</th>
+          <th>Type</th>
+          <th>LGA</th>
+          <th>Method</th>
+          <th>Date</th>
+          <th class="num">Amount</th>
+          <th class="num">Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="donor-row"><span class="av av-sm av-forest">EO</span><div><div class="nm">Eze Okonkwo</div><div class="sub">Individual · diaspora · UK</div></div></div></td>
+          <td>Individual</td>
+          <td>—</td>
+          <td>Wire (Zenith Bank)</td>
+          <td class="mono" style="color: var(--ink-3);">Apr 12</td>
+          <td class="num">₦ 850,000</td>
+          <td class="num"><span class="chip chip-hold">Low</span></td>
+        </tr>
+        <tr>
+          <td><div class="donor-row"><span class="av av-sm">CM</span><div><div class="nm">Chinatu Manufacturing Ltd</div><div class="sub">Corporate</div></div></div></td>
+          <td>Corporate</td>
+          <td>Anambra E.</td>
+          <td>Cheque</td>
+          <td class="mono" style="color: var(--ink-3);">Apr 22</td>
+          <td class="num">₦ 2,400,000</td>
+          <td class="num"><span class="chip chip-hold">Low</span></td>
+        </tr>
+        <tr class="flagged">
+          <td><div class="donor-row"><span class="av av-sm av-orange">??</span><div><div class="nm">Anonymous trust</div><div class="sub">Cash · agent-deposited</div></div></div></td>
+          <td>Individual</td>
+          <td>Onitsha N.</td>
+          <td>Cash · agent</td>
+          <td class="mono" style="color: var(--ink-3);">May 02</td>
+          <td class="num">₦ 5,000,000</td>
+          <td class="num"><span class="chip chip-toss">High</span></td>
+        </tr>
+        <tr>
+          <td><div class="donor-row"><span class="av av-sm">NU</span><div><div class="nm">Nigerian Union of Teachers — Anambra</div><div class="sub">Affiliated body</div></div></div></td>
+          <td>Corporate</td>
+          <td>Multiple</td>
+          <td>Transfer (Access)</td>
+          <td class="mono" style="color: var(--ink-3);">May 05</td>
+          <td class="num">₦ 600,000</td>
+          <td class="num"><span class="chip chip-hold">Low</span></td>
+        </tr>
+        <tr>
+          <td><div class="donor-row"><span class="av av-sm av-forest">JI</span><div><div class="nm">Joseph Ibe</div><div class="sub">Individual</div></div></div></td>
+          <td>Individual</td>
+          <td>Aguata</td>
+          <td>Wire</td>
+          <td class="mono" style="color: var(--ink-3);">May 09</td>
+          <td class="num">₦ 250,000</td>
+          <td class="num"><span class="chip chip-hold">Low</span></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" style="padding: 12px; font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 12px;">Totals tracked against INEC statutory cap of ₦ 4 billion (Senate seat).</td>
+          <td class="mono tabular" style="text-align: right; padding: 12px; font-size: 14px; font-weight: 500;">₦ 9,100,000</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,509 @@
+/* ============================================================
+   DIPSTICK — ledger paperback foundation
+   One stance, applied everywhere.
+
+   The frame: a deep-paperback accounting ledger crossed with
+   a financial daily. A filling-station owner's logbook —
+   opening dip, deliveries, sales, closing dip, expenses,
+   variance — published clean every day.
+
+   Palette: warm cream paper, ink-near-black, deep emerald.
+   Type:    Source Serif 4 (display + thinking) + Inter (chrome)
+            + IBM Plex Mono (every figure, every record id).
+   Chrome:  hairlines, tight 3px geometry, no decoration.
+            Money is the loudest object on the page.
+
+   Numbers are tabular mono. Variance is flagged in text colour
+   only — green for balanced, oxblood-red for shortage. Cards
+   are paper sheets with hairline edges, no shadow ornament.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---------- Paper & ink ---------- */
+  --paper:        #F2EDE2;   /* warm cream — the canvas */
+  --paper-deep:   #ECE5D4;   /* recessed surface, side panels */
+  --sheet:        #FBF7EC;   /* a single sheet on the desk */
+  --sheet-2:      #F7F2E4;   /* a second sheet, slightly deeper */
+  --sheet-edge:   #D6CDB8;   /* the edge of a sheet */
+  --ink:          #1A1714;   /* near-black, slightly warm */
+  --ink-2:        #3D3833;   /* body */
+  --ink-3:        #6E665B;   /* secondary, labels */
+  --ink-4:        #A39A8A;   /* tertiary, placeholders */
+  --hair:         #D6CDB8;   /* hairline */
+  --hair-soft:    #E5DECC;   /* even quieter divider */
+  --rule:         #1A1714;   /* heavy ink rule */
+
+  /* ---------- Money green — the single accent ----------
+     Deep emerald. Used for: posted/confirmed entries, balanced
+     variances, primary actions, the brand mark. Not for nav.
+     Three shades, all earned. */
+  --emerald-50:   #E7F4ED;
+  --emerald-100:  #C7E4D2;
+  --emerald-200:  #98CDAF;
+  --emerald-400:  #2D8A5C;
+  --emerald-600:  #0E5C3A;   /* PRIMARY — the accent */
+  --emerald-700:  #0A4A2E;   /* hover / pressed */
+  --emerald-900:  #06301E;   /* deepest, rare */
+
+  /* ---------- Ledger states ----------
+     Red is for shortages, voids, and irreversible warnings only.
+     Amber is for everything else (out-of-spec, watch). Ink-blue is
+     for "informational / system" — used sparingly. */
+  --short:        #9A1F18;   /* oxblood — shortage / loss / void */
+  --short-bg:     #F8E7E4;
+  --short-edge:   #E6BFBC;
+
+  --watch:        #8E5A0E;   /* burnt amber — out-of-spec, watch */
+  --watch-bg:     #F8EED8;
+  --watch-edge:   #E2CC95;
+
+  --info:         #1F4D7A;   /* deep ink-blue — system notes only */
+  --info-bg:      #E8EEF4;
+  --info-edge:    #BFD0E1;
+
+  --ok:           var(--emerald-700);
+  --ok-bg:        var(--emerald-50);
+  --ok-edge:      var(--emerald-200);
+
+  /* ---------- Product tints (PMS / AGO / DPK) ----------
+     Three Nigerian forecourt products. Used as tiny inline marks
+     on rows and tank labels, never as fills. */
+  --pms:          #0E5C3A;   /* premium motor spirit — emerald */
+  --ago:          #8E5A0E;   /* automotive gas oil (diesel) — amber */
+  --dpk:          #6B4E8E;   /* dual-purpose kerosene — muted plum */
+
+  /* ---------- Type ---------- */
+  --serif:   'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Tracking */
+  --track-display:  -0.018em;
+  --track-h:        -0.01em;
+  --track-body:      0;
+  --track-label:     0.01em;
+  --track-overline:  0.18em;
+  --track-mono:      0;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:    2px;
+  --r-soft:     4px;
+  --r-card:     3px;          /* tight — this is paper */
+  --r-pill:     9999px;
+
+  --gutter:     24px;
+
+  /* Hairlines, not shadows */
+  --line-1:  0 0 0 1px var(--hair);
+  --shade-1: 0 1px 0 rgba(26,23,20,0.04);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern", "calt", "ss01";
+}
+
+/* ----- Type primitives ----- */
+.serif    { font-family: var(--serif); font-weight: 500; letter-spacing: var(--track-display); }
+.sans     { font-family: var(--sans); }
+.mono     { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; letter-spacing: var(--track-mono); }
+.tabular  { font-variant-numeric: tabular-nums; }
+.overline {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ital     { font-style: italic; font-family: var(--serif); color: var(--ink-2); }
+
+/* ----- Page chrome ----- */
+.stamp {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 18px; margin-bottom: 36px;
+  border-bottom: 1px solid var(--ink);
+}
+.stamp .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.stamp .ttl {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  flex: 1;
+  line-height: 1.05;
+}
+.stamp .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.break {
+  margin: 56px 0 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.break::before { content: ""; height: 1px; background: var(--hair); width: 24px; flex-shrink: 0; }
+.break::after  { content: ""; height: 1px; background: var(--hair); flex: 1; }
+.break .lbl {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 64px 96px;
+}
+
+/* ----- Sheet (the only "card" idiom) ----- */
+.sheet {
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+}
+.sheet-2 { background: var(--sheet-2); }
+.sheet-tight { padding: 14px 18px; }
+.sheet-md    { padding: 20px 24px; }
+.sheet-lg    { padding: 28px 32px; }
+
+hr.hair       { border: 0; border-top: 1px solid var(--hair); margin: 0; }
+hr.hair-soft  { border: 0; border-top: 1px solid var(--hair-soft); margin: 0; }
+hr.ink        { border: 0; border-top: 1px solid var(--ink); margin: 0; }
+hr.ink-thick  { border: 0; border-top: 2px solid var(--ink); margin: 0; }
+
+.mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Wordmark (Dipstick brand lock-up) ----- */
+.wordmark {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.wordmark .dot { color: var(--emerald-600); }
+
+/* ----- Buttons ----- */
+.b {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--r-soft);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.b:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14,92,58,0.28);
+}
+.b-primary    { background: var(--emerald-600); color: var(--sheet); border-color: var(--emerald-600); }
+.b-primary:hover  { background: var(--emerald-700); border-color: var(--emerald-700); }
+.b-secondary  { background: transparent; border-color: var(--ink); color: var(--ink); }
+.b-secondary:hover { background: var(--ink); color: var(--paper); }
+.b-quiet      { color: var(--ink-2); }
+.b-quiet:hover{ background: rgba(26,23,20,0.05); color: var(--ink); }
+.b-danger     { color: var(--short); border-color: var(--short); }
+.b-danger:hover{ background: var(--short-bg); }
+.b-ghost      { color: var(--ink-3); border-color: var(--hair); }
+.b-ghost:hover{ color: var(--ink); border-color: var(--ink); }
+.b-sm { height: 26px; padding: 0 10px; font-size: 12px; }
+.b-lg { height: 40px; padding: 0 18px; font-size: 14px; }
+.b-block { width: 100%; justify-content: center; }
+.b[disabled], .b[aria-disabled="true"] {
+  opacity: 0.45; pointer-events: none;
+}
+
+/* ----- Inputs ----- */
+.field-row { display: flex; flex-direction: column; gap: 4px; }
+.field-row .lbl {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: var(--track-label);
+}
+.field-row .hlp {
+  font-family: var(--sans);
+  font-size: 11px; color: var(--ink-3);
+}
+.field-row .err {
+  font-family: var(--sans);
+  font-size: 11px; color: var(--short);
+}
+.f {
+  font-family: var(--sans);
+  font-size: 13px;
+  height: 34px;
+  padding: 0 11px;
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: var(--track-body);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.f::placeholder { color: var(--ink-4); }
+.f:hover { border-color: var(--ink-4); }
+.f:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(14,92,58,0.18); }
+.f[disabled] { background: var(--paper-deep); color: var(--ink-3); }
+.f.is-error { border-color: var(--short); }
+.f.is-error:focus { box-shadow: 0 0 0 3px rgba(154,31,24,0.18); }
+.f-mono { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; }
+.f-lg { height: 44px; font-size: 15px; padding: 0 14px; }
+.f-sm { height: 28px; font-size: 12px; padding: 0 9px; }
+
+/* Input affix (₦, L, /L) — sits inside the field's right or left gutter */
+.f-affix {
+  display: flex; align-items: stretch;
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.f-affix:focus-within { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(14,92,58,0.18); }
+.f-affix .pre, .f-affix .post {
+  display: inline-flex; align-items: center;
+  padding: 0 11px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  background: var(--paper-deep);
+  border-right: 1px solid var(--sheet-edge);
+  letter-spacing: 0.02em;
+}
+.f-affix .post { border-right: 0; border-left: 1px solid var(--sheet-edge); }
+.f-affix .f {
+  border: 0; border-radius: 0; flex: 1; min-width: 0; background: transparent;
+}
+.f-affix .f:focus { box-shadow: none; }
+
+/* ----- Pills ----- */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 20px; padding: 0 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hair);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: var(--track-label);
+  white-space: nowrap;
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+.pill-ok    { color: var(--emerald-700); border-color: var(--emerald-200); background: var(--emerald-50); }
+.pill-short { color: var(--short);  border-color: var(--short-edge);  background: var(--short-bg); }
+.pill-watch { color: var(--watch);  border-color: var(--watch-edge);  background: var(--watch-bg); }
+.pill-info  { color: var(--info);   border-color: var(--info-edge);   background: var(--info-bg); }
+.pill-ink   { color: var(--paper);  border-color: var(--ink);         background: var(--ink); }
+.pill-paper { color: var(--ink-2);  border-color: var(--sheet-edge);  background: var(--paper-deep); }
+
+/* Product chip (PMS / AGO / DPK) — inline mark on rows */
+.prod {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-2);
+}
+.prod::before {
+  content: ""; width: 7px; height: 7px; border-radius: 1px;
+  background: var(--ink-3);
+}
+.prod-pms::before { background: var(--pms); }
+.prod-ago::before { background: var(--ago); }
+.prod-dpk::before { background: var(--dpk); }
+.prod-pms { color: var(--pms); }
+.prod-ago { color: var(--ago); }
+.prod-dpk { color: var(--dpk); }
+
+/* Chip (looser, content tags) */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--sans); font-size: 12px; color: var(--ink-2);
+  padding: 1px 6px; border-radius: 2px; background: var(--paper-deep);
+}
+
+/* Record number — pump id, tank id, shift id */
+.rec {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  text-transform: uppercase;
+}
+
+/* Variance flag — short / over / balanced */
+.flag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  line-height: 14px;
+  border-radius: 2px;
+  letter-spacing: 0;
+}
+.flag-short { color: var(--sheet); background: var(--short); }
+.flag-over  { color: var(--watch); border: 1px solid var(--watch-edge); background: var(--watch-bg); }
+.flag-ok    { color: var(--emerald-700); border: 1px solid var(--emerald-200); background: var(--emerald-50); }
+
+/* ----- Avatar — initials, paper-toned ----- */
+.av {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-deep);
+  color: var(--ink-2);
+  font-family: var(--sans); font-weight: 600; font-size: 11px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  user-select: none;
+  border: 1px solid var(--sheet-edge);
+}
+.av-sm { width: 22px; height: 22px; font-size: 9px; }
+.av-md { width: 32px; height: 32px; font-size: 11px; }
+.av-lg { width: 44px; height: 44px; font-size: 14px; }
+.av-xl { width: 72px; height: 72px; font-size: 22px; }
+/* role tints */
+.av-mgr { background: var(--emerald-50);  color: var(--emerald-700); border-color: var(--emerald-200); }
+.av-att { background: var(--paper-deep);  color: var(--ink-2); }
+.av-owner { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ----- Live pulse (shift currently on) ----- */
+.pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--emerald-600);
+  box-shadow: 0 0 0 0 rgba(14,92,58,0.5);
+  animation: pulse 1.6s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(14,92,58,0.45); }
+  100% { box-shadow: 0 0 0 8px rgba(14,92,58,0); }
+}
+
+/* ----- Focus ring ----- */
+.ring-focus { box-shadow: 0 0 0 2px var(--ink); }
+
+/* ----- Scaffolding ----- */
+.row    { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col    { display: flex; flex-direction: column; gap: 12px; }
+.stack  { display: flex; flex-direction: column; gap: 0; }
+.split  { display: grid; gap: 16px; }
+.split-2 { grid-template-columns: 1fr 1fr; }
+.split-3 { grid-template-columns: repeat(3, 1fr); }
+.split-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ----- Numerics — the readout family ----- */
+.read {
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+.read-xl { font-size: 56px; }
+.read-lg { font-size: 40px; }
+.read-md { font-size: 28px; }
+.read-sm { font-size: 20px; }
+.read .u { font-family: var(--sans); font-size: 0.36em; color: var(--ink-3); margin-left: 4px; letter-spacing: 0.02em; font-weight: 500; }
+.read-short { color: var(--short); }
+.read-ok    { color: var(--emerald-700); }
+
+/* Naira figure — primary money type */
+.naira       { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.naira::before { content: "₦"; font-family: var(--sans); margin-right: 1px; }
+
+/* ----- Quote (manager's note style) ----- */
+.dictated {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-2);
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+/* ----- Selection ----- */
+::selection { background: rgba(14,92,58,0.22); color: var(--ink); }
+
+/* ----- Scrollbar (webkit) ----- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--sheet-edge); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+/* ============================================================
+   LEDGER ROW — the signature reconciliation row.
+   Used in shift-close, day-book, owner roll-up.
+   Five columns: attendant+pump, litres, gross, variance, mark.
+   ============================================================ */
+.ledger {
+  display: grid;
+  grid-template-columns: 1fr 110px 130px 130px 24px;
+  align-items: baseline;
+  column-gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--hair);
+}
+.ledger:first-child  { border-top: 1px solid var(--ink); }
+.ledger.is-total     { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--sheet-2); }
+.ledger:hover        { background: var(--sheet); }
+.ledger .who {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.ledger .who .nm  { font-family: var(--serif); font-weight: 500; font-size: 14px; }
+.ledger .who .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+.ledger .fig {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+}
+.ledger .var-ok    { color: var(--emerald-700); text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+.ledger .var-short { color: var(--short);  text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; }
+.ledger .var-over  { color: var(--watch);  text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+.ledger .mk        { text-align: right; font-family: var(--mono); font-size: 13px; }
+.ledger .mk.ok     { color: var(--emerald-700); }
+.ledger .mk.bad    { color: var(--short); }

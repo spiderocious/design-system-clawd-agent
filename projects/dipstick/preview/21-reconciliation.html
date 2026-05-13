@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Reconciliation row</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .recon-block { background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 26px 30px; }
+  .recon-head { display: flex; align-items: baseline; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--hair); margin-bottom: 12px; }
+  .recon-head .h { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.018em; }
+  .recon-head .meta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+  .ledger-wide { grid-template-columns: 1fr 90px 130px 130px 140px 28px; }
+
+  /* expanded detail */
+  .ledger-detail {
+    background: var(--paper-deep); padding: 16px 28px;
+    border-bottom: 1px solid var(--hair);
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+  }
+  .ledger-detail .col-d .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .ledger-detail .col-d .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; }
+  .ledger-detail .note { font-family: var(--serif); font-style: italic; color: var(--ink-2); font-size: 13px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">21.</div>
+    <div class="ttl">Reconciliation row — the signature data display.</div>
+    <div class="meta">DATA &amp; STATE · ★</div>
+  </div>
+
+  <p class="dictated" style="max-width: 64ch; margin: 0 0 28px;">
+    The reconciliation row is the heart of the product. It shows one pump, one shift: who manned it, what was dispensed, what should have come in, what did, the variance, a single mark. Click any row to expand into the meter trail. The total row is double-ruled — it's the day's signature.
+  </p>
+
+  <div class="recon-block">
+    <div class="recon-head">
+      <div>
+        <div class="overline" style="margin-bottom: 4px;">EVENING SHIFT · TUE 14 MAY</div>
+        <div class="h">Mokola Station · 6 pumps · 4 active</div>
+      </div>
+      <div class="meta">14:00 — 22:00 · WAT</div>
+    </div>
+
+    <div class="ledger ledger-wide">
+      <div class="who">
+        <div class="nm">Aisha Bello</div>
+        <div class="sub">P-01 · PMS · 502 L</div>
+      </div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">P-01</div>
+      <div class="fig">502.0 L</div>
+      <div class="fig">₦98,392.00</div>
+      <div class="var-ok">+ ₦0.00 · balanced</div>
+      <div class="mk ok">✓</div>
+    </div>
+
+    <div class="ledger ledger-wide" style="background: var(--paper-deep);">
+      <div class="who">
+        <div class="nm">Chidera Okoye</div>
+        <div class="sub">P-02 · PMS · 612 L</div>
+      </div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">P-02</div>
+      <div class="fig">612.0 L</div>
+      <div class="fig">₦119,952.00</div>
+      <div class="var-short">− ₦2,400.00 · short</div>
+      <div class="mk bad">!</div>
+    </div>
+
+    <div class="ledger-detail">
+      <div class="col-d">
+        <div class="k">Meter trail</div>
+        <div class="v">Open · 412,118.00 L</div>
+        <div class="v">Close · 412,730.00 L</div>
+        <div class="v" style="color: var(--ink-3);">Δ · 612.00 L</div>
+      </div>
+      <div class="col-d">
+        <div class="k">Cash trail</div>
+        <div class="v">Expected · ₦119,952.00</div>
+        <div class="v">Declared · ₦117,552.00</div>
+        <div class="v read-short">Short · ₦2,400.00</div>
+      </div>
+      <div class="col-d">
+        <div class="k">Manager note</div>
+        <p class="note">"Chidera says one customer left without paying after a phone call. Filed a note, awaiting CCTV review."</p>
+        <div class="rec" style="margin-top: 8px;">ADEOLA · 18:47 · WAT</div>
+      </div>
+    </div>
+
+    <div class="ledger ledger-wide">
+      <div class="who">
+        <div class="nm">Femi Adekunle</div>
+        <div class="sub">P-03 · PMS · 814 L</div>
+      </div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">P-03</div>
+      <div class="fig">814.0 L</div>
+      <div class="fig">₦159,544.00</div>
+      <div class="var-ok">+ ₦0.00 · balanced</div>
+      <div class="mk ok">✓</div>
+    </div>
+
+    <div class="ledger ledger-wide">
+      <div class="who">
+        <div class="nm">Yusuf Lawal</div>
+        <div class="sub">P-05 · AGO · 412 L</div>
+      </div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">P-05</div>
+      <div class="fig">412.0 L</div>
+      <div class="fig">₦362,560.00</div>
+      <div class="var-over">+ ₦440.00 · over</div>
+      <div class="mk" style="color: var(--watch);">∼</div>
+    </div>
+
+    <div class="ledger ledger-wide is-total">
+      <div class="who">
+        <div class="nm" style="font-family: var(--serif); font-weight: 600;">Evening total</div>
+        <div class="sub">4 attendants · 2 balanced · 1 short · 1 over</div>
+      </div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">SUM</div>
+      <div class="fig">2,340.0 L</div>
+      <div class="fig">₦740,448.00</div>
+      <div class="var-short">− ₦1,960.00</div>
+      <div class="mk"></div>
+    </div>
+
+    <div class="row" style="justify-content: space-between; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hair);">
+      <div class="dictated" style="font-size: 13px;">— Adeola, branch manager, signs the shift after Chidera's note is filed.</div>
+      <div class="row">
+        <button class="b b-secondary">Add another</button>
+        <button class="b b-primary">Post evening shift &nbsp;→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="break"><span class="lbl">States — variance idioms</span></div>
+  <div class="sheet sheet-md">
+    <div class="ledger ledger-wide">
+      <div class="who"><div class="nm">Balanced</div><div class="sub">Expected meets declared.</div></div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">EX-A</div>
+      <div class="fig">— L</div>
+      <div class="fig">— —</div>
+      <div class="var-ok">+ ₦0.00 · balanced</div>
+      <div class="mk ok">✓</div>
+    </div>
+    <div class="ledger ledger-wide">
+      <div class="who"><div class="nm">Short</div><div class="sub">Less cash declared than expected.</div></div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">EX-B</div>
+      <div class="fig">— L</div>
+      <div class="fig">— —</div>
+      <div class="var-short">− ₦2,400.00 · short</div>
+      <div class="mk bad">!</div>
+    </div>
+    <div class="ledger ledger-wide">
+      <div class="who"><div class="nm">Over</div><div class="sub">More cash than expected — usually a tip, sometimes an entry error.</div></div>
+      <div class="rec" style="text-align: right; padding-top: 6px;">EX-C</div>
+      <div class="fig">— L</div>
+      <div class="fig">— —</div>
+      <div class="var-over">+ ₦440.00 · over</div>
+      <div class="mk" style="color: var(--watch);">∼</div>
+    </div>
+    <div class="ledger ledger-wide">
+      <div class="who"><div class="nm" style="color: var(--ink-4);">Voided</div><div class="sub" style="color: var(--ink-4);">Entry retracted — kept in sight, struck.</div></div>
+      <div class="rec" style="text-align: right; padding-top: 6px; color: var(--ink-4);">EX-D</div>
+      <div class="fig" style="color: var(--ink-4); text-decoration: line-through;">203.0 L</div>
+      <div class="fig" style="color: var(--ink-4); text-decoration: line-through;">₦39,788.00</div>
+      <div class="var-ok" style="color: var(--ink-4); text-decoration: line-through;">+ ₦0.00</div>
+      <div class="mk" style="color: var(--short);">⊘</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

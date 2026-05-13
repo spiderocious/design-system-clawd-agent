@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Motion</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .spec { padding: 24px 0; border-bottom: 1px solid var(--hair); display: grid; grid-template-columns: 220px 1fr 220px; gap: 32px; align-items: center; }
+  .spec .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); line-height: 1.7; }
+  .spec .demo { min-height: 96px; display: flex; align-items: center; justify-content: center; background: var(--sheet); border: 1px solid var(--sheet-edge); border-radius: var(--r-card); padding: 18px; cursor: pointer; }
+  .spec .note { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--ink-3); line-height: 1.55; }
+
+  /* posted stamp animation */
+  .stamp-box { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; border: 2px solid var(--emerald-600); color: var(--emerald-600); font-family: var(--mono); font-weight: 600; font-size: 14px; letter-spacing: 0.18em; border-radius: 3px; transform: rotate(-4deg); opacity: 0; transition: opacity 220ms ease, transform 220ms cubic-bezier(.2,.7,.3,1); }
+  .stamp-box.on { opacity: 1; transform: rotate(-4deg) scale(1); }
+  .stamp-trigger:hover .stamp-box { opacity: 1; transform: rotate(-4deg) scale(1.04); }
+
+  .lift { transition: transform 180ms ease, box-shadow 180ms ease; }
+  .lift:hover { transform: translateY(-2px); box-shadow: 0 4px 0 -2px rgba(26,23,20,0.08), 0 8px 24px -16px rgba(26,23,20,0.4); }
+
+  .tick { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 28px; }
+  .pulse-row { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">04.</div>
+    <div class="ttl">Motion — paced, paper-honest, never decorative.</div>
+    <div class="meta">FOUNDATION</div>
+  </div>
+
+  <p class="dictated" style="max-width: 60ch; margin: 0 0 28px;">
+    The page should feel like turning a sheet, not opening an app. Easing is short and ease-out. Springs and bounces are forbidden — money does not bounce. The only animated element on a posted row is the green "Posted" stamp landing, once, with a slight rotation.
+  </p>
+
+  <div class="spec">
+    <div class="meta">Hover — paper lift<br>180ms / ease-out<br>2px translate</div>
+    <div class="demo">
+      <div class="sheet sheet-md lift" style="background: var(--paper); width: 280px;">
+        <div class="overline">BRANCH 01 · MOKOLA</div>
+        <div style="font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.015em; margin-top: 4px;">1,928 L sold today</div>
+      </div>
+    </div>
+    <div class="note">Hover the card. Sheets lift 2px and gain a single soft shadow — the only place we use shadow.</div>
+  </div>
+
+  <div class="spec">
+    <div class="meta">Post stamp<br>220ms<br>fade + scale<br>once only</div>
+    <div class="demo stamp-trigger" onclick="this.querySelector('.stamp-box').classList.toggle('on')">
+      <span class="stamp-box">POSTED</span>
+    </div>
+    <div class="note">Click / hover. The "POSTED" stamp lands when an entry is signed. It does not repeat. It does not rotate continuously. This is its single moment.</div>
+  </div>
+
+  <div class="spec">
+    <div class="meta">Number tick<br>step, not animate<br>100ms swap</div>
+    <div class="demo">
+      <span class="tick" id="ticker">₦159,544.00</span>
+    </div>
+    <div class="note">Click to tick. Live numbers (totals on the owner roll-up) update in single 100ms swaps — no rolling-digit theatrics.</div>
+  </div>
+
+  <div class="spec">
+    <div class="meta">Live shift indicator<br>1.6s ease-out<br>infinite, gentle</div>
+    <div class="demo">
+      <span class="pulse-row"><span class="pulse"></span>P-03 · LIVE · FEMI ON DUTY</span>
+    </div>
+    <div class="note">The only continuous motion in the system. Marks pumps that have an open shift. Disappears when posted.</div>
+  </div>
+
+  <div class="spec" style="border-bottom: 0;">
+    <div class="meta">What we don't do</div>
+    <div class="demo" style="background: transparent; border: 0;">
+      <p class="dictated" style="margin: 0;">No spring. No bounce. No gradient sweep. No skeleton shimmer waltz. No confetti on success. No parallax. No "delight" — the delight is in the numbers being right.</p>
+    </div>
+    <div class="note"></div>
+  </div>
+
+</div>
+
+<script>
+  const t = document.getElementById('ticker');
+  const seq = ['₦159,544.00', '₦279,496.00', '₦377,888.00', '₦485,212.00'];
+  let i = 0;
+  t.addEventListener('click', () => { i = (i + 1) % seq.length; t.textContent = seq[i]; });
+</script>
+</body>
+</html>

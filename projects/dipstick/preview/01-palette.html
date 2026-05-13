@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Palette</title>
+<link rel="stylesheet" href="_foundation.css"/>
+<style>
+  .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden; }
+  .sw { padding: 24px 18px 18px; height: 132px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--hair); }
+  .sw:last-child { border-right: 0; }
+  .sw .name { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .sw .hex  { font-family: var(--mono); font-size: 11px; opacity: 0.7; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .scene { padding: 24px; }
+  .recon-mini .ledger { padding: 10px 0; }
+  .recon-mini .ledger:first-child { border-top: 1px solid var(--ink); }
+  .recon-mini .ledger { grid-template-columns: 1fr 90px 110px 100px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="stamp">
+    <div class="num">01.</div>
+    <div class="ttl">Palette — paper, ink, emerald, oxblood.</div>
+    <div class="meta">FOUNDATION</div>
+  </div>
+
+  <p class="dictated" style="margin: 0 0 32px; max-width: 60ch;">
+    One accent. Deep emerald. It marks posted, balanced, confirmed — and it carries the brand. Red is reserved for shortages and voids. Amber is a quiet watch. Everything else stays in warm ink on warm cream.
+  </p>
+
+  <div class="break"><span class="lbl">Paper & ink</span></div>
+  <div class="swatches">
+    <div class="sw" style="background: #F2EDE2; color: #1A1714;"><span class="name">paper</span><span class="hex">#F2EDE2</span></div>
+    <div class="sw" style="background: #ECE5D4; color: #1A1714;"><span class="name">paper-deep</span><span class="hex">#ECE5D4</span></div>
+    <div class="sw" style="background: #FBF7EC; color: #1A1714;"><span class="name">sheet</span><span class="hex">#FBF7EC</span></div>
+    <div class="sw" style="background: #F7F2E4; color: #1A1714;"><span class="name">sheet-2</span><span class="hex">#F7F2E4</span></div>
+    <div class="sw" style="background: #D6CDB8; color: #1A1714;"><span class="name">hair</span><span class="hex">#D6CDB8</span></div>
+    <div class="sw" style="background: #E5DECC; color: #1A1714;"><span class="name">hair-soft</span><span class="hex">#E5DECC</span></div>
+  </div>
+  <div class="swatches" style="margin-top: 0; border-top: 0;">
+    <div class="sw" style="background: #1A1714; color: #F2EDE2;"><span class="name">ink</span><span class="hex">#1A1714</span></div>
+    <div class="sw" style="background: #3D3833; color: #F2EDE2;"><span class="name">ink-2</span><span class="hex">#3D3833</span></div>
+    <div class="sw" style="background: #6E665B; color: #F2EDE2;"><span class="name">ink-3</span><span class="hex">#6E665B</span></div>
+    <div class="sw" style="background: #A39A8A; color: #1A1714;"><span class="name">ink-4</span><span class="hex">#A39A8A</span></div>
+    <div class="sw" style="background: #F2EDE2; color: #6E665B; border-right: 1px solid var(--hair); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic;">warmth, not slate</div>
+    <div class="sw" style="background: #1A1714; color: #F2EDE2; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic;">warm-leaning ink</div>
+  </div>
+
+  <div class="break"><span class="lbl">Emerald — the one accent</span></div>
+  <div class="swatches">
+    <div class="sw" style="background: #E7F4ED; color: #06301E;"><span class="name">emerald-50</span><span class="hex">#E7F4ED</span></div>
+    <div class="sw" style="background: #C7E4D2; color: #06301E;"><span class="name">emerald-100</span><span class="hex">#C7E4D2</span></div>
+    <div class="sw" style="background: #98CDAF; color: #06301E;"><span class="name">emerald-200</span><span class="hex">#98CDAF</span></div>
+    <div class="sw" style="background: #2D8A5C; color: #FBF7EC;"><span class="name">emerald-400</span><span class="hex">#2D8A5C</span></div>
+    <div class="sw" style="background: #0E5C3A; color: #FBF7EC;"><span class="name">emerald-600 ★</span><span class="hex">#0E5C3A</span></div>
+    <div class="sw" style="background: #0A4A2E; color: #FBF7EC;"><span class="name">emerald-700</span><span class="hex">#0A4A2E</span></div>
+  </div>
+  <p class="dictated" style="margin: 14px 0 0; font-size: 13px;">★ emerald-600 is the brand accent. The page should be readable with no other colour. If it isn't, the layout is wrong, not the palette.</p>
+
+  <div class="break"><span class="lbl">State — short, watch, info</span></div>
+  <div class="swatches">
+    <div class="sw" style="background: #9A1F18; color: #FBF7EC;"><span class="name">short</span><span class="hex">#9A1F18</span></div>
+    <div class="sw" style="background: #F8E7E4; color: #9A1F18;"><span class="name">short-bg</span><span class="hex">#F8E7E4</span></div>
+    <div class="sw" style="background: #8E5A0E; color: #FBF7EC;"><span class="name">watch</span><span class="hex">#8E5A0E</span></div>
+    <div class="sw" style="background: #F8EED8; color: #8E5A0E;"><span class="name">watch-bg</span><span class="hex">#F8EED8</span></div>
+    <div class="sw" style="background: #1F4D7A; color: #FBF7EC;"><span class="name">info</span><span class="hex">#1F4D7A</span></div>
+    <div class="sw" style="background: #E8EEF4; color: #1F4D7A;"><span class="name">info-bg</span><span class="hex">#E8EEF4</span></div>
+  </div>
+  <p class="dictated" style="margin: 14px 0 0; font-size: 13px;">Oxblood, not Bootstrap red. Burnt amber, not warning yellow. Deep ink-blue, only for system messages — never as a brand colour.</p>
+
+  <div class="break"><span class="lbl">Product marks — PMS, AGO, DPK</span></div>
+  <div class="row" style="gap: 28px; padding: 20px 0;">
+    <span class="prod prod-pms">PMS</span>
+    <span class="prod prod-ago">AGO</span>
+    <span class="prod prod-dpk">DPK</span>
+    <span style="font-family: var(--serif); font-style: italic; color: var(--ink-3); margin-left: 24px;">Inline marks only. Never fills. The product distinction is a quiet typographic dot, not a brand colour war.</span>
+  </div>
+
+  <div class="break"><span class="lbl">In context — the page that proves it</span></div>
+  <div class="sheet sheet-lg recon-mini">
+    <div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+      <div>
+        <div class="overline" style="margin-bottom: 4px;">Shift close · evening</div>
+        <div style="font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.018em;">Mokola Station — Tue 14 May</div>
+      </div>
+      <span class="pill pill-ok"><span class="dot"></span>Posted</span>
+    </div>
+    <div class="ledger">
+      <div class="who"><div class="nm">Femi Adekunle</div><div class="sub">P-03 · PMS · 814 L</div></div>
+      <div class="fig">814.0 L</div>
+      <div class="fig">₦159,544.00</div>
+      <div class="var-ok">balanced</div>
+      <div class="mk ok">✓</div>
+    </div>
+    <div class="ledger">
+      <div class="who"><div class="nm">Chidera Okoye</div><div class="sub">P-02 · PMS · 612 L</div></div>
+      <div class="fig">612.0 L</div>
+      <div class="fig">₦119,952.00</div>
+      <div class="var-short">− ₦2,400.00</div>
+      <div class="mk bad">!</div>
+    </div>
+    <div class="ledger">
+      <div class="who"><div class="nm">Aisha Bello</div><div class="sub">P-01 · PMS · 502 L</div></div>
+      <div class="fig">502.0 L</div>
+      <div class="fig">₦98,392.00</div>
+      <div class="var-ok">balanced</div>
+      <div class="mk ok">✓</div>
+    </div>
+    <div class="ledger is-total">
+      <div class="who"><div class="nm" style="font-family: var(--serif); font-weight: 600;">Total — evening shift</div><div class="sub">1,928 L · 3 attendants</div></div>
+      <div class="fig">1,928.0 L</div>
+      <div class="fig">₦377,888.00</div>
+      <div class="var-short">− ₦2,400.00</div>
+      <div class="mk"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

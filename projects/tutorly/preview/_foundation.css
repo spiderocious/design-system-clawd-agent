@@ -1,0 +1,414 @@
+/* ============================================================
+   TUTORLY — Soft Scandinavian foundation
+   Oat & forest. Light-only. Hairlines over shadows. One accent.
+
+   Stance: a calm, well-printed faculty page meets a quiet
+   marketplace. Spacious, never gamified, never shouty. The
+   single accent #3BB75E carries every primary action; sage and
+   warm-grey neutrals carry everything else.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---------- Paper & ink (warm oat, warm-grey ink) ---------- */
+  --paper:        #F7F5F0;   /* warm oat — the canvas */
+  --paper-deep:   #EFEBE0;   /* recessed surface, behind a card */
+  --sheet:        #FFFDF8;   /* a single sheet on the canvas */
+  --sheet-edge:   #E4DFCE;   /* the edge of a sheet */
+  --sheet-edge-2: #D7D1C0;   /* slightly stronger edge — for inputs */
+  --ink:          #1F231C;   /* near-black, warm */
+  --ink-2:        #353A30;   /* body */
+  --ink-3:        #6A7263;   /* secondary */
+  --ink-4:        #A1A595;   /* tertiary */
+  --hair:         #E4DFCE;   /* hairline */
+  --hair-soft:    #EFEBE0;   /* even quieter divider */
+  --rule:         #1F231C;   /* heavy rule for emphasis (rare) */
+
+  /* ---------- Forest green — the single accent ----------
+     #3BB75E is the brand. Hover/active steps down toward forest.
+     Tints (50/100) are sage neutrals used for quiet status. */
+  --green-50:   #F0F7F2;   /* sage paper */
+  --green-100:  #E7EFE9;   /* sage chip background */
+  --green-200:  #BFD5C5;   /* sage edge */
+  --green-300:  #8FB39C;   /* sage avatar tint */
+  --green-400:  #5DC57E;   /* hover-up rare use */
+  --green-500:  #3BB75E;   /* PRIMARY — the brand */
+  --green-600:  #2EA351;   /* primary hover */
+  --green-700:  #258043;   /* primary pressed */
+  --green-800:  #1E6638;
+  --green-900:  #14492A;
+
+  /* ---------- State (used sparingly, paired with text) ----------
+     Warning is amber-on-cream. Critical is reserved for irreversible
+     money / safety moments (connect-fee confirm, report-a-tutor). */
+  --crit:        #B23A2A;   /* warm brick-red, never Bootstrap */
+  --crit-bg:     #FCEFEC;
+  --crit-edge:   #E8B8AE;
+
+  --warn:        #A8741E;   /* warm amber */
+  --warn-bg:     #FBF3E2;
+  --warn-edge:   #E5D4A8;
+
+  --info:        #3F6E8F;   /* slate-teal, NOT bootstrap blue — used for safety banners */
+  --info-bg:     #ECF1F4;
+  --info-edge:   #BFD0DA;
+
+  --ok:          var(--green-700);
+  --ok-bg:       var(--green-50);
+  --ok-edge:     var(--green-200);
+
+  /* ---------- Type ---------- */
+  --serif:   'Fraunces', 'Söhne Breit', Georgia, serif;
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Tracking — actually used */
+  --track-display:  -0.022em;
+  --track-h:        -0.014em;
+  --track-body:      0;
+  --track-label:     0.01em;
+  --track-overline:  0.16em;
+  --track-mono:      0;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:   6px;
+  --r-soft:    12px;
+  --r-card:    16px;        /* the project default — A's 16px radii */
+  --r-card-lg: 20px;
+  --r-pill:    9999px;
+
+  --gutter:    24px;
+
+  /* Hairlines, not shadows */
+  --line-1:  0 0 0 1px var(--sheet-edge);
+  --shade-1: 0 1px 0 rgba(31,35,28,0.04);
+  --shade-pop: 0 12px 32px -16px rgba(31,35,28,0.18), 0 2px 8px -4px rgba(31,35,28,0.08);
+
+  /* Motion — calm, never bouncy */
+  --ease:        cubic-bezier(.4,0,.2,1);
+  --t-quick:     120ms;
+  --t-normal:    220ms;
+  --t-slow:      360ms;
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "kern", "calt";
+}
+
+a { color: inherit; }
+
+/* ----- Type primitives ----- */
+.serif    { font-family: var(--serif); font-weight: 500; letter-spacing: var(--track-display); }
+.serif-i  { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.005em; }
+.sans     { font-family: var(--sans); }
+.mono     { font-family: var(--mono); font-feature-settings: "tnum" 1, "lnum" 1; letter-spacing: var(--track-mono); }
+.tabular  { font-variant-numeric: tabular-nums; }
+.overline {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--track-overline);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Page chrome (stamp + section break + page wrapper) ----- */
+.stamp {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 18px; margin-bottom: 36px;
+  border-bottom: 1px solid var(--ink);
+}
+.stamp .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.stamp .ttl {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: var(--track-display);
+  flex: 1;
+  line-height: 1.05;
+}
+.stamp .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.break {
+  margin: 56px 0 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.break::before { content: ""; height: 1px; background: var(--hair); width: 24px; flex-shrink: 0; }
+.break::after  { content: ""; height: 1px; background: var(--hair); flex: 1; }
+.break .lbl {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 64px 96px;
+}
+.page-wide { max-width: 1320px; }
+
+/* ----- Sheet (card) ----- */
+.sheet {
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: var(--r-card);
+}
+.sheet-tight { padding: 14px 18px; }
+.sheet-md    { padding: 20px 24px; }
+.sheet-lg    { padding: 28px 32px; }
+.sheet-xl    { padding: 36px 40px; }
+
+hr.hair { border: 0; border-top: 1px solid var(--hair); margin: 0; }
+hr.hair-soft { border: 0; border-top: 1px solid var(--hair-soft); margin: 0; }
+
+.mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Buttons -----
+   Primary is filled #3BB75E. Secondary is outline-ink (subtle).
+   Quiet is text-only. Danger is brick-red, used for irreversible.
+   No drop shadows. */
+.b {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: var(--r-card);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: background var(--t-quick) var(--ease), border-color var(--t-quick) var(--ease), color var(--t-quick) var(--ease), transform var(--t-quick) var(--ease);
+}
+.b:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,183,94,0.28);
+}
+.b:active { transform: translateY(1px); }
+.b-primary    { background: var(--green-500); color: #fff; border-color: var(--green-500); }
+.b-primary:hover { background: var(--green-600); border-color: var(--green-600); }
+.b-primary:active { background: var(--green-700); border-color: var(--green-700); }
+.b-secondary  { background: var(--sheet); border-color: var(--sheet-edge-2); color: var(--ink); }
+.b-secondary:hover { background: var(--paper-deep); border-color: var(--ink-3); }
+.b-quiet      { color: var(--ink-2); padding: 0 14px; }
+.b-quiet:hover{ background: rgba(31,35,28,0.05); color: var(--ink); }
+.b-link       { color: var(--green-700); padding: 0; height: auto; background: transparent; }
+.b-link:hover { color: var(--green-800); }
+.b-danger     { background: var(--crit); color: #fff; border-color: var(--crit); }
+.b-danger:hover{ background: #8E2D20; border-color: #8E2D20; }
+
+.b-sm { height: 36px; padding: 0 16px; font-size: 13px; border-radius: 12px; }
+.b-lg { height: 52px; padding: 0 28px; font-size: 15px; border-radius: 18px; }
+.b-block { width: 100%; justify-content: center; }
+
+/* ----- Inputs ----- */
+.f {
+  font-family: var(--sans);
+  font-size: 14px;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge-2);
+  border-radius: 14px;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: var(--track-body);
+  transition: border-color var(--t-quick) var(--ease), box-shadow var(--t-quick) var(--ease);
+}
+.f::placeholder { color: var(--ink-4); }
+.f:focus { border-color: var(--green-500); box-shadow: 0 0 0 3px rgba(59,183,94,0.18); }
+.f-mono { font-family: var(--mono); }
+.f-lg { height: 56px; font-size: 15px; padding: 0 20px; border-radius: 16px; }
+.f-sm { height: 36px; font-size: 13px; padding: 0 12px; border-radius: 10px; }
+
+textarea.f { height: auto; padding: 14px 16px; line-height: 1.55; resize: vertical; }
+
+.field-row { display: grid; gap: 8px; }
+.field-row .label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ----- Chips & pills (sage, sand, warn, crit) ----- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 12px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.chip-sage    { background: var(--green-100); color: var(--green-800); }
+.chip-sand    { background: #EFEAD8; color: #5A4F2E; }
+.chip-paper   { background: var(--sheet); color: var(--ink-2); border-color: var(--sheet-edge); }
+.chip-warn    { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-edge); }
+.chip-crit    { background: var(--crit-bg); color: var(--crit); border-color: var(--crit-edge); }
+.chip-dot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.8; }
+
+/* ----- Verified mark (the trust idiom) -----
+   A tiny sage capsule with a green dot. NEVER a checkmark icon —
+   that's the gamified-badge cliché the brief explicitly excluded. */
+.verified {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 24px; padding: 0 10px 0 8px;
+  background: var(--green-100); color: var(--green-800);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.verified::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-500);
+}
+
+/* ----- Avatars ----- */
+.avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #D9C9A9, #B59F76);
+  border: 1px solid #C2B69B;
+  flex-shrink: 0;
+}
+.avatar-sm { width: 36px; height: 36px; }
+.avatar-md { width: 48px; height: 48px; }
+.avatar-lg { width: 88px; height: 88px; }
+.avatar-xl { width: 128px; height: 128px; }
+.avatar-square { border-radius: 14px; }
+.avatar-sage { background: linear-gradient(135deg, #BFD5C5, #8FB39C); border-color: #A8C2B2; }
+.avatar-sand { background: linear-gradient(135deg, #C7BFA2, #998E66); border-color: #B5AA82; }
+.avatar-clay { background: linear-gradient(135deg, #D5BCA2, #A2845E); border-color: #BFA177; }
+.avatar-bone { background: linear-gradient(135deg, #DCD5C2, #B0A78E); border-color: #C2B89F; }
+
+/* ----- Price (mono, tabular) ----- */
+.price {
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.price-lg { font-size: 28px; }
+.price-md { font-size: 18px; }
+.price-sm { font-size: 14px; }
+.price-unit {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ----- Scroll utilities ----- */
+.scroll-y { overflow-y: auto; }
+
+/* ----- A1 list row primitive — locked from variations -----
+   Tight directory entry. 44px avatar, name + 1-line meta + price.
+   Used in the search-results scene. */
+.list-row {
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  transition: border-color var(--t-quick) var(--ease), background var(--t-quick) var(--ease);
+  text-decoration: none;
+  color: inherit;
+}
+.list-row:hover { border-color: var(--ink-3); }
+.list-row .lr-name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  line-height: 1.15;
+}
+.list-row .lr-meta {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+.list-row .lr-price { font-size: 14px; }
+.list-row .lr-unit { font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; text-align: right; }
+
+/* ----- Scene helpers (used across surfaces) ----- */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.headline-xl {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 1.02;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+}
+.headline {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+.subhead {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.body { font-size: 14px; line-height: 1.65; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.tiny  { font-size: 12px; color: var(--ink-3); }
