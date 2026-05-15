@@ -1,4 +1,4 @@
-# Tutorly
+# Pracket
 
 A tutor-meets-student marketplace where tutors publish a rich profile (credentials, evidence, location, photo, blog) and parents or students pay a one-time connection fee to message them. Identities are partially masked — first name + last initial only — to keep contact on-platform.
 
@@ -21,7 +21,7 @@ A tutor-meets-student marketplace where tutors publish a rich profile (credentia
 - **`#3BB75E`** is the brand and the sole accent. Sage neutrals (`green-100` / `green-200`) carry verified state. Sage paper (`green-50`) carries success.
 - **No stars, no badges, no streaks.** Trust is carried by the `<span class="verified">Identity verified</span>` capsule and by credentials typeset as a printed CV.
 - **Tutor names** are masked (first + initial) in every public surface. The full legal name lives only with the verification team.
-- **Two prices, never confused:** the lesson rate (paid to the tutor) and the connection fee (paid to Tutorly). They sit on the same rail but are separated by a hairline.
+- **Two prices, never confused:** the lesson rate (paid to the tutor) and the connection fee (paid to Pracket). They sit on the same rail but are separated by a hairline.
 - **The conversation is the safety perimeter.** Contact info is redacted (`[redacted phone]`) until both sides press "Share contact." The banner above the thread persists while masking is on.
 - **Multi-country in data, ₦ in design.** Price component is currency-agnostic; the design uses Naira throughout for now.
 

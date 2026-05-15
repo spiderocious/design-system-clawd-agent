@@ -1,4 +1,4 @@
-# Tutorly · session notes
+# Pracket · session notes
 
 ## 2026-05-11 · variation pick is the load-bearing step
 The user accepted the overall A stance (Oat & forest) immediately but stopped me mid-flow to swap the profile card to B and asked for **three alternative list-row designs (A1/A2/A3)** before committing. They picked A1 (lean line). Take-away: when offering A/B/C, the user reads each component on its own — they don't accept the package wholesale. Be ready to redo a single specimen with three new takes inside the same `_variations.html` rather than starting over. Continuation of the "scenes-over-catalogues" preference but at the variation-pick stage.
